@@ -12,6 +12,7 @@ Step 2: 加载、切分、嵌入 & ChromaDB 索引（LangChain 实现）
 """
 
 import os
+import re
 import sys
 import json
 from pathlib import Path
@@ -27,34 +28,72 @@ PERSIST_DIR = str(BASE_DIR / "vectordb")
 COLLECTION_NAME = "agri_zoning"
 EMBED_MODEL = "BAAI/bge-small-zh-v1.5"
 
-# 中文适用的切分器：按段落标记递归切分，500字符/chunk，50字符重叠
+# 中文适用的切分器：按段落标记递归切分，1000字符/chunk，200字符重叠
 TEXT_SPLITTER = RecursiveCharacterTextSplitter(
     separators=["\n\n", "\n", "。", "；", "，", " ", ""],
-    chunk_size=500,
-    chunk_overlap=50,
+    chunk_size=1000,
+    chunk_overlap=200,
 )
 
 
 def load_documents() -> list[Document]:
-    """从 step1_parse 产出的 chunks.json 加载为 LangChain Document 列表。"""
+    """从 step1_parse 产出的 chunks.json 加载为 LangChain Document 列表。
+    跳过 excluded=True 和 quality=low 的 chunk。"""
     with open(CHUNKS_PATH, "r", encoding="utf-8") as f:
         chunks = json.load(f)
 
     docs = []
+    skipped_excluded = 0
+    skipped_low = 0
     for c in chunks:
+        if c.get("excluded"):
+            skipped_excluded += 1
+            continue
+        if c.get("quality") == "low":
+            skipped_low += 1
+            continue
+        m = c["metadata"]
+        header = f"[{m.get('province', '')} {m.get('crop', '')} {m.get('zoning_type', '')}] "
         docs.append(Document(
-            page_content=c["content"],
+            page_content=header + c["content"],
             metadata={
                 **c["metadata"],
                 "chunk_id": c["id"],
             },
         ))
+    if skipped_excluded:
+        print(f"         跳过 excluded: {skipped_excluded}")
+    if skipped_low:
+        print(f"         跳过 low quality: {skipped_low}")
     return docs
 
 
+def _has_table(content: str) -> bool:
+    """检测是否包含 markdown 表格"""
+    return bool(re.search(r'\|.+\|', content))
+
+
 def split_documents(docs: list[Document]) -> list[Document]:
-    """用 RecursiveCharacterTextSplitter 切分文档。"""
-    return TEXT_SPLITTER.split_documents(docs)
+    """切分文档。≤800字的短chunk和含表格的chunk保持完整。
+    被切分的文档在子文档 metadata 中保留 parent_content，供检索时展开。"""
+    to_split = []
+    keep_intact = []
+    for d in docs:
+        if len(d.page_content) <= 800 or _has_table(d.page_content):
+            keep_intact.append(d)
+        else:
+            to_split.append(d)
+
+    # 切分前将原始内容写入 metadata，LangChain splitter 的子文档会自动继承
+    for d in to_split:
+        d.metadata["parent_content"] = d.page_content
+
+    split_result = TEXT_SPLITTER.split_documents(to_split)
+
+    print(f"         免切分: {len(keep_intact)} 条 (≤800字或含表格)")
+    print(f"         被切分: {len(to_split)} 条 → {len(split_result)} 条")
+
+    return split_result + keep_intact
 
 
 def build_vectorstore(docs: list[Document], force_rebuild: bool = False) -> Chroma:
@@ -67,6 +106,14 @@ def build_vectorstore(docs: list[Document], force_rebuild: bool = False) -> Chro
 
     if force_rebuild:
         print("[Step 2] 强制重建索引...")
+        # 先删除旧 collection，否则 Chroma.from_documents 会追加而非替换
+        import chromadb
+        client = chromadb.PersistentClient(path=PERSIST_DIR)
+        try:
+            client.delete_collection(COLLECTION_NAME)
+            print(f"         已删除旧 collection: {COLLECTION_NAME}")
+        except Exception:
+            pass
         return Chroma.from_documents(
             documents=docs,
             embedding=embeddings,

@@ -13,8 +13,8 @@ import os
 import time
 import requests
 
-LLM_BASE_URL = os.environ.get("LLM_BASE_URL", "https://api.deepseek.com/v1")
-LLM_API_KEY = os.environ.get("LLM_API_KEY", os.environ.get("DEEPSEEK_API_KEY", ""))
+LLM_BASE_URL = os.environ.get("LLM_BASE_URL", "https://api.deepseek.com")
+LLM_API_KEY = os.environ.get("LLM_API_KEY", "")
 MODEL_NAME = os.environ.get("MODEL_NAME", "deepseek-chat")
 
 

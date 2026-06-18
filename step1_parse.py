@@ -442,6 +442,83 @@ def _split_long_text(text: str, chunk_size: int) -> list[str]:
     return parts
 
 
+# ── 质量标记 & 去重 ─────────────────────────────────────
+
+def _tag_chunk_quality(chunks: list[dict]) -> list[dict]:
+    """标记每个 chunk 的质量等级，用于 step2 选择性 embed。"""
+    import re
+
+    low_patterns = [
+        (r'^[#\s]*(目\s*录|Contents|Table of Contents)', '目录'),
+        (r'^[#\s]*(参考文献|References|参考书目)', '参考文献'),
+    ]
+
+    for c in chunks:
+        content = c['content'].strip()
+        reasons = []
+
+        if len(content) < 50:
+            reasons.append('极短(<50字)')
+
+        for pat, label in low_patterns:
+            if re.match(pat, content):
+                reasons.append(label)
+
+        c['quality'] = 'low' if reasons else 'high'
+        c['quality_reason'] = '; '.join(reasons) if reasons else ''
+
+    low_count = sum(1 for c in chunks if c['quality'] == 'low')
+    print(f"\n  质量标记: high={len(chunks)-low_count} low={low_count}")
+    return chunks
+
+
+def _dedup_documents(chunks: list[dict]) -> list[dict]:
+    """文档级去重：同一省份+作物+区划类型的 DOCX/PDF 对，保留内容多、质量好的。"""
+    from collections import defaultdict
+
+    # 按 (province, crop, zoning_type) 分组
+    groups = defaultdict(lambda: {'docx': defaultdict(list), 'pdf': defaultdict(list)})
+    for i, c in enumerate(chunks):
+        meta = c['metadata']
+        key = (meta.get('province', ''), meta.get('crop', ''), meta.get('zoning_type', ''))
+        src = meta.get('source_file', '')
+        if src.endswith('.docx'):
+            groups[key]['docx'][src].append(i)
+        elif src.endswith('.pdf'):
+            groups[key]['pdf'][src].append(i)
+
+    excluded = set()
+    for group_key, data in groups.items():
+        if not data['docx'] or not data['pdf']:
+            continue
+
+        for docx_src, docx_idxs in data['docx'].items():
+            for pdf_src, pdf_idxs in data['pdf'].items():
+                # 计算文档级总内容量
+                docx_total = sum(len(chunks[i]['content']) for i in docx_idxs)
+                pdf_total = sum(len(chunks[i]['content']) for i in pdf_idxs)
+                ratio = max(docx_total, pdf_total) / min(docx_total, pdf_total)
+
+                # 内容量差距 > 1.15x → 保留多的
+                if ratio > 1.15:
+                    if docx_total > pdf_total:
+                        excluded.update(pdf_idxs)
+                        print(f"  文档去重: 保留 DOCX ({docx_total}字) 排除 PDF ({pdf_total}字) [{group_key}]")
+                    else:
+                        excluded.update(docx_idxs)
+                        print(f"  文档去重: 保留 PDF ({pdf_total}字) 排除 DOCX ({docx_total}字) [{group_key}]")
+                else:
+                    # 内容量相当(<1.15x) → 都保留，不做文档级去重
+                    print(f"  文档去重: 内容量相当(ratio={ratio:.2f}) 都保留 [{group_key}]")
+
+    if excluded:
+        for i in excluded:
+            chunks[i]['excluded'] = True
+        print(f"\n  文档去重: 排除 {len(excluded)} 个 chunk")
+
+    return chunks
+
+
 # ── 主流程 ─────────────────────────────────────────────
 
 def parse_all(src_dir: str) -> list[dict]:
@@ -526,6 +603,12 @@ def main():
         print(f"\n  已去除 {dup_count} 个 ID 重复 chunk")
     if content_dup:
         print(f"  已去除 {content_dup} 个内容重复 chunk")
+
+    # 文档级去重（DOCX/PDF 对）
+    deduped = _dedup_documents(deduped)
+
+    # Chunk 质量标记
+    deduped = _tag_chunk_quality(deduped)
 
     # 统计
     source_types = {}

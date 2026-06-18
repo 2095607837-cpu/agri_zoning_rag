@@ -71,7 +71,7 @@ class RAGPipeline:
         enable_rewrite:  是否启用查询改写（需要 LLM）
     """
 
-    def __init__(self, enable_reranker: bool = False, enable_rewrite: bool = True, top_k: int = 5):
+    def __init__(self, enable_reranker: bool = True, enable_rewrite: bool = True, top_k: int = 5):
         self.enable_reranker = enable_reranker
         self.enable_rewrite = enable_rewrite
         self.top_k = top_k
@@ -93,7 +93,7 @@ class RAGPipeline:
 
         all_results = []
         for sq in search_queries:
-            results = self._searcher.search(sq, top_k=self.top_k)
+            results = self._searcher.search(sq, top_k=self.top_k, expand_parent=True)
             all_results.extend(results)
 
         # 按 content 前 80 字符去重，保留最高相似度
@@ -194,8 +194,8 @@ if __name__ == "__main__":
         print("请先运行 python3 step1_parse.py 构建数据")
         exit(1)
 
-    # 无 LLM 测试（不需要 API Key）
-    rag = RAGPipeline(enable_reranker=False, enable_rewrite=False)
+    # 无 LLM 测试（Reranker 使用本地模型，不需要 API Key；rewrite 需要 LLM，关闭）
+    rag = RAGPipeline(enable_reranker=True, enable_rewrite=False)
     print("=" * 70)
     print("  农业区划 RAG Pipeline 测试 (LangGraph + LangChain)")
     print("=" * 70)
