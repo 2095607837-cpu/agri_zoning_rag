@@ -1,10 +1,10 @@
 # 农业气候区划 RAG 系统 — 评测基线文档
 
-> **版本**: v1.3
-> **日期**: 2026-06-18
-> **用途**: 技术路线迭代升级的对比基线，记录当前架构、参数和评测指标
+> **版本**: v1.3 | **日期**: 2026-06-18
 
-### 变更日志
+---
+
+## 变更日志
 
 | 版本 | 日期 | 变更 |
 |------|------|------|
@@ -15,87 +15,30 @@
 
 ---
 
-## 1. 技术路线
+## 多版本对比总览
 
-### 1.1 整体架构
-
-```
-Query → [Query Rewriter] → Hybrid Search → [Reranker] → Judge (3-layer) → Generator → Answer
-           (可选)         BM25+Chroma      (可选)      signal/score/LLM      LLM
-```
-
-### 1.2 技术栈
-
-| 层 | 组件 | 参数/配置 |
-|------|------|------|
-| 文档加载 | python-docx / pymupdf / openpyxl | DOCX段落+表格、PDF逐页、XLSX行列转文本 |
-| 文本切分 | LangChain `RecursiveCharacterTextSplitter` | **v1.3: chunk_size=1000, overlap=200**, +metadata注入content头, ≤800字/含表格chunk免切分, parent_content记录 |
-| 向量嵌入 | `HuggingFaceEmbeddings` | **BAAI/bge-small-zh-v1.5**, 512维, L2归一化, device=cpu |
-| 向量存储 | LangChain `Chroma` | persist_directory=vectordb/, collection=agri_zoning, 默认L2距离 |
-| 关键词检索 | LangChain `BM25Retriever` | 从原始chunks构建, k=10, 字符+bigram分词 |
-| 混合检索 | 手动 RRF 融合 | **weights=[0.3 BM25, 0.7 Dense]**, RRF_K=60 |
-| 精排 | `CrossEncoder` | bge-reranker-v2-m3, **v1.2 已启用** |
-| 查询改写 | LangChain `ChatPromptTemplate` (可选) | HyDE+关键词+子查询, LRU缓存500条, **评测时未启用** |
-| Judge | 三层判定 | Layer1(signal/无结果)→Layer2(score<0.46)→Layer3(LLM) |
-| Generator | LangChain `ChatPromptTemplate` | 农业区划专家System Prompt |
-| LLM | DeepSeek API | deepseek-chat, temperature=0.6(generate)/0.1(judge) |
-
-### 1.3 LangGraph 管道
-
-```
-START → retrieve → judge → generate → END
-```
-
-### 1.4 检索相似度（v1.1 已修复）
-
-~~当前 `HybridSearcher` 使用 **rank-based 近似相似度** `1/(rank+1)`，而非 Chroma 真实 L2 距离。~~
-**v1.1**: 改用 `vectorstore.similarity_search_with_score()` 获取真实 L2 距离，转换为 `sim = 1/(1+L2)`，并配合手动 RRF 融合（权重 0.7/0.3, k=60）。
-
-**v1.2 阈值依据**: 实测 200 题 Chroma L2 距离分布：
-
-| 数据集 | L2 距离范围 | 转换后 sim 范围 |
-|--------|-----------|----------------|
-| In-domain (172题) | 0.13 ~ 0.35 | 0.74 ~ 0.89 |
-| OOD (28题) | 0.41 ~ 0.60 | 0.63 ~ 0.71 |
-
-两者之间存在 **天然鸿沟 (0.35~0.41)**，Layer 2 阈值设 0.70 可实现 100% 完美分离。
-
----
-
-## 2. 数据集
-
-### 2.1 知识库
-
-| 指标 | v1.0 | v1.2 | v1.3 |
+| 维度 | v1.0 | v1.2 | v1.3 |
 |------|------|------|------|
-| 原始文件 | 34 份 | 同 | 同 |
-| 覆盖省份 | 7省 + 全国 | 同 | 同 |
-| 主要作物 | 大豆、冬小麦、柑橘、苹果 | 同 | 同 |
-| 解析 chunks | 1,177 条 (去重后) | 同 | 同 |
-| 切分后文档 | 1,881 条 | 1,881 条 | **1,088 条** (-42%) |
-| Chroma 向量数 | 1,881 条 | 3,058 条 | **1,088 条** |
-| 平均 chunk 长度 | 305 字符 | 305 字符 | **490 字符** (+61%) |
-| 免切分率 | — | — | **93%** (仅72条被切) |
-
-### 2.2 Golden Set
-
-| 指标 | 数值 |
-|------|------|
-| 总题数 | 200 |
-| OOD 题 | 28 (14%) |
-| In-domain 题 | 172 (86%) |
-| 含 source_chunk_id | 51 (25.5%) |
-| 难度分布 | easy=53, medium=99, hard=48 |
-| 省份覆盖 | 黑龙江28/河南28/OOD28/跨省22/新疆21/江西16/全国16/陕西15/内蒙古15/辽宁11 |
+| MRR | 0.3111 | 0.4641 | **0.4905** |
+| Recall@5 | 37.3% | 56.9% | **66.7%** |
+| In-domain 相关率 | — | 81.4% | 78.5% |
+| OOD 召回率 | 0.0% | 100.0% | 96.4% |
+| In-domain 通过率 | 100.0% | 66.3% | **100.0%** |
+| 误拒率 | 0.0% | 33.7% | **0.0%** |
+| 漏判率 | 100.0% | 0.0% | 3.6% |
+| 忠实率 (≥2) | — | 90.7% | — |
+| 正确率 (≥2) | — | 60.5% | — |
+| 知识库向量数 | 1,881 | 3,058 | **1,088** |
+| 平均 chunk 长度 | 305 字符 | 305 字符 | **490 字符** |
 
 ---
 
-## 3. v1.0 评测指标
+## 1. v1.0 评测指标
 
 > **评测日期**: 2026-06-17 | **Reranker**: 关闭 | **chunk_size**: 500, overlap: 50
 > **架构**: EnsembleRetriever (LangChain) + rank-based 近似相似度 `1/(rank+1)`
 
-### 3.1 检索层 (v1.0, n=51 source-annotated)
+### 1.1 检索层 (n=51 source-annotated)
 
 | 指标 | 数值 | 目标 |
 |------|------|------|
@@ -105,7 +48,7 @@ START → retrieve → judge → generate → END
 | **Recall@5** | **37.3%** | ≥75% |
 | Precision@5 | 25.5% | ≥50% |
 
-### 3.2 OOD 检测 (v1.0)
+### 1.2 OOD 检测
 
 | 指标 | 数值 | 目标 |
 |------|------|------|
@@ -119,11 +62,11 @@ START → retrieve → judge → generate → END
 
 ---
 
-## 4. v1.2 评测指标
+## 2. v1.2 评测指标
 
 > **评测日期**: 2026-06-17 | **Reranker**: 启用 | **chunk_size**: 500, overlap: 50
 
-### 4.1 检索层 (v1.2)
+### 2.1 检索层
 
 | 指标 | 数值 | 目标 |
 |------|------|------|
@@ -133,7 +76,7 @@ START → retrieve → judge → generate → END
 | **Recall@5** | **56.9%** | ≥75% |
 | Precision@5 | 36.1% | ≥50% |
 
-### 4.2 语义相关度 (v1.2, 全部200题)
+### 2.2 语义相关度 (全部200题)
 
 | 指标 | 数值 |
 |------|------|
@@ -143,7 +86,7 @@ START → retrieve → judge → generate → END
 | **In-domain 相关率** | **81.4%** |
 | 平均 NDCG@5 | 0.97 |
 
-### 4.3 OOD 检测 (v1.2)
+### 2.3 OOD 检测
 
 | 指标 | 数值 | 目标 |
 |------|------|------|
@@ -153,7 +96,7 @@ START → retrieve → judge → generate → END
 | 误拒 (假阳性) | 58/172 (33.7%) | <10% |
 | 漏判 (假阴性) | 0/28 (0%) | <5% |
 
-### 4.4 答案质量 (v1.2, 60题分层抽样, LLM Judge)
+### 2.4 答案质量 (60题分层抽样, LLM Judge)
 
 | 指标 | 数值 | 目标 |
 |------|------|------|
@@ -170,7 +113,7 @@ START → retrieve → judge → generate → END
 | Judge 拒答率 | 28.3% | — |
 | 平均延迟 | 3654ms | <5000ms |
 
-### 4.5 按维度细分 (v1.2, In-domain 语义相关度)
+### 2.5 按维度细分 (In-domain 语义相关度)
 
 **省份:**
 | 省 | 相关度 | 评价 |
@@ -205,12 +148,12 @@ START → retrieve → judge → generate → END
 
 ---
 
-## 5. v1.3 评测指标
+## 3. v1.3 评测指标
 
 > **评测日期**: 2026-06-18 | **Reranker**: 关闭 | **chunk_size**: 1000, overlap: 200
 > **新增**: metadata注入, ≤800字免切分, 表格保护, parent_content展开
 
-### 5.1 检索层 (v1.3, n=51 source-annotated)
+### 3.1 检索层 (n=51 source-annotated)
 
 | 指标 | 数值 | vs v1.2 |
 |------|------|---------|
@@ -222,7 +165,7 @@ START → retrieve → judge → generate → END
 | Precision@3 | 37.9% | — |
 | Precision@5 | 35.7% | -0.4pp |
 
-### 5.2 语义相关度 (v1.3, 全部200题)
+### 3.2 语义相关度 (全部200题)
 
 | 指标 | 数值 | vs v1.2 |
 |------|------|---------|
@@ -233,7 +176,7 @@ START → retrieve → judge → generate → END
 | In-domain 平均相关度 | 0.6711 | — |
 | **In-domain 相关率** | **78.5%** | -2.9pp |
 
-### 5.3 OOD 检测 (v1.3)
+### 3.3 OOD 检测
 
 | 指标 | 数值 | vs v1.2 |
 |------|------|---------|
@@ -245,7 +188,7 @@ START → retrieve → judge → generate → END
 | OOD Chroma sim avg | 0.5430 | — |
 | Layer 分布 | signal=0, score=200, llm=0 | — |
 
-### 5.4 按维度细分 (v1.3)
+### 3.4 按维度细分
 
 **省份:**
 | 省 | n | 相关度 | MRR | vs v1.2 相关度 |
@@ -309,9 +252,9 @@ START → retrieve → judge → generate → END
 
 ---
 
-## 6. v1.2 → v1.3 对比总览
+## 4. v1.2 → v1.3 对比详情
 
-### 6.1 检索指标对比
+### 4.1 检索指标对比
 
 | 指标 | v1.2 | v1.3 | 变化 |
 |------|------|------|------|
@@ -322,7 +265,7 @@ START → retrieve → judge → generate → END
 | Precision@5 | 36.1% | 35.7% | -0.4pp |
 | In-domain 相关率 | 81.4% | 78.5% | -2.9pp |
 
-### 6.2 OOD 检测对比
+### 4.2 OOD 检测对比
 
 | 指标 | v1.2 | v1.3 | 变化 |
 |------|------|------|------|
@@ -331,7 +274,7 @@ START → retrieve → judge → generate → END
 | **误拒率 (假阳性)** | 33.7% (58/172) | **0.0% (0/172)** | **-33.7pp** |
 | 总准确率 | 71.0% | 99.5% | +28.5pp |
 
-### 6.3 关键改动与效果
+### 4.3 关键改动与效果
 
 | 改动 | 效果 |
 |------|------|
@@ -341,7 +284,7 @@ START → retrieve → judge → generate → END
 | parent_content 展开 | 被切分的子 chunk 检索时自动还原为完整父文档内容 |
 | chunk_size 500→1000, overlap 50→200 | 单条 chunk 包含完整段落，Judge 不因"信息碎片化"而误拒 |
 
-### 6.4 BGE Token 上限分析
+### 4.4 BGE Token 上限分析
 
 BGE-small-zh-v1.5 底层 BERT 的 `max_position_embeddings=512`，实测中文 tokenize 比率为 1.04 tokens/字符。
 
@@ -354,6 +297,81 @@ BGE-small-zh-v1.5 底层 BERT 的 `max_position_embeddings=512`，实测中文 t
 | 800 字 | ~832 tokens | 显著截断 (尾端 ~320 tokens/308字) |
 
 **当前 490 字平均 → ~510 tokens，刚好在边界。** overlap=200 补偿了尾端截断——被截内容出现在相邻 chunk 的重叠区。
+
+---
+
+## 5. 技术路线
+
+### 5.1 整体架构
+
+```
+Query → [Query Rewriter] → Hybrid Search → [Reranker] → Judge (3-layer) → Generator → Answer
+           (可选)         BM25+Chroma      (可选)      signal/score/LLM      LLM
+```
+
+### 5.2 技术栈
+
+| 层 | 组件 | 参数/配置 |
+|------|------|------|
+| 文档加载 | python-docx / pymupdf / openpyxl | DOCX段落+表格、PDF逐页、XLSX行列转文本 |
+| 文本切分 | LangChain `RecursiveCharacterTextSplitter` | **v1.3: chunk_size=1000, overlap=200**, +metadata注入content头, ≤800字/含表格chunk免切分, parent_content记录 |
+| 向量嵌入 | `HuggingFaceEmbeddings` | **BAAI/bge-small-zh-v1.5**, 512维, L2归一化, device=cpu |
+| 向量存储 | LangChain `Chroma` | persist_directory=vectordb/, collection=agri_zoning, 默认L2距离 |
+| 关键词检索 | LangChain `BM25Retriever` | 从原始chunks构建, k=10, 字符+bigram分词 |
+| 混合检索 | 手动 RRF 融合 | **weights=[0.3 BM25, 0.7 Dense]**, RRF_K=60 |
+| 精排 | `CrossEncoder` | bge-reranker-v2-m3, **v1.2 已启用** |
+| 查询改写 | LangChain `ChatPromptTemplate` (可选) | HyDE+关键词+子查询, LRU缓存500条, **评测时未启用** |
+| Judge | 三层判定 | Layer1(signal/无结果)→Layer2(score<0.46)→Layer3(LLM) |
+| Generator | LangChain `ChatPromptTemplate` | 农业区划专家System Prompt |
+| LLM | DeepSeek API | deepseek-chat, temperature=0.6(generate)/0.1(judge) |
+
+### 5.3 LangGraph 管道
+
+```
+START → retrieve → judge → generate → END
+```
+
+### 5.4 检索相似度（v1.1 已修复）
+
+~~当前 `HybridSearcher` 使用 **rank-based 近似相似度** `1/(rank+1)`，而非 Chroma 真实 L2 距离。~~
+**v1.1**: 改用 `vectorstore.similarity_search_with_score()` 获取真实 L2 距离，转换为 `sim = 1/(1+L2)`，并配合手动 RRF 融合（权重 0.7/0.3, k=60）。
+
+**v1.2 阈值依据**: 实测 200 题 Chroma L2 距离分布：
+
+| 数据集 | L2 距离范围 | 转换后 sim 范围 |
+|--------|-----------|----------------|
+| In-domain (172题) | 0.13 ~ 0.35 | 0.74 ~ 0.89 |
+| OOD (28题) | 0.41 ~ 0.60 | 0.63 ~ 0.71 |
+
+两者之间存在 **天然鸿沟 (0.35~0.41)**，Layer 2 阈值设 0.70 可实现 100% 完美分离。
+
+---
+
+## 6. 数据集
+
+### 6.1 知识库
+
+| 指标 | v1.0 | v1.2 | v1.3 |
+|------|------|------|------|
+| 原始文件 | 34 份 | 同 | 同 |
+| 覆盖省份 | 7省 + 全国 | 同 | 同 |
+| 主要作物 | 大豆、冬小麦、柑橘、苹果 | 同 | 同 |
+| 解析 chunks | 1,177 条 (去重后) | 同 | 同 |
+| 切分后文档 | 1,881 条 | 1,881 条 | **1,088 条** (-42%) |
+| Chroma 向量数 | 1,881 条 | 3,058 条 | **1,088 条** |
+| 平均 chunk 长度 | 305 字符 | 305 字符 | **490 字符** (+61%) |
+| 免切分率 | — | — | **93%** (仅72条被切) |
+
+### 6.2 Golden Set
+
+| 指标 | 数值 |
+|------|------|
+| 总题数 | 200 |
+| OOD 题 | 28 (14%) |
+| In-domain 题 | 172 (86%) |
+| 含 source_chunk_id | 51 (25.5%) |
+| 难度分布 | easy=53, medium=99, hard=48 |
+| 省份覆盖 | 黑龙江28/河南28/OOD28/跨省22/新疆21/江西16/全国16/陕西15/内蒙古15/辽宁11 |
 
 ---
 
@@ -392,9 +410,7 @@ BGE-small-zh-v1.5 底层 BERT 的 `max_position_embeddings=512`，实测中文 t
 | P2 | 补充 golden set source_chunk_id (51→200) | 待实施 | 评测精度提升 | generate_golden_set.py |
 | P3 | BGE token上限对齐 — chunk_size 1000→600 | 待评估 | 消除尾端截断 (overlap已兜底) | step2_embed.py |
 
-### 对比实验模板
-
-每次迭代后，运行以下命令获取新指标并与此 baseline 对比：
+### 评测命令
 
 ```bash
 # 检索层评测（全量 200 题）
@@ -403,20 +419,6 @@ HF_HUB_OFFLINE=1 python3 evaluate.py
 # 全管道评测（抽样 60 题，含忠实率+正确率）
 python3 evaluate.py --full --limit 60
 ```
-
-多版本对比维度：
-
-| 维度 | v1.0 | v1.2 | v1.3 |
-|------|------|------|------|
-| MRR | 0.3111 | 0.4641 | **0.4905** |
-| Recall@5 | 37.3% | 56.9% | **66.7%** |
-| In-domain 相关率 | — | 81.4% | 78.5% |
-| OOD 召回率 | 0.0% | 100.0% | 96.4% |
-| In-domain 通过率 | 100.0% | 66.3% | **100.0%** |
-| 误拒率 | 0.0% | 33.7% | **0.0%** |
-| 漏判率 | 100.0% | 0.0% | 3.6% |
-| 忠实率 (≥2) | — | 90.7% | — |
-| 正确率 (≥2) | — | 60.5% | — |
 
 ---
 
