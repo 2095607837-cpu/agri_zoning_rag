@@ -1,10 +1,15 @@
 """
-OOD Judge（LangChain 实现）
+OOD Judge
 
-三层判断：
-  1. 信号层: 无结果或多源匹配时预判
-  2. 分数层: similarity < 0.46 → reject
-  3. LLM 层: ChatPromptTemplate → LLM chain → YES/NO/PARTIAL
+四层判断：
+  1. 信号层: 无结果 → reject
+  2. 高置信层: similarity >= 0.60 → answer（跳过 LLM，基于真实数据标定）
+  3. 分数层: similarity < 0.46 → reject
+  4. LLM 层: 模糊区间 [0.46, 0.60) → LLM 细判
+
+阈值来源: calibrate_judge_threshold.py 对 200 题 golden set 实测
+  OOD max=0.577, In-domain min=0.614, 两组完全可分
+  0.60 可 100% 准确跳过全部 In-domain 题的 LLM 调用
 
 用法:
   from judge import judge
@@ -13,7 +18,6 @@ OOD Judge（LangChain 实现）
 
 import json
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.output_parsers import StrOutputParser
 from llm_client import call_llm
 
 JUDGE_PROMPT = ChatPromptTemplate.from_messages([
@@ -41,17 +45,26 @@ def judge(query: str, results: list[dict]) -> dict:
 
     Returns:
         {"decision": "answer"|"reject"|"fallback", "reason": "...",
-         "confidence": float, "method": "signal"|"score"|"llm"}
+         "confidence": float, "method": "signal"|"score"|"high_sim"|"llm"}
     """
     if not results:
         return {"decision": "reject", "reason": "无检索结果", "confidence": 1.0, "method": "signal"}
 
     top1 = results[0]
-    sim = top1.get("similarity", 0)
+    # 优先用 dense_similarity（余弦相似度，不受 reranker 影响），fallback 到 similarity
+    sim = top1.get("dense_similarity", top1.get("similarity", 0))
 
-    # Layer 2: 分数层（基于 Chroma 真实 L2 距离，sim=1/(1+L2)）
-    # 实测: In-domain sim∈[0.74, 0.89], OOD sim∈[0.63, 0.71], 阈值 0.72 可完美分离
-    if sim < 0.70:
+    # Layer 2: 高置信度直接放行（sim >= 0.60, 实测 OOD max=0.577）
+    if sim >= 0.60:
+        return {
+            "decision": "answer",
+            "reason": f"similarity={sim:.3f} >= 0.60, 高置信度",
+            "confidence": float(min(1.0, sim)),
+            "method": "high_sim",
+        }
+
+    # Layer 3: 分数层拒绝
+    if sim < 0.46:
         return {
             "decision": "reject",
             "reason": f"similarity={sim:.3f} < 0.46",
@@ -59,12 +72,10 @@ def judge(query: str, results: list[dict]) -> dict:
             "method": "score",
         }
 
-    # Layer 3: LLM 细判
+    # Layer 4: LLM 细判（仅 sim ∈ [0.46, 0.60) 的模糊区间）
     try:
         return _llm_judge(query, results[:3])
     except Exception:
-        if sim >= 0.65:
-            return {"decision": "answer", "reason": f"similarity={sim:.3f} >= 0.65", "confidence": 0.7, "method": "score"}
         return {"decision": "fallback", "reason": f"similarity={sim:.3f} 模糊区间", "confidence": 0.5, "method": "score"}
 
 

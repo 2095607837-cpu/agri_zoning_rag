@@ -28,31 +28,44 @@ EMBED_MODEL = "BAAI/bge-small-zh-v1.5"
 
 
 class Reranker:
-    """BGE CrossEncoder 精排器（LangChain 暂未内置，保留自定义实现）。"""
+    """BGE CrossEncoder 精排器（模块级单例，避免重复加载模型）。"""
 
-    def __init__(self, model_name: str = "BAAI/bge-reranker-v2-m3"):
-        self._model_name = model_name
-        self._model = None
+    _instance: "Reranker | None" = None
+
+    def __new__(cls, model_name: str = "BAAI/bge-reranker-v2-m3"):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+            cls._instance._model_name = model_name
+            cls._instance._model = None
+        return cls._instance
 
     def _load(self):
         if self._model is not None:
             return
         from sentence_transformers import CrossEncoder
         print(f"[Reranker] 加载 {self._model_name}...")
-        self._model = CrossEncoder(self._model_name)
+        self._model = CrossEncoder(self._model_name, device="cpu")
 
-    def rerank(self, query: str, candidates: list[Document], top_k: int = 5) -> list[dict]:
+    def rerank(self, query: str, candidates: list[dict], top_k: int = 5) -> list[dict]:
+        """重排序。candidates 中已有 dense_similarity（余弦相似度），reranker 只决定顺序。"""
         self._load()
-        # 截断到 500 字符，避免长文档拖垮 CrossEncoder（模型 max 512 tokens）
-        pairs = [(query, c.page_content[:500]) for c in candidates]
+        pairs = [(query, c["content"][:500]) for c in candidates]
         scores = self._model.predict(pairs, show_progress_bar=False)
-        ranked = np.argsort(scores)[::-1]
+
+        # 附加 rerank_score，保留原始字段
+        ranked = []
+        for i, c in enumerate(candidates):
+            ranked.append({**c, "rerank_score": round(float(scores[i]), 4)})
+
+        ranked.sort(key=lambda x: x["rerank_score"], reverse=True)
+
         results = []
-        for i in ranked[:top_k]:
+        for r in ranked[:top_k]:
             results.append({
-                "content": candidates[i].page_content,
-                "metadata": candidates[i].metadata,
-                "similarity": round(float(scores[i]), 4),
+                "content": r["content"],
+                "metadata": r["metadata"],
+                "similarity": r["rerank_score"],          # 精排分用于排序展示
+                "dense_similarity": r.get("dense_similarity", r.get("similarity", 0)),  # 余弦相似度，供 Judge 判定
             })
         return results
 
@@ -120,79 +133,82 @@ class HybridSearcher:
         print(f"[HybridSearcher] 就绪 (reranker={'on' if self.enable_reranker else 'off'})")
 
     def search(self, query: str, top_k: int = 5, expand_parent: bool = False) -> list[dict]:
-        """混合检索（手动 RRF 融合）+ 可选精排 + 可选父文档展开。
+        """混合检索（RRF 融合）+ 可选 CrossEncoder 重排序 + 可选父文档展开。
 
-        使用 Chroma 真实 L2 距离作为相似度分数，不再用 rank-based 近似。
-
-        Args:
-            expand_parent: 若为 True，将子 chunk 内容替换为完整父文档，并去重。
+        无论是否启用 reranker，返回结果中的 similarity 字段始终是余弦相似度，
+        确保下游 Judge 的阈值判定一致。
         """
-        pool_size = top_k * 3
+        pool_size = max(top_k * 4, 20)  # 召回量，保证足够候选
 
-        # 1. Chroma 语义检索（带真实 L2 距离）
+        # 1. Chroma 语义检索（带真实余弦距离）
         chroma_raw = self._vectorstore.similarity_search_with_score(query, k=pool_size)
 
         # 2. BM25 关键词检索
         bm25_docs = self._bm25_retriever.invoke(query)[:pool_size]
 
-        # 3. 可选 Reranker 精排（各取 pool_size/2，去重后精排）
+        # 3. 构建统一候选池，记录真实余弦相似度
+        RRF_K = 60
+        rrf_scores: dict[str, float] = {}
+        doc_store: dict[str, tuple] = {}  # key → (content, metadata, cosine_sim)
+
+        for rank, (doc, l2_dist) in enumerate(chroma_raw):
+            key = doc.page_content[:80]
+            rrf_scores[key] = rrf_scores.get(key, 0) + 0.7 / (RRF_K + rank)
+            sim = round(1.0 - l2_dist, 4)
+            if key not in doc_store:
+                doc_store[key] = (doc.page_content, doc.metadata, sim)
+
+        for rank, doc in enumerate(bm25_docs):
+            key = doc.page_content[:80]
+            rrf_scores[key] = rrf_scores.get(key, 0) + 0.3 / (RRF_K + rank)
+            if key not in doc_store:
+                doc_store[key] = (doc.page_content, doc.metadata, None)
+
+        # BM25-only 结果补算余弦相似度
+        bm25_only_keys = [k for k in doc_store if doc_store[k][2] is None]
+        if bm25_only_keys:
+            query_emb = np.array(self._embeddings.embed_query(query))
+            for key in bm25_only_keys:
+                content, metadata, _ = doc_store[key]
+                doc_emb = np.array(self._embeddings.embed_documents([content])[0])
+                sim = float(np.dot(query_emb, doc_emb)
+                            / (np.linalg.norm(query_emb) * np.linalg.norm(doc_emb) + 1e-8))
+                doc_store[key] = (content, metadata, round(sim, 4))
+
+        # 4. 排序
         if self._reranker:
-            half = max(pool_size // 2, top_k)
+            # Reranker 重排序：RRF 粗排截断后送 CrossEncoder 精排
+            rerank_input = min(top_k * 3, 40)  # 精排输入上限，防 CrossEncoder 过载
             candidates = []
-            seen = set()
-            for doc, _ in chroma_raw[:half]:
-                key = doc.page_content[:80]
-                if key not in seen:
-                    seen.add(key)
-                    candidates.append(doc)
-            for doc in bm25_docs[:half]:
-                key = doc.page_content[:80]
-                if key not in seen:
-                    seen.add(key)
-                    candidates.append(doc)
+            for key in sorted(rrf_scores, key=lambda k: -rrf_scores[k])[:rerank_input]:
+                content, metadata, cosine_sim = doc_store[key]
+                candidates.append({
+                    "content": content,
+                    "metadata": metadata,
+                    "dense_similarity": cosine_sim or 0.0,
+                })
             results = self._reranker.rerank(query, candidates, top_k=top_k)
         else:
-            # 4. 手动 RRF 融合（权重: 语义 0.7, 关键词 0.3）
-            RRF_K = 60
-            rrf_scores: dict[str, float] = {}
-            doc_store: dict[str, tuple] = {}  # key → (content, metadata, sim)
-
-            for rank, (doc, l2_dist) in enumerate(chroma_raw):
-                key = doc.page_content[:80]
-                rrf_scores[key] = rrf_scores.get(key, 0) + 0.7 / (RRF_K + rank)
-                sim = round(1.0 / (1.0 + l2_dist), 4)  # L2距离→相似度 [0.33, 1.0]
-                if key not in doc_store:
-                    doc_store[key] = (doc.page_content, doc.metadata, sim)
-
-            for rank, doc in enumerate(bm25_docs):
-                key = doc.page_content[:80]
-                rrf_scores[key] = rrf_scores.get(key, 0) + 0.3 / (RRF_K + rank)
-                if key not in doc_store:
-                    doc_store[key] = (doc.page_content, doc.metadata, None)
-
-            # 按 RRF 得分排序，取 top_k
+            # RRF 融合排序
             sorted_keys = sorted(rrf_scores, key=lambda k: -rrf_scores[k])[:top_k]
-
             results = []
-            for rank, key in enumerate(sorted_keys):
+            for key in sorted_keys:
                 content, metadata, real_sim = doc_store[key]
-                if real_sim is None:
-                    # BM25-only 结果：用 RRF 分数近似（罕见）
-                    real_sim = round(rrf_scores[key] / (0.7 / RRF_K + 0.3 / RRF_K), 4)
                 results.append({
                     "content": content,
                     "metadata": metadata,
-                    "similarity": real_sim,
+                    "similarity": real_sim or 0.0,
+                    "dense_similarity": real_sim or 0.0,
                 })
 
-        # 父文档展开：子 chunk 替换为完整父文档内容，同一父文档的多段去重
+        # 5. 父文档展开
         if expand_parent:
             seen_parents = set()
             expanded = []
             for r in results:
                 parent = r["metadata"].get("parent_content")
                 if parent:
-                    parent_key = parent[:120]  # 用父文档前120字做去重 key
+                    parent_key = parent[:120]
                     if parent_key in seen_parents:
                         continue
                     seen_parents.add(parent_key)
