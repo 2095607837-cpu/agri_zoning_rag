@@ -56,11 +56,13 @@ def _has_source_match(source_id: str, src_file: str) -> bool:
 # ── RAG Evaluator ────────────────────────────────────
 
 class RAGEvaluator:
-    def __init__(self, golden_path=GOLDEN_PATH, enable_reranker: bool = False):
+    def __init__(self, golden_path=GOLDEN_PATH, enable_reranker: bool = False,
+                 enable_rewrite: bool = False):
         with open(golden_path, "r", encoding="utf-8") as f:
             self.golden = json.load(f)
         self._searcher = None
         self._enable_reranker = enable_reranker
+        self._enable_rewrite = enable_rewrite
 
     @property
     def searcher(self):
@@ -69,39 +71,38 @@ class RAGEvaluator:
             self._searcher = HybridSearcher(enable_reranker=self._enable_reranker)
         return self._searcher
 
-    # ── A. 检索层评测 ────────────────────────────────
+    # ── A+B. 检索层 + OOD 检测（单次遍历）────────────────
 
     def eval_retrieval(self, top_k: int = 5, limit: Optional[int] = None) -> dict:
         """
-        检索层评测。
+        检索层评测 + OOD 检测，一次遍历完成。
 
         两个层面:
-          1. Source Match: 基于 source_chunk_id 严格匹配（51 题有标注）
-          2. Semantic Relevance: 检索结果与 golden answer 的语义余弦相似度（全部 200 题）
+          1. Source Match: 基于 source_chunk_id 严格匹配
+          2. Semantic Relevance: 检索结果与 golden answer 的语义余弦相似度（batch embedding）
+        同时采集 OOD 检测指标（复用同一次检索结果）。
         """
+        from judge import judge
+
         samples = self.golden[:limit] if limit else self.golden
         n = len(samples)
         has_source = sum(1 for g in samples if g.get("source_chunk_id"))
         is_ood_count = sum(1 for g in samples if g["question_type"] == "OOD")
         is_indomain = n - is_ood_count
-        print(f"\n[检索层评测] {n} 题 (含 source_chunk_id={has_source}, OOD={is_ood_count}, In-domain={is_indomain})")
+        print(f"\n[检索+OOD评测] {n} 题 (含 source_chunk_id={has_source}, OOD={is_ood_count}, In-domain={is_indomain})")
         print(f"  top_k={top_k}\n")
 
-        # 复用 HybridSearcher 的 HuggingFaceEmbeddings，避免重复加载模型
         embeddings = self.searcher.embeddings
         golden_texts = [g["answer"] for g in samples]
-        golden_embs = embeddings.embed_documents(golden_texts)
-        golden_embs = np.array(golden_embs)
+        golden_embs = np.array(embeddings.embed_documents(golden_texts))
 
-        # 累积器
-        mrr_source = 0.0        # MRR based on source_chunk_id match
+        # ── 检索累积器 ──
+        mrr_source = 0.0
         recall_k = {1: 0, 3: 0, 5: 0}
         precision_k = {1: 0, 3: 0, 5: 0}
-        relevance_scores = []   # max cosine-sim per query
-        retrieval_ndcg = []     # NDCG using golden-answer similarity as relevance
-        chroma_sims = []        # real Chroma similarity scores (top1)
-
-        # 分维度统计: field_name -> value -> {count, mrr, relevance, hits}
+        chroma_sims = []
+        retrieval_ndcg = []
+        relevance_scores = [0.0] * n
         per_field = {
             "province": defaultdict(lambda: {"count": 0, "mrr": 0.0, "relevance": 0.0, "hits": 0}),
             "crop": defaultdict(lambda: {"count": 0, "mrr": 0.0, "relevance": 0.0, "hits": 0}),
@@ -110,47 +111,54 @@ class RAGEvaluator:
             "difficulty": defaultdict(lambda: {"count": 0, "mrr": 0.0, "relevance": 0.0, "hits": 0}),
         }
 
+        # ── OOD 累积器 ──
+        ood_detected = ood_missed = 0
+        indomain_kept = indomain_rejected = 0
+        layer1 = layer2 = layer3 = layer4 = 0
+        ood_sims = []
+        indomain_sims = []
+
+        # ── 延迟 embedding：先收集所有检索结果文本，最后 batch embed ──
+        retrieval_records = []  # [(query_idx, pos, text)]
+
         for idx, g in enumerate(samples):
-            query, golden_ans = g["question"], g["answer"]
+            query = g["question"]
             source_id = g.get("source_chunk_id", "")
             is_ood = g["question_type"] == "OOD"
             is_source_question = bool(source_id)
 
             # ── 检索 ──
-            results = self.searcher.search(query, top_k=top_k, expand_parent=True)
-            retrieved_texts = [r["content"] for r in results]
-
-            # ── Source Match（仅对 51 题有效）──
-            hits = []
-            for r in results:
-                hit = _has_source_match(source_id, r.get("metadata", {}).get("source_file", ""))
-                hits.append(hit)
-
-            # ── 语义相关度 (retrieved vs golden answer) ──
-            if retrieved_texts:
-                ret_embs = np.array(embeddings.embed_documents(retrieved_texts))
-                rels = [cosine_sim(golden_embs[idx], re) for re in ret_embs]
-                max_rel = max(rels)
+            if self._enable_rewrite:
+                from query_rewriter import expand_query
+                search_queries = expand_query(query, mode="all")
             else:
-                rels = [0.0] * top_k
-                max_rel = 0.0
+                search_queries = [query]
 
-            relevance_scores.append(max_rel)
+            all_results = []
+            for sq in search_queries:
+                r = self.searcher.search(sq, top_k=top_k, expand_parent=True)
+                all_results.extend(r)
 
-            # ── NDCG (用 golden-sim 作为 relevance gain) ──
-            dcg = sum((2**r - 1) / np.log2(i + 2) for i, r in enumerate(rels))
-            ideal_rels = sorted(rels, reverse=True)
-            idcg = sum((2**r - 1) / np.log2(i + 2) for i, r in enumerate(ideal_rels))
-            ndcg = dcg / idcg if idcg > 0 else 0.0
-            retrieval_ndcg.append(ndcg)
+            # 去重：按 content 前 80 字符，保留最高相似度
+            seen = {}
+            for r in all_results:
+                key = r["content"][:80]
+                sim = r.get("similarity", 0)
+                if key not in seen or sim > seen[key].get("similarity", 0):
+                    seen[key] = r
+            results = sorted(seen.values(), key=lambda r: r.get("similarity", 0), reverse=True)[:top_k]
+            retrieved_texts = [r["content"] for r in results]
+            for pos, text in enumerate(retrieved_texts):
+                retrieval_records.append((idx, pos, text))
 
             # ── Chroma 真实相似度 ──
-            if results:
-                chroma_sims.append(results[0].get("similarity", 0))
-            else:
-                chroma_sims.append(0)
+            chroma_sims.append(results[0].get("similarity", 0) if results else 0)
 
-            # ── Source MRR/Recall/Precision（仅算有 source_chunk_id 的题）──
+            # ── Source Match ──
+            hits = []
+            for r in results:
+                hits.append(_has_source_match(source_id, r.get("metadata", {}).get("source_file", "")))
+
             if is_source_question:
                 rr = 0.0
                 for i, h in enumerate(hits):
@@ -163,136 +171,118 @@ class RAGEvaluator:
                         recall_k[k] += 1
                     precision_k[k] += sum(hits[:k]) / min(k, len(hits))
 
-            # ── 分维度 ──
+                # 分维度累加 MRR/hits
+                for field_name in per_field:
+                    val = g.get(field_name, "unknown")
+                    per_field[field_name][val]["mrr"] += rr
+                    per_field[field_name][val]["hits"] += 1
+
+            # ── OOD 检测（复用同一检索结果）──
+            j = judge(query, results)
+            rejected = j["decision"] == "reject"
+            top1_sim = results[0].get("similarity", 0) if results else 0
+
+            if is_ood:
+                ood_sims.append(top1_sim)
+                if rejected: ood_detected += 1
+                else: ood_missed += 1
+            else:
+                indomain_sims.append(top1_sim)
+                if rejected: indomain_rejected += 1
+                else: indomain_kept += 1
+
+            layer_map = {"signal": "layer1", "high_sim": "layer2", "score": "layer3", "llm": "layer4"}
+            layer_name = layer_map.get(j["method"], "unknown")
+            if layer_name == "layer1": layer1 += 1
+            elif layer_name == "layer2": layer2 += 1
+            elif layer_name == "layer3": layer3 += 1
+            else: layer4 += 1
+
+            # ── 分维度（relevance 稍后 batch 算完再填）──
             for field_name in per_field:
                 val = g.get(field_name, "unknown")
-                cat = per_field[field_name][val]
-                cat["count"] += 1
-                cat["relevance"] += max_rel
-                if is_source_question:
-                    rr_for_cat = 0.0
-                    any_hit = False
-                    for i, h in enumerate(hits):
-                        if h:
-                            rr_for_cat = 1.0 / (i + 1)
-                            any_hit = True
-                            break
-                    cat["mrr"] += rr_for_cat
-                    if any_hit:
-                        cat["hits"] += 1
+                per_field[field_name][val]["count"] += 1
 
             if (idx + 1) % 50 == 0:
                 print(f"  进度: {idx + 1}/{n}")
 
-        # ── 汇总 ──
+        # ── Batch embed 所有检索结果，一次性计算语义相关度 ──
+        print(f"  正在批量计算语义相关度 ({len(retrieval_records)} 条文本)...")
+        all_texts = [r[2] for r in retrieval_records]
+        all_ret_embs = np.array(embeddings.embed_documents(all_texts))
+
+        # 按 query 分组计算 relevance
+        query_rel_groups = defaultdict(list)  # query_idx → [(pos, rel)]
+        for (query_idx, pos, _), ret_emb in zip(retrieval_records, all_ret_embs):
+            rel = cosine_sim(golden_embs[query_idx], ret_emb)
+            query_rel_groups[query_idx].append((pos, rel))
+
+        for idx in range(n):
+            rels_for_q = query_rel_groups.get(idx, [])
+            if rels_for_q:
+                rel_values = [r[1] for r in sorted(rels_for_q, key=lambda x: -x[1])]
+                max_rel = max(rel_values)
+                relevance_scores[idx] = max_rel
+                # NDCG
+                dcg = sum((2**r - 1) / np.log2(i + 2) for i, r in enumerate(rel_values[:top_k]))
+                ideal_rels = sorted(rel_values[:top_k], reverse=True)
+                idcg = sum((2**r - 1) / np.log2(i + 2) for i, r in enumerate(ideal_rels))
+                retrieval_ndcg.append(dcg / idcg if idcg > 0 else 0.0)
+            else:
+                relevance_scores[idx] = 0.0
+                retrieval_ndcg.append(0.0)
+
+        # 回填分维度 relevance
+        for idx, g in enumerate(samples):
+            max_rel = relevance_scores[idx]
+            for field_name in per_field:
+                val = g.get(field_name, "unknown")
+                per_field[field_name][val]["relevance"] += max_rel
+
+        # ── 汇总检索指标 ──
         n_source = sum(1 for g in samples if g.get("source_chunk_id"))
 
-        metrics = {
+        ret_metrics = {
             "total": n,
             "with_source_id": n_source,
             "top_k": top_k,
-            # Source-match metrics (仅 51 题)
             "mrr_source": mrr_source / n_source if n_source > 0 else 0,
             "recall": {k: recall_k[k] / n_source if n_source > 0 else 0 for k in [1, 3, 5]},
             "precision": {k: precision_k[k] / n_source if n_source > 0 else 0 for k in [1, 3, 5]},
-            # Semantic relevance (全部 200 题)
             "avg_relevance": float(np.mean(relevance_scores)),
             "pct_relevant_06": sum(1 for s in relevance_scores if s > 0.6) / n,
             "pct_relevant_07": sum(1 for s in relevance_scores if s > 0.7) / n,
             "avg_ndcg": float(np.mean(retrieval_ndcg)),
-            # In-domain only relevance
             "indomain_avg_relevance": float(np.mean([relevance_scores[i] for i, g in enumerate(samples) if g["question_type"] != "OOD"])),
             "indomain_pct_relevant_06": sum(1 for i, g in enumerate(samples) if g["question_type"] != "OOD" and relevance_scores[i] > 0.6) / is_indomain if is_indomain > 0 else 0,
-            # Chroma real sim
             "avg_chroma_top1_sim": float(np.mean(chroma_sims)),
             "per_field": per_field,
             "detail": [],
         }
 
-        # 分维度归一化
         for field_name in per_field:
             for cat in per_field[field_name].values():
                 c = cat["count"]
                 if c > 0:
                     cat["relevance"] /= c
-                    source_qs_in_cat = sum(1 for g in samples
-                                           if g.get(field_name) == list(per_field[field_name].keys())[list(per_field[field_name].values()).index(cat)]
-                                           and g.get("source_chunk_id"))
-                    # simpler: just divide by total count in category
                     cat["mrr"] = cat["mrr"] / cat["hits"] if cat["hits"] > 0 else 0
 
-        return metrics
-
-    # ── B. OOD 检测评测 ────────────────────────────────
-
-    def eval_judge_ood(self, limit: Optional[int] = None) -> dict:
-        """评测 Judge 三层 OOD 检测。"""
-        samples = self.golden[:limit] if limit else self.golden
-        n_ood = sum(1 for g in samples if g["question_type"] == "OOD")
-        n_indomain = sum(1 for g in samples if g["question_type"] != "OOD")
-        print(f"\n[Judge OOD 检测] {len(samples)} 题 (OOD={n_ood}, In-domain={n_indomain})")
-
-        from judge import judge
-
-        # 复用 HybridSearcher 的 Chroma 实例
-        vectorstore = self.searcher.vectorstore
-
-        result = {
-            "ood_detected": 0, "ood_missed": 0,
-            "indomain_kept": 0, "indomain_rejected": 0,
-            "layer1": 0, "layer2": 0, "layer3": 0,
-            "ood_sims": [],
-            "indomain_sims": [],
-            "details": [],
+        # ── 汇总 OOD 指标 ──
+        ood_metrics = {
+            "total": n, "n_ood": is_ood_count, "n_indomain": is_indomain,
+            "ood_detected": ood_detected, "ood_missed": ood_missed,
+            "indomain_kept": indomain_kept, "indomain_rejected": indomain_rejected,
+            "ood_recall": ood_detected / is_ood_count if is_ood_count > 0 else 1.0,
+            "indomain_pass_rate": indomain_kept / is_indomain if is_indomain > 0 else 1.0,
+            "accuracy": (ood_detected + indomain_kept) / n,
+            "avg_ood_sim": float(np.mean(ood_sims)) if ood_sims else 0,
+            "avg_indomain_sim": float(np.mean(indomain_sims)) if indomain_sims else 0,
+            "min_ood_sim": float(min(ood_sims)) if ood_sims else 0,
+            "max_ood_sim": float(max(ood_sims)) if ood_sims else 0,
+            "layer1": layer1, "layer2": layer2, "layer3": layer3, "layer4": layer4,
         }
 
-        for g in samples:
-            query = g["question"]
-            is_ood = g["question_type"] == "OOD"
-
-            # 用 Chroma 直接搜获取真实分数
-            vec_results = vectorstore.similarity_search_with_score(query, k=3)
-            real_top1_sim = vec_results[0][1] if vec_results else 0
-
-            # 也用 hybrid search 走一遍
-            results = self.searcher.search(query, top_k=3)
-            j = judge(query, results)
-            rejected = j["decision"] == "reject"
-
-            if is_ood:
-                result["ood_sims"].append(real_top1_sim)
-                if rejected:
-                    result["ood_detected"] += 1
-                else:
-                    result["ood_missed"] += 1
-            else:
-                result["indomain_sims"].append(real_top1_sim)
-                if rejected:
-                    result["indomain_rejected"] += 1
-                else:
-                    result["indomain_kept"] += 1
-
-            if j["method"] == "signal":
-                result["layer1"] += 1
-            elif j["method"] == "score":
-                result["layer2"] += 1
-            else:
-                result["layer3"] += 1
-
-        total = len(samples)
-        result.update({
-            "total": total,
-            "n_ood": n_ood, "n_indomain": n_indomain,
-            "ood_recall": result["ood_detected"] / n_ood if n_ood > 0 else 1.0,
-            "indomain_pass_rate": result["indomain_kept"] / n_indomain if n_indomain > 0 else 1.0,
-            "accuracy": (result["ood_detected"] + result["indomain_kept"]) / total,
-            "avg_ood_sim": float(np.mean(result["ood_sims"])) if result["ood_sims"] else 0,
-            "avg_indomain_sim": float(np.mean(result["indomain_sims"])) if result["indomain_sims"] else 0,
-            "min_ood_sim": float(min(result["ood_sims"])) if result["ood_sims"] else 0,
-            "max_ood_sim": float(max(result["ood_sims"])) if result["ood_sims"] else 0,
-        })
-
-        return result
+        return ret_metrics, ood_metrics
 
     # ── C. 忠实率 + 正确率评测（需 LLM）─────────────────────
 
@@ -340,8 +330,6 @@ class RAGEvaluator:
                 if j["decision"] == "reject":
                     gen_answer = "[拒答] " + j.get("reason", "")
                     metrics["rejected"] += 1
-                    # 对 in-domain 被拒答做标记
-                    from judge import judge as _j
                 else:
                     gen_answer = generate(query, results, temperature=0.3)
                     metrics["generated"] += 1
@@ -473,7 +461,7 @@ def print_report(ret: dict, ood: dict):
     print(f"  漏判 (OOD→pass):         {ood['ood_missed']}")
     print(f"\n  OOD 真实 Chroma 相似度: avg={ood['avg_ood_sim']:.4f} min={ood['min_ood_sim']:.4f} max={ood['max_ood_sim']:.4f}")
     print(f"  In-domain 真实相似度:    avg={ood['avg_indomain_sim']:.4f}")
-    print(f"  Layer 分布: signal={ood['layer1']}, score={ood['layer2']}, llm={ood['layer3']}")
+    print(f"  Layer 分布: signal(L1)={ood['layer1']}, high_sim(L2)={ood['layer2']}, score(L3)={ood['layer3']}, llm(L4)={ood['layer4']}")
 
     # ── 3. 按维度细分 ──
     for field_name, title in [
@@ -513,12 +501,12 @@ def print_report(ret: dict, ood: dict):
         print(f"     建议: 调优 EnsembleRetriever 权重, 或增大 top_k 配合 Reranker 使用。")
 
     # OOD 真实 sim 分析
-    if ood.get("avg_ood_sim", 0) > 1.5:
-        print(f"  4. OOD 查询的 Chroma 真实距离偏低 (avg={ood['avg_ood_sim']:.2f})。")
-        print(f"     可设 distance > 1.5 作为 Layer 2 reject 阈值。")
+    if ood.get("avg_ood_sim", 0) < 0.55:
+        print(f"  4. OOD 余弦相似度偏低 (avg={ood['avg_ood_sim']:.4f})，向量空间分离良好。")
+        print(f"     OOD 查询与知识库距离远，Judge score 层可有效拦截。")
     else:
-        print(f"  4. OOD 查询 Chrome 距离: avg={ood['avg_ood_sim']:.2f}。")
-        print(f"     说明 OOD 查询在向量空间中能找到'近邻'内容（话题漂移）。")
+        print(f"  4. OOD 余弦相似度偏高 (avg={ood['avg_ood_sim']:.4f})，存在话题漂移。")
+        print(f"     OOD 查询在向量空间中仍有近邻内容，需依赖 LLM 层细判。")
 
 
 # ── 主函数 ──────────────────────────────────────────
@@ -527,6 +515,7 @@ def main():
     parser = argparse.ArgumentParser(description="Golden Set 评测")
     parser.add_argument("--full", action="store_true", help="全管道评测（需要 LLM）")
     parser.add_argument("--reranker", action="store_true", help="启用 CrossEncoder Reranker 精排")
+    parser.add_argument("--rewrite", action="store_true", help="启用查询改写（需要 LLM）")
     parser.add_argument("--limit", type=int, default=None, help="限制评测数量")
     parser.add_argument("--top-k", type=int, default=5, help="检索返回数量")
     parser.add_argument("--output", type=str, default=None, help="保存结果 JSON")
@@ -536,13 +525,10 @@ def main():
         print("请先运行 python3 generate_golden_set.py")
         sys.exit(1)
 
-    evaluator = RAGEvaluator(enable_reranker=args.reranker)
+    evaluator = RAGEvaluator(enable_reranker=args.reranker, enable_rewrite=args.rewrite)
 
-    # A. 检索层评测
-    ret = evaluator.eval_retrieval(top_k=args.top_k, limit=args.limit)
-
-    # B. OOD 检测
-    ood = evaluator.eval_judge_ood(limit=args.limit)
+    # A+B. 检索层 + OOD 检测（单次遍历）
+    ret, ood = evaluator.eval_retrieval(top_k=args.top_k, limit=args.limit)
 
     # C. 打印报告
     print_report(ret, ood)
