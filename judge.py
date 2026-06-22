@@ -7,9 +7,8 @@ OOD Judge
   3. 分数层: similarity < 0.46 → reject
   4. LLM 层: 模糊区间 [0.46, 0.60) → LLM 细判
 
-阈值来源: calibrate_judge_threshold.py 对 200 题 golden set 实测
-  OOD max=0.577, In-domain min=0.614, 两组完全可分
-  0.60 可 100% 准确跳过全部 In-domain 题的 LLM 调用
+阈值来源: calibrate_judge_threshold.py 对 200 题 golden set 实测标定
+  （相似度公式为 1.0 - cosine_distance，重新运行校准脚本以更新阈值）
 
 用法:
   from judge import judge

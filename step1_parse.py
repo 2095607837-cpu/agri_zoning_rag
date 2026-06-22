@@ -5,6 +5,7 @@
 
 用法:
   python3 step1_parse.py
+  DATA_SRC=/path/to/source python3 step1_parse.py  # 指定数据源目录
 """
 
 import json
@@ -15,7 +16,7 @@ import hashlib
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
-DATA_SRC = Path("/Users/han/大模型自研代码/农业区划算法")
+DATA_SRC = Path(os.environ.get("DATA_SRC", "/Users/han/大模型自研代码/农业区划算法"))
 OUTPUT = BASE_DIR / "data" / "chunks.json"
 
 # 重复目录（跳过，避免相同文件被解析两次）

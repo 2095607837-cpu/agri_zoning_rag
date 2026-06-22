@@ -3,9 +3,7 @@
 
 使用 LangGraph StateGraph 编排完整的 RAG 流程：
 
-  START → retrieve → judge ──(answer)──→ generate → END
-                    ├──(fallback)──→ generate → END
-                    └──(reject)───→ reject ──→ END
+  START → retrieve → judge → generate → END
 
 用法:
   from rag_pipeline import RAGPipeline
@@ -64,7 +62,7 @@ class RAGPipeline:
     基于 LangGraph 的农业区划 RAG 管道。
 
     图结构:
-      retrieve → judge → [conditional] → generate / reject → END
+      retrieve → judge → generate → END
 
     Args:
         enable_reranker: 是否启用 CrossEncoder 精排
@@ -111,7 +109,7 @@ class RAGPipeline:
         }
 
     def _judge_node(self, state: RAGState) -> dict:
-        """判定节点：三层判断。"""
+        """判定节点：四层判断。"""
         j = judge(state["query"], state["results"])
         return {
             "decision": j["decision"],
@@ -140,12 +138,6 @@ class RAGPipeline:
             })
 
         return {"answer": answer, "sources": sources}
-
-    # ── 路由 ──────────────────────────────────────
-
-    def _route_after_judge(self, state: RAGState) -> str:
-        """判定后路由：answer → generate, fallback → generate, reject → generate_rejection（走 generate 节点统一处理）。"""
-        return "generate"
 
     # ── 构建图 ────────────────────────────────────
 
