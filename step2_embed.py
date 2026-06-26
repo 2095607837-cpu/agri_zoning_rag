@@ -28,17 +28,25 @@ PERSIST_DIR = str(BASE_DIR / "vectordb")
 COLLECTION_NAME = "agri_zoning"
 EMBED_MODEL = "BAAI/bge-small-zh-v1.5"
 
-# 中文适用的切分器：按段落标记递归切分，1000字符/chunk，200字符重叠
+# 中文适用的切分器：按段落标记递归切分，800字符/chunk，150字符重叠
 TEXT_SPLITTER = RecursiveCharacterTextSplitter(
     separators=["\n\n", "\n", "。", "；", "，", " ", ""],
-    chunk_size=1000,
-    chunk_overlap=200,
+    chunk_size=800,
+    chunk_overlap=150,
+)
+
+# H3 子标题模式（用于 >3000 字章节的回退切分）
+_H3_SPLIT_RE = re.compile(
+    r'^\d+\.\d+[\.\、\s]'                         # 1.1  2.3.1
+    r'|^\（\d+）'                                  # （1）（2）
+    r'|^[\(（]\d+[\)）][\s]'                       # (1) 1)
 )
 
 
 def load_documents() -> list[Document]:
     """从 step1_parse 产出的 chunks.json 加载为 LangChain Document 列表。
-    跳过 excluded=True 和 quality=low 的 chunk。"""
+    跳过 excluded=True 和 quality=low 的 chunk。
+    page_content = heading_path + 正文（heading_path 参与 embedding）。"""
     with open(CHUNKS_PATH, "r", encoding="utf-8") as f:
         chunks = json.load(f)
 
@@ -53,9 +61,11 @@ def load_documents() -> list[Document]:
             skipped_low += 1
             continue
         m = c["metadata"]
-        header = f"[{m.get('province', '')} {m.get('crop', '')} {m.get('zoning_type', '')}] "
+        heading_path = m.get("heading_path", [])
+        path_str = " > ".join(heading_path) if heading_path else ""
+        page_content = path_str + "\n\n" + c["content"] if path_str else c["content"]
         docs.append(Document(
-            page_content=header + c["content"],
+            page_content=page_content,
             metadata={
                 **c["metadata"],
                 "chunk_id": c["id"],
@@ -73,27 +83,98 @@ def _has_table(content: str) -> bool:
     return bool(re.search(r'\|.+\|', content))
 
 
+def _split_by_h3(doc: Document) -> list[Document]:
+    """将 >3000 字的章节按 H3 子标题回退切分，保留 heading_path 谱系。"""
+    text = doc.page_content
+    # 分离 heading_path 前缀和正文
+    heading_path = doc.metadata.get("heading_path", [])
+    path_prefix = " > ".join(heading_path) + "\n\n" if heading_path else ""
+    body = text[len(path_prefix):] if path_prefix and text.startswith(path_prefix) else text
+
+    lines = body.split("\n")
+    sub_sections = []
+    current_lines = []
+    current_title = ""
+
+    for line in lines:
+        stripped = line.strip()
+        if _H3_SPLIT_RE.match(stripped):
+            if current_lines:
+                sub_sections.append((current_title, "\n".join(current_lines)))
+            current_title = stripped
+            current_lines = []
+        else:
+            current_lines.append(line)
+
+    if current_lines:
+        sub_sections.append((current_title, "\n".join(current_lines)))
+
+    if len(sub_sections) <= 1:
+        return [doc]
+
+    result = []
+    for i, (title, content) in enumerate(sub_sections):
+        new_path = list(heading_path) + ([title] if title else [])
+        new_meta = dict(doc.metadata)
+        new_meta["heading_path"] = new_path
+        new_meta["heading_level"] = len(new_path)
+        new_meta["section_id"] = f"{doc.metadata.get('section_id', '')}_h3_{i}"
+
+        path_str = " > ".join(new_path)
+        new_page_content = path_str + "\n\n" + content.strip()
+
+        result.append(Document(page_content=new_page_content, metadata=new_meta))
+
+    return result
+
+
 def split_documents(docs: list[Document]) -> list[Document]:
-    """切分文档。≤800字的短chunk和含表格的chunk保持完整。
-    被切分的文档在子文档 metadata 中保留 parent_content，供检索时展开。"""
+    """切分文档：>3000 字的章节先尝试 H3 回退切分，
+    再走 RecursiveCharacterTextSplitter(800, 150)。
+    切分后按 section_id 分配 chunk_index/chunk_count。"""
+
+    # Phase 1: H3 fallback for large sections
+    phase1 = []
+    h3_split_count = 0
+    for d in docs:
+        if len(d.page_content) > 3000:
+            sub_docs = _split_by_h3(d)
+            if len(sub_docs) > 1:
+                h3_split_count += len(sub_docs) - 1
+            phase1.extend(sub_docs)
+        else:
+            phase1.append(d)
+    if h3_split_count:
+        print(f"         H3 回退切分: +{h3_split_count} 个子章节")
+
+    # Phase 2: RecursiveCharacterTextSplitter
     to_split = []
     keep_intact = []
-    for d in docs:
+    for d in phase1:
         if len(d.page_content) <= 800 or _has_table(d.page_content):
             keep_intact.append(d)
         else:
             to_split.append(d)
-
-    # 切分前将原始内容写入 metadata，LangChain splitter 的子文档会自动继承
-    for d in to_split:
-        d.metadata["parent_content"] = d.page_content
 
     split_result = TEXT_SPLITTER.split_documents(to_split)
 
     print(f"         免切分: {len(keep_intact)} 条 (≤800字或含表格)")
     print(f"         被切分: {len(to_split)} 条 → {len(split_result)} 条")
 
-    return split_result + keep_intact
+    all_docs = split_result + keep_intact
+
+    # Phase 3: 按 section_id 分组分配 chunk_index / chunk_count
+    section_groups: dict[str, list[Document]] = {}
+    for d in all_docs:
+        sid = d.metadata.get("section_id", "")
+        section_groups.setdefault(sid, []).append(d)
+
+    for sid, group in section_groups.items():
+        for i, d in enumerate(group):
+            d.metadata["chunk_index"] = i
+            d.metadata["chunk_count"] = len(group)
+
+    return all_docs
 
 
 def build_vectorstore(docs: list[Document], force_rebuild: bool = False) -> Chroma:

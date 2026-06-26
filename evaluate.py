@@ -128,16 +128,20 @@ class RAGEvaluator:
             is_source_question = bool(source_id)
 
             # ── 检索 ──
+            # 原始 query 检索 — 用于 Judge OOD 判定（不受改写干扰）
+            judge_results_raw = self.searcher.search(query, top_k=top_k, expand_context=True)
+
             if self._enable_rewrite:
                 from query_rewriter import expand_query
-                search_queries = expand_query(query, mode="all")
+                search_queries = expand_query(query, mode="multi_view")
+                extra_queries = [sq for sq in search_queries if sq != query]
+                all_results = list(judge_results_raw)
+                for sq in extra_queries:
+                    r = self.searcher.search(sq, top_k=top_k, expand_context=True)
+                    all_results.extend(r)
             else:
                 search_queries = [query]
-
-            all_results = []
-            for sq in search_queries:
-                r = self.searcher.search(sq, top_k=top_k, expand_parent=True)
-                all_results.extend(r)
+                all_results = judge_results_raw
 
             # 去重：按 content 前 80 字符，保留最高相似度
             seen = {}
@@ -147,6 +151,7 @@ class RAGEvaluator:
                 if key not in seen or sim > seen[key].get("similarity", 0):
                     seen[key] = r
             results = sorted(seen.values(), key=lambda r: r.get("similarity", 0), reverse=True)[:top_k]
+            judge_results = judge_results_raw[:top_k]
             retrieved_texts = [r["content"] for r in results]
             for pos, text in enumerate(retrieved_texts):
                 retrieval_records.append((idx, pos, text))
@@ -177,10 +182,10 @@ class RAGEvaluator:
                     per_field[field_name][val]["mrr"] += rr
                     per_field[field_name][val]["hits"] += 1
 
-            # ── OOD 检测（复用同一检索结果）──
-            j = judge(query, results)
+            # ── OOD 检测（用原始 query 检索结果，避免改写干扰）──
+            j = judge(query, judge_results)
             rejected = j["decision"] == "reject"
-            top1_sim = results[0].get("similarity", 0) if results else 0
+            top1_sim = judge_results[0].get("similarity", 0) if judge_results else 0
 
             if is_ood:
                 ood_sims.append(top1_sim)
@@ -203,8 +208,7 @@ class RAGEvaluator:
                 val = g.get(field_name, "unknown")
                 per_field[field_name][val]["count"] += 1
 
-            if (idx + 1) % 50 == 0:
-                print(f"  进度: {idx + 1}/{n}")
+            print(f"  [{idx + 1}/{n}] query: {query[:60]}...")
 
         # ── Batch embed 所有检索结果，一次性计算语义相关度 ──
         print(f"  正在批量计算语义相关度 ({len(retrieval_records)} 条文本)...")
@@ -361,8 +365,7 @@ class RAGEvaluator:
                     metrics["faith_scores"].append(-1)
                     metrics["correct_scores"].append(-1)
 
-                if (idx + 1) % 10 == 0:
-                    print(f"  进度: {idx+1}/{n}  [生成={metrics['generated']} 拒答={metrics['rejected']}]")
+                print(f"  [{idx+1}/{n}] query={g['id']}  [生成={metrics['generated']} 拒答={metrics['rejected']}]")
 
             except Exception as ex:
                 metrics["errors"] += 1
@@ -516,6 +519,7 @@ def main():
     parser.add_argument("--full", action="store_true", help="全管道评测（需要 LLM）")
     parser.add_argument("--reranker", action="store_true", help="启用 CrossEncoder Reranker 精排")
     parser.add_argument("--rewrite", action="store_true", help="启用查询改写（需要 LLM）")
+    parser.add_argument("--precompute-rewrites", action="store_true", help="预计算所有评测问题的改写结果并缓存到文件")
     parser.add_argument("--limit", type=int, default=None, help="限制评测数量")
     parser.add_argument("--top-k", type=int, default=5, help="检索返回数量")
     parser.add_argument("--output", type=str, default=None, help="保存结果 JSON")
@@ -524,6 +528,16 @@ def main():
     if not os.path.exists(GOLDEN_PATH):
         print("请先运行 python3 generate_golden_set.py")
         sys.exit(1)
+
+    if args.precompute_rewrites:
+        from query_rewriter import precompute_rewrites
+        with open(GOLDEN_PATH, "r", encoding="utf-8") as f:
+            golden = json.load(f)
+        queries = list({g["question"] for g in golden})
+        print(f"[precompute] 预计算 {len(queries)} 个唯一问题的改写结果...")
+        precompute_rewrites(queries)
+        print("[precompute] 完成。可直接运行 python3 evaluate.py --rewrite 进行评测。")
+        sys.exit(0)
 
     evaluator = RAGEvaluator(enable_reranker=args.reranker, enable_rewrite=args.rewrite)
 

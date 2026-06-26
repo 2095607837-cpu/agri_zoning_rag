@@ -76,9 +76,13 @@ class HybridSearcher:
 
     内部组合:
       - BM25Retriever (关键词匹配)
-      - Chroma.as_retriever (语义检索)
-      - EnsembleRetriever (RRF-like 加权融合，weights=[0.3, 0.7])
+      - Chroma 语义检索
+      - RRF 加权融合
       - 可选 Reranker 精排
+      - 同 section 上下文扩展（命中 chunk ±1）
+
+    BM25 和 Chroma 使用同一套 document（step2 切分后的子块），
+    metadata 中含 section_id / chunk_index / chunk_count，支持按 section 扩展上下文。
     """
 
     def __init__(self, enable_reranker: bool = False):
@@ -87,6 +91,7 @@ class HybridSearcher:
         self._vectorstore = None
         self._bm25_retriever = None
         self._reranker: Reranker | None = None
+        self._section_index: dict[str, list[dict]] = {}
         self._init()
 
     @property
@@ -101,42 +106,53 @@ class HybridSearcher:
 
     def _init(self):
         print("[HybridSearcher] 初始化...")
-        # 加载 embeddings
         self._embeddings = HuggingFaceEmbeddings(
             model_name=EMBED_MODEL,
             model_kwargs={"device": "cpu"},
             encode_kwargs={"normalize_embeddings": True},
         )
 
-        # 加载 Chroma
         self._vectorstore = Chroma(
             collection_name=COLLECTION_NAME,
             embedding_function=self._embeddings,
             persist_directory=PERSIST_DIR,
         )
 
-        # BM25 — 从原始 chunks 构建（跳过被文档去重排除的 chunk）
-        with open(CHUNKS_PATH, "r", encoding="utf-8") as f:
-            raw_chunks = json.load(f)
-        bm25_docs = [
-            Document(page_content=c["content"], metadata={**c["metadata"], "chunk_id": c["id"]})
-            for c in raw_chunks
-            if not c.get("excluded")  # 文档级去重排除的跳过
-        ]
-        self._bm25_retriever = BM25Retriever.from_documents(bm25_docs)
-        self._bm25_retriever.k = 20  # 候选池，供 RRF 融合
+        # BM25 + Section Index — 统一从 Chroma vectorstore 构建
+        all_data = self._vectorstore.get(include=["documents", "metadatas"])
+        bm25_docs = []
+        for content, meta in zip(all_data["documents"], all_data["metadatas"]):
+            bm25_docs.append(Document(page_content=content, metadata=meta))
 
-        # Reranker
+            # 同时构建 section 索引（用于上下文扩展）
+            sid = meta.get("section_id", "")
+            if sid:
+                self._section_index.setdefault(sid, []).append({
+                    "content": content,
+                    "metadata": meta,
+                    "chunk_index": meta.get("chunk_index", 0),
+                })
+
+        for sid in self._section_index:
+            self._section_index[sid].sort(key=lambda x: x["chunk_index"])
+
+        self._bm25_retriever = BM25Retriever.from_documents(bm25_docs)
+        self._bm25_retriever.k = 20
+
         if self.enable_reranker:
             self._reranker = Reranker()
 
-        print(f"[HybridSearcher] 就绪 (reranker={'on' if self.enable_reranker else 'off'})")
+        print(f"[HybridSearcher] 就绪 (docs={len(bm25_docs)}, sections={len(self._section_index)}, "
+              f"reranker={'on' if self.enable_reranker else 'off'})")
 
-    def search(self, query: str, top_k: int = 5, expand_parent: bool = False) -> list[dict]:
-        """混合检索（RRF 融合）+ 可选 CrossEncoder 重排序 + 可选父文档展开。
+    def search(self, query: str, top_k: int = 5, expand_context: bool = False) -> list[dict]:
+        """混合检索（RRF 融合）+ 可选 CrossEncoder 重排序 + 可选同 section 上下文扩展。
 
         无论是否启用 reranker，返回结果中的 similarity 字段始终是余弦相似度，
         确保下游 Judge 的阈值判定一致。
+
+        expand_context=True 时：对每个命中 chunk，取同 section 内前1后1相邻 chunk，
+        拼接为检索结果（固定窗口，而非展开完整父文档）。
         """
         pool_size = max(top_k * 4, 20)  # 召回量，保证足够候选
 
@@ -201,21 +217,39 @@ class HybridSearcher:
                     "dense_similarity": real_sim or 0.0,
                 })
 
-        # 5. 父文档展开
-        if expand_parent:
-            seen_parents = set()
+        # 5. 同 section 上下文扩展（命中 chunk ±1）
+        if expand_context:
             expanded = []
+            seen_windows = set()
             for r in results:
-                parent = r["metadata"].get("parent_content")
-                if parent:
-                    parent_key = parent[:120]
-                    if parent_key in seen_parents:
+                sid = r["metadata"].get("section_id", "")
+                chunk_idx = r["metadata"].get("chunk_index", 0)
+
+                if sid and sid in self._section_index:
+                    section_chunks = self._section_index[sid]
+                    chunk_count = len(section_chunks)
+                    start = max(0, chunk_idx - 1)
+                    end = min(chunk_count - 1, chunk_idx + 1)
+
+                    # 同一 section 内去重：相同窗口只保留一次
+                    window_key = f"{sid}:{start}:{end}"
+                    if window_key in seen_windows:
                         continue
-                    seen_parents.add(parent_key)
-                    r["content"] = parent
+                    seen_windows.add(window_key)
+
+                    parts = []
+                    heading_path = r["metadata"].get("heading_path", [])
+                    if heading_path:
+                        parts.append(" > ".join(heading_path))
+
+                    for i in range(start, end + 1):
+                        if i < len(section_chunks):
+                            parts.append(section_chunks[i]["content"])
+
+                    r["content"] = "\n\n---\n\n".join(parts)
+                    r["context_range"] = [start, end]
+
                 expanded.append(r)
-                if len(expanded) >= top_k:
-                    break
             results = expanded
 
         return results

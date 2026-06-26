@@ -32,15 +32,138 @@ CSV_ENCODINGS = ["utf-8", "gbk", "gb2312", "gb18030", "latin-1"]
 
 # ── DOCX 解析 ──────────────────────────────────────────
 
+# Tier 2 正则标题模式（中文文档常见标题格式）
+_TIER2_HEADING_RE = re.compile(
+    r'^[一二三四五六七八九十]+[、．.\s]'           # 一、二、三、
+    r'|^第[一二三四五六七八九十\d]+[章节]'        # 第一章、第2节
+    r'|^（[一二三四五六七八九十]+）'              # （一）（二）
+    r'|^\d+[\.\、]\s*[^\d]'                       # 1. 引言  2. 方法（排除纯数字）
+)
+
+# Tier 2 内 H3 子标题模式（用于 3000+ 字章节的回退切分）
+_H3_SPLIT_RE = re.compile(
+    r'^\d+\.\d+[\.\、\s]'                         # 1.1  2.3.1
+    r'|^\（\d+）'                                  # （1）（2）
+    r'|^[\(（]\d+[\)）][\s]'                       # (1) 1)
+)
+
+
+def _heading_level(style_name: str) -> int:
+    """从段落样式名提取标题级别，非标题返回 0。
+    兼容：'Heading 1' / '标题 2' / '1 Heading 1'(WPS) / 'TOC 1'"""
+    if not style_name:
+        return 0
+    m = re.search(r'(?:heading|标题|TOC)\s*(\d+)', style_name, re.IGNORECASE)
+    if m:
+        return int(m.group(1))
+    if re.search(r'heading|标题', style_name, re.IGNORECASE):
+        return 1
+    return 0
+
+
+def _split_by_sentence(text: str, max_chars: int = 800) -> list[str]:
+    """按句边界切分文本，每段 ≤ max_chars。"""
+    sentences = re.split(r'(?<=[。！？\n])\s*', text)
+    chunks = []
+    current = ""
+    for s in sentences:
+        if not s.strip():
+            continue
+        if len(current) + len(s) > max_chars and current:
+            chunks.append(current.strip())
+            current = s
+        else:
+            current += s
+    if current.strip():
+        chunks.append(current.strip())
+    return chunks or [text]
+
+
+def _build_style_sections(items: list[dict]) -> list[dict]:
+    """Tier 1: 样式标题构建章节。H1 记录文档标题，H2 为章节边界，H3+ 内联为 markdown。"""
+    h1_title = ""
+    sections = []
+    current = {"heading_path": [], "paragraphs": []}
+
+    for item in items:
+        level = item["level"]
+        text = item["text"]
+
+        if level == 1:
+            h1_title = text
+        elif level == 2:
+            if current["paragraphs"]:
+                sections.append(current)
+            path = [h1_title, text] if h1_title else [text]
+            current = {"heading_path": path, "paragraphs": []}
+        elif level >= 3:
+            prefix = "#" * min(level, 4)
+            current["paragraphs"].append(f"{prefix} {text}")
+        else:
+            current["paragraphs"].append(text)
+
+    if current["paragraphs"]:
+        sections.append(current)
+    return sections
+
+
+def _build_regex_sections(texts: list[str]) -> list[dict]:
+    """Tier 2: 正则匹配标题行构建章节，所有匹配项视为 H2 级别。"""
+    sections = []
+    current = {"heading_path": [], "paragraphs": []}
+
+    for text in texts:
+        if _TIER2_HEADING_RE.match(text.strip()):
+            if current["paragraphs"]:
+                sections.append(current)
+            current = {"heading_path": [text.strip()], "paragraphs": []}
+        else:
+            current["paragraphs"].append(text)
+
+    if current["paragraphs"]:
+        sections.append(current)
+    return sections
+
+
+def _fixed_length_chunks(items: list[dict], doc_stem: str, fname: str,
+                          province: str, crop: str, zoning: str) -> list[dict]:
+    """Tier 3: 固定长度切分（~800 字，句边界对齐），最终兜底。"""
+    all_text = "\n".join(it["text"] for it in items)
+    parts = _split_by_sentence(all_text, 800)
+    chunks = []
+    for i, part in enumerate(parts):
+        section_id = f"{doc_stem}_sec_{i}"
+        chunks.append({
+            "id": f"{doc_stem}_s{i}",
+            "content": part,
+            "metadata": {
+                "doc_id": doc_stem,
+                "section_id": section_id,
+                "heading_path": [doc_stem],
+                "heading_level": 1,
+                "source_type": "technical_spec",
+                "source_file": fname,
+                "province": province,
+                "crop": crop,
+                "zoning_type": zoning,
+                "section_title": doc_stem,
+            },
+        })
+    return chunks
+
+
 def parse_docx(filepath: str) -> list[dict]:
-    """解析 DOCX 文件，提取段落文本 + 表格，按章节切分。"""
+    """解析 DOCX 文件。三层策略：
+      Tier 1 - 样式标题（H1 文档标题，H2 章节边界，H3+ 内联为 markdown）
+      Tier 2 - 正则标题识别（降级，所有匹配视为 H2 级别）
+      Tier 3 - 固定长度切分（最终兜底，~800 字/段，句边界对齐）
+    """
     try:
         import docx
     except ImportError:
         print(f"  [!] python-docx 未安装，跳过: {filepath}")
         return []
 
-    chunks = []
     try:
         doc = docx.Document(filepath)
     except Exception as e:
@@ -48,98 +171,69 @@ def parse_docx(filepath: str) -> list[dict]:
         return []
 
     fname = Path(filepath).name
+    doc_stem = Path(filepath).stem
     province, crop, zoning = _infer_meta(fname)
-    sections = []
-    current_section = {"title": "", "paragraphs": [], "tables": []}
 
+    # 收集段落并标注标题级别
+    items = []
     for para in doc.paragraphs:
         text = para.text.strip()
         if not text:
             continue
         style = para.style.name if para.style else ""
-        if "Heading" in style or "heading" in style or "标题" in style:
-            if current_section["paragraphs"] or current_section["tables"]:
-                sections.append(current_section)
-            current_section = {"title": text, "paragraphs": [], "tables": []}
-        else:
-            current_section["paragraphs"].append(text)
+        level = _heading_level(style)
+        items.append({"text": text, "level": level})
 
-    # 保存最后一个 section
-    if current_section["paragraphs"] or current_section["tables"]:
-        sections.append(current_section)
+    # Tier 1: 样式标题切分
+    sections = _build_style_sections(items)
 
-    # 提取表格
+    # Tier 2: 正则标题降级
+    if len(sections) < 2:
+        plain_texts = [it["text"] for it in items if it["level"] == 0]
+        sections = _build_regex_sections(plain_texts if plain_texts else [it["text"] for it in items])
+
+    # Tier 3: 固定长度兜底
+    if len(sections) < 2:
+        return _fixed_length_chunks(items, doc_stem, fname, province, crop, zoning)
+
+    # 分配表格到最近的 section
     for i, table in enumerate(doc.tables):
         table_text = _table_to_markdown(table)
         if sections:
-            sections[min(i, len(sections) - 1)]["tables"].append(table_text)
+            sections[min(i, len(sections) - 1)].setdefault("tables", []).append(table_text)
 
     # 生成 chunks
+    chunks = []
     for si, sec in enumerate(sections):
         content_parts = []
-        if sec["title"]:
-            content_parts.append(f"## {sec['title']}")
-        content_parts.extend(sec["paragraphs"])
-        if sec["tables"]:
+        content_parts.extend(sec.get("paragraphs", []))
+        tables = sec.get("tables", [])
+        if tables:
             content_parts.append("\n### 表格数据")
-            content_parts.extend(sec["tables"])
+            content_parts.extend(tables)
         full_text = "\n\n".join(content_parts).strip()
         if len(full_text) < 20:
             continue
 
-        chunk_id = f"{Path(filepath).stem}_s{si}"
+        section_id = f"{doc_stem}_sec_{si}"
+        heading_path = sec.get("heading_path") or [doc_stem]
         chunks.append({
-            "id": chunk_id,
+            "id": f"{doc_stem}_s{si}",
             "content": full_text,
             "metadata": {
+                "doc_id": doc_stem,
+                "section_id": section_id,
+                "heading_path": heading_path,
+                "heading_level": len(heading_path),
                 "source_type": "technical_spec",
                 "source_file": fname,
                 "province": province,
                 "crop": crop,
                 "zoning_type": zoning,
-                "section_title": sec["title"],
+                "section_title": heading_path[-1] if heading_path else "",
             },
         })
 
-    # 如果按章节切分后 chunk 太少（比如无标题的文档），按段落数切
-    if len(chunks) < 2:
-        return _fallback_chunk(filepath, fname, province, crop, zoning)
-
-    return chunks
-
-
-def _fallback_chunk(filepath: str, fname: str, province: str, crop: str, zoning: str) -> list[dict]:
-    """无章节标题时的降级切分：每 3 段为一个 chunk。"""
-    try:
-        import docx
-        doc = docx.Document(filepath)
-    except Exception:
-        return []
-
-    all_text = []
-    for para in doc.paragraphs:
-        t = para.text.strip()
-        if t:
-            all_text.append(t)
-    if not all_text:
-        return []
-
-    chunks = []
-    for i in range(0, len(all_text), 3):
-        chunk_text = "\n\n".join(all_text[i:i + 3])
-        if len(chunk_text) < 20:
-            continue
-        chunks.append({
-            "id": f"{Path(filepath).stem}_p{i // 3}",
-            "content": chunk_text,
-            "metadata": {
-                "source_type": "technical_spec",
-                "source_file": fname,
-                "province": province,
-                "crop": crop,
-                "zoning_type": zoning,
-            },
-        })
     return chunks
 
 
@@ -170,6 +264,7 @@ def parse_pdf(filepath: str) -> list[dict]:
 
     chunks = []
     fname = Path(filepath).name
+    doc_stem = Path(filepath).stem
     province, crop, zoning = _infer_meta(fname)
 
     try:
@@ -183,33 +278,44 @@ def parse_pdf(filepath: str) -> list[dict]:
         text = page.get_text().strip()
         if len(text) < 30:
             continue
-        # 每页作为一个 chunk，长页再切开
         if len(text) > 1200:
             parts = _split_long_text(text, 600)
             for pi, part in enumerate(parts):
+                section_id = f"{doc_stem}_p{page_num}c{pi}"
                 chunks.append({
-                    "id": f"{Path(filepath).stem}_p{page_num}c{pi}",
+                    "id": f"{doc_stem}_p{page_num}c{pi}",
                     "content": part,
                     "metadata": {
+                        "doc_id": doc_stem,
+                        "section_id": section_id,
+                        "heading_path": [doc_stem],
+                        "heading_level": 1,
                         "source_type": "report",
                         "source_file": fname,
                         "province": province,
                         "crop": crop,
                         "zoning_type": zoning,
                         "page": page_num + 1,
+                        "section_title": doc_stem,
                     },
                 })
         else:
+            section_id = f"{doc_stem}_p{page_num}"
             chunks.append({
-                "id": f"{Path(filepath).stem}_p{page_num}",
+                "id": f"{doc_stem}_p{page_num}",
                 "content": text,
                 "metadata": {
+                    "doc_id": doc_stem,
+                    "section_id": section_id,
+                    "heading_path": [doc_stem],
+                    "heading_level": 1,
                     "source_type": "report",
                     "source_file": fname,
                     "province": province,
                     "crop": crop,
                     "zoning_type": zoning,
                     "page": page_num + 1,
+                    "section_title": doc_stem,
                 },
             })
     doc.close()
@@ -228,6 +334,7 @@ def parse_xlsx(filepath: str) -> list[dict]:
 
     chunks = []
     fname = Path(filepath).name
+    doc_stem = Path(filepath).stem
     province, crop, zoning = _infer_meta(fname)
 
     try:
@@ -242,17 +349,13 @@ def parse_xlsx(filepath: str) -> list[dict]:
         if not rows:
             continue
 
-        # 表头
         headers = [str(h) if h else "" for h in rows[0]]
         data_rows = rows[1:]
-
-        # 过滤空行
         data_rows = [r for r in data_rows if any(c is not None for c in r)]
 
         if not data_rows:
             continue
 
-        # 转为文本描述：表头 + 统计 + 示例行
         text_parts = [
             f"表格: {sheet_name}",
             f"列名: {', '.join(h for h in headers if h)}",
@@ -260,7 +363,6 @@ def parse_xlsx(filepath: str) -> list[dict]:
             "",
         ]
 
-        # 数值列的统计
         numeric_cols = {}
         for ci, h in enumerate(headers):
             vals = []
@@ -279,23 +381,28 @@ def parse_xlsx(filepath: str) -> list[dict]:
                     f"平均值={sum(vals)/len(vals):.4f}"
                 )
 
-        # 前 5 行示例
         text_parts.append("\n前5行数据示例:")
         for ri, row in enumerate(data_rows[:5]):
             row_str = " | ".join(str(c) if c is not None else "" for c in row)
             text_parts.append(f"  行{ri + 2}: {row_str}")
 
         full_text = "\n".join(text_parts)
+        section_id = f"{doc_stem}_{sheet_name}"
         chunks.append({
-            "id": f"{Path(filepath).stem}_{sheet_name}",
+            "id": f"{doc_stem}_{sheet_name}",
             "content": full_text,
             "metadata": {
+                "doc_id": doc_stem,
+                "section_id": section_id,
+                "heading_path": [sheet_name],
+                "heading_level": 1,
                 "source_type": "data_table",
                 "source_file": fname,
                 "province": province,
                 "crop": crop,
                 "zoning_type": zoning,
                 "sheet_name": sheet_name,
+                "section_title": sheet_name,
             },
         })
 
@@ -308,6 +415,7 @@ def parse_xlsx(filepath: str) -> list[dict]:
 def parse_csv(filepath: str) -> list[dict]:
     """解析 CSV 文件，转为结构化文本。支持多编码自动检测。"""
     fname = Path(filepath).name
+    doc_stem = Path(filepath).stem
     province, crop, zoning = _infer_meta(fname)
 
     rows = None
@@ -360,14 +468,19 @@ def parse_csv(filepath: str) -> list[dict]:
         text_parts.append(f"  [{ri + 1}] {', '.join(items)}")
 
     return [{
-        "id": Path(filepath).stem,
+        "id": doc_stem,
         "content": "\n".join(text_parts),
         "metadata": {
+            "doc_id": doc_stem,
+            "section_id": doc_stem,
+            "heading_path": [fname],
+            "heading_level": 1,
             "source_type": "data_table",
             "source_file": fname,
             "province": province,
             "crop": crop,
             "zoning_type": zoning,
+            "section_title": fname,
         },
     }]
 

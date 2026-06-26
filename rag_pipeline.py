@@ -13,6 +13,7 @@
 
 import os
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
 from typing import TypedDict, Annotated
 
@@ -30,7 +31,8 @@ class RAGState(TypedDict):
     """LangGraph 状态，在节点间流转。"""
     query: str
     search_queries: list[str]   # 改写后的多路查询
-    results: list[dict]         # 检索结果
+    results: list[dict]         # 增强检索结果（原始+改写，供生成用）
+    judge_results: list[dict]   # 仅原始 query 的检索结果（供 Judge OOD 判定用）
     decision: str               # "answer" | "reject" | "fallback"
     judge_reason: str
     judge_confidence: float
@@ -84,15 +86,33 @@ class RAGPipeline:
     # ── 节点 ──────────────────────────────────────
 
     def _retrieve_node(self, state: RAGState) -> dict:
-        """检索节点：改写查询 → 多路检索 → 去重。"""
-        search_queries = [state["query"]]
-        if self.enable_rewrite:
-            search_queries = expand_query(state["query"], mode="all")
+        """检索节点：原始 query 检索（供 Judge）+ 改写增强检索（供生成）。"""
+        query = state["query"]
 
-        all_results = []
-        for sq in search_queries:
-            results = self._searcher.search(sq, top_k=self.top_k, expand_parent=True)
-            all_results.extend(results)
+        # 原始 query 检索 — 始终执行，用于 Judge OOD 判定
+        judge_results = self._searcher.search(query, top_k=self.top_k, expand_context=True)
+
+        if self.enable_rewrite:
+            # 方案 A: LLM 改写和原始 query 检索并行
+            with ThreadPoolExecutor(max_workers=2) as ex:
+                rewrite_future = ex.submit(expand_query, query, "all")
+                search_queries = rewrite_future.result()
+
+            # 方案 B: 额外 query 并发检索，与 judge_results 合并供生成
+            extra_queries = [sq for sq in search_queries if sq != query]
+            all_results = list(judge_results)
+            if extra_queries:
+                workers = min(len(extra_queries), 6)
+                with ThreadPoolExecutor(max_workers=workers) as ex:
+                    futures = {
+                        ex.submit(self._searcher.search, sq, self.top_k, True): sq
+                        for sq in extra_queries
+                    }
+                    for f in as_completed(futures):
+                        all_results.extend(f.result())
+        else:
+            search_queries = [query]
+            all_results = judge_results
 
         # 按 content 前 80 字符去重，保留最高相似度
         seen = {}
@@ -105,12 +125,13 @@ class RAGPipeline:
         deduped = sorted(seen.values(), key=lambda r: r.get("similarity", 0), reverse=True)
         return {
             "search_queries": search_queries,
+            "judge_results": judge_results[:self.top_k],
             "results": deduped[:self.top_k],
         }
 
     def _judge_node(self, state: RAGState) -> dict:
-        """判定节点：四层判断。"""
-        j = judge(state["query"], state["results"])
+        """判定节点：基于原始 query 检索结果判定（避免改写干扰 OOD 检测）。"""
+        j = judge(state["query"], state["judge_results"])
         return {
             "decision": j["decision"],
             "judge_reason": j["reason"],
