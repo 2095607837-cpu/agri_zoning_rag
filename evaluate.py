@@ -53,6 +53,111 @@ def _has_source_match(source_id: str, src_file: str) -> bool:
     return _normalize_name(source_id) in _normalize_name(src_file)
 
 
+# ── 分层抽样 ──────────────────────────────────────────
+
+def _stratified_sample(golden: list[dict], limit: int, seed: int = 42) -> list[dict]:
+    """分层抽样：优先保证 OOD、难度、省份、问题类型的覆盖面。
+
+    层级优先级：
+      1. OOD — 上限 10% quota，下限 2 题
+      2. 难度 (easy/medium/hard) — 每层 ≥1 题，按原比例分配
+      3. 省份 — 每省 ≥1 题（如果 quota 够）
+      4. 问题类型 — 每种 ≥1 题（如果 quota 够）
+      5. 剩余按原分布随机填充
+
+    与 self.golden[:limit] 对比：
+      - 旧方案：取前 N 题 → 严重偏向前几个省份和 easy 题
+      - 新方案：各维度均衡覆盖，seed 固定可复现
+    """
+    import random
+    rng = random.Random(seed)
+
+    if limit is None or limit >= len(golden):
+        return list(golden)
+
+    ood = [g for g in golden if g.get("question_type") == "OOD"]
+    indomain = [g for g in golden if g.get("question_type") != "OOD"]
+
+    sampled = []
+    pool = list(indomain)  # 剩余候选池
+
+    # ── Layer 1: OOD ──
+    ood_n = max(2, min(len(ood), limit // 10))
+    sampled.extend(rng.sample(ood, min(ood_n, len(ood))))
+    quota = limit - len(sampled)
+
+    # ── Layer 2: 难度分层 ──
+    from collections import defaultdict
+    diff_groups = defaultdict(list)
+    for g in pool:
+        diff_groups[g.get("difficulty", "medium")].append(g)
+
+    diff_n = {}
+    for diff in ["hard", "medium", "easy"]:
+        items = diff_groups.get(diff, [])
+        if items:
+            # 保证每层 ≥1，权重按 √(层大小) 缓和极端分布
+            diff_n[diff] = max(1, int(quota * (len(items) ** 0.5) /
+                                       sum(len(v) ** 0.5 for v in diff_groups.values())))
+
+    # 确保总和 ≤ quota
+    while sum(diff_n.values()) > quota:
+        largest = max(diff_n, key=diff_n.get)
+        if diff_n[largest] > 1:
+            diff_n[largest] -= 1
+
+    for diff, n in diff_n.items():
+        items = diff_groups.get(diff, [])
+        chosen = rng.sample(items, min(n, len(items)))
+        sampled.extend(chosen)
+        for g in chosen:
+            pool.remove(g)
+
+    # ── Layer 3: 省份补位 ──
+    quota = limit - len(sampled)
+    if quota > 0:
+        prov_groups = defaultdict(list)
+        for g in pool:
+            prov_groups[g.get("province", "?")].append(g)
+
+        missing_provs = [p for p in prov_groups if p not in
+                         {g.get("province") for g in sampled}]
+        for prov in missing_provs:
+            if quota <= 0:
+                break
+            items = prov_groups[prov]
+            g = rng.choice(items)
+            sampled.append(g)
+            pool.remove(g)
+            quota -= 1
+
+    # ── Layer 4: 问题类型补位 ──
+    if quota > 0:
+        type_groups = defaultdict(list)
+        for g in pool:
+            type_groups[g.get("question_type", "?")].append(g)
+
+        missing_types = [t for t in type_groups if t not in
+                         {g.get("question_type") for g in sampled}]
+        for qt in missing_types:
+            if quota <= 0:
+                break
+            items = type_groups[qt]
+            g = rng.choice(items)
+            sampled.append(g)
+            pool.remove(g)
+            quota -= 1
+
+    # ── Layer 5: 随机填满 ──
+    quota = limit - len(sampled)
+    if quota > 0:
+        rng.shuffle(pool)
+        sampled.extend(pool[:quota])
+
+    rng.shuffle(sampled)
+    return sampled
+
+
 # ── RAG Evaluator ────────────────────────────────────
 
 class RAGEvaluator:
@@ -84,7 +189,7 @@ class RAGEvaluator:
         """
         from judge import judge
 
-        samples = self.golden[:limit] if limit else self.golden
+        samples = _stratified_sample(self.golden, limit) if limit else self.golden
         n = len(samples)
         has_source = sum(1 for g in samples if g.get("source_chunk_id"))
         is_ood_count = sum(1 for g in samples if g["question_type"] == "OOD")
@@ -298,18 +403,11 @@ class RAGEvaluator:
         from judge import judge
         from generator import generate, build_context
 
-        samples = [g for g in self.golden if g["question_type"] != "OOD"]
+        indomain = [g for g in self.golden if g["question_type"] != "OOD"]
         if limit:
-            import random
-            random.seed(42)
-            easy = [g for g in samples if g["difficulty"] == "easy"]
-            med = [g for g in samples if g["difficulty"] == "medium"]
-            hard = [g for g in samples if g["difficulty"] == "hard"]
-            n_per = max(limit // 3, 3)
-            sampled = (random.sample(easy, min(n_per, len(easy))) +
-                       random.sample(med, min(n_per, len(med))) +
-                       random.sample(hard, min(n_per, len(hard))))
-            samples = sampled[:limit]
+            samples = _stratified_sample(indomain, limit)
+        else:
+            samples = list(indomain)
 
         n = len(samples)
         print(f"\n[忠实率+正确率评测] {n} 条 In-domain 题 (分层抽样)")
