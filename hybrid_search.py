@@ -31,20 +31,26 @@ class Reranker:
     """BGE CrossEncoder 精排器（模块级单例，避免重复加载模型）。"""
 
     _instance: "Reranker | None" = None
+    _lock = None
 
     def __new__(cls, model_name: str = "BAAI/bge-reranker-v2-m3"):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
             cls._instance._model_name = model_name
             cls._instance._model = None
+            import threading
+            cls._instance._load_lock = threading.Lock()
         return cls._instance
 
     def _load(self):
         if self._model is not None:
             return
-        from sentence_transformers import CrossEncoder
-        print(f"[Reranker] 加载 {self._model_name}...")
-        self._model = CrossEncoder(self._model_name, device="cpu")
+        with self._load_lock:
+            if self._model is not None:
+                return
+            from sentence_transformers import CrossEncoder
+            print(f"[Reranker] 加载 {self._model_name}...")
+            self._model = CrossEncoder(self._model_name, device="cpu")
 
     def rerank(self, query: str, candidates: list[dict], top_k: int = 5) -> list[dict]:
         """重排序。candidates 中已有 dense_similarity（余弦相似度），reranker 只决定顺序。"""

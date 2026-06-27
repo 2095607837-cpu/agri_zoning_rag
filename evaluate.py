@@ -25,6 +25,7 @@ import os
 import sys
 import time
 import argparse
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from collections import defaultdict
 from typing import Any, Optional
@@ -162,12 +163,13 @@ def _stratified_sample(golden: list[dict], limit: int, seed: int = 42) -> list[d
 
 class RAGEvaluator:
     def __init__(self, golden_path=GOLDEN_PATH, enable_reranker: bool = False,
-                 enable_rewrite: bool = False):
+                 enable_rewrite: bool = False, max_workers: int = 4):
         with open(golden_path, "r", encoding="utf-8") as f:
             self.golden = json.load(f)
         self._searcher = None
         self._enable_reranker = enable_reranker
         self._enable_rewrite = enable_rewrite
+        self._max_workers = max_workers
 
     @property
     def searcher(self):
@@ -177,6 +179,79 @@ class RAGEvaluator:
         return self._searcher
 
     # ── A+B. 检索层 + OOD 检测（单次遍历）────────────────
+
+    _FIELD_NAMES = ("province", "crop", "zoning_type", "question_type", "difficulty")
+
+    def _process_one_query(self, args: tuple) -> dict:
+        """处理单个 query：检索 + 去重 + Judge + source match。线程安全。"""
+        from judge import judge
+        from query_rewriter import expand_query
+
+        idx, g, top_k = args
+        query = g["question"]
+        source_id = g.get("source_chunk_id", "")
+        is_ood = g["question_type"] == "OOD"
+        is_source_question = bool(source_id)
+
+        result = {
+            "idx": idx,
+            "is_ood": is_ood,
+            "golden_fields": {f: g.get(f, "unknown") for f in self._FIELD_NAMES},
+        }
+
+        # 原始 query 检索 — 用于 Judge OOD 判定（不受改写干扰）
+        judge_results_raw = self.searcher.search(query, top_k=top_k, expand_context=True)
+
+        if self._enable_rewrite:
+            search_queries = expand_query(query, mode="multi_view")
+            extra_queries = [sq for sq in search_queries if sq != query]
+            all_results_list = list(judge_results_raw)
+            if extra_queries:
+                # 改写子查询并发检索
+                with ThreadPoolExecutor(max_workers=min(len(extra_queries), 4)) as ex:
+                    futures = {ex.submit(self.searcher.search, sq, top_k, True): sq for sq in extra_queries}
+                    for f in as_completed(futures):
+                        all_results_list.extend(f.result())
+        else:
+            all_results_list = judge_results_raw
+
+        # 去重：按 content 前 80 字符，保留最高相似度
+        seen = {}
+        for r in all_results_list:
+            key = r["content"][:80]
+            sim = r.get("similarity", 0)
+            if key not in seen or sim > seen[key].get("similarity", 0):
+                seen[key] = r
+        results = sorted(seen.values(), key=lambda r: r.get("similarity", 0), reverse=True)[:top_k]
+        judge_results = judge_results_raw[:top_k]
+
+        result["retrieved_texts"] = (idx, [(pos, r["content"]) for pos, r in enumerate(results)])
+        result["top1_sim"] = results[0].get("similarity", 0) if results else 0
+
+        # Source Match
+        hits = [False] * len(results)
+        for i, r in enumerate(results):
+            if _has_source_match(source_id, r.get("metadata", {}).get("source_file", "")):
+                hits[i] = True
+
+        if is_source_question:
+            rr = 0.0
+            for i, h in enumerate(hits):
+                if h:
+                    rr = 1.0 / (i + 1)
+                    break
+            result["source_metrics"] = {
+                "rr": rr,
+                "recall": {1: any(hits[:1]), 3: any(hits[:3]), 5: any(hits[:5])},
+                "precision": {1: sum(hits[:1]) / 1, 3: sum(hits[:3]) / 3, 5: sum(hits[:5]) / 5},
+            }
+
+        # Judge（用原始 query 检索结果，避免改写干扰）
+        j = judge(query, judge_results)
+        result["rejected"] = j["decision"] == "reject"
+        result["judge_method"] = j["method"]
+
+        return result
 
     def eval_retrieval(self, top_k: int = 5, limit: Optional[int] = None) -> dict:
         """
@@ -226,94 +301,68 @@ class RAGEvaluator:
         # ── 延迟 embedding：先收集所有检索结果文本，最后 batch embed ──
         retrieval_records = []  # [(query_idx, pos, text)]
 
-        for idx, g in enumerate(samples):
-            query = g["question"]
-            source_id = g.get("source_chunk_id", "")
-            is_ood = g["question_type"] == "OOD"
-            is_source_question = bool(source_id)
+        # ── 并行检索+Judge：主查询 6 路并发 + 改写子查询并行 ──
+        workers = min(self._max_workers, n)
+        print(f"  并行度: {workers} workers")
+        args_list = [(idx, g, top_k) for idx, g in enumerate(samples)]
 
-            # ── 检索 ──
-            # 原始 query 检索 — 用于 Judge OOD 判定（不受改写干扰）
-            judge_results_raw = self.searcher.search(query, top_k=top_k, expand_context=True)
+        completed = 0
+        with ThreadPoolExecutor(max_workers=workers) as ex:
+            futures = {ex.submit(self._process_one_query, args): args[0] for args in args_list}
+            for f in as_completed(futures):
+                r = f.result()
+                idx = r["idx"]
+                completed += 1
+                if completed % 10 == 0 or completed == n:
+                    print(f"  [{completed}/{n}] 已完成...")
 
-            if self._enable_rewrite:
-                from query_rewriter import expand_query
-                search_queries = expand_query(query, mode="multi_view")
-                extra_queries = [sq for sq in search_queries if sq != query]
-                all_results = list(judge_results_raw)
-                for sq in extra_queries:
-                    r = self.searcher.search(sq, top_k=top_k, expand_context=True)
-                    all_results.extend(r)
-            else:
-                search_queries = [query]
-                all_results = judge_results_raw
+                # ── 收集检索文本 ──
+                q_idx, texts = r["retrieved_texts"]
+                for pos, text in texts:
+                    retrieval_records.append((q_idx, pos, text))
 
-            # 去重：按 content 前 80 字符，保留最高相似度
-            seen = {}
-            for r in all_results:
-                key = r["content"][:80]
-                sim = r.get("similarity", 0)
-                if key not in seen or sim > seen[key].get("similarity", 0):
-                    seen[key] = r
-            results = sorted(seen.values(), key=lambda r: r.get("similarity", 0), reverse=True)[:top_k]
-            judge_results = judge_results_raw[:top_k]
-            retrieved_texts = [r["content"] for r in results]
-            for pos, text in enumerate(retrieved_texts):
-                retrieval_records.append((idx, pos, text))
+                # ── Chroma 相似度 ──
+                chroma_sims.append(r["top1_sim"])
 
-            # ── Chroma 真实相似度 ──
-            chroma_sims.append(results[0].get("similarity", 0) if results else 0)
+                # ── Source Match 累加 ──
+                if r.get("source_metrics"):
+                    sm = r["source_metrics"]
+                    mrr_source += sm["rr"]
+                    for k in [1, 3, 5]:
+                        if sm["recall"][k]:
+                            recall_k[k] += 1
+                        precision_k[k] += sm["precision"][k]
+                    for f_name in per_field:
+                        per_field[f_name][r["golden_fields"][f_name]]["mrr"] += sm["rr"]
+                        per_field[f_name][r["golden_fields"][f_name]]["hits"] += 1
 
-            # ── Source Match ──
-            hits = []
-            for r in results:
-                hits.append(_has_source_match(source_id, r.get("metadata", {}).get("source_file", "")))
+                # ── OOD 检测累加 ──
+                is_ood = r["is_ood"]
+                top1_sim = r["top1_sim"]
+                if is_ood:
+                    ood_sims.append(top1_sim)
+                    if r["rejected"]:
+                        ood_detected += 1
+                    else:
+                        ood_missed += 1
+                else:
+                    indomain_sims.append(top1_sim)
+                    if r["rejected"]:
+                        indomain_rejected += 1
+                    else:
+                        indomain_kept += 1
 
-            if is_source_question:
-                rr = 0.0
-                for i, h in enumerate(hits):
-                    if h:
-                        rr = 1.0 / (i + 1)
-                        break
-                mrr_source += rr
-                for k in [1, 3, 5]:
-                    if any(hits[:k]):
-                        recall_k[k] += 1
-                    precision_k[k] += sum(hits[:k]) / min(k, len(hits))
+                # ── Judge Layer 分布 ──
+                layer_map = {"signal": "layer1", "high_sim": "layer2", "score": "layer3", "llm": "layer4"}
+                layer_name = layer_map.get(r["judge_method"], "unknown")
+                if layer_name == "layer1": layer1 += 1
+                elif layer_name == "layer2": layer2 += 1
+                elif layer_name == "layer3": layer3 += 1
+                else: layer4 += 1
 
-                # 分维度累加 MRR/hits
-                for field_name in per_field:
-                    val = g.get(field_name, "unknown")
-                    per_field[field_name][val]["mrr"] += rr
-                    per_field[field_name][val]["hits"] += 1
-
-            # ── OOD 检测（用原始 query 检索结果，避免改写干扰）──
-            j = judge(query, judge_results)
-            rejected = j["decision"] == "reject"
-            top1_sim = judge_results[0].get("similarity", 0) if judge_results else 0
-
-            if is_ood:
-                ood_sims.append(top1_sim)
-                if rejected: ood_detected += 1
-                else: ood_missed += 1
-            else:
-                indomain_sims.append(top1_sim)
-                if rejected: indomain_rejected += 1
-                else: indomain_kept += 1
-
-            layer_map = {"signal": "layer1", "high_sim": "layer2", "score": "layer3", "llm": "layer4"}
-            layer_name = layer_map.get(j["method"], "unknown")
-            if layer_name == "layer1": layer1 += 1
-            elif layer_name == "layer2": layer2 += 1
-            elif layer_name == "layer3": layer3 += 1
-            else: layer4 += 1
-
-            # ── 分维度（relevance 稍后 batch 算完再填）──
-            for field_name in per_field:
-                val = g.get(field_name, "unknown")
-                per_field[field_name][val]["count"] += 1
-
-            print(f"  [{idx + 1}/{n}] query: {query[:60]}...")
+                # ── 分维度 count（relevance 稍后 batch 算完再填）──
+                for f_name in per_field:
+                    per_field[f_name][r["golden_fields"][f_name]]["count"] += 1
 
         # ── Batch embed 所有检索结果，一次性计算语义相关度 ──
         print(f"  正在批量计算语义相关度 ({len(retrieval_records)} 条文本)...")
@@ -620,6 +669,7 @@ def main():
     parser.add_argument("--precompute-rewrites", action="store_true", help="预计算所有评测问题的改写结果并缓存到文件")
     parser.add_argument("--limit", type=int, default=None, help="限制评测数量")
     parser.add_argument("--top-k", type=int, default=5, help="检索返回数量")
+    parser.add_argument("--workers", type=int, default=4, help="并发 worker 数（评测加速）")
     parser.add_argument("--output", type=str, default=None, help="保存结果 JSON")
     args = parser.parse_args()
 
@@ -637,7 +687,8 @@ def main():
         print("[precompute] 完成。可直接运行 python3 evaluate.py --rewrite 进行评测。")
         sys.exit(0)
 
-    evaluator = RAGEvaluator(enable_reranker=args.reranker, enable_rewrite=args.rewrite)
+    evaluator = RAGEvaluator(enable_reranker=args.reranker, enable_rewrite=args.rewrite,
+                             max_workers=args.workers)
 
     # A+B. 检索层 + OOD 检测（单次遍历）
     ret, ood = evaluator.eval_retrieval(top_k=args.top_k, limit=args.limit)

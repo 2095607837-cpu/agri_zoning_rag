@@ -2,7 +2,7 @@
 
 > 完整记录从原始文档到检索结果的全链路 chunk 处理逻辑
 >
-> **最后更新**: 2026-06-26
+> **最后更新**: 2026-06-26 (v1.8 compact header 修复)
 
 ---
 
@@ -37,7 +37,7 @@ top_k 结果 → Judge → Generate
 |------|--------|--------|
 | **DOCX 切分** | 遇 Heading 就切，H1/H2/H3 平级 | H1 文档标题，H2 章节边界，H3+ 内联正文 |
 | **层级信息** | 仅 section_title，父子关系丢失 | heading_path 完整谱系：`["黑龙江大豆区划", "区划指标", "冷害指数"]` |
-| **page_content** | `[省份 作物 区划]` header + 正文 | `heading_path` + 正文（header 退化为 metadata 过滤字段） |
+| **page_content** | `[省份 作物 区划]` header + 正文 | `[省份 作物 区划]` compact header + `heading_path` + 正文（v1.8 修复） |
 | **大章节处理** | 无中间层，直接切 1000 字子块 | >3000 字先按 H3 回退切分，保留 path，再走 800/150 |
 | **切分参数** | chunk_size=1000, overlap=200 | chunk_size=800, overlap=150 |
 | **parent-child** | parent_content = 完整章节全文 | 按 section_id + chunk_index 同 section ±1 窗口扩展 |
@@ -194,7 +194,7 @@ page_content = header + c["content"]
 # "[黑龙江 大豆 冷害风险区划] ## 一、数据来源\n\n正文..."
 ```
 
-**新方案**：heading_path 替代 header
+**v1.7 方案**：heading_path 替代 header（**已弃用 — 见 v1.8**）
 ```python
 heading_path = m.get("heading_path", [])
 path_str = " > ".join(heading_path) if heading_path else ""
@@ -202,7 +202,17 @@ page_content = path_str + "\n\n" + c["content"]
 # "黑龙江省大豆冷害气候风险区划 > 一、数据来源与处理\n\n正文..."
 ```
 
-优势：heading_path 比 province/crop/zoning 三元组更精确（文档标题包含更多语义细节），且 province/crop/zoning 退回 metadata 做结构化过滤，互不冗余。
+**v1.8 方案（当前）**：compact header + heading_path 共存
+```python
+compact = f"[{province} {crop} {zoning_type}] "  # 三元组关键词锚点
+path_str = " > ".join(heading_path) if heading_path else ""
+page_content = compact + path_str + "\n\n" + c["content"]
+# "[黑龙江 大豆 冷害风险区划] 黑龙江省大豆冷害气候风险区划 > 一、数据来源与处理\n\n正文..."
+```
+
+v1.7 用 heading_path 替代三元组 header 后 MRR -11.2%（0.4958→0.4402）。根因：BGE embedding 对所有 token 平均池化，heading_path 的冗余词（"技术规范""初稿""3.3区化方法"）稀释了核心关键词的信号权重。PDF 文档 heading_path 仅为文件名（如 `D_P_R_150000_001-内蒙古区划报告`），信号更弱。
+
+v1.8 修复：compact header 提供高密度关键词锚点（15 字符，100% 信号密度），heading_path 保留在 page_content 中提供层级语义，同时也在 metadata 中驱动 section 级上下文扩展。MRR 恢复到 0.8333。
 
 ### H3 回退切分（新增）
 
@@ -411,9 +421,9 @@ heading_path: 黑龙江大豆区划 > 二、区划指标与方法 > 冷害指数
 | step2 H3 回退 | 大章节切分 | 无 | **+62 子章节** |
 | step2 免切分 | ≤800字/含表格 | 988 | **818** |
 | step2 切分 | >800字 → 子块 | 72→100 | **83→235** |
-| step2 总计 | vectordb 向量 | **1088** | **1053** |
-| 平均 chunk 长度 | — | ~490 字符 | **530** 字符 |
-| section 数 | — | 无此概念 | **901** |
+| step2 总计 | vectordb 向量 | **1088** | **1061** (v1.8 重建) |
+| 平均 chunk 长度 | — | ~490 字符 | **537** 字符 |
+| section 数 | — | 无此概念 | **902** |
 | heading_level 分布 | — | 无此字段 | L1=721, L2=177 |
 
 ---

@@ -43,10 +43,19 @@ _H3_SPLIT_RE = re.compile(
 )
 
 
+def _compact_header(metadata: dict) -> str:
+    """从 metadata 构建紧凑关键词前缀，增强 embedding 信号。"""
+    province = metadata.get("province", "")
+    crop = metadata.get("crop", "")
+    zoning_type = metadata.get("zoning_type", "")
+    parts = [p for p in [province, crop, zoning_type] if p]
+    return f"[{' '.join(parts)}] " if parts else ""
+
+
 def load_documents() -> list[Document]:
     """从 step1_parse 产出的 chunks.json 加载为 LangChain Document 列表。
     跳过 excluded=True 和 quality=low 的 chunk。
-    page_content = heading_path + 正文（heading_path 参与 embedding）。"""
+    page_content = [省份 作物 区划] + heading_path + 正文。"""
     with open(CHUNKS_PATH, "r", encoding="utf-8") as f:
         chunks = json.load(f)
 
@@ -63,7 +72,10 @@ def load_documents() -> list[Document]:
         m = c["metadata"]
         heading_path = m.get("heading_path", [])
         path_str = " > ".join(heading_path) if heading_path else ""
-        page_content = path_str + "\n\n" + c["content"] if path_str else c["content"]
+        compact = _compact_header(m)
+        parts = [p for p in [compact.rstrip(), path_str] if p]
+        prefix = "\n\n".join(parts)
+        page_content = prefix + "\n\n" + c["content"] if prefix else c["content"]
         docs.append(Document(
             page_content=page_content,
             metadata={
@@ -86,10 +98,16 @@ def _has_table(content: str) -> bool:
 def _split_by_h3(doc: Document) -> list[Document]:
     """将 >3000 字的章节按 H3 子标题回退切分，保留 heading_path 谱系。"""
     text = doc.page_content
-    # 分离 heading_path 前缀和正文
     heading_path = doc.metadata.get("heading_path", [])
+    compact = _compact_header(doc.metadata)
+
+    # 分离紧凑前缀 + heading_path 前缀，提取正文
+    body = text
+    if compact and body.startswith(compact):
+        body = body[len(compact):]
     path_prefix = " > ".join(heading_path) + "\n\n" if heading_path else ""
-    body = text[len(path_prefix):] if path_prefix and text.startswith(path_prefix) else text
+    if path_prefix and body.startswith(path_prefix):
+        body = body[len(path_prefix):]
 
     lines = body.split("\n")
     sub_sections = []
@@ -121,7 +139,7 @@ def _split_by_h3(doc: Document) -> list[Document]:
         new_meta["section_id"] = f"{doc.metadata.get('section_id', '')}_h3_{i}"
 
         path_str = " > ".join(new_path)
-        new_page_content = path_str + "\n\n" + content.strip()
+        new_page_content = compact + path_str + "\n\n" + content.strip()
 
         result.append(Document(page_content=new_page_content, metadata=new_meta))
 
