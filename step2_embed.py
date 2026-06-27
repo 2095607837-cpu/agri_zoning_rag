@@ -55,7 +55,7 @@ def _compact_header(metadata: dict) -> str:
 def load_documents() -> list[Document]:
     """从 step1_parse 产出的 chunks.json 加载为 LangChain Document 列表。
     跳过 excluded=True 和 quality=low 的 chunk。
-    page_content = [省份 作物 区划] + heading_path + 正文。"""
+    page_content = [省份 作物 区划] + 正文（heading_path 仅保留在 metadata）。"""
     with open(CHUNKS_PATH, "r", encoding="utf-8") as f:
         chunks = json.load(f)
 
@@ -70,12 +70,8 @@ def load_documents() -> list[Document]:
             skipped_low += 1
             continue
         m = c["metadata"]
-        heading_path = m.get("heading_path", [])
-        path_str = " > ".join(heading_path) if heading_path else ""
         compact = _compact_header(m)
-        parts = [p for p in [compact.rstrip(), path_str] if p]
-        prefix = "\n\n".join(parts)
-        page_content = prefix + "\n\n" + c["content"] if prefix else c["content"]
+        page_content = compact + c["content"] if compact else c["content"]
         docs.append(Document(
             page_content=page_content,
             metadata={
@@ -101,13 +97,8 @@ def _split_by_h3(doc: Document) -> list[Document]:
     heading_path = doc.metadata.get("heading_path", [])
     compact = _compact_header(doc.metadata)
 
-    # 分离紧凑前缀 + heading_path 前缀，提取正文
-    body = text
-    if compact and body.startswith(compact):
-        body = body[len(compact):]
-    path_prefix = " > ".join(heading_path) + "\n\n" if heading_path else ""
-    if path_prefix and body.startswith(path_prefix):
-        body = body[len(path_prefix):]
+    # 分离 compact header 前缀，提取正文
+    body = text[len(compact):] if compact and text.startswith(compact) else text
 
     lines = body.split("\n")
     sub_sections = []
@@ -138,8 +129,7 @@ def _split_by_h3(doc: Document) -> list[Document]:
         new_meta["heading_level"] = len(new_path)
         new_meta["section_id"] = f"{doc.metadata.get('section_id', '')}_h3_{i}"
 
-        path_str = " > ".join(new_path)
-        new_page_content = compact + path_str + "\n\n" + content.strip()
+        new_page_content = compact + content.strip()
 
         result.append(Document(page_content=new_page_content, metadata=new_meta))
 

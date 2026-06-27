@@ -124,19 +124,23 @@ class HybridSearcher:
             persist_directory=PERSIST_DIR,
         )
 
-        # BM25 + Section Index — 统一从 Chroma vectorstore 构建
-        all_data = self._vectorstore.get(include=["documents", "metadatas"])
+        # BM25 + Section Index — 直接从 chunks.json 构建，不依赖 Chroma
+        with open(CHUNKS_PATH, encoding="utf-8") as f:
+            chunks = json.load(f)
+
         bm25_docs = []
-        for content, meta in zip(all_data["documents"], all_data["metadatas"]):
+        for c in chunks:
+            content = c["content"]
+            meta = c["metadata"]
             bm25_docs.append(Document(page_content=content, metadata=meta))
 
-            # 同时构建 section 索引（用于上下文扩展）
             sid = meta.get("section_id", "")
             if sid:
+                idx = len(self._section_index.get(sid, []))
                 self._section_index.setdefault(sid, []).append({
                     "content": content,
                     "metadata": meta,
-                    "chunk_index": meta.get("chunk_index", 0),
+                    "chunk_index": idx,
                 })
 
         for sid in self._section_index:
