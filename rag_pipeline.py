@@ -13,7 +13,7 @@
 
 import os
 import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
+
 from dataclasses import dataclass, field
 from typing import TypedDict, Annotated
 
@@ -71,7 +71,7 @@ class RAGPipeline:
         enable_rewrite:  是否启用查询改写（需要 LLM）
     """
 
-    def __init__(self, enable_reranker: bool = True, enable_rewrite: bool = True, top_k: int = 5):
+    def __init__(self, enable_reranker: bool = False, enable_rewrite: bool = True, top_k: int = 5):
         self.enable_reranker = enable_reranker
         self.enable_rewrite = enable_rewrite
         self.top_k = top_k
@@ -89,44 +89,24 @@ class RAGPipeline:
         """检索节点：原始 query 检索（供 Judge）+ 改写增强检索（供生成）。"""
         query = state["query"]
 
-        # 原始 query 检索 — 始终执行，用于 Judge OOD 判定
-        judge_results = self._searcher.search(query, top_k=self.top_k, expand_context=True)
+        # 快速初始检索，获取 top-1 相似度用于改写决策
+        initial = self._searcher.search(query, top_k=1, expand_context=True)
+        top1_sim = initial[0].get("similarity", 0) if initial else 0
 
         if self.enable_rewrite:
-            # 方案 A: LLM 改写和原始 query 检索并行
-            with ThreadPoolExecutor(max_workers=2) as ex:
-                rewrite_future = ex.submit(expand_query, query, "all")
-                search_queries = rewrite_future.result()
-
-            # 方案 B: 额外 query 并发检索，与 judge_results 合并供生成
+            search_queries = expand_query(query, "all", top1_sim=top1_sim)
             extra_queries = [sq for sq in search_queries if sq != query]
-            all_results = list(judge_results)
-            if extra_queries:
-                workers = min(len(extra_queries), 6)
-                with ThreadPoolExecutor(max_workers=workers) as ex:
-                    futures = {
-                        ex.submit(self._searcher.search, sq, self.top_k, True): sq
-                        for sq in extra_queries
-                    }
-                    for f in as_completed(futures):
-                        all_results.extend(f.result())
         else:
             search_queries = [query]
-            all_results = judge_results
+            extra_queries = None
 
-        # 按 content 前 80 字符去重，保留最高相似度
-        seen = {}
-        for r in all_results:
-            key = r["content"][:80]
-            sim = r.get("similarity", 0)
-            if key not in seen or sim > seen[key].get("similarity", 0):
-                seen[key] = r
-
-        deduped = sorted(seen.values(), key=lambda r: r.get("similarity", 0), reverse=True)
+        judge_results, merged = self._searcher.search_multi_query(
+            query, top_k=self.top_k, expand_context=True, extra_queries=extra_queries,
+        )
         return {
             "search_queries": search_queries,
-            "judge_results": judge_results[:self.top_k],
-            "results": deduped[:self.top_k],
+            "judge_results": judge_results,
+            "results": merged,
         }
 
     def _judge_node(self, state: RAGState) -> dict:

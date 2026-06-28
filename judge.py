@@ -53,25 +53,25 @@ def judge(query: str, results: list[dict]) -> dict:
     # 优先用 dense_similarity（余弦相似度，不受 reranker 影响），fallback 到 similarity
     sim = top1.get("dense_similarity", top1.get("similarity", 0))
 
-    # Layer 2: 高置信度直接放行（sim >= 0.60, 实测 OOD max=0.577）
-    if sim >= 0.60:
+    # Layer 2: 高置信度放行（sim >= 0.63, 新标定: OOD max=0.588, In-domain min=0.602, 完全可分）
+    if sim >= 0.63:
         return {
             "decision": "answer",
-            "reason": f"similarity={sim:.3f} >= 0.60, 高置信度",
+            "reason": f"similarity={sim:.3f} >= 0.63, 高置信度",
             "confidence": float(min(1.0, sim)),
             "method": "high_sim",
         }
 
-    # Layer 3: 分数层拒绝
-    if sim < 0.46:
+    # Layer 3: 分数层拒绝（OOD max=0.588, 低于此值全为 OOD）
+    if sim < 0.59:
         return {
             "decision": "reject",
-            "reason": f"similarity={sim:.3f} < 0.46",
+            "reason": f"similarity={sim:.3f} < 0.59",
             "confidence": 0.9,
             "method": "score",
         }
 
-    # Layer 4: LLM 细判（仅 sim ∈ [0.46, 0.60) 的模糊区间）
+    # Layer 4: LLM 细判（仅 sim ∈ [0.59, 0.63) 的低置信度 in-domain）
     try:
         return _llm_judge(query, results[:3])
     except Exception:

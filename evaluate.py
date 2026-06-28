@@ -199,31 +199,19 @@ class RAGEvaluator:
             "golden_fields": {f: g.get(f, "unknown") for f in self._FIELD_NAMES},
         }
 
-        # 原始 query 检索 — 用于 Judge OOD 判定（不受改写干扰）
-        judge_results_raw = self.searcher.search(query, top_k=top_k, expand_context=True)
+        # 快速初始检索，获取 top-1 相似度用于改写决策
+        initial = self.searcher.search(query, top_k=1, expand_context=True)
+        top1_sim = initial[0].get("similarity", 0) if initial else 0
 
         if self._enable_rewrite:
-            search_queries = expand_query(query, mode="multi_view")
+            search_queries = expand_query(query, mode="multi_view", top1_sim=top1_sim)
             extra_queries = [sq for sq in search_queries if sq != query]
-            all_results_list = list(judge_results_raw)
-            if extra_queries:
-                # 改写子查询并发检索
-                with ThreadPoolExecutor(max_workers=min(len(extra_queries), 4)) as ex:
-                    futures = {ex.submit(self.searcher.search, sq, top_k, True): sq for sq in extra_queries}
-                    for f in as_completed(futures):
-                        all_results_list.extend(f.result())
         else:
-            all_results_list = judge_results_raw
+            extra_queries = None
 
-        # 去重：按 content 前 80 字符，保留最高相似度
-        seen = {}
-        for r in all_results_list:
-            key = r["content"][:80]
-            sim = r.get("similarity", 0)
-            if key not in seen or sim > seen[key].get("similarity", 0):
-                seen[key] = r
-        results = sorted(seen.values(), key=lambda r: r.get("similarity", 0), reverse=True)[:top_k]
-        judge_results = judge_results_raw[:top_k]
+        judge_results, results = self.searcher.search_multi_query(
+            query, top_k=top_k, expand_context=True, extra_queries=extra_queries,
+        )
 
         result["retrieved_texts"] = (idx, [(pos, r["content"]) for pos, r in enumerate(results)])
         result["top1_sim"] = results[0].get("similarity", 0) if results else 0
@@ -669,9 +657,13 @@ def main():
     parser.add_argument("--precompute-rewrites", action="store_true", help="预计算所有评测问题的改写结果并缓存到文件")
     parser.add_argument("--limit", type=int, default=None, help="限制评测数量")
     parser.add_argument("--top-k", type=int, default=5, help="检索返回数量")
-    parser.add_argument("--workers", type=int, default=4, help="并发 worker 数（评测加速）")
+    parser.add_argument("--workers", type=int, default=None, help="并发 worker 数（评测加速）")
     parser.add_argument("--output", type=str, default=None, help="保存结果 JSON")
     args = parser.parse_args()
+
+    # 自适应默认 workers: reranker 模式 CPU-bound 用 2，full 模式 I/O-bound 用 4
+    if args.workers is None:
+        args.workers = 2 if (args.reranker and not args.full) else 4
 
     if not os.path.exists(GOLDEN_PATH):
         print("请先运行 python3 generate_golden_set.py")

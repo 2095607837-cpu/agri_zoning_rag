@@ -171,6 +171,16 @@ def split_documents(docs: list[Document]) -> list[Document]:
 
     all_docs = split_result + keep_intact
 
+    # Phase 2.5: 切分后子块补回 compact header（仅第一块保留了前缀）
+    restored = 0
+    for d in all_docs:
+        compact = _compact_header(d.metadata)
+        if compact and not d.page_content.startswith(compact):
+            d.page_content = compact + d.page_content
+            restored += 1
+    if restored:
+        print(f"         补回 compact header: {restored} 个子块")
+
     # Phase 3: 按 section_id 分组分配 chunk_index / chunk_count
     section_groups: dict[str, list[Document]] = {}
     for d in all_docs:

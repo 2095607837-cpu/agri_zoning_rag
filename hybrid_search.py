@@ -96,7 +96,7 @@ class HybridSearcher:
         self._embeddings = None
         self._vectorstore = None
         self._bm25_retriever = None
-        self._reranker: Reranker | None = None
+        self._reranker = None  # type: Reranker | None
         self._section_index: dict[str, list[dict]] = {}
         self._init()
 
@@ -154,6 +154,51 @@ class HybridSearcher:
 
         print(f"[HybridSearcher] 就绪 (docs={len(bm25_docs)}, sections={len(self._section_index)}, "
               f"reranker={'on' if self.enable_reranker else 'off'})")
+
+    def search_multi_query(
+        self, query: str, top_k: int = 5, expand_context: bool = True,
+        extra_queries=None, max_workers: int = 6,
+    ):
+        """原始检索 + 可选多路子查询并发检索 + 按 content 前 80 字符去重。
+
+        Args:
+            query: 原始查询（用于 Judge OOD 判定）
+            top_k: 返回数量
+            expand_context: 是否展开同 section 上下文
+            extra_queries: 改写后的额外查询列表，None 表示不启用多路检索
+            max_workers: 子查询并发上限
+
+        Returns:
+            (judge_results, merged_results)
+            - judge_results: 原始 query 的 top_k 结果
+            - merged_results: 多路合并去重后的 top_k 结果
+        """
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+
+        judge_results = self.search(query, top_k=top_k, expand_context=expand_context)
+
+        if not extra_queries:
+            return judge_results[:top_k], judge_results[:top_k]
+
+        all_results = list(judge_results)
+        workers = min(len(extra_queries), max_workers)
+        with ThreadPoolExecutor(max_workers=workers) as ex:
+            futures = {
+                ex.submit(self.search, sq, top_k, expand_context): sq
+                for sq in extra_queries
+            }
+            for f in as_completed(futures):
+                all_results.extend(f.result())
+
+        seen: dict = {}  # type: dict[str, dict]
+        for r in all_results:
+            key = r["content"][:80]
+            sim = r.get("similarity", 0)
+            if key not in seen or sim > seen[key].get("similarity", 0):
+                seen[key] = r
+
+        merged = sorted(seen.values(), key=lambda r: r.get("similarity", 0), reverse=True)
+        return judge_results[:top_k], merged[:top_k]
 
     def search(self, query: str, top_k: int = 5, expand_context: bool = False) -> list[dict]:
         """混合检索（RRF 融合）+ 可选 CrossEncoder 重排序 + 可选同 section 上下文扩展。

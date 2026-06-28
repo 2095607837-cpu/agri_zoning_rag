@@ -106,6 +106,7 @@ agri_zoning_rag/
 ├── generator.py         # LLM 答案生成（LangChain ChatPromptTemplate）
 ├── query_rewriter.py    # 查询改写（LRU 缓存 + LangChain）
 ├── rag_pipeline.py      # LangGraph 管道编排
+├── evaluate.py          # Golden Set 评测（检索 + OOD + 全管道）
 ├── llm_client.py        # LLM API 客户端（OpenAI 兼容）
 ├── data/
 │   └── chunks.json      # 解析后的统一 chunks
@@ -150,7 +151,42 @@ print(result.answer)
 print(result.sources)
 ```
 
-### 5. 仅检索（不需要 LLM）
+### 5. 评测
+
+```bash
+# 检索层 + OOD 检测（无需 LLM）
+python3 evaluate.py
+
+# 检索层 + Reranker 精排
+python3 evaluate.py --reranker
+
+# 全管道评测（需 LLM API Key）
+python3 evaluate.py --full
+
+# 常用组合
+python3 evaluate.py --reranker --rewrite --workers 2 --limit 10
+```
+
+| 参数 | 默认值 | 说明 |
+|------|--------|------|
+| `--full` | false | 全管道评测：检索 + Judge + 生成，评忠实率 & 正确率（需 LLM） |
+| `--reranker` | false | 启用 CrossEncoder 精排 |
+| `--rewrite` | false | 启用查询改写（需 LLM） |
+| `--precompute-rewrites` | false | 预计算所有评测问题的改写并缓存，避免评测时调 LLM |
+| `--limit` | 全部 | 限制评测条数 |
+| `--top-k` | 5 | 检索返回数量 |
+| `--workers` | 自适应 | 并发数。`--reranker` 模式默认 2（CPU-bound），`--full` / 无参模式默认 4（I/O-bound） |
+| `--output` | 无 | 保存结果 JSON 路径 |
+
+**三种模式区别：**
+
+| 模式 | 测什么 | 需要 LLM？ |
+|------|--------|-----------|
+| `evaluate.py` | 检索层 (MRR/Recall/Precision/NDCG) + OOD 拒答 | 否 |
+| `evaluate.py --reranker` | 同上 + Reranker 精排 | 否 |
+| `evaluate.py --full` | 检索层 + 生成层（忠实率/答案正确率） | 是 |
+
+### 6. 仅检索（不需要 LLM）
 
 ```python
 from hybrid_search import HybridSearcher

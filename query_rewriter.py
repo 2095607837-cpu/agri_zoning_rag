@@ -34,16 +34,14 @@ REWRITE_PROMPT = ChatPromptTemplate.from_messages([
 ])
 
 
-REWRITE_TRIGGERS = ["为什么", "怎么", "如何", "什么原因", "区别", "比较", "影响", "关系", "差异", "不同", "优缺点"]
-
-
-def _needs_rewrite(query: str) -> bool:
-    """规则判断是否需要 LLM 改写（无 LLM 调用）。"""
+def _needs_rewrite(query: str, top1_sim: float = 0.0) -> bool:
+    """评分判断是否需要 LLM 改写。
+    跳过：极短查询（≤12字）或初次检索已足够好（top1_sim ≥ 0.70）。"""
     if len(query) <= 12:
         return False
-    if any(w in query for w in REWRITE_TRIGGERS):
-        return True
-    return False
+    if top1_sim >= 0.70:
+        return False
+    return True
 
 
 def _llm_rewrite(query: str) -> dict:
@@ -107,16 +105,17 @@ def precompute_rewrites(queries: list[str], mode: str = "all"):
     print(f"[rewriter] 已缓存 {len(_cache)} 条改写结果 → {CACHE_FILE}")
 
 
-def expand_query(query: str, mode: str = "all") -> list[str]:
+def expand_query(query: str, mode: str = "all", top1_sim: float = 0.0) -> list[str]:
     """
     扩展查询，返回扩展后的查询列表供多路检索使用。
     mode: "keywords" | "multi_view" | "all"
+    top1_sim: 原始 query 检索 top-1 相似度，<0.70 才触发改写
     """
     cache_key = query.strip()
     if cache_key in _cache:
         _cache.move_to_end(cache_key)
         entry = _cache[cache_key]
-    elif not _needs_rewrite(cache_key):
+    elif not _needs_rewrite(cache_key, top1_sim):
         # 简单查询无需改写，缓存空结果避免重复判断
         entry = {"keywords": "", "sub_queries": ""}
         _cache[cache_key] = entry
