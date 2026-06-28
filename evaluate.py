@@ -257,7 +257,7 @@ class RAGEvaluator:
         has_source = sum(1 for g in samples if g.get("source_chunk_id"))
         is_ood_count = sum(1 for g in samples if g["question_type"] == "OOD")
         is_indomain = n - is_ood_count
-        print(f"\n[检索+OOD评测] {n} 题 (含 source_chunk_id={has_source}, OOD={is_ood_count}, In-domain={is_indomain})")
+        print(f"\n[检索+OOD评测] {n} 题 (含 source_chunk_id={has_source}, OOD={is_ood_count}, In-domain={is_indomain})", flush=True)
         print(f"  top_k={top_k}\n")
 
         embeddings = self.searcher.embeddings
@@ -302,7 +302,7 @@ class RAGEvaluator:
                 idx = r["idx"]
                 completed += 1
                 if completed % 10 == 0 or completed == n:
-                    print(f"  [{completed}/{n}] 已完成...")
+                    print(f"  [{completed}/{n}] 已完成...", flush=True)
 
                 # ── 收集检索文本 ──
                 q_idx, texts = r["retrieved_texts"]
