@@ -42,6 +42,11 @@ class Block:
     style: Optional[str] = None    # DOCX: "Heading 1"/"Heading 2"; PDF: None
     page: Optional[int] = None     # PDF 页码
     source: str = ""               # 源文件名（用于调试）
+    font_size: Optional[float] = None  # PDF dict mode: 字号(pt)
+    bold: bool = False                 # PDF dict mode: 是否加粗
+    x0: Optional[float] = None         # PDF dict mode: 左上角 x 坐标
+    y0: Optional[float] = None         # PDF dict mode: 左上角 y 坐标
+    is_title: bool = False             # PDF dict mode: 布局检测为标题
 
 
 # 多 Regex 标题模式列表（按优先级从高到低）
@@ -143,7 +148,11 @@ def _build_regex_sections(blocks: list[Block]) -> list[dict]:
         text = b.text.strip()
         if not text:
             continue
-        if _is_heading(text):
+        # dict 模式有布局信息时，仅信任 is_title（避免正则误匹配列表项）
+        # text 回退模式无布局信息时，用正则 _is_heading()
+        has_layout = b.font_size is not None
+        is_split = b.is_title if has_layout else _is_heading(text)
+        if is_split:
             if current["blocks"]:
                 sections.append(current)
             current = {"heading_path": [text], "blocks": []}
@@ -180,11 +189,284 @@ def _split_by_sentence(text: str, max_chars: int = 800) -> list[str]:
     return chunks or [text]
 
 
+# ── Section Quality Filter (三层优先级架构) ──────────
+# Layer 0: 结构识别 (Table / TOC / Fragment) → Drop 或 Group-Merge
+# Layer 1: 语义判断 (完整句→Keep / PDF断句→Merge / 过渡句→Merge / 空标题→Merge)
+# Layer 2: 长度兜底  (<80 且无完整句 → Merge)
+
+# ── 预编译 Regex ─────────────────────────────────────────
+
+_TOC_DOT_PAT = re.compile(r'[.…]{3,}\s*\d+\s*$')
+_TOC_TAB_PAT = re.compile(r'\t{2,}\d+\s*$')
+_TOC_SPACE_PAT = re.compile(r'\s{4,}\d+\s*$')
+_TOC_MARKER_PAT = re.compile(r'###\s+\d[\d.]*\s+\S.*\d+')
+_DEF_PAT = re.compile(r'是指|即|公式|定义')
+_SENT_END = re.compile(r'[。！？]')
+_LIST_PAT = re.compile(r'^\s*(?:[（\(]?\d+[）\)\.\、]|[一二三四五六七八九十]+[、．]|[-•·*])')
+_DOMAIN_PAT = re.compile(r'区划|风险|作物|指标|气候|农业|气象|品种|种植|产量|品质|灾害|温度|降水|干旱|冷害|渍涝|霜冻|病虫害|土壤|光照|积温|日照|海拔|高原|地形|地势|地貌|丘陵|平原|山地|盆地|谷地|高程|纬度|经度')
+TRANSITION_PATTERNS = ["包括以下", "主要包括", "如下", "具体如下", "分别为", "分为",
+                       "以下几个方面", "以下方面", "主要措施", "对策建议"]
+FOOTER_NOISE = re.compile(r'(区划报告|技术规范|初稿)\d*$|^\d+$|图\d+\.\d|表\d+\.\d')
+
+# ── Helpers ──────────────────────────────────────────────
+
+def _body_text(sec: dict) -> str:
+    return "\n".join(sec.get("blocks", [])).strip()
+
+
+def _is_mid_sentence_end(text: str) -> bool:
+    """文本不以句子结束标点结尾 → 可能是断句。"""
+    text = text.strip()
+    if not text:
+        return False
+    return not text.endswith(('。', '！', '？', '；', '：', ':', ';'))
+
+
+def _next_starts_continuation(next_sec: dict) -> bool:
+    """下一个 section 开头是小写字母/数字/汉字（非大写开头）→ 续接上文。"""
+    body = _body_text(next_sec)
+    if not body:
+        return True
+    first = body[0]
+    return (first.islower() or first.isdigit() or
+            ('一' <= first <= '鿿'))
+
+
+# ── Layer 0: 结构识别 ───────────────────────────────────
+
+def _is_table_block(sec: dict) -> bool:
+    """识别表格结构：pipe 数 > 3 或含连续数字列。"""
+    body = _body_text(sec)
+    if not body:
+        return False
+    # Pipe 数量 > 3（至少 2 列）
+    pipe_count = body.count('|')
+    if pipe_count > 3:
+        return True
+    # 检测连续数字列（>60% 行含数字）
+    lines = [l.strip() for l in body.split("\n") if l.strip()]
+    if len(lines) >= 2:
+        digit_lines = sum(1 for l in lines if re.search(r'\b\d+\.?\d*\b', l))
+        if digit_lines > len(lines) * 0.6:
+            return True
+    return False
+
+
+def _merge_table_block(sections: list[dict], start_idx: int) -> tuple[int, list[dict]]:
+    """找出从 start_idx 开始的连续表格 section，合并所有 blocks 到第一个。"""
+    # 先收集连续表格 section 的索引
+    group = [start_idx]
+    j = start_idx + 1
+    while j < len(sections):
+        if _is_table_block(sections[j]):
+            group.append(j)
+            j += 1
+        else:
+            break
+    if len(group) == 1:
+        return 0, []
+    # 合并
+    base = sections[group[0]]
+    for idx in group[1:]:
+        base["blocks"] = base["blocks"] + sections[idx]["blocks"]
+    return len(group) - 1, [base]
+
+
+def _is_toc_section(sec: dict) -> bool:
+    """扩展 TOC 识别：点线目录 + tab/空格目录 + DOCX markdown 目录行。"""
+    text = _body_text(sec)
+    if not text:
+        return False
+    lines = [l.strip() for l in text.split("\n") if l.strip()]
+    if not lines:
+        return False
+
+    toc_count = 0
+    for l in lines:
+        if (_TOC_DOT_PAT.search(l) or _TOC_TAB_PAT.search(l) or
+            _TOC_SPACE_PAT.search(l) or _TOC_MARKER_PAT.match(l)):
+            toc_count += 1
+    # 单行 TOC → drop; 多行且 >40% → drop
+    return toc_count > 0 and (len(lines) == 1 or toc_count / len(lines) > 0.4)
+
+
+# ── Layer 1: 语义判断 ───────────────────────────────────
+
+def _is_complete_sentence(sec: dict) -> bool:
+    """以句号/问号/感叹号结尾 → 完整语义句，即使短也应保留。"""
+    body = _body_text(sec)
+    return bool(body) and body.endswith(('。', '！', '？'))
+
+
+def _is_pdf_fragment(sec: dict, next_sec: dict) -> bool:
+    """PDF 截断片段：非句末结尾 + 80-250字 + 含领域词 + 下一 section 续接。"""
+    body = _body_text(sec)
+    if not (50 < len(body) < 250):
+        return False
+    if not _is_mid_sentence_end(body):
+        return False
+    if not _DOMAIN_PAT.search(body):
+        return False
+    return _next_starts_continuation(next_sec)
+
+
+def _is_transition(sec: dict) -> bool:
+    """识别过渡句：<120 字且含过渡关键词，或以冒号结尾。"""
+    body = _body_text(sec)
+    if not body or len(body) >= 120:
+        return False
+    if body.endswith((':', '：')):
+        return True
+    return any(p in body for p in TRANSITION_PATTERNS)
+
+
+def _is_empty_title(sec: dict) -> bool:
+    """标题后正文 <50 字 → 空标题。"""
+    return len(_body_text(sec)) < 50
+
+
+# ── Layer 2: 长度兜底 ───────────────────────────────────
+
+def _is_short_fragment(sec: dict) -> bool:
+    """极短且无完整句子 + 非定义/非列表 → 可合并。"""
+    body = _body_text(sec)
+    if not body or len(body) >= 80:
+        return False
+    if not _is_mid_sentence_end(body):
+        return False
+    if _DEF_PAT.search(body):
+        return False
+    if _LIST_PAT.match(body):
+        return False
+    return True
+
+
+def _is_drop_junk(sec: dict) -> bool:
+    """识别模板注释等无用内容。"""
+    body = _body_text(sec)
+    return any(m in body for m in ["不用删除", "标红内容为示例", "仅供参考"])
+
+
+# ── 主过滤函数 ───────────────────────────────────────────
+
+def _filter_sections(sections: list[dict]) -> list[dict]:
+    results = []
+    stats = {"dropped_toc": 0, "dropped_junk": 0,
+             "merged_table": 0, "merged_transition": 0,
+             "merged_empty": 0, "merged_broken": 0, "merged_short": 0,
+             "kept_short_complete": 0}
+
+    i = 0
+    while i < len(sections):
+        sec = sections[i]
+
+        # ── Layer 0: 结构识别 ──
+
+        # L0a: Drop junk (模板注释)
+        if _is_drop_junk(sec):
+            stats["dropped_junk"] += 1
+            i += 1
+            continue
+
+        # L0b: Drop TOC
+        if _is_toc_section(sec):
+            stats["dropped_toc"] += 1
+            i += 1
+            continue
+
+        # L0c: Table block — 识别并合并连续表格 section
+        if _is_table_block(sec):
+            merged_n, table_results = _merge_table_block(sections, i)
+            if merged_n > 0:
+                stats["merged_table"] += merged_n
+                results.append(table_results[0])
+                i += merged_n + 1
+                continue
+
+        # ── Layer 1: 语义判断 ──
+        # 注意顺序：先清理垃圾（空标题/过渡句），再判断保留/断句合并
+
+        # L1a: 空标题合并（<50字正文）— 最先，清理无内容标题
+        if _is_empty_title(sec) and i + 1 < len(sections):
+            sections[i + 1]["blocks"] = sec["blocks"] + sections[i + 1]["blocks"]
+            stats["merged_empty"] += 1
+            i += 2
+            continue
+
+        # L1b: 过渡句合并（<120字 + 过渡关键词/冒号结尾）
+        if _is_transition(sec) and i + 1 < len(sections):
+            sections[i + 1]["blocks"] = sec["blocks"] + sections[i + 1]["blocks"]
+            stats["merged_transition"] += 1
+            i += 2
+            continue
+
+        # L1c: 完整语义句 (<200字但以。！？结尾) → 保留
+        if len(_body_text(sec)) < 200 and _is_complete_sentence(sec):
+            stats["kept_short_complete"] += 1
+            results.append(sec)
+            i += 1
+            continue
+
+        # L1d: PDF 断句补全 (80-250字, 无句末标点, 含领域词)
+        if (i + 1 < len(sections) and
+            _is_pdf_fragment(sec, sections[i + 1])):
+            sections[i + 1]["blocks"] = sec["blocks"] + sections[i + 1]["blocks"]
+            stats["merged_broken"] += 1
+            i += 2
+            continue
+
+        # ── Layer 2: 长度兜底 ──
+
+        if _is_short_fragment(sec) and i + 1 < len(sections):
+            sections[i + 1]["blocks"] = sec["blocks"] + sections[i + 1]["blocks"]
+            stats["merged_short"] += 1
+            i += 2
+            continue
+
+        results.append(sec)
+        i += 1
+
+    # 打印统计
+    total_dropped = stats["dropped_toc"] + stats["dropped_junk"]
+    total_merged = (stats["merged_table"] + stats["merged_transition"] +
+                    stats["merged_empty"] + stats["merged_broken"] +
+                    stats["merged_short"])
+    if total_dropped or total_merged or stats["kept_short_complete"]:
+        parts = [f"{len(sections)} -> {len(results)}"]
+        if total_dropped:
+            parts.append(f"丢弃{total_dropped}")
+        if total_merged:
+            parts.append(f"合并{total_merged}")
+        print(f"    [Section 过滤] {' | '.join(parts)}")
+        detail_parts = []
+        if stats["dropped_toc"]:
+            detail_parts.append(f"TOC={stats['dropped_toc']}")
+        if stats["dropped_junk"]:
+            detail_parts.append(f"模板注释={stats['dropped_junk']}")
+        if stats["merged_table"]:
+            detail_parts.append(f"表格={stats['merged_table']}")
+        if stats["merged_broken"]:
+            detail_parts.append(f"PDF断句={stats['merged_broken']}")
+        if stats["merged_transition"]:
+            detail_parts.append(f"过渡句={stats['merged_transition']}")
+        if stats["merged_empty"]:
+            detail_parts.append(f"空标题={stats['merged_empty']}")
+        if stats["merged_short"]:
+            detail_parts.append(f"短片段={stats['merged_short']}")
+        if stats["kept_short_complete"]:
+            detail_parts.append(f"保留短完整句={stats['kept_short_complete']}")
+        if detail_parts:
+            print(f"           [{', '.join(detail_parts)}]")
+
+    return results
+
+
 # ── Chunk 生成 ─────────────────────────────────────────
 
 def _sections_to_chunks(sections: list[dict], doc_stem: str, fname: str,
                          province: str, crop: str, zoning: str,
-                         source_type: str = "technical_spec") -> list[dict]:
+                         source_type: str = "technical_spec",
+                         layout_mode: str = "none") -> list[dict]:
     """将 Section 列表转为最终 chunk 列表。每个 Section 生成一个 chunk。"""
     chunks = []
     for si, sec in enumerate(sections):
@@ -194,6 +476,15 @@ def _sections_to_chunks(sections: list[dict], doc_stem: str, fname: str,
 
         heading_path = sec.get("heading_path") or [doc_stem]
         section_id = f"{doc_stem}_sec_{si}"
+
+        # 判断 section 内容类型
+        if _is_table_block(sec):
+            sec_type = "table"
+        elif _is_heading(full_text[:60]) and len(full_text) < 60:
+            sec_type = "heading"
+        else:
+            sec_type = "text"
+
         chunks.append({
             "id": f"{doc_stem}_s{si}",
             "content": full_text,
@@ -208,6 +499,8 @@ def _sections_to_chunks(sections: list[dict], doc_stem: str, fname: str,
                 "crop": crop,
                 "zoning_type": zoning,
                 "section_title": heading_path[-1] if heading_path else "",
+                "type": sec_type,
+                "layout_mode": layout_mode,
             },
         })
     return chunks
@@ -246,8 +539,9 @@ def parse_docx(filepath: str) -> list[dict]:
 
     # 统一 Section 管道
     sections = _build_sections(blocks)
+    sections = _filter_sections(sections)
     chunks = _sections_to_chunks(sections, doc_stem, fname, province, crop, zoning,
-                                  source_type="technical_spec")
+                                  source_type="technical_spec", layout_mode="docx_style")
 
     # 分配表格到最近的 section
     table_chunks = _extract_tables(doc, doc_stem, fname, province, crop, zoning)
@@ -279,6 +573,8 @@ def _extract_tables(doc, doc_stem: str, fname: str,
                 "crop": crop,
                 "zoning_type": zoning,
                 "section_title": f"表格{i+1}",
+                "type": "table",
+                "layout_mode": "docx_style",
             },
         })
     return chunks
@@ -302,7 +598,7 @@ def _table_to_markdown(table) -> str:
 # ═══════════════════════════════════════════════════════════
 
 def parse_pdf(filepath: str) -> list[dict]:
-    """解析 PDF：全文拼接 → 段落切分 → Block 列表 → 统一 Section 管道。"""
+    """解析 PDF：优先使用 fitz dict 模式提取排版信息，失败则回退全文拼接。"""
     try:
         import fitz
     except ImportError:
@@ -319,36 +615,66 @@ def parse_pdf(filepath: str) -> list[dict]:
         print(f"  [!] 无法打开 PDF {filepath}: {e}")
         return []
 
-    # Step 1: 提取所有页面文本 → 跳过封面和目录页 → 拼接全文
-    all_text_parts = []
-    toc_pages = set()
+    num_pages = len(doc)
+    layout_mode = "text_fallback"
+    all_blocks = []
 
-    for page_num in range(len(doc)):
-        page = doc[page_num]
-        text = page.get_text().strip()
-        if len(text) < 50:
-            continue
-        # 检测目录页：包含大量 "....." 或罗马数字
-        if _is_toc_page(text):
-            toc_pages.add(page_num)
-            continue
-        all_text_parts.append(text)
+    # ── 尝试 dict 模式 ──
+    try:
+        layout_blocks, ok = _extract_layout_blocks(doc)
+        if ok and len(layout_blocks) >= 10:
+            # 按页跳过 TOC
+            page_texts = defaultdict(list)
+            for b in layout_blocks:
+                if b.page is not None:
+                    page_texts[b.page].append(b.text)
+            toc_pages = set()
+            for pn, texts in page_texts.items():
+                joined = "\n".join(texts)
+                if len(joined) < 50 or _is_toc_page(joined):
+                    toc_pages.add(pn)
+            layout_blocks = [b for b in layout_blocks if b.page not in toc_pages]
+
+            if layout_blocks:
+                layout_blocks = _dedup_headers_footers(layout_blocks, num_pages)
+                _detect_titles_by_layout(layout_blocks)
+                all_blocks = layout_blocks
+                layout_mode = "dict"
+                title_n = sum(1 for b in all_blocks if b.is_title)
+                print(f"    [PDF Layout] dict 模式, {len(all_blocks)} blocks, "
+                      f"{title_n} 标题")
+    except Exception as e:
+        print(f"    [PDF Layout] dict 异常: {e}, 回退 text 模式")
+
+    # ── 回退 text 模式 ──
+    if not all_blocks:
+        all_text_parts = []
+        for page_num in range(num_pages):
+            page = doc[page_num]
+            text = page.get_text().strip()
+            if len(text) < 50:
+                continue
+            if _is_toc_page(text):
+                continue
+            all_text_parts.append(text)
+
+        if not all_text_parts:
+            doc.close()
+            return []
+
+        full_text = "\n".join(all_text_parts)
+        full_text = _clean_pdf_text(full_text)
+        all_blocks = _lines_to_blocks(full_text, fname)
 
     doc.close()
 
-    if not all_text_parts:
+    if not all_blocks:
         return []
 
-    full_text = "\n".join(all_text_parts)
-
-    # Step 2: 清洗后按行切分 → 每行独立检测标题
-    full_text = _clean_pdf_text(full_text)
-    blocks = _lines_to_blocks(full_text, fname)
-
-    # Step 4: 统一 Section 管道
-    sections = _build_sections(blocks)
+    sections = _build_sections(all_blocks)
+    sections = _filter_sections(sections)
     return _sections_to_chunks(sections, doc_stem, fname, province, crop, zoning,
-                                source_type="report")
+                                source_type="report", layout_mode=layout_mode)
 
 
 def _is_toc_page(text: str) -> bool:
@@ -420,6 +746,157 @@ def _lines_to_blocks(text: str, source: str) -> list[Block]:
                 blocks.append(Block(text=merged, source=source))
 
     return blocks
+
+
+# ── PDF Layout 解析（Phase 1: fitz dict 模式）─────────────
+
+def _extract_layout_blocks(doc) -> tuple:
+    """使用 page.get_text("dict") 提取带排版信息的 Block 列表。
+
+    Returns:
+        (blocks: list[Block], success: bool)
+        每个 line 变成一个 Block，合并 line 内多个 span。
+    """
+    blocks = []
+    for page_num in range(len(doc)):
+        try:
+            page = doc[page_num]
+            pagedict = page.get_text("dict")
+            for block in pagedict.get("blocks", []):
+                if block.get("type") != 0:  # 跳过图片块
+                    continue
+                for line in block.get("lines", []):
+                    spans = line.get("spans", [])
+                    if not spans:
+                        continue
+                    text_parts = []
+                    max_font = 0.0
+                    any_bold = False
+                    x0 = spans[0].get("bbox", [0, 0, 0, 0])[0]
+                    y0 = spans[0].get("bbox", [0, 0, 0, 0])[1]
+                    for sp in spans:
+                        text_parts.append(sp.get("text", ""))
+                        max_font = max(max_font, sp.get("size", 0))
+                        if sp.get("flags", 0) & 16:  # bit 4 = bold
+                            any_bold = True
+                    text = "".join(text_parts).strip()
+                    if text:
+                        blocks.append(Block(
+                            text=text,
+                            page=page_num,
+                            font_size=max_font if max_font > 0 else None,
+                            bold=any_bold,
+                            x0=x0,
+                            y0=y0,
+                        ))
+        except Exception:
+            return [], False
+    return blocks, len(blocks) > 0
+
+
+def _detect_titles_by_layout(blocks: list[Block]):
+    """基于字号 P70/P90 双阈值 + 加粗 + 长度 检测标题。
+
+    评分规则:
+      - font_size >= P90 → 0.5 (章节标题级)
+      - font_size >= P70 → 0.3 (小节标题级)
+      - bold           → 0.1
+      - len(text) < 30 → 0.2
+      - score > 0.6    → is_title = True
+    """
+    font_sizes = sorted(
+        [b.font_size for b in blocks if b.font_size and b.font_size > 0]
+    )
+    if len(font_sizes) < 5:
+        return
+
+    n = len(font_sizes)
+    p70 = font_sizes[int(n * 0.7)]
+    p90 = font_sizes[int(n * 0.9)]
+
+    for b in blocks:
+        score = 0.0
+        if b.font_size and b.font_size > 0:
+            if b.font_size >= p90:
+                score += 0.5
+            elif b.font_size >= p70:
+                score += 0.3
+        if b.bold:
+            score += 0.1
+        if len(b.text.strip()) < 30:
+            score += 0.2
+        if score > 0.6:
+            b.is_title = True
+
+
+def _dedup_headers_footers(blocks: list[Block], num_pages: int) -> list[Block]:
+    """移除跨页重复的页眉/页脚。
+
+    策略:
+      1. 每页按 y0 排序，取前 2 / 后 2 个 Block 为候选
+      2. 候选项在 >40% 页面出现 → 标记为噪声
+      3. 仅移除处于页眉/页脚位置的噪声 Block（不影响正文中的同名文本）
+    """
+    from collections import defaultdict
+
+    page_blocks = defaultdict(list)
+    for b in blocks:
+        if b.page is not None:
+            page_blocks[b.page].append(b)
+
+    if len(page_blocks) < 3:
+        return blocks
+
+    # 每页按 y0 排序，收集首尾候选
+    candidates = defaultdict(int)  # hash → 出现页数
+    page_sorted = {}
+    for pg, pblocks in page_blocks.items():
+        sorted_b = sorted(
+            [b for b in pblocks if b.y0 is not None],
+            key=lambda b: b.y0,
+        )
+        if not sorted_b:
+            continue
+        page_sorted[pg] = sorted_b
+        seen = set()
+        for b in sorted_b[:2]:
+            t = b.text.strip()
+            if len(t) < 100:
+                h = hashlib.md5(t[:100].encode()).hexdigest()
+                if h not in seen:
+                    candidates[h] += 1
+                    seen.add(h)
+        for b in sorted_b[-2:]:
+            t = b.text.strip()
+            if len(t) < 100:
+                h = hashlib.md5(t[:100].encode()).hexdigest()
+                if h not in seen:
+                    candidates[h] += 1
+                    seen.add(h)
+
+    threshold = max(3, num_pages * 0.4)
+    noise_hashes = {h for h, c in candidates.items() if c > threshold}
+
+    if not noise_hashes:
+        return blocks
+
+    # 过滤：仅移除处于页眉/页脚位置的匹配 Block
+    filtered = []
+    for b in blocks:
+        if b.page is not None and b.page in page_sorted:
+            sorted_b = page_sorted[b.page]
+            top_ids = {id(x) for x in sorted_b[:2]}
+            bot_ids = {id(x) for x in sorted_b[-2:]}
+            if id(b) in top_ids or id(b) in bot_ids:
+                h = hashlib.md5(b.text.strip()[:100].encode()).hexdigest()
+                if h in noise_hashes:
+                    continue
+        filtered.append(b)
+
+    dedup_n = len(blocks) - len(filtered)
+    if dedup_n:
+        print(f"    [PDF Layout] 移除页眉页脚 {dedup_n} 行 (阈值>{threshold:.0f}页)")
+    return filtered
 
 
 # ═══════════════════════════════════════════════════════════
@@ -504,6 +981,8 @@ def parse_xlsx(filepath: str) -> list[dict]:
                 "zoning_type": zoning,
                 "sheet_name": sheet_name,
                 "section_title": sheet_name,
+                "type": "table",
+                "layout_mode": "xlsx",
             },
         })
 
@@ -582,6 +1061,8 @@ def parse_csv(filepath: str) -> list[dict]:
             "crop": crop,
             "zoning_type": zoning,
             "section_title": fname,
+            "type": "table",
+            "layout_mode": "csv",
         },
     }]
 

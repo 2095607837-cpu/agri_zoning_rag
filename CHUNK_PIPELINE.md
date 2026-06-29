@@ -2,7 +2,16 @@
 
 > 完整记录从原始文档到检索结果的全链路 chunk 处理逻辑
 >
-> **最后更新**: 2026-06-26 (v1.8 compact header 修复)
+> **最后更新**: 2026-06-29 (v1.11 Section Quality Filter + PDF Layout Phase 1)
+
+---
+
+## 变更日志
+
+| 日期 | 版本 | 变更 |
+|------|------|------|
+| 2026-06-29 | v1.11 | Section Quality Filter (三层过滤) + PDF Layout 解析 Phase 1 (fitz dict 模式、布局标题检测、页眉页脚去重) + metadata.type / layout_mode |
+| 2026-06-26 | v1.8 | compact header 修复，MRR 恢复到 0.8333 |
 
 ---
 
@@ -174,12 +183,126 @@ metadata = {
 
 `data/chunks.json`
 
-| 指标 | 旧值 | 新值 |
+| 指标 | 旧值 | 新值 (v1.11) |
 |------|------|------|
-| 总 chunk 数 | 1177 | 898 |
-| 有效 chunk (排除 excluded + low) | 1060 | 839 |
-| 平均 chunk 长度 | ~490 字符 | 623 字符 |
-| heading_level 1 / 2 | 无此字段 | 721 / 177 |
+| 总 chunk 数 | 1177 | 516 |
+| 有效 chunk (排除 excluded + low) | 1060 | 513 |
+| 平均 chunk 长度 | ~490 字符 | 547 字符 |
+| heading_level 1 / 2 | 无此字段 | 分布见 section 统计 |
+| metadata.type | 无 | text / heading / table |
+| metadata.layout_mode | 无 | dict / docx_style / xlsx / csv |
+
+---
+
+### Section Quality Filter（新增：v1.11）
+
+Section 构建后、chunk 生成前插入三道过滤，沿 sections 列表单遍 while 循环处理。
+
+**三层优先级架构**：
+
+```
+Layer 0: 结构识别 → Drop（丢弃）或 Group-Merge（表格合并）
+  ├── L0a: 模板注释 ("不用删除"/"标红内容为示例") → Drop
+  ├── L0b: TOC 目录 (省略号+页码 / tab+页码 / DOCX ###标记) → Drop
+  └── L0c: 表格结构 (|...| 或 >60% 行为数字) → 连续表格合并为一个
+
+Layer 1: 语义判断 → Merge（向后合并）或 Keep（保留）
+  ├── L1a: 空标题 (<50字正文) → Merge 到下一个 section
+  ├── L1b: 过渡句 (<120字 + 过渡关键词或冒号结尾) → Merge
+  ├── L1c: 完整句 (<200字且以。！？结尾) → Keep（短但语义完整）
+  └── L1d: PDF 断句补全 (50-250字 + 无句末标点 + 含领域词 + 下一 section 续接) → Merge
+
+Layer 2: 长度兜底
+  └── L2: 极短片段 (<80字 + 无句末标点 + 非定义/非列表) → Merge
+```
+
+**领域词表（`_DOMAIN_PAT`）**：
+农业气象类：区划|风险|作物|指标|气候|农业|气象|品种|种植|产量|品质|灾害|温度|降水|干旱|冷害|渍涝|霜冻|病虫害|土壤|光照|积温|日照
+地形地理类：海拔|高原|地形|地势|地貌|丘陵|平原|山地|盆地|谷地|高程|纬度|经度
+
+**过渡关键词**（`TRANSITION_PATTERNS`）：
+"包括以下", "主要包括", "如下", "具体如下", "分别为", "分为", "以下几个方面", "以下方面", "主要措施", "对策建议"
+
+**过滤效果（内蒙古 PDF 示例）**：
+```
+[Section 过滤] 386 -> 50 | 合并180
+           [表格=24, PDF断句=46, 过渡句=3, 空标题=76, 短片段=29, 保留短完整句=4]
+```
+
+**全局统计（516 chunks）**：
+- 完整段落: 62%，可接受: 23%，碎片: 10%（主要是跨页断句和公式/小表格）
+- 低质量标记: 仅 3 个（空表格壳）
+
+---
+
+### PDF Layout 解析 Phase 1（新增：v1.11）
+
+将 PDF 解析从纯文本模式升级为排版感知模式。
+
+**Block 字段扩展**：
+```python
+@dataclass
+class Block:
+    text: str
+    font_size: Optional[float] = None  # 字号(pt)
+    bold: bool = False                 # 是否加粗
+    x0: Optional[float] = None         # 左边距
+    y0: Optional[float] = None         # 上边距
+    is_title: bool = False             # 布局检测为标题
+```
+
+**双模解析流程**（`parse_pdf`）：
+```
+fitz.open(doc)
+  │
+  ├── try dict 模式 (_extract_layout_blocks)
+  │     page.get_text("dict") → 逐 blocks/lines/spans 解析
+  │     每个 line → 一个 Block（合并同 line 内 spans）
+  │     ↓
+  │     按 y0 排序 + 首尾位置去重页眉页脚 (_dedup_headers_footers)
+  │     ↓
+  │     全局 P70/P90 双阈值标题检测 (_detect_titles_by_layout)
+  │     ↓
+  │     layout_mode = "dict"
+  │
+  └── except → fallback text 模式
+        page.get_text() → _lines_to_blocks() → 正则标题
+        layout_mode = "text_fallback"
+```
+
+**标题检测评分规则**（`_detect_titles_by_layout`）：
+| 信号 | 条件 | 得分 |
+|------|------|------|
+| 字号 | font_size >= P90（章节级） | +0.5 |
+| 字号 | font_size >= P70（小节级） | +0.3 |
+| 加粗 | flags bit 4 = 1 | +0.1 |
+| 长度 | len(text) < 30 | +0.2 |
+
+score > 0.6 → `is_title = True`。dict 模式下仅用 `is_title` 切 section（关闭正则标题，避免 `_is_heading()` 误匹配列表项/数字编号）。
+
+**字号分位数示例（内蒙古 PDF）**：
+```
+3387 blocks, P50=9.0pt, P70=10.0pt, P90=14.0pt
+727 个 block 得分 > 0.6 → is_title
+```
+
+**页眉页脚去重**（`_dedup_headers_footers`）：
+- 每页按 y0 排序，取前 2 / 后 2 个 Block 为候选
+- 候选项在 >40% 页面出现 → 标记为噪声哈希
+- 仅移除处于页眉/页脚**位置**的匹配 Block（保留正文中同名文本）
+- 效果：新疆冬小麦报告移除 54 行，新疆普查技术规范移除 12 行
+
+**dict 模式覆盖率**：
+9 个已处理 PDF 100% 成功使用 dict 模式，0 回退到 text 模式。
+
+**新增 metadata 字段**（`_sections_to_chunks`）：
+| 字段 | 值 | 说明 |
+|------|-----|------|
+| `metadata.type` | `"heading"` / `"text"` / `"table"` | section 内容类型 |
+| `metadata.layout_mode` | `"dict"` / `"text_fallback"` / `"docx_style"` / `"xlsx"` / `"csv"` | 解析模式来源 |
+
+**PDF Section 匹配适配**：
+原 `_build_regex_sections` 同时用 `_is_heading()` 正则 + `is_title` 布局信号。发现 dict 模式每行一个 Block，`_is_heading()` 的 `num_dot1` / `cn_num` 等模式会误匹配列表项（如 "1. "），导致 386 sections（text 模式下仅 162）。修复：dict 模式（有布局信息时）仅信任 `is_title`，关闭正则标题。
 
 ---
 
@@ -414,17 +537,20 @@ heading_path: 黑龙江大豆区划 > 二、区划指标与方法 > 冷害指数
 
 ## 数值总结
 
-| 阶段 | 产物 | 旧值 | 新值 |
+| 阶段 | 产物 | 旧值 | 新值 (v1.11) |
 |------|------|------|------|
-| step1 解析 | chunks.json 总条数 | 1177 | **898** |
-| step1 有效 | 排除 excluded + low | 1060 | **839** |
-| step2 H3 回退 | 大章节切分 | 无 | **+62 子章节** |
-| step2 免切分 | ≤800字/含表格 | 988 | **818** |
-| step2 切分 | >800字 → 子块 | 72→100 | **83→235** |
-| step2 总计 | vectordb 向量 | **1088** | **1061** (v1.8 重建) |
-| 平均 chunk 长度 | — | ~490 字符 | **537** 字符 |
-| section 数 | — | 无此概念 | **902** |
-| heading_level 分布 | — | 无此字段 | L1=721, L2=177 |
+| step1 解析 | chunks.json 总条数 | 1177 | **516** |
+| step1 有效 | 排除 excluded + low | 1060 | **513** |
+| step1 过滤 | Section Quality Filter | 无 | 三层过滤，丢弃+合并 |
+| step1 PDF | 解析模式 | text only | dict (9/9 PDF, 0 回退) |
+| step1 metadata | 新增字段 | — | type + layout_mode |
+| step2 H3 回退 | 大章节切分 | 无 | +62 子章节 |
+| step2 免切分 | ≤800字/含表格 | 988 | 818 |
+| step2 切分 | >800字 → 子块 | 72→100 | 83→235 |
+| step2 总计 | vectordb 向量 | 1088 | 1061 |
+| 平均 chunk 长度 | — | ~490 字符 | **547** 字符 |
+| PDF <100字碎片 | — | — | 45/252 (18%) |
+| 低质量标记 | — | — | 3/516 (0.6%) |
 
 ---
 
