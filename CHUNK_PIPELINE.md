@@ -20,8 +20,20 @@
 ```
 源文件 (.docx/.pdf/.xlsx/.csv)
     │
-    ▼ step1_parse.py   — 三层切分 (样式标题 → 正则降级 → 固定长度兜底)
-chunks.json            — 每个 chunk 含 heading_path / section_id
+    ▼ step1_parse.py   — 解析 → Block 列表 → Section 构建 → Section Quality Filter
+    │
+    │  DOCX: 样式标题 (H1/H2/H3) → Section
+    │  PDF:  fitz dict 模式 (布局感知) → 字号/加粗/坐标 → P70/P90 标题检测
+    │        ├─ 页眉页脚去重 (跨页频率 >40%)
+    │        └─ fallback: text 模式 (正则标题)
+    │
+    │  Section Quality Filter (三层):
+    │    Layer 0: 结构识别 → Drop TOC/模板注释, Merge 连续表格
+    │    Layer 1: 语义判断 → Merge 空标题/过渡句/PDF断句, Keep 完整句
+    │    Layer 2: 长度兜底 → Merge 极短无句末片段
+    │
+    ▼
+chunks.json            — 每个 chunk 含 heading_path / section_id / type / layout_mode
     │
     ▼ step2_embed.py   — H3回退切分 → RecursiveCharacterTextSplitter(800/150)
     │                    page_content = heading_path + 正文
@@ -30,7 +42,7 @@ chunks.json            — 每个 chunk 含 heading_path / section_id
     ├─ BM25 索引 ───── 从 vectordb 构建（与 Dense 同一套子块）
     │
     ▼
-vectordb/              — 1053 条向量，含 heading_path 语义信号
+vectordb/              — 向量库，含 heading_path 语义信号
     │
     ▼ hybrid_search.py — RRF 融合 → [Reranker] → 同 section 上下文扩展(±1)
     │
