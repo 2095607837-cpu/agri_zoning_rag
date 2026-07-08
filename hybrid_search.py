@@ -184,7 +184,7 @@ class HybridSearcher:
         workers = min(len(extra_queries), max_workers)
         with ThreadPoolExecutor(max_workers=workers) as ex:
             futures = {
-                ex.submit(self.search, sq, top_k, expand_context): sq
+                ex.submit(self.search, sq, top_k, expand_context, True): sq
                 for sq in extra_queries
             }
             for f in as_completed(futures):
@@ -200,7 +200,8 @@ class HybridSearcher:
         merged = sorted(seen.values(), key=lambda r: r.get("similarity", 0), reverse=True)
         return judge_results[:top_k], merged[:top_k]
 
-    def search(self, query: str, top_k: int = 5, expand_context: bool = False) -> list[dict]:
+    def search(self, query: str, top_k: int = 5, expand_context: bool = False,
+               skip_reranker: bool = False) -> list[dict]:
         """混合检索（RRF 融合）+ 可选 CrossEncoder 重排序 + 可选同 section 上下文扩展。
 
         无论是否启用 reranker，返回结果中的 similarity 字段始终是余弦相似度，
@@ -247,7 +248,7 @@ class HybridSearcher:
                 doc_store[key] = (content, metadata, round(sim, 4))
 
         # 4. 排序
-        if self._reranker:
+        if self._reranker and not skip_reranker:
             # Reranker 重排序：RRF 粗排截断后送 CrossEncoder 精排
             rerank_input = min(top_k * 3, 40)  # 精排输入上限，防 CrossEncoder 过载
             candidates = []

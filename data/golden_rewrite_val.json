@@ -1,0 +1,799 @@
+[
+  {
+    "id": "Q_L01",
+    "question": "种大豆需要多少积温才够？",
+    "rewrite_type": "normalize",
+    "rewrite_eval": {
+      "required_terms": {
+        "must_have": [
+          "大豆"
+        ],
+        "core_concept": [
+          "活动积温"
+        ],
+        "precision_term": [
+          "≥10℃"
+        ]
+      },
+      "important_terms": [],
+      "optional_terms": []
+    },
+    "canonical_queries": [
+      "大豆≥10℃活动积温",
+      "大豆种植积温要求",
+      "大豆≥10℃活动积温阈值",
+      "大豆活动积温指标"
+    ],
+    "reference_sub_queries": [
+      "大豆≥10℃活动积温阈值标准是多少",
+      "大豆种植积温条件要求",
+      "大豆积温适宜性区划指标"
+    ]
+  },
+  {
+    "id": "Q_L02",
+    "question": "农业上说的光照好不好用什么指标衡量？",
+    "rewrite_type": "normalize",
+    "rewrite_eval": {
+      "required_terms": {
+        "must_have": [],
+        "core_concept": [
+          "日照时数",
+          "日照百分率"
+        ],
+        "precision_term": [
+          "太阳辐射"
+        ]
+      },
+      "important_terms": [],
+      "optional_terms": [
+        "光合有效辐射"
+      ]
+    },
+    "canonical_queries": [
+      "农业气候资源日照指标",
+      "日照时数日照百分率评估标准",
+      "太阳辐射农业光照条件衡量"
+    ],
+    "reference_sub_queries": [
+      "日照时数和日照百分率定义及计算方法",
+      "太阳辐射光合有效辐射估算方法"
+    ]
+  },
+  {
+    "id": "Q_L03",
+    "question": "大豆怕不怕冷？怎么判断一个地方会不会太冷？",
+    "rewrite_type": "normalize",
+    "rewrite_eval": {
+      "required_terms": {
+        "must_have": [
+          "大豆"
+        ],
+        "core_concept": [
+          "低温冷害"
+        ],
+        "precision_term": [
+          "霜冻"
+        ]
+      },
+      "important_terms": [],
+      "optional_terms": []
+    },
+    "canonical_queries": [
+      "大豆低温冷害评估方法",
+      "大豆种植区低温冻害判断标准",
+      "大豆低温霜冻风险指标"
+    ],
+    "reference_sub_queries": [
+      "低温冷害定义及霜冻发生条件",
+      "大豆低温冷害气温之和距平评估方法",
+      "大豆种植区低温冻害风险区划"
+    ]
+  },
+  {
+    "id": "Q_L04",
+    "question": "什么叫风刮得庄稼受不了？",
+    "rewrite_type": "normalize",
+    "rewrite_eval": {
+      "required_terms": {
+        "must_have": [
+          "干热风"
+        ],
+        "core_concept": [
+          "高温低湿"
+        ],
+        "precision_term": [
+          "灌浆期"
+        ]
+      },
+      "important_terms": [],
+      "optional_terms": []
+    },
+    "canonical_queries": [
+      "干热风定义及发生条件",
+      "干热风农业气象灾害",
+      "干热风风险区划",
+      "干热风灾害指标"
+    ],
+    "reference_sub_queries": [
+      "干热风是什么灾害及其高温低湿发生条件",
+      "小麦灌浆期干热风灾害影响机理",
+      "冬小麦干热风风险区划及防灾减灾措施"
+    ]
+  },
+  {
+    "id": "Q_L05",
+    "question": "冬小麦什么时候种什么时候收？",
+    "rewrite_type": "normalize",
+    "rewrite_eval": {
+      "required_terms": {
+        "must_have": [
+          "冬小麦"
+        ],
+        "core_concept": [
+          "播种期",
+          "成熟期"
+        ],
+        "precision_term": [
+          "生育期"
+        ]
+      },
+      "important_terms": [],
+      "optional_terms": []
+    },
+    "canonical_queries": [
+      "冬小麦播种期成熟期时间",
+      "冬小麦生育期天数",
+      "冬小麦种植收获时间节点"
+    ],
+    "reference_sub_queries": [
+      "冬小麦播种期时间及适宜气象条件",
+      "冬小麦成熟期收获期时间",
+      "冬小麦全生育期天数及关键物候节点"
+    ]
+  },
+  {
+    "id": "Q_L06",
+    "question": "田里水太多对大豆有什么影响？",
+    "rewrite_type": "normalize",
+    "rewrite_eval": {
+      "required_terms": {
+        "must_have": [
+          "大豆"
+        ],
+        "core_concept": [
+          "渍涝"
+        ],
+        "precision_term": [
+          "土壤含水量"
+        ]
+      },
+      "important_terms": [],
+      "optional_terms": [
+        "减产"
+      ]
+    },
+    "canonical_queries": [
+      "大豆渍涝灾害土壤含水量影响",
+      "渍涝对大豆根系产量影响",
+      "大豆渍涝风险区划评估"
+    ],
+    "reference_sub_queries": [
+      "渍涝灾害定义及土壤含水量过饱和条件",
+      "渍涝导致大豆根系缺氧减产机理",
+      "大豆渍涝风险区划及减产评估方法"
+    ]
+  },
+  {
+    "id": "Q_L07",
+    "question": "为什么有的地方适合种苹果有的地方不行？",
+    "rewrite_type": "normalize",
+    "rewrite_eval": {
+      "required_terms": {
+        "must_have": [
+          "苹果种植"
+        ],
+        "core_concept": [
+          "适宜性区划"
+        ],
+        "precision_term": [
+          "年平均气温",
+          "年降水量"
+        ]
+      },
+      "important_terms": [
+        "坡度"
+      ],
+      "optional_terms": []
+    },
+    "canonical_queries": [
+      "苹果种植气候适宜性区划",
+      "苹果种植气温降水坡度条件",
+      "苹果最适宜区气候指标阈值"
+    ],
+    "reference_sub_queries": [
+      "苹果种植气候适宜性区划指标体系",
+      "苹果种植气温降水坡度条件要求及阈值",
+      "苹果最适宜区年平均气温与年降水量范围"
+    ]
+  },
+  {
+    "id": "Q_L08",
+    "question": "大豆怎么知道该不该打药防虫？",
+    "rewrite_type": "normalize",
+    "rewrite_eval": {
+      "required_terms": {
+        "must_have": [
+          "大豆食心虫"
+        ],
+        "core_concept": [
+          "综合气象风险指数"
+        ],
+        "precision_term": [
+          "风险等级"
+        ]
+      },
+      "important_terms": [
+        "虫害防治"
+      ],
+      "optional_terms": [
+        "病虫害预警"
+      ]
+    },
+    "canonical_queries": [
+      "大豆食心虫防治判断标准",
+      "大豆食心虫综合气象风险指数",
+      "大豆虫害风险等级划分",
+      "大豆病虫害气象风险预警"
+    ],
+    "reference_sub_queries": [
+      "大豆食心虫综合气象风险指数计算方法",
+      "大豆食心虫风险等级划分标准及防治措施",
+      "大豆病虫害预警及防治气象条件判断"
+    ]
+  },
+  {
+    "id": "Q_L09",
+    "question": "冬天麦子冻不坏的条件是什么？",
+    "rewrite_type": "normalize",
+    "rewrite_eval": {
+      "required_terms": {
+        "must_have": [
+          "冬小麦"
+        ],
+        "core_concept": [
+          "积雪覆盖",
+          "越冬期"
+        ],
+        "precision_term": [
+          "最低气温"
+        ]
+      },
+      "important_terms": [],
+      "optional_terms": []
+    },
+    "canonical_queries": [
+      "冬小麦安全越冬积雪覆盖条件",
+      "冬小麦越冬期最低气温冻害阈值",
+      "冬小麦安全越冬保护措施"
+    ],
+    "reference_sub_queries": [
+      "冬小麦安全越冬积雪覆盖条件要求及积雪深度",
+      "冬小麦越冬期最低气温冻害阈值标准",
+      "冬小麦冻害风险评估及越冬保护机制"
+    ]
+  },
+  {
+    "id": "Q_L10",
+    "question": "橘子怕什么天气？",
+    "rewrite_type": "normalize",
+    "rewrite_eval": {
+      "required_terms": {
+        "must_have": [
+          "柑橘"
+        ],
+        "core_concept": [
+          "低温冻害",
+          "极端最低气温",
+          "高温热害"
+        ],
+        "precision_term": [
+          "暴雨洪涝"
+        ]
+      },
+      "important_terms": [],
+      "optional_terms": []
+    },
+    "canonical_queries": [
+      "柑橘种植主要气象灾害类型",
+      "柑橘低温冻害高温干旱暴雨洪涝",
+      "柑橘极端天气灾害风险评估"
+    ],
+    "reference_sub_queries": [
+      "柑橘低温冻害定义及阈值标准",
+      "柑橘高温干旱暴雨洪涝灾害类型及影响",
+      "柑橘产区极端天气风险等级评估"
+    ]
+  },
+  {
+    "id": "Q_L11",
+    "question": "种大豆选什么地方最好？",
+    "rewrite_type": "normalize",
+    "rewrite_eval": {
+      "required_terms": {
+        "must_have": [
+          "大豆"
+        ],
+        "core_concept": [
+          "适宜性区划"
+        ],
+        "precision_term": [
+          "≥10℃活动积温",
+          "降水量"
+        ]
+      },
+      "important_terms": [
+        "坡度"
+      ],
+      "optional_terms": []
+    },
+    "canonical_queries": [
+      "大豆种植适宜性区划评估",
+      "大豆适宜区积温降水量坡度指标",
+      "大豆种植最适宜区条件"
+    ],
+    "reference_sub_queries": [
+      "大豆种植适宜性区划指标体系及方法",
+      "大豆适宜区≥10℃活动积温阈值及降水量条件",
+      "大豆种植地形坡度适宜性要求"
+    ]
+  },
+  {
+    "id": "Q_L12",
+    "question": "陕西苹果为啥好吃？和天气有关系吗？",
+    "rewrite_type": "normalize",
+    "rewrite_eval": {
+      "required_terms": {
+        "must_have": [
+          "陕西苹果"
+        ],
+        "core_concept": [
+          "品质气候区划"
+        ],
+        "precision_term": [
+          "日照时数",
+          "昼夜温差"
+        ]
+      },
+      "important_terms": [
+        "糖分",
+        "着色"
+      ],
+      "optional_terms": [
+        "黄土高原"
+      ]
+    },
+    "canonical_queries": [
+      "陕西苹果品质气候区划",
+      "陕西苹果日照昼夜温差品质关系",
+      "陕西苹果气候条件糖分积累"
+    ],
+    "reference_sub_queries": [
+      "陕西苹果品质气候区划评价指标体系",
+      "陕西苹果日照时数昼夜温差对糖分着色影响",
+      "黄土高原苹果品质优良气候条件分析"
+    ]
+  },
+  {
+    "id": "Q_SR01",
+    "question": "高温伤害在大豆区划中如何评估？",
+    "rewrite_type": "normalize",
+    "rewrite_eval": {
+      "required_terms": {
+        "must_have": [
+          "大豆"
+        ],
+        "core_concept": [
+          "高温热害指数"
+        ],
+        "precision_term": [
+          "开花期"
+        ]
+      },
+      "important_terms": [],
+      "optional_terms": []
+    },
+    "canonical_queries": [
+      "大豆高温热害指数评估方法",
+      "大豆开花期高温热害风险",
+      "大豆高温热害等级划分"
+    ],
+    "reference_sub_queries": [
+      "高温热害指数定义及评估框架",
+      "大豆高温热害指数计算方法及计算公式",
+      "大豆开花期高温热害等级划分标准"
+    ]
+  },
+  {
+    "id": "Q_SR02",
+    "question": "水分不足对大豆种植的影响用什么指标衡量？",
+    "rewrite_type": "normalize",
+    "rewrite_eval": {
+      "required_terms": {
+        "must_have": [],
+        "core_concept": [
+          "水分亏缺指数",
+          "干旱风险区划"
+        ],
+        "precision_term": [
+          "CWDI"
+        ]
+      },
+      "important_terms": [
+        "致灾因子危险性",
+        "承灾体脆弱性"
+      ],
+      "optional_terms": []
+    },
+    "canonical_queries": [
+      "水分亏缺指数CWDI大豆干旱评估",
+      "大豆干旱风险区划指标体系",
+      "大豆致灾因子危险性干旱指标"
+    ],
+    "reference_sub_queries": [
+      "水分亏缺指数CWDI是什么及计算公式",
+      "大豆干旱风险区划致灾因子危险性评估方法",
+      "大豆干旱承灾体暴露度脆弱性防灾减灾应用"
+    ]
+  },
+  {
+    "id": "Q_SR03",
+    "question": "低温累积效应如何影响大豆产量？",
+    "rewrite_type": "normalize",
+    "rewrite_eval": {
+      "required_terms": {
+        "must_have": [
+          "大豆"
+        ],
+        "core_concept": [
+          "低温冷害",
+          "气温之和距平"
+        ],
+        "precision_term": [
+          "积温"
+        ]
+      },
+      "important_terms": [
+        "生育期"
+      ],
+      "optional_terms": []
+    },
+    "canonical_queries": [
+      "大豆低温冷害气温之和距平指标",
+      "低温累积效应对大豆产量影响",
+      "大豆积温生育期低温胁迫"
+    ],
+    "reference_sub_queries": [
+      "气温之和距平指标定义及物理含义",
+      "大豆低温冷害气温之和距平指标计算方法",
+      "低温累积效应对大豆生长发育及产量影响评估"
+    ]
+  },
+  {
+    "id": "Q_SR04",
+    "question": "光合有效辐射在作物产量估算中起什么作用？",
+    "rewrite_type": "normalize",
+    "rewrite_eval": {
+      "required_terms": {
+        "must_have": [],
+        "core_concept": [
+          "光合有效辐射",
+          "光合生产潜力"
+        ],
+        "precision_term": [
+          "太阳总辐射"
+        ]
+      },
+      "important_terms": [
+        "生产潜力"
+      ],
+      "optional_terms": []
+    },
+    "canonical_queries": [
+      "光合有效辐射作物产量估算作用",
+      "光合生产潜力计算方法",
+      "太阳总辐射与光合有效辐射换算"
+    ],
+    "reference_sub_queries": [
+      "光合有效辐射是什么及其与太阳总辐射的关系",
+      "光合有效辐射与太阳总辐射换算方法",
+      "光合生产潜力计算公式及作物产量估算应用"
+    ]
+  },
+  {
+    "id": "Q_SR05",
+    "question": "什么是参考作物蒸散量ET₀和实际蒸散量ETc？它们有什么区别？",
+    "rewrite_type": "normalize",
+    "rewrite_eval": {
+      "required_terms": {
+        "must_have": [],
+        "core_concept": [
+          "参考作物蒸散量",
+          "实际蒸散量"
+        ],
+        "precision_term": [
+          "Penman-Monteith"
+        ]
+      },
+      "important_terms": [
+        "ET0",
+        "ETc",
+        "作物系数"
+      ],
+      "optional_terms": []
+    },
+    "canonical_queries": [
+      "参考作物蒸散量ET0与实际蒸散量ETc区别",
+      "Penman-Monteith蒸散量计算方法",
+      "作物系数Kc实际蒸散量计算"
+    ],
+    "reference_sub_queries": [
+      "参考作物蒸散量ET0是什么及其Penman-Monteith定义",
+      "Penman-Monteith公式ET0计算方法",
+      "实际蒸散量ETc作物系数Kc计算公式及应用"
+    ]
+  },
+  {
+    "id": "Q_SR06",
+    "question": "气候生产潜力考虑了哪些因素？和光温生产潜力、光合生产潜力的层次关系是什么？",
+    "rewrite_type": "normalize",
+    "rewrite_eval": {
+      "required_terms": {
+        "must_have": [],
+        "core_concept": [
+          "气候生产潜力",
+          "光温生产潜力",
+          "光合生产潜力"
+        ],
+        "precision_term": [
+          "温度订正系数",
+          "水分订正系数"
+        ]
+      },
+      "important_terms": [],
+      "optional_terms": []
+    },
+    "canonical_queries": [
+      "气候光温光合生产潜力三层关系",
+      "生产潜力温度订正水分订正系数",
+      "光合光温气候生产潜力递减机制"
+    ],
+    "reference_sub_queries": [
+      "光合生产潜力光温生产潜力气候生产潜力的定义及层次关系",
+      "温度订正系数和水分订正系数计算方法",
+      "气候生产潜力逐级订正在作物产量估算中的应用"
+    ]
+  },
+  {
+    "id": "Q_SR07",
+    "question": "温度适宜性隶属度在气候区划中怎么用？",
+    "rewrite_type": "normalize",
+    "rewrite_eval": {
+      "required_terms": {
+        "must_have": [],
+        "core_concept": [
+          "隶属函数",
+          "适宜性指数"
+        ],
+        "precision_term": [
+          "加权求和"
+        ]
+      },
+      "important_terms": [],
+      "optional_terms": []
+    },
+    "canonical_queries": [
+      "温度适宜性隶属函数气候区划应用",
+      "适宜性指数加权求和综合评价",
+      "隶属函数多指标综合评价方法"
+    ],
+    "reference_sub_queries": [
+      "隶属函数和适宜性指数在气候区划中的概念定义",
+      "温度适宜性隶属函数构建方法及评分标准",
+      "气候区划加权求和综合适宜性指数评价应用"
+    ]
+  },
+  {
+    "id": "Q_SR08",
+    "question": "干旱致灾因子危险性和孕灾环境敏感性有什么区别？",
+    "rewrite_type": "normalize",
+    "rewrite_eval": {
+      "required_terms": {
+        "must_have": [],
+        "core_concept": [
+          "致灾因子危险性",
+          "孕灾环境敏感性"
+        ],
+        "precision_term": [
+          "降水距平",
+          "地形坡度"
+        ]
+      },
+      "important_terms": [],
+      "optional_terms": []
+    },
+    "canonical_queries": [
+      "致灾因子危险性与孕灾环境敏感性概念区别",
+      "干旱致灾因子危险性降水距平评估",
+      "孕灾环境敏感性地形坡度评估"
+    ],
+    "reference_sub_queries": [
+      "致灾因子危险性与孕灾环境敏感性的概念定义及区别",
+      "干旱致灾因子危险性降水距平水分亏缺指数评估方法",
+      "孕灾环境敏感性地形坡度河流水系分布评估应用"
+    ]
+  },
+  {
+    "id": "Q_SR09",
+    "question": "承灾体暴露度和脆弱性在大豆风险区划中分别指什么？",
+    "rewrite_type": "normalize",
+    "rewrite_eval": {
+      "required_terms": {
+        "must_have": [],
+        "core_concept": [
+          "承灾体暴露度",
+          "承灾体脆弱性"
+        ],
+        "precision_term": [
+          "防灾减灾能力"
+        ]
+      },
+      "important_terms": [],
+      "optional_terms": []
+    },
+    "canonical_queries": [
+      "大豆承灾体暴露度脆弱性概念",
+      "大豆风险区划暴露度脆弱性评估",
+      "大豆防灾减灾能力指标体系"
+    ],
+    "reference_sub_queries": [
+      "承灾体暴露度和承灾体脆弱性的概念定义及区别",
+      "大豆承灾体暴露度种植面积占比评估方法",
+      "大豆承灾体脆弱性防灾减灾能力评估应用"
+    ]
+  },
+  {
+    "id": "Q_SR10",
+    "question": "地表净辐射Rn在蒸散计算中如何求得？",
+    "rewrite_type": "normalize",
+    "rewrite_eval": {
+      "required_terms": {
+        "must_have": [],
+        "core_concept": [
+          "地表净辐射",
+          "地表净短波辐射",
+          "地表净长波辐射"
+        ],
+        "precision_term": [
+          "反照率"
+        ]
+      },
+      "important_terms": [
+        "Rn",
+        "Rns",
+        "Rnl"
+      ],
+      "optional_terms": []
+    },
+    "canonical_queries": [
+      "地表净辐射Rn计算公式",
+      "净短波辐射Rns净长波辐射Rnl计算",
+      "地表净辐射反照率蒸散计算"
+    ],
+    "reference_sub_queries": [
+      "地表净辐射Rn的定义及物理含义",
+      "地表净辐射Rn等于净短波减净长波计算公式",
+      "地表净短波辐射Rns反照率与地表净长波辐射Rnl计算方法"
+    ]
+  },
+  {
+    "id": "Q_SR11",
+    "question": "标准化降水蒸散指数SPEI与水分亏缺指数CWDI有什么不同？",
+    "rewrite_type": "normalize",
+    "rewrite_eval": {
+      "required_terms": {
+        "must_have": [],
+        "core_concept": [
+          "水分亏缺指数",
+          "标准化降水"
+        ],
+        "precision_term": [
+          "CWDI",
+          "作物需水量"
+        ]
+      },
+      "important_terms": [],
+      "optional_terms": [
+        "时间尺度"
+      ]
+    },
+    "canonical_queries": [
+      "标准化降水蒸散指数与水分亏缺指数CWDI对比",
+      "CWDI作物需水量计算方法",
+      "标准化降水蒸散指数干旱监测"
+    ],
+    "reference_sub_queries": [
+      "标准化降水蒸散指数和水分亏缺指数CWDI的概念定义",
+      "水分亏缺指数CWDI作物需水量计算公式",
+      "CWDI与SPEI在农业干旱评估中的应用场景对比"
+    ]
+  },
+  {
+    "id": "Q_SR12",
+    "question": "GIS空间叠加分析在农业气候综合区划中如何实现？",
+    "rewrite_type": "normalize",
+    "rewrite_eval": {
+      "required_terms": {
+        "must_have": [
+          "GIS"
+        ],
+        "core_concept": [
+          "空间分析",
+          "图层"
+        ],
+        "precision_term": [
+          "综合评判法",
+          "网格点"
+        ]
+      },
+      "important_terms": [
+        "叠加分析",
+        "栅格计算"
+      ],
+      "optional_terms": []
+    },
+    "canonical_queries": [
+      "GIS空间叠加分析农业气候区划方法",
+      "图层叠加综合评判网格点区划",
+      "栅格计算农业气候区划图生成"
+    ],
+    "reference_sub_queries": [
+      "GIS空间叠加分析的概念及在农业气候区划中的作用",
+      "GIS图层叠加空间分析方法步骤",
+      "主导因子法综合评判法网格点栅格计算区划图生成"
+    ]
+  },
+  {
+    "id": "Q_SR13",
+    "question": "层次分析法中的一致性检验有什么用？CR>0.1意味着什么？",
+    "rewrite_type": "normalize",
+    "rewrite_eval": {
+      "required_terms": {
+        "must_have": [
+          "层次分析法"
+        ],
+        "core_concept": [
+          "一致性检验",
+          "判断矩阵"
+        ],
+        "precision_term": [
+          "随机一致性"
+        ]
+      },
+      "important_terms": [],
+      "optional_terms": [
+        "AHP"
+      ]
+    },
+    "canonical_queries": [
+      "层次分析法AHP一致性检验方法",
+      "判断矩阵一致性检验CR阈值标准",
+      "AHP一致性检验CR计算方法"
+    ],
+    "reference_sub_queries": [
+      "层次分析法AHP一致性检验的概念及目的",
+      "层次分析法一致性检验CR等于CI除以RI计算方法",
+      "判断矩阵CR一致性可接受标准及CR大于0.1的含义"
+    ]
+  }
+]

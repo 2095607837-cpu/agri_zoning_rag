@@ -1,0 +1,893 @@
+[
+  {
+    "id": "Q_E01",
+    "question": "内蒙古地区发生频次最高、影响范围最大的农业气象灾害是什么？",
+    "answer": "干旱。内蒙古大部分地区降水量稀少，年总降水量在50～500mm之间，干旱和半干旱地区面积占全区总面积的70%，旱灾占建国以来各类自然灾害的44.36%，居各类灾害之首。",
+    "capability": "exact_retrieval",
+    "features": [],
+    "query_type": "fact",
+    "difficulty_score": 1,
+    "difficulty": "easy",
+    "gold_doc_ids": ["D_P_R_150000_001-内蒙古区划报告"],
+    "gold_sections": ["s1"],
+    "gold_chunks": ["D_P_R_150000_001-内蒙古区划报告_s1"],
+    "expected_chunk_num": 1,
+    "expected_context_expand": false,
+    "retrieval_eval": {
+      "must_retrieve": ["D_P_R_150000_001-内蒙古区划报告_s1"],
+      "optional_retrieve": [],
+      "negative_sections": ["D_P_R_150000_001-内蒙古区划报告_s11"]
+    },
+    "generator_eval": {
+      "must_include": ["干旱", "70%", "44.36%"],
+      "must_not_include": ["霜冻", "冷害"]
+    },
+    "expected_citation": [
+      {"doc_id": "D_P_R_150000_001-内蒙古区划报告", "section": "s1", "heading": "干旱灾害概述"}
+    ],
+    "keywords": ["干旱", "农业气象灾害", "内蒙古", "降水量"]
+  },
+  {
+    "id": "Q_E02",
+    "question": "什么是农业气候资源？主要包括哪些方面？",
+    "answer": "农业气候资源是指在一定经济技术条件下，能为一个地区农业生产提供物质和能量的气候资源，是农业自然资源的组成部分，也是农业生产的基本条件。主要包括光资源、热量资源、水资源和风资源等。",
+    "capability": "exact_retrieval",
+    "features": [],
+    "query_type": "definition",
+    "difficulty_score": 1,
+    "difficulty": "easy",
+    "gold_doc_ids": ["黑龙江农业气候资源普查技术规范2025"],
+    "gold_sections": ["s0"],
+    "gold_chunks": ["黑龙江农业气候资源普查技术规范2025_s0"],
+    "expected_chunk_num": 1,
+    "expected_context_expand": false,
+    "retrieval_eval": {
+      "must_retrieve": ["黑龙江农业气候资源普查技术规范2025_s0"],
+      "optional_retrieve": [],
+      "negative_sections": ["黑龙江农业生产普查技术规范2025_s0"]
+    },
+    "generator_eval": {
+      "must_include": ["光资源", "热量资源", "水资源"],
+      "must_not_include": ["普查表", "填表人"]
+    },
+    "expected_citation": [
+      {"doc_id": "黑龙江农业气候资源普查技术规范2025", "section": "s0", "heading": "概述"}
+    ],
+    "keywords": ["农业气候资源", "定义", "光资源", "热量资源", "水资源"]
+  },
+  {
+    "id": "Q_E03",
+    "question": "气候倾向率的单位是什么？如何计算？",
+    "answer": "气候倾向率的单位为 unit·10a⁻¹（如 mm·10a⁻¹，℃·10a⁻¹）。采用最小二乘法拟合得到一元线性回归方程 y=a+bx，以 b 的 10 倍作为气候倾向率。正的 b 值表明增加趋势，负的 b 值表明减少趋势。",
+    "capability": "exact_retrieval",
+    "features": ["numeric"],
+    "query_type": "calculation",
+    "difficulty_score": 2,
+    "difficulty": "easy",
+    "gold_doc_ids": ["黑龙江农业气候资源普查技术规范2025"],
+    "gold_sections": ["s13"],
+    "gold_chunks": ["黑龙江农业气候资源普查技术规范2025_s13"],
+    "expected_chunk_num": 1,
+    "expected_context_expand": false,
+    "retrieval_eval": {
+      "must_retrieve": ["黑龙江农业气候资源普查技术规范2025_s13"],
+      "optional_retrieve": [],
+      "negative_sections": ["黑龙江农业气候资源普查技术规范2025_s14"]
+    },
+    "generator_eval": {
+      "must_include": ["最小二乘法", "10a⁻¹", "b的10倍"],
+      "must_not_include": ["保证率", "均方差"]
+    },
+    "expected_citation": [
+      {"doc_id": "黑龙江农业气候资源普查技术规范2025", "section": "s13", "heading": "气候倾向率"}
+    ],
+    "keywords": ["气候倾向率", "最小二乘法", "线性回归"]
+  },
+  {
+    "id": "Q_E04",
+    "question": "什么是界限温度？农业气候资源普查中常用的界限温度有哪些？",
+    "answer": "界限温度是标志某些重要物候或农事活动开始、终止或转折的日平均气温。常用的界限温度有0℃、2℃、8℃、10℃、12.5℃等，各地区可根据当地农业生产实际合理选择和调整农业界限温度。",
+    "capability": "exact_retrieval",
+    "features": ["numeric"],
+    "query_type": "definition",
+    "difficulty_score": 2,
+    "difficulty": "easy",
+    "gold_doc_ids": ["黑龙江农业气候资源普查技术规范2025"],
+    "gold_sections": ["s3"],
+    "gold_chunks": ["黑龙江农业气候资源普查技术规范2025_s3"],
+    "expected_chunk_num": 1,
+    "expected_context_expand": false,
+    "retrieval_eval": {
+      "must_retrieve": ["黑龙江农业气候资源普查技术规范2025_s3"],
+      "optional_retrieve": [],
+      "negative_sections": ["黑龙江农业气候资源普查技术规范2025_s7"]
+    },
+    "generator_eval": {
+      "must_include": ["0℃", "10℃", "物候"],
+      "must_not_include": ["活动积温", "有效积温"]
+    },
+    "expected_citation": [
+      {"doc_id": "黑龙江农业气候资源普查技术规范2025", "section": "s3", "heading": "界限温度"}
+    ],
+    "keywords": ["界限温度", "定义", "0℃", "10℃", "物候"]
+  },
+  {
+    "id": "Q_E05",
+    "question": "农业生产普查应遵循哪些基本原则？每个原则的核心要点是什么？",
+    "answer": "应遵循综合性、可靠性、因地制宜三个基本原则。综合性指综合考虑农业生产的各方面，以县行政区域为基本单元进行全面普查；可靠性指对数据代表性、客观性、准确性、逻辑性等方面进行逐级质量核查；因地制宜指注重相关部门数据信息收集和实地调查相结合。",
+    "capability": "exact_retrieval",
+    "features": [],
+    "query_type": "fact",
+    "difficulty_score": 1,
+    "difficulty": "easy",
+    "gold_doc_ids": ["黑龙江农业生产普查技术规范2025"],
+    "gold_sections": ["s0"],
+    "gold_chunks": ["黑龙江农业生产普查技术规范2025_s0"],
+    "expected_chunk_num": 1,
+    "expected_context_expand": false,
+    "retrieval_eval": {
+      "must_retrieve": ["黑龙江农业生产普查技术规范2025_s0"],
+      "optional_retrieve": [],
+      "negative_sections": ["黑龙江农业气候资源普查技术规范2025_s0"]
+    },
+    "generator_eval": {
+      "must_include": ["综合性", "可靠性", "因地制宜"],
+      "must_not_include": ["光资源", "积温"]
+    },
+    "expected_citation": [
+      {"doc_id": "黑龙江农业生产普查技术规范2025", "section": "s0", "heading": "普查基本原则"}
+    ],
+    "keywords": ["农业生产普查", "原则", "综合性", "可靠性", "因地制宜"]
+  },
+  {
+    "id": "Q_C01",
+    "question": "黑龙江省气候资源普查中，温度和无霜期天数等热量指标的空间推算采用什么方法？具体步骤是什么？",
+    "answer": "采用趋势面模拟和残差内插相结合的混合插值法。首先以气象站点数据为基础，采用多元回归分析方法，分别建立热量指标与经度、纬度、海拔高度等地理因子的趋势模型；其次利用预测模型和各站点的地理地形数据计算出热量指标模拟值，将实际值与模型预测值的差值作为残差值；最后对残差值进行空间内插。",
+    "capability": "context_expansion",
+    "features": [],
+    "query_type": "method",
+    "difficulty_score": 1,
+    "difficulty": "easy",
+    "gold_doc_ids": ["黑龙江农业气候资源普查技术规范2025"],
+    "gold_sections": ["s15", "s16"],
+    "gold_chunks": ["黑龙江农业气候资源普查技术规范2025_s15", "黑龙江农业气候资源普查技术规范2025_s16"],
+    "expected_chunk_num": 2,
+    "expected_context_expand": true,
+    "retrieval_eval": {
+      "must_retrieve": ["黑龙江农业气候资源普查技术规范2025_s15", "黑龙江农业气候资源普查技术规范2025_s16"],
+      "optional_retrieve": [],
+      "negative_sections": ["黑龙江农业气候资源普查技术规范2025_s13"]
+    },
+    "generator_eval": {
+      "must_include": ["混合插值法", "趋势面模拟", "残差内插", "多元回归"],
+      "must_not_include": ["反距离权重", "IDW"]
+    },
+    "expected_citation": [
+      {"doc_id": "黑龙江农业气候资源普查技术规范2025", "section": "s15", "heading": "反距离权重法"},
+      {"doc_id": "黑龙江农业气候资源普查技术规范2025", "section": "s16", "heading": "热量指标空间推算"}
+    ],
+    "keywords": ["热量指标", "空间推算", "混合插值法", "趋势面模拟", "残差内插"]
+  },
+  {
+    "id": "Q_C02",
+    "question": "黑龙江省气候资源普查中，积温如何计算？界限温度的起止日期和持续天数如何确定？",
+    "answer": "积温计算有活动积温和有效积温两种形式。活动积温为某界限温度期间逐日平均气温之和；有效积温为逐日平均气温减去界限温度后的差值之和。界限温度的起止日期采用五日滑动平均法求算：以春季第一次出现日平均气温≥界限温度的日期为初日，以秋季最后一次出现的日期为终日，初日到终日的天数为持续天数。",
+    "capability": "context_expansion",
+    "features": ["numeric"],
+    "query_type": "method",
+    "difficulty_score": 2,
+    "difficulty": "easy",
+    "gold_doc_ids": ["黑龙江农业气候资源普查技术规范2025"],
+    "gold_sections": ["s7", "s8"],
+    "gold_chunks": ["黑龙江农业气候资源普查技术规范2025_s7", "黑龙江农业气候资源普查技术规范2025_s8"],
+    "expected_chunk_num": 2,
+    "expected_context_expand": true,
+    "retrieval_eval": {
+      "must_retrieve": ["黑龙江农业气候资源普查技术规范2025_s7", "黑龙江农业气候资源普查技术规范2025_s8"],
+      "optional_retrieve": [],
+      "negative_sections": ["黑龙江农业气候资源普查技术规范2025_s13"]
+    },
+    "generator_eval": {
+      "must_include": ["活动积温", "有效积温", "五日滑动平均"],
+      "must_not_include": ["倾向率", "保证率"]
+    },
+    "expected_citation": [
+      {"doc_id": "黑龙江农业气候资源普查技术规范2025", "section": "s7", "heading": "积温计算"},
+      {"doc_id": "黑龙江农业气候资源普查技术规范2025", "section": "s8", "heading": "界限温度起止日期"}
+    ],
+    "keywords": ["积温", "界限温度", "起止日期", "持续天数", "五日滑动平均"]
+  },
+  {
+    "id": "Q_C03",
+    "question": "黑龙江大豆低温冷害风险区划模型是如何构建的？考虑了哪些评价因子？",
+    "answer": "基于自然灾害风险区划理论，构建以致灾因子危险性、承灾体暴露度、承灾体脆弱性、防灾减灾能力四个因子为核心的风险区划模型。风险指数由四个因子的指数加权求和得到，各因子权重由层次分析法（AHP）确定。致灾因子危险性包括冷害强度和冷害频率；承灾体暴露度包括大豆种植面积占比等；脆弱性包括地形地貌等。",
+    "capability": "context_expansion",
+    "features": ["multi_hop"],
+    "query_type": "method",
+    "difficulty_score": 3,
+    "difficulty": "medium",
+    "gold_doc_ids": ["黑龙江省大豆冷害气候风险区划技术规范（初稿）"],
+    "gold_sections": ["s1", "s2"],
+    "gold_chunks": ["黑龙江省大豆冷害气候风险区划技术规范（初稿）_s1", "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s2"],
+    "expected_chunk_num": 2,
+    "expected_context_expand": true,
+    "retrieval_eval": {
+      "must_retrieve": ["黑龙江省大豆冷害气候风险区划技术规范（初稿）_s1", "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s2"],
+      "optional_retrieve": ["黑龙江省大豆冷害气候风险区划技术规范（初稿）_s3"],
+      "negative_sections": ["黑龙江省大豆霜冻气候风险区划技术规范（初稿）_s1"]
+    },
+    "generator_eval": {
+      "must_include": ["致灾因子危险性", "承灾体暴露度", "承灾体脆弱性", "防灾减灾能力"],
+      "must_not_include": ["霜冻", "白霜"]
+    },
+    "expected_citation": [
+      {"doc_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）", "section": "s1", "heading": "低温冷害风险区划模型"},
+      {"doc_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）", "section": "s2", "heading": "风险指数公式"}
+    ],
+    "keywords": ["低温冷害", "风险区划模型", "致灾因子", "暴露度", "脆弱性"]
+  },
+  {
+    "id": "Q_C04",
+    "question": "河南省冬小麦干旱是如何定义的？其空间分布有什么特征？",
+    "answer": "冬小麦干旱属于农业干旱的范畴，是气象干旱传递到农业干旱的一个具体表现。发生干旱时，小麦根系从土壤中吸收到的水分难以补偿蒸腾消耗，导致植株体内水分收支平衡失调。河南省冬小麦干旱空间分布总体表现为东北重、西南低，中部和东部平原地带全年降水量偏少，易受中至重度干旱；西部浅山丘陵盆地与豫南地区旱情相对较轻。",
+    "capability": "context_expansion",
+    "features": [],
+    "query_type": "definition",
+    "difficulty_score": 1,
+    "difficulty": "easy",
+    "gold_doc_ids": ["D_P_R_410000_001-农业气候区划报告-河南省"],
+    "gold_sections": ["s1", "s2"],
+    "gold_chunks": ["D_P_R_410000_001-农业气候区划报告-河南省_s1", "D_P_R_410000_001-农业气候区划报告-河南省_s2"],
+    "expected_chunk_num": 2,
+    "expected_context_expand": true,
+    "retrieval_eval": {
+      "must_retrieve": ["D_P_R_410000_001-农业气候区划报告-河南省_s1", "D_P_R_410000_001-农业气候区划报告-河南省_s2"],
+      "optional_retrieve": [],
+      "negative_sections": ["D_P_R_410000_001-农业气候区划报告-河南省_s37"]
+    },
+    "generator_eval": {
+      "must_include": ["农业干旱", "水分收支", "东北重", "西南低"],
+      "must_not_include": ["晚霜冻"]
+    },
+    "expected_citation": [
+      {"doc_id": "D_P_R_410000_001-农业气候区划报告-河南省", "section": "s1", "heading": "冬小麦干旱定义"},
+      {"doc_id": "D_P_R_410000_001-农业气候区划报告-河南省", "section": "s2", "heading": "干旱空间分布"}
+    ],
+    "keywords": ["冬小麦", "干旱", "定义", "空间分布", "河南"]
+  },
+  {
+    "id": "Q_S01",
+    "question": "内蒙古大豆种植气候区划中，选用了哪些区划指标？各指标的分级阈值是多少？",
+    "answer": "选用的区划指标包括稳定≥10℃活动积温、5-9月降水量、7月中旬-8月中旬平均气温等。分级阈值：稳定≥10℃活动积温≥2800℃·d为最适宜，2400-2800为适宜，1900-2400为次适宜，≤1900为不适宜；5-9月降水量分区同样分为四个等级。各指标根据当地气候条件赋予不同权重，采用加权求和方法建立种植气候区划指数。",
+    "capability": "cross_section",
+    "features": ["numeric", "table"],
+    "query_type": "threshold",
+    "difficulty_score": 3,
+    "difficulty": "medium",
+    "gold_doc_ids": ["D_P_R_150000_001-内蒙古区划报告"],
+    "gold_sections": ["s11", "s20"],
+    "gold_chunks": ["D_P_R_150000_001-内蒙古区划报告_s11", "D_P_R_150000_001-内蒙古区划报告_s20"],
+    "expected_chunk_num": 2,
+    "expected_context_expand": false,
+    "retrieval_eval": {
+      "must_retrieve": ["D_P_R_150000_001-内蒙古区划报告_s11"],
+      "optional_retrieve": ["D_P_R_150000_001-内蒙古区划报告_s20"],
+      "negative_sections": ["D_P_R_150000_001-内蒙古区划报告_s4"]
+    },
+    "generator_eval": {
+      "must_include": ["≥10℃", "2800", "2400", "1900"],
+      "must_not_include": ["无霜期", "变化率"]
+    },
+    "expected_citation": [
+      {"doc_id": "D_P_R_150000_001-内蒙古区划报告", "section": "s11", "heading": "种植气候区划指标"},
+      {"doc_id": "D_P_R_150000_001-内蒙古区划报告", "section": "s20", "heading": "区划指标空间分析模型"}
+    ],
+    "keywords": ["区划指标", "积温", "降水量", "分级阈值", "适宜性"]
+  },
+  {
+    "id": "Q_S02",
+    "question": "黑龙江大豆低温冷害区划的完整技术流程是什么？从资料收集到最终区划结果经过了哪些步骤？",
+    "answer": "包括以下步骤：（1）资料收集与处理：收集气象数据（逐日气温等）、产量数据、地理信息数据；（2）冷害指标计算：采用5-9月月平均温度之和的距平作为冷害指标；（3）风险区划模型构建：以致灾因子危险性、承灾体暴露度、承灾体脆弱性、防灾减灾能力四个因子加权求和；（4）权重确定：采用层次分析法（AHP）确定各因子权重；（5）等级划分：按风险指数范围划分为低、中、较高、高、极高五个风险等级。",
+    "capability": "cross_section",
+    "features": ["table"],
+    "query_type": "workflow",
+    "difficulty_score": 2,
+    "difficulty": "medium",
+    "gold_doc_ids": ["黑龙江省大豆冷害气候风险区划技术规范（初稿）"],
+    "gold_sections": ["s0", "s3", "t9"],
+    "gold_chunks": ["黑龙江省大豆冷害气候风险区划技术规范（初稿）_s0", "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s3", "黑龙江省大豆冷害气候风险区划技术规范（初稿）_t9"],
+    "expected_chunk_num": 3,
+    "expected_context_expand": false,
+    "retrieval_eval": {
+      "must_retrieve": ["黑龙江省大豆冷害气候风险区划技术规范（初稿）_s0", "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s3"],
+      "optional_retrieve": ["黑龙江省大豆冷害气候风险区划技术规范（初稿）_t9"],
+      "negative_sections": ["黑龙江省大豆霜冻气候风险区划技术规范（初稿）_s3"]
+    },
+    "generator_eval": {
+      "must_include": ["5-9月", "距平", "层次分析法", "风险指数"],
+      "must_not_include": ["霜冻", "白霜"]
+    },
+    "expected_citation": [
+      {"doc_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）", "section": "s0", "heading": "低温冷害定义"},
+      {"doc_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）", "section": "s3", "heading": "冷害指标计算"},
+      {"doc_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）", "section": "t9", "heading": "风险等级划分"}
+    ],
+    "keywords": ["冷害区划", "流程", "资料收集", "指标计算", "风险模型", "等级划分"]
+  },
+  {
+    "id": "Q_S03",
+    "question": "黑龙江省农业气候资源普查技术规范中，涵盖了哪些气候要素的计算方法？每种方法的核心思路是什么？",
+    "answer": "涵盖以下气候要素的计算方法：积温（活动积温和有效积温两种形式）、界限温度起止日期（五日滑动平均法）、日照百分率（实际日照时数与可能日照时数之比）、太阳总辐射（Penman-Monteith方程）、作物蒸散量（FAO-PM模型）、气候倾向率（最小二乘法拟合线性回归）、保证率（均方差法）。各方法以气象站点逐日数据为基础，计算不同时间尺度的气候资源特征量。",
+    "capability": "cross_section",
+    "features": [],
+    "query_type": "summary",
+    "difficulty_score": 1,
+    "difficulty": "medium",
+    "gold_doc_ids": ["黑龙江农业气候资源普查技术规范2025"],
+    "gold_sections": ["s7", "s8", "s11", "s12", "s13", "s14"],
+    "gold_chunks": ["黑龙江农业气候资源普查技术规范2025_s7", "黑龙江农业气候资源普查技术规范2025_s11", "黑龙江农业气候资源普查技术规范2025_s12", "黑龙江农业气候资源普查技术规范2025_s13"],
+    "expected_chunk_num": 4,
+    "expected_context_expand": false,
+    "retrieval_eval": {
+      "must_retrieve": ["黑龙江农业气候资源普查技术规范2025_s7", "黑龙江农业气候资源普查技术规范2025_s13"],
+      "optional_retrieve": ["黑龙江农业气候资源普查技术规范2025_s11", "黑龙江农业气候资源普查技术规范2025_s12"],
+      "negative_sections": ["黑龙江农业气候资源普查技术规范2025_s17"]
+    },
+    "generator_eval": {
+      "must_include": ["积温", "日照百分率", "太阳总辐射", "蒸散量", "气候倾向率"],
+      "must_not_include": ["普查报告", "省级单位"]
+    },
+    "expected_citation": [
+      {"doc_id": "黑龙江农业气候资源普查技术规范2025", "section": "s7", "heading": "积温计算"},
+      {"doc_id": "黑龙江农业气候资源普查技术规范2025", "section": "s11", "heading": "太阳辐射"},
+      {"doc_id": "黑龙江农业气候资源普查技术规范2025", "section": "s13", "heading": "气候倾向率"}
+    ],
+    "keywords": ["气候要素", "计算方法", "积温", "蒸散", "太阳辐射", "气候倾向率"]
+  },
+  {
+    "id": "Q_S04",
+    "question": "陕西苹果气候区划报告中，种植适宜性区划、产量区划和品质区划分别从哪些维度进行？各自的核心指标是什么？",
+    "answer": "种植适宜性区划从热量、水分、地形、土地利用四个维度，核心指标包括年平均气温、年降水量、≥10℃积温、坡度、坡向等；产量区划从光温水综合条件出发，核心指标包括稳定通过10℃的有效积温、5月降水量、6-8月降水量和4月平均气温；品质区划从影响苹果品质的关键气象因子入手，核心指标包括4月日照时数、7-8月平均气温、9月平均气温日较差等。三个维度的区划结果通过GIS空间叠加实现综合区划。",
+    "capability": "cross_section",
+    "features": ["table"],
+    "query_type": "comparison",
+    "difficulty_score": 3,
+    "difficulty": "medium",
+    "gold_doc_ids": ["D_P_R_610000_001-陕西苹果气候区划报告"],
+    "gold_sections": ["s10", "s15", "s17"],
+    "gold_chunks": ["D_P_R_610000_001-陕西苹果气候区划报告_s10", "D_P_R_610000_001-陕西苹果气候区划报告_s15", "D_P_R_610000_001-陕西苹果气候区划报告_s17"],
+    "expected_chunk_num": 3,
+    "expected_context_expand": false,
+    "retrieval_eval": {
+      "must_retrieve": ["D_P_R_610000_001-陕西苹果气候区划报告_s10", "D_P_R_610000_001-陕西苹果气候区划报告_s15"],
+      "optional_retrieve": ["D_P_R_610000_001-陕西苹果气候区划报告_s17"],
+      "negative_sections": ["D_P_R_610000_001-陕西苹果气候区划报告_s37"]
+    },
+    "generator_eval": {
+      "must_include": ["种植适宜性", "产量区划", "品质区划", "GIS"],
+      "must_not_include": ["病虫害", "农药"]
+    },
+    "expected_citation": [
+      {"doc_id": "D_P_R_610000_001-陕西苹果气候区划报告", "section": "s10", "heading": "种植适宜性区划指标"},
+      {"doc_id": "D_P_R_610000_001-陕西苹果气候区划报告", "section": "s15", "heading": "产量区划指标"},
+      {"doc_id": "D_P_R_610000_001-陕西苹果气候区划报告", "section": "s17", "heading": "品质区划指标"}
+    ],
+    "keywords": ["苹果", "种植适宜性", "产量区划", "品质区划", "区划指标"]
+  },
+  {
+    "id": "Q_D01",
+    "question": "黑龙江省农业气候资源普查技术规范和农业生产普查技术规范，分别覆盖什么范围？它们共同构成了什么样的普查体系？",
+    "answer": "农业气候资源普查技术规范覆盖光资源、热量资源、水资源和风资源等气候要素的普查方法，内容包括普查数据处理方法（积温、日照、蒸散等）和报告撰写要求，空间范围覆盖省、市、县三级行政区。农业生产普查技术规范覆盖农业生产资料（土地利用、土壤理化特性、种植制度、作物品种产量品质、农业气象灾害、病虫害等）的普查方法，内容包括普查原则（综合性、可靠性、因地制宜）、组织分工和普查表填报。两者共同构成完整的农业资源普查体系：气候资源普查提供自然条件基础数据，生产普查提供农业社会经济和技术数据。",
+    "capability": "cross_document",
+    "features": [],
+    "query_type": "comparison",
+    "difficulty_score": 3,
+    "difficulty": "medium",
+    "gold_doc_ids": ["黑龙江农业气候资源普查技术规范2025", "黑龙江农业生产普查技术规范2025"],
+    "gold_sections": ["s0", "s0"],
+    "gold_chunks": ["黑龙江农业气候资源普查技术规范2025_s0", "黑龙江农业生产普查技术规范2025_s0"],
+    "expected_chunk_num": 2,
+    "expected_context_expand": false,
+    "retrieval_eval": {
+      "must_retrieve": ["黑龙江农业气候资源普查技术规范2025_s0", "黑龙江农业生产普查技术规范2025_s0"],
+      "optional_retrieve": [],
+      "negative_sections": ["黑龙江农业生产普查技术规范2025_t0"]
+    },
+    "generator_eval": {
+      "must_include": ["气候资源", "农业生产", "普查体系"],
+      "must_not_include": ["填表人", "复核人"]
+    },
+    "expected_citation": [
+      {"doc_id": "黑龙江农业气候资源普查技术规范2025", "section": "s0", "heading": "概述"},
+      {"doc_id": "黑龙江农业生产普查技术规范2025", "section": "s0", "heading": "普查原则与组织分工"}
+    ],
+    "keywords": ["气候资源普查", "生产普查", "技术规范", "普查体系"]
+  },
+  {
+    "id": "Q_D02",
+    "question": "黑龙江大豆的低温冷害和霜冻在定义、致灾机理和区划指标上有什么不同？",
+    "answer": "定义方面：低温冷害指作物生长期间日最低气温在0℃以上，但出现较长时间的持续性低温天气，日平均气温低于作物适宜温度下限；霜冻指日最低气温≤0℃，近地面空气中的水汽直接凝华成冰晶。致灾机理方面：冷害使作物生长发育受抑制，影响最终产量；霜冻使作物细胞间隙的水形成冰晶，导致细胞质脱水、细胞壁受损。区划指标方面：冷害采用5-9月各月月平均温度之和的距平作为指标；霜冻采用初霜日、终霜日、无霜期天数及霜冻频率等作为指标。",
+    "capability": "cross_document",
+    "features": [],
+    "query_type": "comparison",
+    "difficulty_score": 3,
+    "difficulty": "medium",
+    "gold_doc_ids": ["黑龙江省大豆冷害气候风险区划技术规范（初稿）", "黑龙江省大豆霜冻气候风险区划技术规范（初稿）"],
+    "gold_sections": ["s0", "s1"],
+    "gold_chunks": ["黑龙江省大豆冷害气候风险区划技术规范（初稿）_s0", "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_s1"],
+    "expected_chunk_num": 2,
+    "expected_context_expand": false,
+    "retrieval_eval": {
+      "must_retrieve": ["黑龙江省大豆冷害气候风险区划技术规范（初稿）_s0", "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_s1"],
+      "optional_retrieve": [],
+      "negative_sections": ["黑龙江省大豆干旱气候风险区划技术规范（初稿）_s2"]
+    },
+    "generator_eval": {
+      "must_include": ["0℃以上", "0℃以下", "冰晶", "距平"],
+      "must_not_include": ["干旱", "水分亏缺"]
+    },
+    "expected_citation": [
+      {"doc_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）", "section": "s0", "heading": "低温冷害定义"},
+      {"doc_id": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）", "section": "s1", "heading": "霜冻定义与致灾机理"}
+    ],
+    "keywords": ["冷害", "霜冻", "定义", "致灾机理", "区划指标", "对比"]
+  },
+  {
+    "id": "Q_D03",
+    "question": "气科院的全国农业气候区划指标算法与陕西省的本地化算法说明文档是什么关系？各省可以在全国统一框架下做哪些本地化调整？",
+    "answer": "气科院的全国农业气候区划指标算法说明文档提供全国统一的技术框架和指标体系，采用LightGBM等人工智能模型，适用于全国范围内的春大豆与夏大豆种植区划、产量区划和品质区划等。陕西省的算法说明文档在全国统一框架下，结合陕西本省的气候特点（如陕北黄土高原、关中平原、陕南山地的不同气候背景），对区划指标阈值进行了本地化调整。各省本地化调整一般包括：调整指标阈值、增加本省特有的区划因子、选择更适合本地地形和气候的插值方法。",
+    "capability": "cross_document",
+    "features": ["multi_hop"],
+    "query_type": "comparison",
+    "difficulty_score": 5,
+    "difficulty": "hard",
+    "gold_doc_ids": ["气科院-农业气候区划指标算法说明文档-王旗", "农业气候区划指标算法说明文档（陕西-算法说明文档-梁轶）20250926"],
+    "gold_sections": ["s1", "s0"],
+    "gold_chunks": ["气科院-农业气候区划指标算法说明文档-王旗_s1", "农业气候区划指标算法说明文档（陕西-算法说明文档-梁轶）20250926_s0"],
+    "expected_chunk_num": 2,
+    "expected_context_expand": false,
+    "retrieval_eval": {
+      "must_retrieve": ["气科院-农业气候区划指标算法说明文档-王旗_s1", "农业气候区划指标算法说明文档（陕西-算法说明文档-梁轶）20250926_s0"],
+      "optional_retrieve": [],
+      "negative_sections": ["农业气候区划指标算法说明文档（新疆农业气象台-算法说明文档-郑新倩）_s1"]
+    },
+    "generator_eval": {
+      "must_include": ["全国统一框架", "本地化", "LightGBM"],
+      "must_not_include": ["新疆"]
+    },
+    "expected_citation": [
+      {"doc_id": "气科院-农业气候区划指标算法说明文档-王旗", "section": "s1", "heading": "算法概述"},
+      {"doc_id": "农业气候区划指标算法说明文档（陕西-算法说明文档-梁轶）20250926", "section": "s0", "heading": "本地化说明"}
+    ],
+    "keywords": ["全国统一框架", "本地化", "算法说明", "区划指标", "气科院"]
+  },
+  {
+    "id": "Q_D04",
+    "question": "内蒙古大豆区划和陕西苹果区划在指标体系构建和空间分析方法上有什么共性和差异？",
+    "answer": "共性：两者均遵循"指标选择→空间分析→权重确定→加权求和→等级划分"的技术路线；均采用多元回归方法建立区划指标与地理因子（经度、纬度、海拔）的关系模型；均使用GIS进行空间制图和分级。差异：内蒙古大豆区划以≥10℃活动积温为核心热量指标，通过加权求和建立种植气候区划指数；陕西苹果区划采用气候适宜性隶属度函数进行多指标综合评价，指标体系更为复杂（包含种植适宜性、产量、品质三个维度）。内蒙古侧重热量和水分条件，陕西增加了地形（坡度、坡向）和土地利用分类指标。",
+    "capability": "cross_document",
+    "features": ["table", "multi_hop"],
+    "query_type": "comparison",
+    "difficulty_score": 5,
+    "difficulty": "hard",
+    "gold_doc_ids": ["D_P_R_150000_001-内蒙古区划报告", "D_P_R_610000_001-陕西苹果气候区划报告"],
+    "gold_sections": ["s11", "s10"],
+    "gold_chunks": ["D_P_R_150000_001-内蒙古区划报告_s11", "D_P_R_610000_001-陕西苹果气候区划报告_s10"],
+    "expected_chunk_num": 2,
+    "expected_context_expand": false,
+    "retrieval_eval": {
+      "must_retrieve": ["D_P_R_150000_001-内蒙古区划报告_s11", "D_P_R_610000_001-陕西苹果气候区划报告_s10"],
+      "optional_retrieve": [],
+      "negative_sections": ["D_P_R_150000_001-内蒙古区划报告_s8"]
+    },
+    "generator_eval": {
+      "must_include": ["GIS", "多元回归", "加权求和", "隶属度"],
+      "must_not_include": ["病虫害", "农药"]
+    },
+    "expected_citation": [
+      {"doc_id": "D_P_R_150000_001-内蒙古区划报告", "section": "s11", "heading": "种植气候区划指标"},
+      {"doc_id": "D_P_R_610000_001-陕西苹果气候区划报告", "section": "s10", "heading": "种植适宜性区划指标"}
+    ],
+    "keywords": ["区划指标", "空间分析", "内蒙古", "陕西", "对比", "方法论"]
+  },
+  {
+    "id": "Q_T01",
+    "question": "内蒙古大豆种植气候区划中，≥10℃活动积温的四个适宜性等级各自对应的阈值范围是什么？",
+    "answer": "最适宜：≥2800℃·d；适宜：2400-2800℃·d；次适宜：1900-2400℃·d；不适宜（不可种植）：≤1900℃·d。",
+    "capability": "table_retrieval",
+    "features": ["numeric"],
+    "query_type": "threshold",
+    "difficulty_score": 2,
+    "difficulty": "easy",
+    "gold_doc_ids": ["D_P_R_150000_001-内蒙古区划报告"],
+    "gold_sections": ["s11"],
+    "gold_chunks": ["D_P_R_150000_001-内蒙古区划报告_s11"],
+    "expected_chunk_num": 1,
+    "expected_context_expand": false,
+    "retrieval_eval": {
+      "must_retrieve": ["D_P_R_150000_001-内蒙古区划报告_s11"],
+      "optional_retrieve": [],
+      "negative_sections": ["D_P_R_150000_001-内蒙古区划报告_s3"]
+    },
+    "generator_eval": {
+      "must_include": ["2800", "2400", "1900", "℃·d"],
+      "must_not_include": ["无霜期"]
+    },
+    "expected_citation": [
+      {"doc_id": "D_P_R_150000_001-内蒙古区划报告", "section": "s11", "heading": "区划指标等级表"}
+    ],
+    "keywords": ["积温", "阈值", "适宜性等级", "表格"]
+  },
+  {
+    "id": "Q_T02",
+    "question": "从内蒙古大豆产量统计图表中可以看到，大兴安岭东南麓大豆种植面积和单产的变化趋势如何？最低和最高单产分别出现在哪一年？",
+    "answer": "从1987-2023年大兴安岭东南麓大豆种植面积和单产变化趋势来看，最低单产出现在2000年，为839 kg/hm²；最高单产出现在2002年，为2161 kg/hm²。1987-2000年大豆单产呈波动变化趋势，平均单产1300.8 kg/hm²。",
+    "capability": "table_retrieval",
+    "features": ["numeric"],
+    "query_type": "fact",
+    "difficulty_score": 2,
+    "difficulty": "easy",
+    "gold_doc_ids": ["D_P_R_150000_001-内蒙古区划报告"],
+    "gold_sections": ["s8"],
+    "gold_chunks": ["D_P_R_150000_001-内蒙古区划报告_s8"],
+    "expected_chunk_num": 1,
+    "expected_context_expand": false,
+    "retrieval_eval": {
+      "must_retrieve": ["D_P_R_150000_001-内蒙古区划报告_s8"],
+      "optional_retrieve": [],
+      "negative_sections": ["D_P_R_150000_001-内蒙古区划报告_s17"]
+    },
+    "generator_eval": {
+      "must_include": ["2000年", "2002年", "839", "2161"],
+      "must_not_include": ["光温生产潜力"]
+    },
+    "expected_citation": [
+      {"doc_id": "D_P_R_150000_001-内蒙古区划报告", "section": "s8", "heading": "产量变化趋势"}
+    ],
+    "keywords": ["种植面积", "单产", "变化趋势", "最高", "最低"]
+  },
+  {
+    "id": "Q_T03",
+    "question": "黑龙江大豆低温冷害风险区划中，五个风险等级的划分标准和风险指数范围分别是什么？",
+    "answer": "低风险区：风险指数范围[0～0.27)；中风险区：[0.27～0.44)；较高风险区：[0.44～0.60)；高风险区：[0.60～0.78)；极高风险区：[0.78～1.0]。",
+    "capability": "table_retrieval",
+    "features": ["numeric"],
+    "query_type": "threshold",
+    "difficulty_score": 2,
+    "difficulty": "medium",
+    "gold_doc_ids": ["黑龙江省大豆冷害气候风险区划技术规范（初稿）"],
+    "gold_sections": ["t9"],
+    "gold_chunks": ["黑龙江省大豆冷害气候风险区划技术规范（初稿）_t9"],
+    "expected_chunk_num": 1,
+    "expected_context_expand": false,
+    "retrieval_eval": {
+      "must_retrieve": ["黑龙江省大豆冷害气候风险区划技术规范（初稿）_t9"],
+      "optional_retrieve": [],
+      "negative_sections": ["黑龙江省大豆冷害气候风险区划技术规范（初稿）_t1"]
+    },
+    "generator_eval": {
+      "must_include": ["0.27", "0.44", "0.60", "0.78"],
+      "must_not_include": ["冷害等级", "权重"]
+    },
+    "expected_citation": [
+      {"doc_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）", "section": "t9", "heading": "风险等级划分"}
+    ],
+    "keywords": ["冷害", "风险等级", "风险指数", "表格"]
+  },
+  {
+    "id": "Q_N01",
+    "question": "内蒙古大豆区划中，≥10℃活动积温最适宜区的阈值是多少？适宜区和次适宜区分别是多少？",
+    "answer": "稳定≥10℃活动积温最适宜区阈值为≥2800℃·d，适宜区为2400-2800℃·d，次适宜区为1900-2400℃·d，不适宜区为≤1900℃·d。",
+    "capability": "numeric_retrieval",
+    "features": ["table"],
+    "query_type": "threshold",
+    "difficulty_score": 2,
+    "difficulty": "easy",
+    "gold_doc_ids": ["D_P_R_150000_001-内蒙古区划报告"],
+    "gold_sections": ["s11"],
+    "gold_chunks": ["D_P_R_150000_001-内蒙古区划报告_s11"],
+    "expected_chunk_num": 1,
+    "expected_context_expand": false,
+    "retrieval_eval": {
+      "must_retrieve": ["D_P_R_150000_001-内蒙古区划报告_s11"],
+      "optional_retrieve": [],
+      "negative_sections": ["D_P_R_150000_001-内蒙古区划报告_s2"]
+    },
+    "generator_eval": {
+      "must_include": ["2800", "2400", "1900"],
+      "must_not_include": ["无霜期", "日照"]
+    },
+    "expected_citation": [
+      {"doc_id": "D_P_R_150000_001-内蒙古区划报告", "section": "s11", "heading": "区划指标等级表"}
+    ],
+    "keywords": ["≥10℃", "活动积温", "阈值", "数字"]
+  },
+  {
+    "id": "Q_N02",
+    "question": "内蒙古1961-2020年间无霜期的变化率是多少？变化趋势如何？",
+    "answer": "1961-2020年60年间，无霜期在波动中呈逐渐延长趋势，无霜期随年代延长的变化率为3.186d/10a，R²达到显著水平。",
+    "capability": "numeric_retrieval",
+    "features": [],
+    "query_type": "fact",
+    "difficulty_score": 1,
+    "difficulty": "easy",
+    "gold_doc_ids": ["D_P_R_150000_001-内蒙古区划报告"],
+    "gold_sections": ["s4"],
+    "gold_chunks": ["D_P_R_150000_001-内蒙古区划报告_s4"],
+    "expected_chunk_num": 1,
+    "expected_context_expand": false,
+    "retrieval_eval": {
+      "must_retrieve": ["D_P_R_150000_001-内蒙古区划报告_s4"],
+      "optional_retrieve": [],
+      "negative_sections": ["D_P_R_150000_001-内蒙古区划报告_s5"]
+    },
+    "generator_eval": {
+      "must_include": ["3.186", "d/10a", "延长"],
+      "must_not_include": ["降水量", "635"]
+    },
+    "expected_citation": [
+      {"doc_id": "D_P_R_150000_001-内蒙古区划报告", "section": "s4", "heading": "无霜期变化趋势"}
+    ],
+    "keywords": ["无霜期", "变化率", "3.186", "年代际"]
+  },
+  {
+    "id": "Q_N03",
+    "question": "河南省冬小麦全生育期日照时数的数值范围是多少？空间分布特征是什么？",
+    "answer": "根据1961-1990年数据，河南省各地小麦全生育期日照时数在1145.1~1587.3h之间，分布特点为北部多于南部、东部多于西部。1991-2020年间，日照时数主要在1044.8~1474.8h之间，较前一时期有所减少。",
+    "capability": "numeric_retrieval",
+    "features": [],
+    "query_type": "fact",
+    "difficulty_score": 1,
+    "difficulty": "medium",
+    "gold_doc_ids": ["D_P_R_410000_001-农业气候区划报告-河南省"],
+    "gold_sections": ["s14", "s15"],
+    "gold_chunks": ["D_P_R_410000_001-农业气候区划报告-河南省_s14", "D_P_R_410000_001-农业气候区划报告-河南省_s15"],
+    "expected_chunk_num": 2,
+    "expected_context_expand": true,
+    "retrieval_eval": {
+      "must_retrieve": ["D_P_R_410000_001-农业气候区划报告-河南省_s14"],
+      "optional_retrieve": ["D_P_R_410000_001-农业气候区划报告-河南省_s15"],
+      "negative_sections": ["D_P_R_410000_001-农业气候区划报告-河南省_s16"]
+    },
+    "generator_eval": {
+      "must_include": ["1145", "1587", "1044", "1474"],
+      "must_not_include": ["光合有效辐射"]
+    },
+    "expected_citation": [
+      {"doc_id": "D_P_R_410000_001-农业气候区划报告-河南省", "section": "s14", "heading": "日照时数分布"}
+    ],
+    "keywords": ["日照时数", "数值范围", "空间分布", "冬小麦", "河南"]
+  },
+  {
+    "id": "Q_L01",
+    "question": "种大豆需要多少积温才够？",
+    "answer": "以≥10℃活动积温作为大豆生长发育的热量指标。内蒙古大豆主产区最适宜区需要≥10℃活动积温≥2800℃·d，适宜区为2400-2800℃·d，次适宜区为1900-2400℃·d，不适宜区为≤1900℃·d。具体阈值因地区气候条件而异。",
+    "capability": "query_rewrite",
+    "features": ["numeric", "table"],
+    "query_type": "threshold",
+    "difficulty_score": 3,
+    "difficulty": "medium",
+    "gold_doc_ids": ["D_P_R_150000_001-内蒙古区划报告"],
+    "gold_sections": ["s11"],
+    "gold_chunks": ["D_P_R_150000_001-内蒙古区划报告_s11"],
+    "expected_chunk_num": 1,
+    "expected_context_expand": false,
+    "retrieval_eval": {
+      "must_retrieve": ["D_P_R_150000_001-内蒙古区划报告_s11"],
+      "optional_retrieve": [],
+      "negative_sections": ["D_P_R_150000_001-内蒙古区划报告_s4"]
+    },
+    "generator_eval": {
+      "must_include": ["≥10℃", "活动积温", "2800"],
+      "must_not_include": ["无霜期", "变化率"]
+    },
+    "expected_citation": [
+      {"doc_id": "D_P_R_150000_001-内蒙古区划报告", "section": "s11", "heading": "区划指标等级表"}
+    ],
+    "rewrite_type": "lexical",
+    "rewrite_hint": "口语化"积温够不够"→≥10℃活动积温阈值/适宜性等级",
+    "keywords": ["积温", "≥10℃", "口语化", "改写"]
+  },
+  {
+    "id": "Q_L02",
+    "question": "农业上说的光照好不好，在技术规范里用什么指标衡量？",
+    "answer": "用日照时数、日照百分率和太阳辐射三项指标衡量。日照时数指实际日照时间；日照百分率是实际日照时间与可能日照时间之比，反映云、雨、雾等对日照的减少程度，单位为%；太阳辐射采用Penman-Monteith方程估算，包括直接辐射和散射辐射，单位为MJ·m⁻²·d⁻¹。",
+    "capability": "query_rewrite",
+    "features": [],
+    "query_type": "definition",
+    "difficulty_score": 2,
+    "difficulty": "easy",
+    "gold_doc_ids": ["黑龙江农业气候资源普查技术规范2025"],
+    "gold_sections": ["s5", "s10", "s11"],
+    "gold_chunks": ["黑龙江农业气候资源普查技术规范2025_s5", "黑龙江农业气候资源普查技术规范2025_s11"],
+    "expected_chunk_num": 2,
+    "expected_context_expand": false,
+    "retrieval_eval": {
+      "must_retrieve": ["黑龙江农业气候资源普查技术规范2025_s5"],
+      "optional_retrieve": ["黑龙江农业气候资源普查技术规范2025_s11"],
+      "negative_sections": ["黑龙江农业气候资源普查技术规范2025_s7"]
+    },
+    "generator_eval": {
+      "must_include": ["日照时数", "日照百分率", "太阳辐射"],
+      "must_not_include": ["积温", "活动积温"]
+    },
+    "expected_citation": [
+      {"doc_id": "黑龙江农业气候资源普查技术规范2025", "section": "s5", "heading": "日照百分率"},
+      {"doc_id": "黑龙江农业气候资源普查技术规范2025", "section": "s11", "heading": "太阳辐射"}
+    ],
+    "rewrite_type": "lexical",
+    "rewrite_hint": "口语化"光照好不好"→日照时数/日照百分率/太阳辐射",
+    "keywords": ["日照", "光照", "日照百分率", "太阳辐射", "口语化"]
+  },
+  {
+    "id": "Q_SR01",
+    "question": "高温伤害在大豆区划中如何评估？",
+    "answer": "高温伤害在大豆区划中主要通过高温热害指数评估。以大豆开花期高温热害为例，统计大豆开花期的高温热害指数和低温日数。气科院全国算法中，大豆开花期高温热害指数的计算考虑了开花期日最高气温超过一定阈值的程度，生成开花期高温热害分布图。高温会导致光合作用速率下降、蛋白质变性，影响大豆产量和品质。",
+    "capability": "query_rewrite",
+    "features": ["numeric"],
+    "query_type": "method",
+    "difficulty_score": 3,
+    "difficulty": "medium",
+    "gold_doc_ids": ["气科院-农业气候区划指标算法说明文档-王旗"],
+    "gold_sections": ["s5"],
+    "gold_chunks": ["气科院-农业气候区划指标算法说明文档-王旗_s5"],
+    "expected_chunk_num": 1,
+    "expected_context_expand": false,
+    "retrieval_eval": {
+      "must_retrieve": ["气科院-农业气候区划指标算法说明文档-王旗_s5"],
+      "optional_retrieve": [],
+      "negative_sections": ["气科院-农业气候区划指标算法说明文档-王旗_s4"]
+    },
+    "generator_eval": {
+      "must_include": ["高温热害", "开花期"],
+      "must_not_include": ["干旱", "水分亏缺"]
+    },
+    "expected_citation": [
+      {"doc_id": "气科院-农业气候区划指标算法说明文档-王旗", "section": "s5", "heading": "高温热害"}
+    ],
+    "rewrite_type": "semantic",
+    "rewrite_hint": ""高温伤害"→热害/高温热害指数（专业术语映射）",
+    "keywords": ["高温", "热害", "开花期", "大豆", "语义改写"]
+  },
+  {
+    "id": "Q_SR02",
+    "question": "水分不够对大豆种植有什么影响？区划里用什么指标衡量？",
+    "answer": "水分不足对大豆的影响通过干旱风险区划来评估。基于自然灾害风险区划理论，以致灾因子危险性、承灾体暴露度、承灾体脆弱性、防灾减灾能力四个因子构建干旱风险区划模型。具体指标包括：干旱致灾因子危险性（降水量、水分亏缺指数等）、承灾体暴露度（大豆种植面积占比）、孕灾环境脆弱性（地形地貌、距离河流远近）、防灾减灾能力（灌溉条件）。各区划结果分为低、中、较高、高、极高五个干旱风险等级。",
+    "capability": "query_rewrite",
+    "features": [],
+    "query_type": "method",
+    "difficulty_score": 2,
+    "difficulty": "medium",
+    "gold_doc_ids": ["黑龙江省大豆干旱气候风险区划技术规范（初稿）"],
+    "gold_sections": ["s2"],
+    "gold_chunks": ["黑龙江省大豆干旱气候风险区划技术规范（初稿）_s2"],
+    "expected_chunk_num": 1,
+    "expected_context_expand": false,
+    "retrieval_eval": {
+      "must_retrieve": ["黑龙江省大豆干旱气候风险区划技术规范（初稿）_s2"],
+      "optional_retrieve": [],
+      "negative_sections": ["黑龙江省大豆冷害气候风险区划技术规范（初稿）_s1"]
+    },
+    "generator_eval": {
+      "must_include": ["干旱", "风险区划", "致灾因子"],
+      "must_not_include": ["冷害", "低温"]
+    },
+    "expected_citation": [
+      {"doc_id": "黑龙江省大豆干旱气候风险区划技术规范（初稿）", "section": "s2", "heading": "干旱风险区划模型"}
+    ],
+    "rewrite_type": "semantic",
+    "rewrite_hint": ""水分不够"→干旱/水分亏缺（专业术语映射）",
+    "keywords": ["水分", "干旱", "风险区划", "灌溉", "语义改写"]
+  },
+  {
+    "id": "Q_O01",
+    "question": "云南省水稻种植的气候适宜性如何？有哪些区划指标？",
+    "answer": "知识库中没有云南省水稻区划的相关数据。当前知识库仅覆盖黑龙江、内蒙古、河南、江西、陕西、新疆、辽宁等省份的大豆、冬小麦、苹果、柑橘等作物的区划信息，不包含云南和水稻的内容。",
+    "capability": "ood_detection",
+    "features": [],
+    "query_type": "fact",
+    "difficulty_score": 0,
+    "difficulty": "easy",
+    "gold_doc_ids": [],
+    "gold_sections": [],
+    "gold_chunks": [],
+    "expected_chunk_num": 0,
+    "expected_context_expand": false,
+    "retrieval_eval": {
+      "must_retrieve": [],
+      "optional_retrieve": [],
+      "negative_sections": []
+    },
+    "generator_eval": {
+      "must_include": ["没有", "不包含"],
+      "must_not_include": ["云南", "水稻", "适宜"]
+    },
+    "expected_citation": [],
+    "ood_type": "outside_kb",
+    "keywords": ["云南", "水稻", "不在知识库", "OOD", "拒答"]
+  },
+  {
+    "id": "Q_O02",
+    "question": "中国大豆进口贸易对国内大豆价格的影响因素有哪些？",
+    "answer": "知识库中不包含大豆贸易和市场价格相关信息。当前知识库聚焦于农业气候区划（种植适宜性、气象灾害风险、品质区划等），属于自然科学和农业气象领域，不涉及经济学和贸易政策内容。",
+    "capability": "ood_detection",
+    "features": [],
+    "query_type": "fact",
+    "difficulty_score": 0,
+    "difficulty": "medium",
+    "gold_doc_ids": [],
+    "gold_sections": [],
+    "gold_chunks": [],
+    "expected_chunk_num": 0,
+    "expected_context_expand": false,
+    "retrieval_eval": {
+      "must_retrieve": [],
+      "optional_retrieve": [],
+      "negative_sections": []
+    },
+    "generator_eval": {
+      "must_include": ["没有", "不包含"],
+      "must_not_include": ["贸易", "价格", "关税"]
+    },
+    "expected_citation": [],
+    "ood_type": "outside_kb",
+    "keywords": ["大豆", "进口贸易", "价格", "经济学", "不在知识库", "OOD"]
+  },
+  {
+    "id": "Q_U01",
+    "question": "陕西苹果区划报告中，一共划分了几个红色预警等级？每个等级的具体标准是什么？",
+    "answer": "知识库中的陕西苹果气候区划报告未使用"红色预警等级"这一分类体系。该报告的区划等级使用的是"适宜区/次适宜区/不适宜区"（种植适宜性）、"特优/优/良/一般"（品质气候区划）、"轻度/中度/重度风险区"（气象灾害风险区划）等分级方式。不存在"红色预警等级"这一概念，无法回答。",
+    "capability": "ood_detection",
+    "features": [],
+    "query_type": "fact",
+    "difficulty_score": 0,
+    "difficulty": "hard",
+    "gold_doc_ids": [],
+    "gold_sections": [],
+    "gold_chunks": [],
+    "expected_chunk_num": 0,
+    "expected_context_expand": false,
+    "retrieval_eval": {
+      "must_retrieve": [],
+      "optional_retrieve": [],
+      "negative_sections": []
+    },
+    "generator_eval": {
+      "must_include": ["未使用", "不存在"],
+      "must_not_include": ["红色预警", "预警等级"]
+    },
+    "expected_citation": [],
+    "ood_type": "unanswerable",
+    "keywords": ["红色预警", "等级", "不存在", "无法回答", "OOD"]
+  },
+  {
+    "id": "Q_CF01",
+    "question": "冬小麦什么时候成熟？不同产区的收获时间是否一致？",
+    "answer": "知识库中不同文档对冬小麦成熟期的描述存在差异。河南省冬小麦一般在5月下旬至6月上旬成熟收获；新疆冬小麦因越冬期较长，成熟期一般在6月中下旬至7月上旬。不同产区的收获时间因纬度、海拔和气候条件不同而存在显著差异，不能给出统一的成熟时间。具体的成熟期需参考各产区的区划报告和当地农业气象条件。",
+    "capability": "ood_detection",
+    "features": ["multi_hop"],
+    "query_type": "comparison",
+    "difficulty_score": 3,
+    "difficulty": "hard",
+    "gold_doc_ids": ["D_P_R_410000_001-农业气候区划报告-河南省", "D_P_R_650000_001-新疆冬小麦气候区划报告"],
+    "gold_sections": ["s4", "s9"],
+    "gold_chunks": ["D_P_R_410000_001-农业气候区划报告-河南省_s4", "D_P_R_650000_001-新疆冬小麦气候区划报告_s9"],
+    "expected_chunk_num": 2,
+    "expected_context_expand": false,
+    "retrieval_eval": {
+      "must_retrieve": ["D_P_R_410000_001-农业气候区划报告-河南省_s4", "D_P_R_650000_001-新疆冬小麦气候区划报告_s9"],
+      "optional_retrieve": [],
+      "negative_sections": []
+    },
+    "generator_eval": {
+      "must_include": ["不一致", "差异", "5月", "6月"],
+      "must_not_include": ["统一时间"]
+    },
+    "expected_citation": [
+      {"doc_id": "D_P_R_410000_001-农业气候区划报告-河南省", "section": "s4", "heading": "成熟期连阴雨"},
+      {"doc_id": "D_P_R_650000_001-新疆冬小麦气候区划报告", "section": "s9", "heading": "种植适宜区"}
+    ],
+    "ood_type": "conflict",
+    "keywords": ["冬小麦", "成熟期", "收获时间", "产区差异", "冲突", "OOD"]
+  }
+]

@@ -1,0 +1,32 @@
+{
+  "retrieval": {
+    "total": 200,
+    "with_source_id": 51,
+    "mrr_source": 0.5424836601307189,
+    "recall": {
+      "1": 0.47058823529411764,
+      "3": 0.6470588235294118,
+      "5": 0.6862745098039216
+    },
+    "precision": {
+      "1": 0.47058823529411764,
+      "3": 0.41176470588235287,
+      "5": 0.3803921568627451
+    },
+    "avg_relevance": 0.6567309580176658,
+    "pct_relevant_06": 0.715,
+    "avg_ndcg": 1.0,
+    "indomain_avg_relevance": 0.6795850544635088,
+    "indomain_pct_relevant_06": 0.8197674418604651,
+    "avg_chroma_top1_sim": 0.834647
+  },
+  "ood_detection": {
+    "n_ood": 28,
+    "n_indomain": 172,
+    "ood_recall": 1.0,
+    "indomain_pass_rate": 0.9825581395348837,
+    "accuracy": 0.985,
+    "avg_ood_sim": 0.41377142857142857,
+    "avg_indomain_sim": 0.9031616279069766
+  }
+}
