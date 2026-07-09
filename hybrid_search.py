@@ -180,7 +180,8 @@ class HybridSearcher:
         if not extra_queries:
             return judge_results[:top_k], judge_results[:top_k]
 
-        all_results = list(judge_results)
+        # 并发检索各路改写查询
+        rw_pool = list(judge_results)
         workers = min(len(extra_queries), max_workers)
         with ThreadPoolExecutor(max_workers=workers) as ex:
             futures = {
@@ -188,16 +189,17 @@ class HybridSearcher:
                 for sq in extra_queries
             }
             for f in as_completed(futures):
-                all_results.extend(f.result())
+                rw_pool.extend(f.result())
 
-        seen: dict = {}  # type: dict[str, dict]
-        for r in all_results:
+        # 按 content 前 80 字去重；原查询结果排前，改写仅补充中尾部 gap
+        seen_keys = set()
+        merged = []
+        for r in list(judge_results) + rw_pool:
             key = r["content"][:80]
-            sim = r.get("similarity", 0)
-            if key not in seen or sim > seen[key].get("similarity", 0):
-                seen[key] = r
+            if key not in seen_keys:
+                seen_keys.add(key)
+                merged.append(r)
 
-        merged = sorted(seen.values(), key=lambda r: r.get("similarity", 0), reverse=True)
         return judge_results[:top_k], merged[:top_k]
 
     def search(self, query: str, top_k: int = 5, expand_context: bool = False,
