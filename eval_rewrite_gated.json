@@ -1,0 +1,3078 @@
+{
+  "rows": [
+    {
+      "id": "Q_E04",
+      "capability": "exact_retrieval",
+      "top1": 0.7253,
+      "has_rw": true,
+      "len": 18,
+      "base": [
+        0.25,
+        true,
+        true
+      ],
+      "merged": [
+        0.25,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_E01",
+      "capability": "exact_retrieval",
+      "top1": 0.7312,
+      "has_rw": true,
+      "len": 19,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_E03",
+      "capability": "exact_retrieval",
+      "top1": 0.7278,
+      "has_rw": true,
+      "len": 20,
+      "base": [
+        0.5,
+        true,
+        true
+      ],
+      "merged": [
+        0.5,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_E02",
+      "capability": "exact_retrieval",
+      "top1": 0.7658,
+      "has_rw": true,
+      "len": 28,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_E05",
+      "capability": "exact_retrieval",
+      "top1": 0.6471,
+      "has_rw": true,
+      "len": 18,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_E06",
+      "capability": "exact_retrieval",
+      "top1": 0.7419,
+      "has_rw": true,
+      "len": 17,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_E07",
+      "capability": "exact_retrieval",
+      "top1": 0.8216,
+      "has_rw": true,
+      "len": 27,
+      "base": [
+        0.3333333333333333,
+        true,
+        true
+      ],
+      "merged": [
+        0.3333333333333333,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_E08",
+      "capability": "exact_retrieval",
+      "top1": 0.8951,
+      "has_rw": true,
+      "len": 26,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_E09",
+      "capability": "exact_retrieval",
+      "top1": 0.6898,
+      "has_rw": true,
+      "len": 29,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_E10",
+      "capability": "exact_retrieval",
+      "top1": 0.5877,
+      "has_rw": true,
+      "len": 25,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_E12",
+      "capability": "exact_retrieval",
+      "top1": 0.7858,
+      "has_rw": true,
+      "len": 29,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_E11",
+      "capability": "exact_retrieval",
+      "top1": 0.7742,
+      "has_rw": true,
+      "len": 32,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_E13",
+      "capability": "exact_retrieval",
+      "top1": 0.8207,
+      "has_rw": true,
+      "len": 33,
+      "base": [
+        0.14285714285714285,
+        false,
+        true
+      ],
+      "merged": [
+        0.14285714285714285,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "Q_E14",
+      "capability": "exact_retrieval",
+      "top1": 0.8192,
+      "has_rw": true,
+      "len": 16,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_E15",
+      "capability": "exact_retrieval",
+      "top1": 0.808,
+      "has_rw": true,
+      "len": 30,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_E16",
+      "capability": "exact_retrieval",
+      "top1": 0.8303,
+      "has_rw": true,
+      "len": 36,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_E17",
+      "capability": "exact_retrieval",
+      "top1": 0.7426,
+      "has_rw": true,
+      "len": 14,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_E18",
+      "capability": "exact_retrieval",
+      "top1": 0.7515,
+      "has_rw": true,
+      "len": 27,
+      "base": [
+        0.3333333333333333,
+        true,
+        true
+      ],
+      "merged": [
+        0.3333333333333333,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_E19",
+      "capability": "exact_retrieval",
+      "top1": 0.7408,
+      "has_rw": true,
+      "len": 22,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_E20",
+      "capability": "exact_retrieval",
+      "top1": 0.7788,
+      "has_rw": true,
+      "len": 23,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_E21",
+      "capability": "exact_retrieval",
+      "top1": 0.8051,
+      "has_rw": true,
+      "len": 17,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_E22",
+      "capability": "exact_retrieval",
+      "top1": 0.7537,
+      "has_rw": true,
+      "len": 17,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_E23",
+      "capability": "exact_retrieval",
+      "top1": 0.5906,
+      "has_rw": true,
+      "len": 24,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_E24",
+      "capability": "exact_retrieval",
+      "top1": 0.7244,
+      "has_rw": true,
+      "len": 25,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_E25",
+      "capability": "exact_retrieval",
+      "top1": 0.7022,
+      "has_rw": true,
+      "len": 16,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_E26",
+      "capability": "exact_retrieval",
+      "top1": 0.7752,
+      "has_rw": true,
+      "len": 28,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_E27",
+      "capability": "exact_retrieval",
+      "top1": 0.8409,
+      "has_rw": true,
+      "len": 35,
+      "base": [
+        0.5,
+        true,
+        true
+      ],
+      "merged": [
+        0.5,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_E28",
+      "capability": "exact_retrieval",
+      "top1": 0.7379,
+      "has_rw": true,
+      "len": 30,
+      "base": [
+        0.5,
+        true,
+        true
+      ],
+      "merged": [
+        0.5,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_E30",
+      "capability": "exact_retrieval",
+      "top1": 0.7719,
+      "has_rw": true,
+      "len": 21,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_E29",
+      "capability": "exact_retrieval",
+      "top1": 0.7806,
+      "has_rw": true,
+      "len": 24,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_E31",
+      "capability": "exact_retrieval",
+      "top1": 0.8478,
+      "has_rw": true,
+      "len": 17,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_E32",
+      "capability": "exact_retrieval",
+      "top1": 0.9051,
+      "has_rw": true,
+      "len": 19,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_E34",
+      "capability": "exact_retrieval",
+      "top1": 0.8839,
+      "has_rw": true,
+      "len": 23,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_E33",
+      "capability": "exact_retrieval",
+      "top1": 0.7072,
+      "has_rw": true,
+      "len": 18,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_E35",
+      "capability": "exact_retrieval",
+      "top1": 0.8469,
+      "has_rw": true,
+      "len": 37,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_C01",
+      "capability": "context_expansion",
+      "top1": 0.7882,
+      "has_rw": true,
+      "len": 45,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_C03",
+      "capability": "context_expansion",
+      "top1": 0.739,
+      "has_rw": true,
+      "len": 30,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_C02",
+      "capability": "context_expansion",
+      "top1": 0.8287,
+      "has_rw": true,
+      "len": 38,
+      "base": [
+        0.5,
+        true,
+        true
+      ],
+      "merged": [
+        0.5,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_C04",
+      "capability": "context_expansion",
+      "top1": 0.7746,
+      "has_rw": true,
+      "len": 45,
+      "base": [
+        0.5,
+        true,
+        true
+      ],
+      "merged": [
+        0.5,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_C05",
+      "capability": "context_expansion",
+      "top1": 0.8725,
+      "has_rw": true,
+      "len": 32,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_C06",
+      "capability": "context_expansion",
+      "top1": 0.8404,
+      "has_rw": true,
+      "len": 26,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_C07",
+      "capability": "context_expansion",
+      "top1": 0.799,
+      "has_rw": true,
+      "len": 30,
+      "base": [
+        0.5,
+        true,
+        true
+      ],
+      "merged": [
+        0.5,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_C09",
+      "capability": "context_expansion",
+      "top1": 0.8541,
+      "has_rw": true,
+      "len": 27,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_C08",
+      "capability": "context_expansion",
+      "top1": 0.7557,
+      "has_rw": true,
+      "len": 33,
+      "base": [
+        0.14285714285714285,
+        false,
+        true
+      ],
+      "merged": [
+        0.14285714285714285,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "Q_C11",
+      "capability": "context_expansion",
+      "top1": 0.8134,
+      "has_rw": true,
+      "len": 35,
+      "base": [
+        0.5,
+        true,
+        true
+      ],
+      "merged": [
+        0.5,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_C10",
+      "capability": "context_expansion",
+      "top1": 0.8088,
+      "has_rw": true,
+      "len": 23,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_C12",
+      "capability": "context_expansion",
+      "top1": 0.7894,
+      "has_rw": true,
+      "len": 25,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_C13",
+      "capability": "context_expansion",
+      "top1": 0.7913,
+      "has_rw": true,
+      "len": 26,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_C15",
+      "capability": "context_expansion",
+      "top1": 0.8187,
+      "has_rw": true,
+      "len": 31,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_C14",
+      "capability": "context_expansion",
+      "top1": 0.8127,
+      "has_rw": true,
+      "len": 21,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_C16",
+      "capability": "context_expansion",
+      "top1": 0.8393,
+      "has_rw": true,
+      "len": 25,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_C17",
+      "capability": "context_expansion",
+      "top1": 0.8211,
+      "has_rw": true,
+      "len": 21,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_C18",
+      "capability": "context_expansion",
+      "top1": 0.6905,
+      "has_rw": false,
+      "len": 28,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_C19",
+      "capability": "context_expansion",
+      "top1": 0.7606,
+      "has_rw": true,
+      "len": 29,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_C20",
+      "capability": "context_expansion",
+      "top1": 0.8201,
+      "has_rw": true,
+      "len": 23,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_C21",
+      "capability": "context_expansion",
+      "top1": 0.8508,
+      "has_rw": true,
+      "len": 23,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_C22",
+      "capability": "context_expansion",
+      "top1": 0.8269,
+      "has_rw": true,
+      "len": 23,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_C23",
+      "capability": "context_expansion",
+      "top1": 0.7217,
+      "has_rw": true,
+      "len": 27,
+      "base": [
+        0.14285714285714285,
+        false,
+        true
+      ],
+      "merged": [
+        0.16666666666666666,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "Q_C24",
+      "capability": "context_expansion",
+      "top1": 0.7906,
+      "has_rw": true,
+      "len": 42,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_C25",
+      "capability": "context_expansion",
+      "top1": 0.8474,
+      "has_rw": true,
+      "len": 24,
+      "base": [
+        0.1111111111111111,
+        false,
+        true
+      ],
+      "merged": [
+        0.125,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "Q_S01",
+      "capability": "cross_section",
+      "top1": 0.822,
+      "has_rw": true,
+      "len": 34,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_S02",
+      "capability": "cross_section",
+      "top1": 0.8193,
+      "has_rw": true,
+      "len": 22,
+      "base": [
+        0.16666666666666666,
+        false,
+        true
+      ],
+      "merged": [
+        0.16666666666666666,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "Q_S03",
+      "capability": "cross_section",
+      "top1": 0.6789,
+      "has_rw": true,
+      "len": 45,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_S04",
+      "capability": "cross_section",
+      "top1": 0.8366,
+      "has_rw": true,
+      "len": 45,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_S05",
+      "capability": "cross_section",
+      "top1": 0.8246,
+      "has_rw": true,
+      "len": 35,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_S06",
+      "capability": "cross_section",
+      "top1": 0.7833,
+      "has_rw": true,
+      "len": 38,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_S07",
+      "capability": "cross_section",
+      "top1": 0.7916,
+      "has_rw": true,
+      "len": 42,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_S08",
+      "capability": "cross_section",
+      "top1": 0.6133,
+      "has_rw": true,
+      "len": 30,
+      "base": [
+        0.3333333333333333,
+        true,
+        true
+      ],
+      "merged": [
+        0.3333333333333333,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_S09",
+      "capability": "cross_section",
+      "top1": 0.8355,
+      "has_rw": true,
+      "len": 42,
+      "base": [
+        0.2,
+        true,
+        true
+      ],
+      "merged": [
+        0.2,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_S10",
+      "capability": "cross_section",
+      "top1": 0.8447,
+      "has_rw": true,
+      "len": 33,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_S11",
+      "capability": "cross_section",
+      "top1": 0.7889,
+      "has_rw": true,
+      "len": 28,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_S13",
+      "capability": "cross_section",
+      "top1": 0.7615,
+      "has_rw": true,
+      "len": 32,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_S14",
+      "capability": "cross_section",
+      "top1": 0.7414,
+      "has_rw": true,
+      "len": 41,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_S15",
+      "capability": "cross_section",
+      "top1": 0.7504,
+      "has_rw": true,
+      "len": 28,
+      "base": [
+        0.25,
+        true,
+        true
+      ],
+      "merged": [
+        0.25,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_S16",
+      "capability": "cross_section",
+      "top1": 0.8853,
+      "has_rw": true,
+      "len": 59,
+      "base": [
+        0.3333333333333333,
+        true,
+        true
+      ],
+      "merged": [
+        0.3333333333333333,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_S17",
+      "capability": "cross_section",
+      "top1": 0.7942,
+      "has_rw": true,
+      "len": 48,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_S18",
+      "capability": "cross_section",
+      "top1": 0.8045,
+      "has_rw": true,
+      "len": 47,
+      "base": [
+        0.3333333333333333,
+        true,
+        true
+      ],
+      "merged": [
+        0.3333333333333333,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_S19",
+      "capability": "cross_section",
+      "top1": 0.7957,
+      "has_rw": true,
+      "len": 38,
+      "base": [
+        0.2,
+        true,
+        true
+      ],
+      "merged": [
+        0.2,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_S21",
+      "capability": "cross_section",
+      "top1": 0.7863,
+      "has_rw": true,
+      "len": 36,
+      "base": [
+        0.5,
+        true,
+        true
+      ],
+      "merged": [
+        0.5,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_S20",
+      "capability": "cross_section",
+      "top1": 0.7759,
+      "has_rw": true,
+      "len": 30,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_S23",
+      "capability": "cross_section",
+      "top1": 0.7891,
+      "has_rw": true,
+      "len": 55,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_S22",
+      "capability": "cross_section",
+      "top1": 0.8137,
+      "has_rw": true,
+      "len": 41,
+      "base": [
+        0.2,
+        true,
+        true
+      ],
+      "merged": [
+        0.25,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_S24",
+      "capability": "cross_section",
+      "top1": 0.7869,
+      "has_rw": true,
+      "len": 41,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_S25",
+      "capability": "cross_section",
+      "top1": 0.8281,
+      "has_rw": true,
+      "len": 52,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_D01",
+      "capability": "cross_document",
+      "top1": 0.6766,
+      "has_rw": true,
+      "len": 52,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_D02",
+      "capability": "cross_document",
+      "top1": 0.8066,
+      "has_rw": true,
+      "len": 33,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_D03",
+      "capability": "cross_document",
+      "top1": 0.7477,
+      "has_rw": true,
+      "len": 53,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_D04",
+      "capability": "cross_document",
+      "top1": 0.7004,
+      "has_rw": true,
+      "len": 38,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_D05",
+      "capability": "cross_document",
+      "top1": 0.7566,
+      "has_rw": true,
+      "len": 46,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_D07",
+      "capability": "cross_document",
+      "top1": 0.5802,
+      "has_rw": true,
+      "len": 36,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_D06",
+      "capability": "cross_document",
+      "top1": 0.6842,
+      "has_rw": true,
+      "len": 38,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_D09",
+      "capability": "cross_document",
+      "top1": 0.7651,
+      "has_rw": true,
+      "len": 56,
+      "base": [
+        0.2,
+        true,
+        true
+      ],
+      "merged": [
+        0.2,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_D10",
+      "capability": "cross_document",
+      "top1": 0.7647,
+      "has_rw": true,
+      "len": 49,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_D11",
+      "capability": "cross_document",
+      "top1": 0.8076,
+      "has_rw": true,
+      "len": 54,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_D12",
+      "capability": "cross_document",
+      "top1": 0.7655,
+      "has_rw": true,
+      "len": 36,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_D13",
+      "capability": "cross_document",
+      "top1": 0.7941,
+      "has_rw": true,
+      "len": 38,
+      "base": [
+        0.25,
+        true,
+        true
+      ],
+      "merged": [
+        0.25,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_D14",
+      "capability": "cross_document",
+      "top1": 0.8237,
+      "has_rw": true,
+      "len": 35,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_D15",
+      "capability": "cross_document",
+      "top1": 0.7229,
+      "has_rw": true,
+      "len": 41,
+      "base": [
+        0.25,
+        true,
+        true
+      ],
+      "merged": [
+        0.25,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_D16",
+      "capability": "cross_document",
+      "top1": 0.8014,
+      "has_rw": true,
+      "len": 36,
+      "base": [
+        0.2,
+        true,
+        true
+      ],
+      "merged": [
+        0.2,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_D18",
+      "capability": "cross_document",
+      "top1": 0.7761,
+      "has_rw": true,
+      "len": 44,
+      "base": [
+        0.2,
+        true,
+        true
+      ],
+      "merged": [
+        0.2,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_D17",
+      "capability": "cross_document",
+      "top1": 0.8012,
+      "has_rw": true,
+      "len": 37,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_D19",
+      "capability": "cross_document",
+      "top1": 0.7782,
+      "has_rw": true,
+      "len": 38,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_D20",
+      "capability": "cross_document",
+      "top1": 0.6124,
+      "has_rw": true,
+      "len": 37,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_D21",
+      "capability": "cross_document",
+      "top1": 0.79,
+      "has_rw": true,
+      "len": 39,
+      "base": [
+        0.16666666666666666,
+        false,
+        true
+      ],
+      "merged": [
+        0.16666666666666666,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "Q_D22",
+      "capability": "cross_document",
+      "top1": 0.818,
+      "has_rw": true,
+      "len": 36,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_D23",
+      "capability": "cross_document",
+      "top1": 0.8047,
+      "has_rw": true,
+      "len": 36,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_D24",
+      "capability": "cross_document",
+      "top1": 0.8002,
+      "has_rw": true,
+      "len": 40,
+      "base": [
+        0.16666666666666666,
+        false,
+        true
+      ],
+      "merged": [
+        0.16666666666666666,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "Q_D25",
+      "capability": "cross_document",
+      "top1": 0.7169,
+      "has_rw": true,
+      "len": 33,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_D26",
+      "capability": "cross_document",
+      "top1": 0.8347,
+      "has_rw": true,
+      "len": 39,
+      "base": [
+        0.14285714285714285,
+        false,
+        true
+      ],
+      "merged": [
+        0.14285714285714285,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "Q_D27",
+      "capability": "cross_document",
+      "top1": 0.7753,
+      "has_rw": true,
+      "len": 42,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_D28",
+      "capability": "cross_document",
+      "top1": 0.6885,
+      "has_rw": true,
+      "len": 37,
+      "base": [
+        0.25,
+        true,
+        true
+      ],
+      "merged": [
+        0.25,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_D29",
+      "capability": "cross_document",
+      "top1": 0.6929,
+      "has_rw": true,
+      "len": 37,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_D30",
+      "capability": "cross_document",
+      "top1": 0.7504,
+      "has_rw": true,
+      "len": 36,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_T03",
+      "capability": "table_retrieval",
+      "top1": 0.7062,
+      "has_rw": true,
+      "len": 16,
+      "base": [
+        0.2,
+        true,
+        true
+      ],
+      "merged": [
+        0.2,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_T04",
+      "capability": "table_retrieval",
+      "top1": 0.8476,
+      "has_rw": true,
+      "len": 26,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_T08",
+      "capability": "table_retrieval",
+      "top1": 0.8447,
+      "has_rw": true,
+      "len": 16,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_T09",
+      "capability": "table_retrieval",
+      "top1": 0.8321,
+      "has_rw": true,
+      "len": 16,
+      "base": [
+        0.1111111111111111,
+        false,
+        true
+      ],
+      "merged": [
+        0.1111111111111111,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "Q_T12",
+      "capability": "table_retrieval",
+      "top1": 0.7326,
+      "has_rw": true,
+      "len": 13,
+      "base": [
+        0.25,
+        true,
+        true
+      ],
+      "merged": [
+        0.25,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_T11",
+      "capability": "table_retrieval",
+      "top1": 0.8179,
+      "has_rw": true,
+      "len": 16,
+      "base": [
+        0.25,
+        true,
+        true
+      ],
+      "merged": [
+        0.25,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_T16",
+      "capability": "table_retrieval",
+      "top1": 0.8063,
+      "has_rw": true,
+      "len": 23,
+      "base": [
+        0.16666666666666666,
+        false,
+        true
+      ],
+      "merged": [
+        0.2,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_T20",
+      "capability": "table_retrieval",
+      "top1": 0.8603,
+      "has_rw": true,
+      "len": 15,
+      "base": [
+        0.5,
+        true,
+        true
+      ],
+      "merged": [
+        0.5,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_N01",
+      "capability": "numeric_retrieval",
+      "top1": 0.7571,
+      "has_rw": true,
+      "len": 18,
+      "base": [
+        0.5,
+        true,
+        true
+      ],
+      "merged": [
+        0.5,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_N02",
+      "capability": "numeric_retrieval",
+      "top1": 0.8283,
+      "has_rw": true,
+      "len": 20,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_N03",
+      "capability": "numeric_retrieval",
+      "top1": 0.8236,
+      "has_rw": true,
+      "len": 28,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_N04",
+      "capability": "numeric_retrieval",
+      "top1": 0.6488,
+      "has_rw": true,
+      "len": 23,
+      "base": [
+        0.3333333333333333,
+        true,
+        true
+      ],
+      "merged": [
+        0.3333333333333333,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_N05",
+      "capability": "numeric_retrieval",
+      "top1": 0.798,
+      "has_rw": true,
+      "len": 18,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_N06",
+      "capability": "numeric_retrieval",
+      "top1": 0.8038,
+      "has_rw": true,
+      "len": 18,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_N07",
+      "capability": "numeric_retrieval",
+      "top1": 0.8569,
+      "has_rw": true,
+      "len": 29,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_N09",
+      "capability": "numeric_retrieval",
+      "top1": 0.8169,
+      "has_rw": true,
+      "len": 21,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_N10",
+      "capability": "numeric_retrieval",
+      "top1": 0.7956,
+      "has_rw": true,
+      "len": 17,
+      "base": [
+        0.125,
+        false,
+        true
+      ],
+      "merged": [
+        0.125,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "Q_N08",
+      "capability": "numeric_retrieval",
+      "top1": 0.8185,
+      "has_rw": true,
+      "len": 24,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_N13",
+      "capability": "numeric_retrieval",
+      "top1": 0.7737,
+      "has_rw": false,
+      "len": 11,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_N11",
+      "capability": "numeric_retrieval",
+      "top1": 0.7526,
+      "has_rw": true,
+      "len": 16,
+      "base": [
+        0.2,
+        true,
+        true
+      ],
+      "merged": [
+        0.2,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_N14",
+      "capability": "numeric_retrieval",
+      "top1": 0.8445,
+      "has_rw": true,
+      "len": 28,
+      "base": [
+        0.14285714285714285,
+        false,
+        true
+      ],
+      "merged": [
+        0.14285714285714285,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "Q_N12",
+      "capability": "numeric_retrieval",
+      "top1": 0.8114,
+      "has_rw": true,
+      "len": 19,
+      "base": [
+        0.5,
+        true,
+        true
+      ],
+      "merged": [
+        0.5,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_N15",
+      "capability": "numeric_retrieval",
+      "top1": 0.8919,
+      "has_rw": true,
+      "len": 27,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_N16",
+      "capability": "numeric_retrieval",
+      "top1": 0.8349,
+      "has_rw": true,
+      "len": 15,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_N18",
+      "capability": "numeric_retrieval",
+      "top1": 0.8847,
+      "has_rw": true,
+      "len": 17,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_N17",
+      "capability": "numeric_retrieval",
+      "top1": 0.7871,
+      "has_rw": true,
+      "len": 24,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_L01",
+      "capability": "query_rewrite",
+      "top1": 0.741,
+      "has_rw": false,
+      "len": 12,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_N19",
+      "capability": "numeric_retrieval",
+      "top1": 0.7222,
+      "has_rw": true,
+      "len": 13,
+      "base": [
+        0.5,
+        true,
+        true
+      ],
+      "merged": [
+        0.5,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_L04",
+      "capability": "query_rewrite",
+      "top1": 0.5191,
+      "has_rw": false,
+      "len": 12,
+      "base": [
+        0.5,
+        true,
+        true
+      ],
+      "merged": [
+        0.5,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_N20",
+      "capability": "numeric_retrieval",
+      "top1": 0.7987,
+      "has_rw": true,
+      "len": 13,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_L02",
+      "capability": "query_rewrite",
+      "top1": 0.615,
+      "has_rw": true,
+      "len": 18,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_L03",
+      "capability": "query_rewrite",
+      "top1": 0.6914,
+      "has_rw": true,
+      "len": 21,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_L05",
+      "capability": "query_rewrite",
+      "top1": 0.6659,
+      "has_rw": true,
+      "len": 14,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_L06",
+      "capability": "query_rewrite",
+      "top1": 0.6996,
+      "has_rw": true,
+      "len": 14,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_L07",
+      "capability": "query_rewrite",
+      "top1": 0.6784,
+      "has_rw": true,
+      "len": 19,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_L10",
+      "capability": "query_rewrite",
+      "top1": 0.5629,
+      "has_rw": false,
+      "len": 8,
+      "base": [
+        0.1,
+        false,
+        true
+      ],
+      "merged": [
+        0.1,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "Q_L08",
+      "capability": "query_rewrite",
+      "top1": 0.6363,
+      "has_rw": true,
+      "len": 14,
+      "base": [
+        0.5,
+        true,
+        true
+      ],
+      "merged": [
+        0.5,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_L11",
+      "capability": "query_rewrite",
+      "top1": 0.7363,
+      "has_rw": false,
+      "len": 11,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_L09",
+      "capability": "query_rewrite",
+      "top1": 0.5775,
+      "has_rw": true,
+      "len": 14,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_L12",
+      "capability": "query_rewrite",
+      "top1": 0.7069,
+      "has_rw": true,
+      "len": 17,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_SR01",
+      "capability": "query_rewrite",
+      "top1": 0.7496,
+      "has_rw": true,
+      "len": 15,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_SR02",
+      "capability": "query_rewrite",
+      "top1": 0.7004,
+      "has_rw": true,
+      "len": 20,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_SR03",
+      "capability": "query_rewrite",
+      "top1": 0.683,
+      "has_rw": true,
+      "len": 15,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_SR04",
+      "capability": "query_rewrite",
+      "top1": 0.6838,
+      "has_rw": true,
+      "len": 20,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_SR05",
+      "capability": "query_rewrite",
+      "top1": 0.7178,
+      "has_rw": true,
+      "len": 31,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_SR06",
+      "capability": "query_rewrite",
+      "top1": 0.7683,
+      "has_rw": true,
+      "len": 37,
+      "base": [
+        0.16666666666666666,
+        false,
+        true
+      ],
+      "merged": [
+        0.16666666666666666,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "Q_SR07",
+      "capability": "query_rewrite",
+      "top1": 0.7015,
+      "has_rw": true,
+      "len": 18,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_SR08",
+      "capability": "query_rewrite",
+      "top1": 0.7266,
+      "has_rw": true,
+      "len": 23,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_SR09",
+      "capability": "query_rewrite",
+      "top1": 0.7943,
+      "has_rw": true,
+      "len": 24,
+      "base": [
+        0.25,
+        true,
+        true
+      ],
+      "merged": [
+        0.25,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_SR10",
+      "capability": "query_rewrite",
+      "top1": 0.6766,
+      "has_rw": true,
+      "len": 18,
+      "base": [
+        0.3333333333333333,
+        true,
+        true
+      ],
+      "merged": [
+        0.3333333333333333,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_SR11",
+      "capability": "query_rewrite",
+      "top1": 0.6484,
+      "has_rw": true,
+      "len": 30,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_SR12",
+      "capability": "query_rewrite",
+      "top1": 0.7292,
+      "has_rw": true,
+      "len": 24,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_SR13",
+      "capability": "query_rewrite",
+      "top1": 0.4901,
+      "has_rw": true,
+      "len": 29,
+      "base": [
+        0.2,
+        true,
+        true
+      ],
+      "merged": [
+        0.2,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_T21",
+      "capability": "table_retrieval",
+      "top1": 0.808,
+      "has_rw": true,
+      "len": 40,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_T22",
+      "capability": "table_retrieval",
+      "top1": 0.8128,
+      "has_rw": true,
+      "len": 27,
+      "base": [
+        0.5,
+        true,
+        true
+      ],
+      "merged": [
+        0.5,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_T23",
+      "capability": "table_retrieval",
+      "top1": 0.8201,
+      "has_rw": true,
+      "len": 39,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_T24",
+      "capability": "table_retrieval",
+      "top1": 0.7914,
+      "has_rw": true,
+      "len": 42,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.125,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "Q_T25",
+      "capability": "table_retrieval",
+      "top1": 0.7845,
+      "has_rw": true,
+      "len": 30,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_T26",
+      "capability": "table_retrieval",
+      "top1": 0.9153,
+      "has_rw": true,
+      "len": 59,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_T27",
+      "capability": "table_retrieval",
+      "top1": 0.8695,
+      "has_rw": true,
+      "len": 56,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_T28",
+      "capability": "table_retrieval",
+      "top1": 0.7972,
+      "has_rw": true,
+      "len": 37,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_T29",
+      "capability": "table_retrieval",
+      "top1": 0.7025,
+      "has_rw": true,
+      "len": 43,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_T31",
+      "capability": "table_retrieval",
+      "top1": 0.6885,
+      "has_rw": true,
+      "len": 23,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_T30",
+      "capability": "table_retrieval",
+      "top1": 0.66,
+      "has_rw": true,
+      "len": 26,
+      "base": [
+        0.5,
+        true,
+        true
+      ],
+      "merged": [
+        0.5,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_T32",
+      "capability": "table_retrieval",
+      "top1": 0.8674,
+      "has_rw": true,
+      "len": 30,
+      "base": [
+        1.0,
+        true,
+        true
+      ],
+      "merged": [
+        1.0,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "Q_S26",
+      "capability": "cross_section",
+      "top1": 0.829,
+      "has_rw": true,
+      "len": 48,
+      "base": [
+        0.0,
+        false,
+        false
+      ],
+      "merged": [
+        0.0,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "Q_D31",
+      "capability": "cross_document",
+      "top1": 0.8323,
+      "has_rw": true,
+      "len": 34,
+      "base": [
+        0.3333333333333333,
+        true,
+        true
+      ],
+      "merged": [
+        0.3333333333333333,
+        true,
+        true
+      ]
+    }
+  ],
+  "baseline": [
+    0.5692305996472663,
+    0.7055555555555556,
+    0.7833333333333333,
+    0.4777777777777778,
+    39
+  ],
+  "full": [
+    0.570597442680776,
+    0.7111111111111111,
+    0.7888888888888889,
+    0.4777777777777778,
+    38
+  ]
+}

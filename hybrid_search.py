@@ -1,8 +1,7 @@
 """
 混合检索引擎（LangChain 实现）
 
-组合 BM25 关键词检索 + Chroma 语义检索，通过 EnsembleRetriever 融合。
-同时支持 CrossEncoder Reranker 精排。
+Dense + BM25 → RRF 融合 → CrossEncoder 精排 → top-k。
 
 用法:
   searcher = HybridSearcher()
@@ -27,6 +26,22 @@ COLLECTION_NAME = "agri_zoning"
 EMBED_MODEL = "BAAI/bge-small-zh-v1.5"
 
 
+def bm25_tokenize(text: str) -> list[str]:
+    """中文 BM25 分词：单字 + 双字 bigram，无外部依赖。
+
+    langchain BM25Retriever 默认 `text.split()` 对中文失效（整段成一个 token，
+    查询永远匹配不上）。改用字 + bigram：查询"大豆冷害"与文档都切成
+    ['大','豆','冷','害','大豆','豆冷','冷害']，含"大豆"的文档即可在 bigram 上命中。
+    """
+    text = text.replace("\n", " ").strip()
+    tokens = [ch for ch in text if not ch.isspace()]
+    for i in range(len(text) - 1):
+        bigram = text[i:i + 2]
+        if not bigram[0].isspace() and not bigram[1].isspace():
+            tokens.append(bigram)
+    return tokens
+
+
 class Reranker:
     """BGE CrossEncoder 精排器（模块级单例，避免重复加载模型）。"""
 
@@ -40,6 +55,7 @@ class Reranker:
             cls._instance._model = None
             import threading
             cls._instance._load_lock = threading.Lock()
+            cls._instance._infer_lock = threading.Lock()
         return cls._instance
 
     def _load(self):
@@ -56,7 +72,9 @@ class Reranker:
         """重排序。candidates 中已有 dense_similarity（余弦相似度），reranker 只决定顺序。"""
         self._load()
         pairs = [(query, c["content"][:500]) for c in candidates]
-        scores = self._model.predict(pairs, show_progress_bar=False)
+        # 序列化 CrossEncoder 推理，避免多线程 CPU 争抢反而变慢
+        with self._infer_lock:
+            scores = self._model.predict(pairs, show_progress_bar=False)
 
         # 附加 rerank_score，保留原始字段
         ranked = []
@@ -81,17 +99,17 @@ class HybridSearcher:
     LangChain 混合检索器。
 
     内部组合:
-      - BM25Retriever (关键词匹配)
       - Chroma 语义检索
+      - BM25Retriever 关键词检索
       - RRF 加权融合
-      - 可选 Reranker 精排
+      - CrossEncoder 精排
       - 同 section 上下文扩展（命中 chunk ±1）
 
     BM25 和 Chroma 使用同一套 document（step2 切分后的子块），
     metadata 中含 section_id / chunk_index / chunk_count，支持按 section 扩展上下文。
     """
 
-    def __init__(self, enable_reranker: bool = False):
+    def __init__(self, enable_reranker: bool = True):
         self.enable_reranker = enable_reranker
         self._embeddings = None
         self._vectorstore = None
@@ -146,7 +164,9 @@ class HybridSearcher:
         for sid in self._section_index:
             self._section_index[sid].sort(key=lambda x: x["chunk_index"])
 
-        self._bm25_retriever = BM25Retriever.from_documents(bm25_docs)
+        self._bm25_retriever = BM25Retriever.from_documents(
+            bm25_docs, preprocess_func=bm25_tokenize
+        )
         self._bm25_retriever.k = 20
 
         if self.enable_reranker:
@@ -203,16 +223,14 @@ class HybridSearcher:
         return judge_results[:top_k], merged[:top_k]
 
     def search(self, query: str, top_k: int = 5, expand_context: bool = False,
-               skip_reranker: bool = False) -> list[dict]:
-        """混合检索（RRF 融合）+ 可选 CrossEncoder 重排序 + 可选同 section 上下文扩展。
-
-        无论是否启用 reranker，返回结果中的 similarity 字段始终是余弦相似度，
-        确保下游 Judge 的阈值判定一致。
+               skip_reranker: bool = False, w_dense: float = 0.7, w_bm25: float = 0.3,
+               alpha: float = 0.2) -> list[dict]:
+        """混合检索（RRF 融合）+ CrossEncoder 精排 + 可选同 section 上下文扩展。
 
         expand_context=True 时：对每个命中 chunk，取同 section 内前1后1相邻 chunk，
         拼接为检索结果（固定窗口，而非展开完整父文档）。
         """
-        pool_size = max(top_k * 4, 20)  # 召回量，保证足够候选
+        pool_size = max(top_k * 4, 20)  # 召回池，top_k=10 时 pool=40
 
         # 1. Chroma 语义检索（带真实余弦距离）
         chroma_raw = self._vectorstore.similarity_search_with_score(query, k=pool_size)
@@ -220,21 +238,21 @@ class HybridSearcher:
         # 2. BM25 关键词检索
         bm25_docs = self._bm25_retriever.invoke(query)[:pool_size]
 
-        # 3. 构建统一候选池，记录真实余弦相似度
+        # 3. RRF 加权融合
         RRF_K = 60
         rrf_scores: dict[str, float] = {}
         doc_store: dict[str, tuple] = {}  # key → (content, metadata, cosine_sim)
 
         for rank, (doc, l2_dist) in enumerate(chroma_raw):
             key = doc.page_content[:80]
-            rrf_scores[key] = rrf_scores.get(key, 0) + 0.7 / (RRF_K + rank)
+            rrf_scores[key] = rrf_scores.get(key, 0) + w_dense / (RRF_K + rank)
             sim = round(1.0 - l2_dist, 4)
             if key not in doc_store:
                 doc_store[key] = (doc.page_content, doc.metadata, sim)
 
         for rank, doc in enumerate(bm25_docs):
             key = doc.page_content[:80]
-            rrf_scores[key] = rrf_scores.get(key, 0) + 0.3 / (RRF_K + rank)
+            rrf_scores[key] = rrf_scores.get(key, 0) + w_bm25 / (RRF_K + rank)
             if key not in doc_store:
                 doc_store[key] = (doc.page_content, doc.metadata, None)
 
@@ -251,9 +269,9 @@ class HybridSearcher:
 
         # 4. 排序
         if self._reranker and not skip_reranker:
-            # Reranker 重排序：RRF 粗排截断后送 CrossEncoder 精排
-            rerank_input = min(top_k * 3, 40)  # 精排输入上限，防 CrossEncoder 过载
+            rerank_input = min(top_k * 3, 40)  # 精排候选数，top_k=10 时 CE=30
             candidates = []
+            candidate_keys = []
             for key in sorted(rrf_scores, key=lambda k: -rrf_scores[k])[:rerank_input]:
                 content, metadata, cosine_sim = doc_store[key]
                 candidates.append({
@@ -261,9 +279,56 @@ class HybridSearcher:
                     "metadata": metadata,
                     "dense_similarity": cosine_sim or 0.0,
                 })
-            results = self._reranker.rerank(query, candidates, top_k=top_k)
+                candidate_keys.append(key)
+
+            # CE 精排 + 可选 RRF 分数融合
+            self._reranker._load()
+            ce_pairs = [(query, c["content"][:500]) for c in candidates]
+            with self._reranker._infer_lock:
+                ce_scores = [float(x) for x in self._reranker._model.predict(
+                    ce_pairs, show_progress_bar=False)]
+
+            if alpha > 0.0:
+                # Min-max normalize both to [0,1]
+                rrf_vals = [rrf_scores[k] for k in candidate_keys]
+                rrf_min, rrf_max = min(rrf_vals), max(rrf_vals)
+                ce_min, ce_max = min(ce_scores), max(ce_scores)
+                rrf_range = rrf_max - rrf_min or 1e-8
+                ce_range = ce_max - ce_min or 1e-8
+
+                final_scores = []
+                for i, key in enumerate(candidate_keys):
+                    rrf_norm = (rrf_scores[key] - rrf_min) / rrf_range
+                    ce_norm = (ce_scores[i] - ce_min) / ce_range
+                    final = alpha * rrf_norm + (1 - alpha) * ce_norm
+                    final_scores.append((final, i))
+
+                final_scores.sort(key=lambda x: -x[0])
+                results = []
+                for _, idx in final_scores[:top_k]:
+                    c = candidates[idx]
+                    results.append({
+                        "content": c["content"],
+                        "metadata": c["metadata"],
+                        "similarity": round(final_scores[idx][0], 4) if idx < len(final_scores) else ce_scores[idx],
+                        "dense_similarity": c["dense_similarity"],
+                    })
+            else:
+                # Pure CE (alpha=0): delegate to Reranker.rerank
+                ranked = []
+                for i, c in enumerate(candidates):
+                    ranked.append((ce_scores[i], c))
+                ranked.sort(key=lambda x: -x[0])
+                results = []
+                for score, c in ranked[:top_k]:
+                    results.append({
+                        "content": c["content"],
+                        "metadata": c["metadata"],
+                        "similarity": round(float(score), 4),
+                        "dense_similarity": c["dense_similarity"],
+                    })
         else:
-            # RRF 融合排序
+            # RRF only
             sorted_keys = sorted(rrf_scores, key=lambda k: -rrf_scores[k])[:top_k]
             results = []
             for key in sorted_keys:
