@@ -147,19 +147,26 @@ class HybridSearcher:
             chunks = json.load(f)
 
         bm25_docs = []
+        self._chunk_id_map: dict[str, str] = {}  # content[:80] → chunk_id
         for c in chunks:
             content = c["content"]
-            meta = c["metadata"]
-            bm25_docs.append(Document(page_content=content, metadata=meta))
+            meta = dict(c["metadata"])
+            cid = c["id"]
+            meta["chunk_id"] = cid
+            # 若 content[:80] 碰撞，后出现的覆盖（罕见，且不劣于直接用 content[:80] 去重）
+            self._chunk_id_map[content[:80]] = cid
 
             sid = meta.get("section_id", "")
             if sid:
                 idx = len(self._section_index.get(sid, []))
+                meta["chunk_index"] = idx
                 self._section_index.setdefault(sid, []).append({
                     "content": content,
                     "metadata": meta,
                     "chunk_index": idx,
                 })
+
+            bm25_docs.append(Document(page_content=content, metadata=meta))
 
         for sid in self._section_index:
             self._section_index[sid].sort(key=lambda x: x["chunk_index"])
@@ -175,205 +182,195 @@ class HybridSearcher:
         print(f"[HybridSearcher] 就绪 (docs={len(bm25_docs)}, sections={len(self._section_index)}, "
               f"reranker={'on' if self.enable_reranker else 'off'})")
 
+    def _chunk_key(self, doc) -> str:
+        """解析 Document 或 result dict → chunk_id（fallback: content[:80]）。"""
+        if isinstance(doc, dict):
+            return doc.get("metadata", {}).get("chunk_id") or \
+                   self._chunk_id_map.get(doc["content"][:80], doc["content"][:80])
+        return doc.metadata.get("chunk_id") or \
+               self._chunk_id_map.get(doc.page_content[:80], doc.page_content[:80])
+
+    def _expand_results(self, results: list[dict]) -> list[dict]:
+        """同 section 上下文扩展：命中 chunk ±1 窗口。"""
+        expanded = []
+        seen = set()
+        for r in results:
+            sid = r["metadata"].get("section_id", "")
+            chunk_idx = r["metadata"].get("chunk_index", 0)
+            if sid and sid in self._section_index:
+                sc = self._section_index[sid]
+                start, end = max(0, chunk_idx - 1), min(len(sc) - 1, chunk_idx + 1)
+                wk = f"{sid}:{start}:{end}"
+                if wk in seen:
+                    continue
+                seen.add(wk)
+                parts = []
+                hp = r["metadata"].get("heading_path", [])
+                if hp:
+                    parts.append(" > ".join(hp))
+                for i in range(start, end + 1):
+                    if i < len(sc):
+                        parts.append(sc[i]["content"])
+                r["content"] = "\n\n---\n\n".join(parts)
+                r["context_range"] = [start, end]
+            expanded.append(r)
+        return expanded
+
+    def _rrf_ce_fusion(self, query: str, rrf_scores: dict, doc_store: dict,
+                        candidate_keys: list[str], top_k: int, alpha: float) -> list[dict]:
+        """CE 精排 + RRF-CE alpha 融合，返回 top_k 结果。"""
+        candidates = []
+        for key in candidate_keys:
+            content, metadata, cosine_sim = doc_store[key]
+            candidates.append({
+                "content": content, "metadata": metadata,
+                "dense_similarity": cosine_sim or 0.0,
+            })
+
+        if not self._reranker:
+            results = []
+            for c in candidates[:top_k]:
+                results.append({
+                    "content": c["content"], "metadata": c["metadata"],
+                    "similarity": c["dense_similarity"],
+                    "dense_similarity": c["dense_similarity"],
+                })
+            return results
+
+        self._reranker._load()
+        ce_pairs = [(query, c["content"][:500]) for c in candidates]
+        with self._reranker._infer_lock:
+            ce_scores = [float(x) for x in self._reranker._model.predict(
+                ce_pairs, show_progress_bar=False)]
+
+        if alpha > 0.0:
+            rrf_vals = [rrf_scores[k] for k in candidate_keys]
+            rrf_min, rrf_max = min(rrf_vals), max(rrf_vals)
+            ce_min, ce_max = min(ce_scores), max(ce_scores)
+            rrf_range = rrf_max - rrf_min or 1e-8
+            ce_range = ce_max - ce_min or 1e-8
+            final_scores = []
+            for i, key in enumerate(candidate_keys):
+                rrf_norm = (rrf_scores[key] - rrf_min) / rrf_range
+                ce_norm = (ce_scores[i] - ce_min) / ce_range
+                final = alpha * rrf_norm + (1 - alpha) * ce_norm
+                final_scores.append((final, i))
+            final_scores.sort(key=lambda x: -x[0])
+            results = []
+            for final, idx in final_scores[:top_k]:
+                c = candidates[idx]
+                results.append({
+                    "content": c["content"], "metadata": c["metadata"],
+                    "similarity": round(final, 4),
+                    "dense_similarity": c["dense_similarity"],
+                })
+        else:
+            ranked = sorted(zip(ce_scores, candidates), key=lambda x: -x[0])
+            results = []
+            for score, c in ranked[:top_k]:
+                results.append({
+                    "content": c["content"], "metadata": c["metadata"],
+                    "similarity": round(float(score), 4),
+                    "dense_similarity": c["dense_similarity"],
+                })
+        return results
+
     def search_multi_query(
         self, query: str, top_k: int = 5, expand_context: bool = True,
-        extra_queries=None, max_workers: int = 6,
+        extra_queries=None, w_dense: float = 0.7, w_bm25: float = 0.3,
+        alpha: float = 0.2,
     ):
-        """原始检索 + 可选多路子查询并发检索 + 按 content 前 80 字符去重。
+        """Append 架构：Original 独占 CE 管线，Rewrite 以 RRF-only 补充。
 
-        Args:
-            query: 原始查询（用于 Judge OOD 判定）
-            top_k: 返回数量
-            expand_context: 是否展开同 section 上下文
-            extra_queries: 改写后的额外查询列表，None 表示不启用多路检索
-            max_workers: 子查询并发上限
+        Original → RRF+CE → 排在前面（高质量 CE 信号）
+        Rewrite → RRF-only → 去重追加到后面（不干扰 original 排序）
 
-        Returns:
-            (judge_results, merged_results)
-            - judge_results: 原始 query 的 top_k 结果
-            - merged_results: 多路合并去重后的 top_k 结果
+        子查询跳过 CE 避免了噪声干扰，同时保留改写召回的高价值 chunk。
         """
-        from concurrent.futures import ThreadPoolExecutor, as_completed
-
-        judge_results = self.search(query, top_k=top_k, expand_context=expand_context)
-
         if not extra_queries:
-            return judge_results[:top_k], judge_results[:top_k]
+            results = self.search(query, top_k=top_k, expand_context=expand_context)
+            return results, results
 
-        # 并发检索各路改写查询
-        rw_pool = list(judge_results)
-        workers = min(len(extra_queries), max_workers)
-        with ThreadPoolExecutor(max_workers=workers) as ex:
-            futures = {
-                ex.submit(self.search, sq, top_k, expand_context, True): sq
-                for sq in extra_queries
-            }
-            for f in as_completed(futures):
-                rw_pool.extend(f.result())
+        # Original query → 完整 RRF+CE 管线
+        results = self.search(
+            query, top_k=top_k, expand_context=False,
+            w_dense=w_dense, w_bm25=w_bm25, alpha=alpha,
+        )
+        seen = {self._chunk_key(r) for r in results}
 
-        # 按 content 前 80 字去重；原查询结果排前，改写仅补充中尾部 gap
-        seen_keys = set()
-        merged = []
-        for r in list(judge_results) + rw_pool:
-            key = r["content"][:80]
-            if key not in seen_keys:
-                seen_keys.add(key)
-                merged.append(r)
+        # Rewrite queries → RRF-only (skip CE)，去重追加
+        for rq in extra_queries:
+            if len(results) >= top_k * 3:
+                break
+            rq_results = self.search(
+                rq, top_k=top_k, expand_context=False,
+                skip_reranker=True, w_dense=w_dense, w_bm25=w_bm25,
+            )
+            for r in rq_results:
+                key = self._chunk_key(r)
+                if key not in seen:
+                    seen.add(key)
+                    results.append(r)
 
-        return judge_results[:top_k], merged[:top_k]
+        results = results[:top_k]
+
+        if expand_context:
+            results = self._expand_results(results)
+
+        return results, results
 
     def search(self, query: str, top_k: int = 5, expand_context: bool = False,
                skip_reranker: bool = False, w_dense: float = 0.7, w_bm25: float = 0.3,
                alpha: float = 0.2) -> list[dict]:
-        """混合检索（RRF 融合）+ CrossEncoder 精排 + 可选同 section 上下文扩展。
-
-        expand_context=True 时：对每个命中 chunk，取同 section 内前1后1相邻 chunk，
-        拼接为检索结果（固定窗口，而非展开完整父文档）。
-        """
-        pool_size = max(top_k * 4, 20)  # 召回池，top_k=10 时 pool=40
-
-        # 1. Chroma 语义检索（带真实余弦距离）
-        chroma_raw = self._vectorstore.similarity_search_with_score(query, k=pool_size)
-
-        # 2. BM25 关键词检索
-        bm25_docs = self._bm25_retriever.invoke(query)[:pool_size]
-
-        # 3. RRF 加权融合
+        """单 query 混合检索（RRF 融合 + CE 精排 + 可选上下文扩展）。"""
+        pool_size = max(top_k * 4, 20)
         RRF_K = 60
         rrf_scores: dict[str, float] = {}
         doc_store: dict[str, tuple] = {}  # key → (content, metadata, cosine_sim)
 
+        chroma_raw = self._vectorstore.similarity_search_with_score(query, k=pool_size)
+        bm25_docs = self._bm25_retriever.invoke(query)[:pool_size]
+
         for rank, (doc, l2_dist) in enumerate(chroma_raw):
-            key = doc.page_content[:80]
+            key = self._chunk_key(doc)
             rrf_scores[key] = rrf_scores.get(key, 0) + w_dense / (RRF_K + rank)
-            sim = round(1.0 - l2_dist, 4)
             if key not in doc_store:
-                doc_store[key] = (doc.page_content, doc.metadata, sim)
+                doc_store[key] = (doc.page_content, doc.metadata, round(1.0 - l2_dist, 4))
 
         for rank, doc in enumerate(bm25_docs):
-            key = doc.page_content[:80]
+            key = self._chunk_key(doc)
             rrf_scores[key] = rrf_scores.get(key, 0) + w_bm25 / (RRF_K + rank)
             if key not in doc_store:
                 doc_store[key] = (doc.page_content, doc.metadata, None)
 
-        # BM25-only 结果补算余弦相似度
-        bm25_only_keys = [k for k in doc_store if doc_store[k][2] is None]
-        if bm25_only_keys:
+        # BM25-only 补算余弦相似度
+        bm25_only = [k for k in doc_store if doc_store[k][2] is None]
+        if bm25_only:
             query_emb = np.array(self._embeddings.embed_query(query))
-            for key in bm25_only_keys:
+            for key in bm25_only:
                 content, metadata, _ = doc_store[key]
                 doc_emb = np.array(self._embeddings.embed_documents([content])[0])
                 sim = float(np.dot(query_emb, doc_emb)
                             / (np.linalg.norm(query_emb) * np.linalg.norm(doc_emb) + 1e-8))
                 doc_store[key] = (content, metadata, round(sim, 4))
 
-        # 4. 排序
+        rerank_input = min(top_k * 3, 40)
+        sorted_keys = sorted(rrf_scores, key=lambda k: -rrf_scores[k])[:rerank_input]
+
         if self._reranker and not skip_reranker:
-            rerank_input = min(top_k * 3, 40)  # 精排候选数，top_k=10 时 CE=30
-            candidates = []
-            candidate_keys = []
-            for key in sorted(rrf_scores, key=lambda k: -rrf_scores[k])[:rerank_input]:
-                content, metadata, cosine_sim = doc_store[key]
-                candidates.append({
-                    "content": content,
-                    "metadata": metadata,
-                    "dense_similarity": cosine_sim or 0.0,
-                })
-                candidate_keys.append(key)
-
-            # CE 精排 + 可选 RRF 分数融合
-            self._reranker._load()
-            ce_pairs = [(query, c["content"][:500]) for c in candidates]
-            with self._reranker._infer_lock:
-                ce_scores = [float(x) for x in self._reranker._model.predict(
-                    ce_pairs, show_progress_bar=False)]
-
-            if alpha > 0.0:
-                # Min-max normalize both to [0,1]
-                rrf_vals = [rrf_scores[k] for k in candidate_keys]
-                rrf_min, rrf_max = min(rrf_vals), max(rrf_vals)
-                ce_min, ce_max = min(ce_scores), max(ce_scores)
-                rrf_range = rrf_max - rrf_min or 1e-8
-                ce_range = ce_max - ce_min or 1e-8
-
-                final_scores = []
-                for i, key in enumerate(candidate_keys):
-                    rrf_norm = (rrf_scores[key] - rrf_min) / rrf_range
-                    ce_norm = (ce_scores[i] - ce_min) / ce_range
-                    final = alpha * rrf_norm + (1 - alpha) * ce_norm
-                    final_scores.append((final, i))
-
-                final_scores.sort(key=lambda x: -x[0])
-                results = []
-                for _, idx in final_scores[:top_k]:
-                    c = candidates[idx]
-                    results.append({
-                        "content": c["content"],
-                        "metadata": c["metadata"],
-                        "similarity": round(final_scores[idx][0], 4) if idx < len(final_scores) else ce_scores[idx],
-                        "dense_similarity": c["dense_similarity"],
-                    })
-            else:
-                # Pure CE (alpha=0): delegate to Reranker.rerank
-                ranked = []
-                for i, c in enumerate(candidates):
-                    ranked.append((ce_scores[i], c))
-                ranked.sort(key=lambda x: -x[0])
-                results = []
-                for score, c in ranked[:top_k]:
-                    results.append({
-                        "content": c["content"],
-                        "metadata": c["metadata"],
-                        "similarity": round(float(score), 4),
-                        "dense_similarity": c["dense_similarity"],
-                    })
+            results = self._rrf_ce_fusion(query, rrf_scores, doc_store,
+                                           sorted_keys, top_k, alpha)
         else:
-            # RRF only
-            sorted_keys = sorted(rrf_scores, key=lambda k: -rrf_scores[k])[:top_k]
             results = []
-            for key in sorted_keys:
-                content, metadata, real_sim = doc_store[key]
+            for key in sorted_keys[:top_k]:
+                content, metadata, sim = doc_store[key]
                 results.append({
-                    "content": content,
-                    "metadata": metadata,
-                    "similarity": real_sim or 0.0,
-                    "dense_similarity": real_sim or 0.0,
+                    "content": content, "metadata": metadata,
+                    "similarity": sim or 0.0, "dense_similarity": sim or 0.0,
                 })
 
-        # 5. 同 section 上下文扩展（命中 chunk ±1）
         if expand_context:
-            expanded = []
-            seen_windows = set()
-            for r in results:
-                sid = r["metadata"].get("section_id", "")
-                chunk_idx = r["metadata"].get("chunk_index", 0)
-
-                if sid and sid in self._section_index:
-                    section_chunks = self._section_index[sid]
-                    chunk_count = len(section_chunks)
-                    start = max(0, chunk_idx - 1)
-                    end = min(chunk_count - 1, chunk_idx + 1)
-
-                    # 同一 section 内去重：相同窗口只保留一次
-                    window_key = f"{sid}:{start}:{end}"
-                    if window_key in seen_windows:
-                        continue
-                    seen_windows.add(window_key)
-
-                    parts = []
-                    heading_path = r["metadata"].get("heading_path", [])
-                    if heading_path:
-                        parts.append(" > ".join(heading_path))
-
-                    for i in range(start, end + 1):
-                        if i < len(section_chunks):
-                            parts.append(section_chunks[i]["content"])
-
-                    r["content"] = "\n\n---\n\n".join(parts)
-                    r["context_range"] = [start, end]
-
-                expanded.append(r)
-            results = expanded
+            results = self._expand_results(results)
 
         return results
 

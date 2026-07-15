@@ -14,6 +14,9 @@
 | 2026-07-12 | **Union 实验（已否定）**：Dense top-30 + BM25 top-10 → Union → CE。R@10 从 80.0% 跌至 76.1%，R@10=0 从 36 升至 43。BM25 只放 10 个候选丢掉太多好结果，RRF 的互补效应不可替代。**已回退 RRF。** 详见"十一、Union 融合实验（2026-07-12，已否定）" |
 | 2026-07-13 | **CE 逐题增益分析**：对比 RRF-only vs RRF+CE 每道题，CE 救回 14 道、搅黄 12 道，净增益 +2。CE 对 cross_section 最有效（+4），但对 query_rewrite 和 cross_document 几乎对等。详见"十二、CE 逐题增益分析（2026-07-13）" |
 | 2026-07-13 | **RRF+CE 分数融合 Alpha 扫描**：实现 `final = alpha * RRF_norm + (1-alpha) * CE_norm` 加权融合（min-max 归一化），扫描 alpha=[0, 0.2, 0.3, 0.4, 0.5]。alpha=0.2 最优：R@10=82.2%（vs 78.3% baseline，vs 78.9% pure CE），R@10=0 从 39 降至 32（-7 题）。alpha=0.2 已设为生产默认值。详见"十三、RRF+CE 分数融合与 Alpha 扫描（2026-07-13）" |
+| 2026-07-14 | **新 Rewrite Prompt + Gate 触发逻辑**：重写 `REWRITE_PROMPT`（none/normalize/expand 三类型）、`_needs_rewrite` 门控（length>12 + top1<0.70）、修复 Q_L09/Q_L12 gold 标注、移除 Q_L05。+Rewrite+Reranker：MRR=0.6169、R@10=83.8%、R@10=0=29（-9 vs 旧 rewrite）。详见"十四、新 Rewrite Prompt 与 Gate 触发（2026-07-14）" |
+| 2026-07-14 | **Late Fusion 架构**：全部 query（原始 + 改写）共享一轮 RRF 池→单次 CE 精排，替代旧 Append 架构（per-query RRF+CE→merge）。结果：MRR 和 Top1 下降（vs Append），R@5 略升。详见"十五、Late Fusion 架构评测（2026-07-14）" |
+| 2026-07-15 | **Hybrid Fusion 实验（已否定）**：Original 独立 CE + Rewrite RRF 投票加分（β=0.01）。R@10=82.7%（第二），但 MRR=0.5568 为所有 reranker 配置最差，甚至低于 Baseline。**已回退 Append。** 详见"十六、Hybrid Fusion 实验（2026-07-15，已否定）" |
 
 ---
 
@@ -538,3 +541,325 @@ final = alpha * RRF_norm + (1-alpha) * CE_norm
 2. **分数融合优于纯 CE**：加入少量 RRF 先验（20%）能有效抑制 CE 的过偏，同时保留精排能力
 3. **不推荐 alpha>0.3**：RRF 先验过强时 MRR 开始下降，CE 的语义匹配优势被压制
 4. **后续方向**：RRF top-3 强制保留策略可与分数融合叠加，预计进一步降低搅黄至接近 0
+
+---
+
+## 十四、新 Rewrite Prompt 与 Gate 触发（2026-07-14）
+
+### 14.1 变更内容
+
+| 变更 | 说明 |
+|------|------|
+| `REWRITE_PROMPT` 重写 | 明确 none/normalize/expand 三种输出类型，新增 few-shot 示例和术语映射表 |
+| `_needs_rewrite` 门控 | 两个条件均满足才触发：`len(query) > 12` 且 `top1_sim < 0.70` |
+| Gold 标注修复 | Q_L09、Q_L12 gold chunks 修正；Q_L05 因标注不可靠移除 |
+| 评测集 | In-domain 从 180→179 题（移除 Q_L05） |
+
+**架构**：旧 Append 架构（原始 query → RRF+CE，子查询 → RRF-only skip_reranker，merge 去重），alpha=0.2。
+
+### 14.2 整体指标
+
+```
+题目数: 179  耗时: 1927.0s  改写触发: 158/199 (79.4%)
+
+  MRR:             0.6169
+  Recall@5:        0.7598 (76.0%)
+  Recall@10:       0.8380 (83.8%)
+  Top-1 命中率:    0.5196 (52.0%)
+  平均命中 chunk:  1.2 / 1.6
+  Recall@10=0:     29/179
+```
+
+### 14.3 按 Capability
+
+| Capability | n | MRR | R@5 | R@10 | Top1 |
+|------------|----|------|------|------|------|
+| exact_retrieval | 35 | 0.784 | 0.886 | 0.886 | 0.714 |
+| context_expansion | 25 | 0.768 | 0.920 | 0.920 | 0.680 |
+| cross_section | 25 | 0.482 | 0.680 | 0.880 | 0.360 |
+| cross_document | 30 | 0.455 | 0.600 | 0.700 | 0.333 |
+| table_retrieval | 20 | 0.560 | 0.800 | 0.850 | 0.400 |
+| numeric_retrieval | 20 | 0.827 | 0.900 | 0.950 | 0.800 |
+| query_rewrite | 24 | 0.430 | 0.542 | 0.708 | 0.333 |
+
+### 14.4 按 Difficulty
+
+| Difficulty | n | MRR | R@5 | R@10 |
+|------------|----|------|------|------|
+| easy | 131 | 0.6800 | 0.8244 | 0.8702 |
+| medium | 37 | 0.5020 | 0.6757 | 0.8378 |
+| hard | 11 | 0.2516 | 0.2727 | 0.4545 |
+
+### 14.5 R@10=0 漏召回（29 题）
+
+```
+Q_E23 (exact_retrieval, easy): 新疆的地理位置有什么特点？东西和南北跨度有多大？
+Q_E24 (exact_retrieval, easy): 新疆冬小麦区划报告中列举了哪些主栽品种和示范品种？
+Q_E30 (exact_retrieval, easy): 辽宁省春玉米干旱灾害区划基于什么核心指标？
+Q_E33 (exact_retrieval, easy): 新疆冬小麦产量划分标准分为几个等级？
+Q_C18 (context_expansion, easy): 新疆冬小麦品质性状与气候因子之间的关系模型是如何建立的？
+Q_C25 (context_expansion, easy): 陕西省苹果品质气候区划采用什么方法进行综合评价？
+Q_S04 (cross_section, easy): 陕西苹果气候区划报告中种植适宜性、产量和品质区划分别从哪些维度进行？
+Q_S15 (cross_section, easy): 新疆冬小麦区划中南疆和北疆的冬小麦种植适宜性有什么差异？
+Q_D04 (cross_document, hard): 内蒙古大豆区划和陕西苹果区划在指标体系构建和空间分析方法上有什么共性和差异？
+Q_D05 (cross_document, hard): 黑龙江省区划报告中大豆不同生育期的活动积温空间分布有什么特征？
+```
+
+### 14.6 OOD 检测
+
+```
+OOD 召回率: 15/20 (75.0%)  漏判: 5
+分层: signal=0 high_sim=3 score=8 llm=9
+```
+
+5 个漏判题与之前一致（Q_U03、Q_U04、Q_U05、Q_CF05、Q_CF06），OOD 检测器未变。
+
+### 14.7 vs 旧 Rewrite Prompt（第一节表格）
+
+| 指标 | 旧 +RW+Reranker | 新 +RW+Reranker | Δ |
+|------|-----------------|-----------------|----|
+| MRR | 0.5938 | 0.6169 | **+0.0231** |
+| R@5 | 70.6% | 76.0% | **+5.4%** |
+| R@10 | 78.9% | 83.8% | **+4.9%** |
+| Top1 | 50.0% | 52.0% | **+2.0%** |
+| R@10=0 | 38 | 29 | **-9** |
+
+### 14.8 结论
+
+1. **新 Rewrite Prompt 全面提升**：MRR +0.023，R@10 +4.9pp，漏召回 -9 题
+2. **Gate 门控有效**：79.4% 触发改写（vs 旧 100% 无差别改写），改写更精准
+3. **numeric_retrieval 提升最明显**：MRR 0.827（+0.156 vs baseline），受益于术语标准化
+4. **cross_document 仍是最短板**：R@10=70%，改写对此能力的帮助有限
+
+---
+
+## 十五、Late Fusion 架构评测（2026-07-14）
+
+### 15.1 架构变更
+
+| 维度 | 旧 Append | 新 Late Fusion |
+|------|-----------|----------------|
+| 候选池 | per-query 独立 RRF | 全部 query 共享一个 RRF 池 |
+| CE 精排 | 原始 query 过 CE，子查询跳过 | 统一 top-40 过一次 CE |
+| 合并时机 | per-query RRF+CE 后 append 去重 | RRF 打分时就合并（多 query 累加 RRF） |
+| 子查询信号 | 子查询只在 RRF 轮参与，不进 CE | 子查询与原始 query 在 RRF 中同台竞争，共享 CE |
+
+**动机**：避免子查询召回的高价值 chunk 因 skip_reranker 而缺少 CE 信号，导致 cross_document/cross_section 等能力受限。
+
+**配置**：alpha=0.2，pool_size=40，rerank_input=min(top_k*3, 40)=30。
+
+### 15.2 整体指标
+
+```
+题目数: 179  耗时: 1475.0s  改写触发: 154/199 (77.4%)
+
+  MRR:             0.5758
+  Recall@5:        0.7542 (75.4%)
+  Recall@10:       0.8101 (81.0%)
+  Top-1 命中率:    0.4581 (45.8%)
+  平均命中 chunk:  1.1 / 1.6
+  Recall@10=0:     34/179
+```
+
+### 15.3 按 Capability
+
+| Capability | n | MRR | R@5 | R@10 | Top1 |
+|------------|----|------|------|------|------|
+| exact_retrieval | 35 | 0.745 | 0.886 | 0.886 | 0.629 |
+| context_expansion | 25 | 0.683 | 0.880 | 0.920 | 0.560 |
+| cross_section | 25 | 0.446 | 0.640 | 0.720 | 0.320 |
+| cross_document | 30 | 0.514 | 0.667 | 0.667 | 0.433 |
+| table_retrieval | 20 | 0.437 | 0.800 | 0.900 | 0.250 |
+| numeric_retrieval | 20 | 0.671 | 0.900 | 0.900 | 0.500 |
+| query_rewrite | 24 | 0.466 | 0.500 | 0.708 | 0.417 |
+
+### 15.4 按 Difficulty
+
+| Difficulty | n | MRR | R@5 | R@10 |
+|------------|----|------|------|------|
+| easy | 131 | 0.6191 | 0.8092 | 0.8550 |
+| medium | 37 | 0.5060 | 0.6757 | 0.7838 |
+| hard | 11 | 0.2955 | 0.3636 | 0.3636 |
+
+### 15.5 R@10=0 漏召回（34 题）
+
+```
+Q_E23 (exact_retrieval, easy): 新疆的地理位置有什么特点？东西和南北跨度有多大？
+Q_E24 (exact_retrieval, easy): 新疆冬小麦区划报告中列举了哪些主栽品种和示范品种？
+Q_E30 (exact_retrieval, easy): 辽宁省春玉米干旱灾害区划基于什么核心指标？
+Q_E33 (exact_retrieval, easy): 新疆冬小麦产量划分标准分为几个等级？
+Q_C18 (context_expansion, easy): 新疆冬小麦品质性状与气候因子之间的关系模型是如何建立的？
+Q_C25 (context_expansion, easy): 陕西省苹果品质气候区划采用什么方法进行综合评价？
+Q_S01 (cross_section, medium): 内蒙古大豆种植气候区划中选用了哪些区划指标？各指标的分级阈值是多少？
+Q_S04 (cross_section, easy): 陕西苹果气候区划报告中种植适宜性、产量和品质区划分别从哪些维度进行？
+Q_S05 (cross_section, easy): 新疆冬小麦气候区划从哪几个维度进行？产量提升建议与区划结果有什么关联？
+Q_S07 (cross_section, easy): 内蒙古大豆多种灾害（干旱、霜冻、食心虫）风险区划在指标体系和方法上有什么共性和差异？
+```
+
+### 15.6 OOD 检测
+
+```
+OOD 召回率: 15/20 (75.0%)  漏判: 5
+分层: signal=0 high_sim=3 score=5 llm=12
+```
+
+漏判题与第十四节一致（Q_U03、Q_U04、Q_U05、Q_CF05、Q_CF06）。
+
+### 15.7 全配置对比（含 Late Fusion）
+
+| Config | MRR | R@5 | R@10 | Top1 | R@10=0 | 架构 |
+|--------|------|------|------|------|--------|------|
+| Baseline | 0.5692 | 70.6% | 78.3% | 47.8% | 39 | — |
+| +Rewrite only | 0.4785 | 58.9% | 68.9% | 38.3% | 56 | Append |
+| +Reranker only | 0.6092 | 72.8% | 80.0% | 51.7% | 36 | — |
+| **+RW+Reranker (新 prompt, Append)** | **0.6169** | **76.0%** | **83.8%** | **52.0%** | **29** | Append |
+| +RW+Reranker (Late Fusion) | 0.5758 | 75.4% | 81.0% | 45.8% | 34 | Late Fusion |
+
+### 15.8 Late Fusion vs Append 逐能力对比
+
+| Capability | Append MRR | LF MRR | Δ MRR | Append R@10 | LF R@10 | Δ R@10 |
+|------------|-----------|--------|-------|-------------|---------|--------|
+| exact_retrieval | 0.784 | 0.745 | -0.039 | 0.886 | 0.886 | 0 |
+| context_expansion | 0.768 | 0.683 | -0.085 | 0.920 | 0.920 | 0 |
+| cross_section | 0.482 | 0.446 | -0.036 | 0.880 | 0.720 | **-0.160** |
+| cross_document | 0.455 | 0.514 | **+0.059** | 0.700 | 0.667 | -0.033 |
+| table_retrieval | 0.560 | 0.437 | -0.123 | 0.850 | 0.900 | +0.050 |
+| numeric_retrieval | 0.827 | 0.671 | -0.156 | 0.950 | 0.900 | -0.050 |
+| query_rewrite | 0.430 | 0.466 | +0.036 | 0.708 | 0.708 | 0 |
+
+### 15.9 分析
+
+**Late Fusion 为什么整体变差？**
+
+1. **多 query RRF 累加引入噪声**：改写查询的 BM25/Dense 结果与原始 query 共享 RRF 池，改写查询召回的 chunk 获得额外 RRF 加分，挤占了原始 query 的高质量候选。原始 query 本身的 CE 评分是最可靠的信号，Late Fusion 稀释了这一优势。
+
+2. **单次 CE 覆盖不足**：旧架构原始 query 过 CE 时面对的是 RRF 精选后的 top-30，干扰少。Late Fusion 的 RRF top-40 混合了多个 query 的结果，CE 需要从更嘈杂的候选池中挑选，精度下降。
+
+3. **cross_section R@10 暴跌 -16pp**：cross_section 需要跨 section 对比，改写查询容易引入不相关 section，在 RRF 累加后排名上升，挤掉了正确答案。
+
+4. **cross_document MRR 微涨 +0.059**：Late Fusion 的设计动机（让改写 query 的 CE 信号参与排序）对 cross_document 产生了预期的正面效果，但幅度有限，且 R@10 反而 -0.033。
+
+**结论**：
+
+- Late Fusion 在 R@5 上持平（75.4% vs 76.0%），但 MRR 和 Top1 显著下降
+- **不推荐 Late Fusion**：Append 架构中原始 query 独占 CE 精排信号的优势不容忽视
+- **建议回退 Append 架构**，将新 rewrite prompt（第十四节）作为生产配置
+- cross_document 的改善方向应探索其他策略（如 query 分解后独立检索+LLM 汇总），而非改变融合架构
+
+### 15.10 代码改动
+
+| 文件 | 修改 |
+|------|------|
+| `hybrid_search.py` | 新增 `_chunk_key()` chunk_id 去重 helper |
+| `hybrid_search.py` | 新增 `_expand_results()` 上下文扩展 helper |
+| `hybrid_search.py` | 新增 `_rrf_ce_fusion()` RRF+CE 融合 helper |
+| `hybrid_search.py` `search_multi_query()` | 完全重写为 Late Fusion |
+| `hybrid_search.py` `search()` | 重构使用三个 helper，减少 ~85 行 |
+| `hybrid_search.py` `_init()` | BM25 metadata 补全 chunk_id + chunk_index |
+
+---
+
+## 十六、Hybrid Fusion 实验（2026-07-15，已否定）
+
+### 16.1 架构
+
+用户提出的两级 Hybrid Fusion：
+
+```
+Level 1:  Original → RRF → Top30 → CE → Scored Candidates
+          Rewrite → RRF → Top20 → chunk keys (投票)
+
+Level 2:  Score Fusion
+          Final = CE_Score + β × RewriteVote  (β=0.01)
+          Rewrite 只加分不推翻，Original 没有的候选可补入
+```
+
+**设计意图**：Rewrite 作为轻量投票信号，不进入 CE 管线，避免噪声干扰 original 的精确排序。
+
+### 16.2 整体指标
+
+```
+题目数: 179  耗时: 3242.9s  改写触发: 154/199 (77.4%)
+
+  MRR:             0.5568
+  Recall@5:        0.7430 (74.3%)
+  Recall@10:       0.8268 (82.7%)
+  Top-1 命中率:    0.4358 (43.6%)
+  平均命中 chunk:  1.1 / 1.6
+  Recall@10=0:     31/179
+```
+
+### 16.3 按 Capability
+
+| Capability | n | MRR | R@5 | R@10 | Top1 |
+|------------|----|------|------|------|------|
+| exact_retrieval | 35 | 0.715 | 0.886 | 0.886 | 0.600 |
+| context_expansion | 25 | 0.693 | 0.920 | 0.920 | 0.560 |
+| cross_section | 25 | 0.477 | 0.680 | 0.840 | 0.360 |
+| cross_document | 30 | 0.423 | 0.600 | 0.700 | 0.300 |
+| table_retrieval | 20 | 0.397 | 0.800 | 0.900 | 0.200 |
+| numeric_retrieval | 20 | 0.733 | 0.900 | 0.900 | 0.600 |
+| query_rewrite | 24 | 0.421 | 0.417 | 0.667 | 0.375 |
+
+### 16.4 按 Difficulty
+
+| Difficulty | n | MRR | R@5 | R@10 |
+|------------|----|------|------|------|
+| easy | 131 | 0.6189 | 0.8092 | 0.8702 |
+| medium | 37 | 0.4284 | 0.6486 | 0.7838 |
+| hard | 11 | 0.2487 | 0.2727 | 0.4545 |
+
+### 16.5 OOD 检测
+
+```
+OOD 召回率: 14/20 (70.0%)  漏判: 6
+分层: signal=0 high_sim=3 score=9 llm=8
+```
+
+新增漏判 Q_CF02，其他 5 题与之前一致。
+
+### 16.6 全架构对比
+
+| Config | MRR | R@5 | R@10 | Top1 | R@10=0 | 耗时 |
+|--------|------|------|------|------|--------|------|
+| Baseline | 0.5692 | 70.6% | 78.3% | 47.8% | 39 | 18s |
+| +Rewrite only | 0.4785 | 58.9% | 68.9% | 38.3% | 56 | 329s |
+| +Reranker only | 0.6092 | 72.8% | 80.0% | 51.7% | 36 | 3499s |
+| **+RW+Reranker (Append)** | **0.6169** | **76.0%** | **83.8%** | **52.0%** | **29** | 1927s |
+| +RW+Reranker (Late Fusion) | 0.5758 | 75.4% | 81.0% | 45.8% | 34 | 1475s |
+| +RW+Reranker (Hybrid Fusion) | 0.5568 | 74.3% | 82.7% | 43.6% | 31 | 3243s |
+
+### 16.7 vs Append 逐能力 Δ
+
+| Capability | Append MRR | HF MRR | Δ MRR | Append R@10 | HF R@10 | Δ R@10 |
+|------------|-----------|--------|-------|-------------|---------|--------|
+| exact_retrieval | 0.784 | 0.715 | -0.069 | 0.886 | 0.886 | 0 |
+| context_expansion | 0.768 | 0.693 | -0.075 | 0.920 | 0.920 | 0 |
+| cross_section | 0.482 | 0.477 | -0.005 | 0.880 | 0.840 | -0.040 |
+| cross_document | 0.455 | 0.423 | -0.032 | 0.700 | 0.700 | 0 |
+| table_retrieval | 0.560 | 0.397 | **-0.163** | 0.850 | 0.900 | +0.050 |
+| numeric_retrieval | 0.827 | 0.733 | -0.094 | 0.950 | 0.900 | -0.050 |
+| query_rewrite | 0.430 | 0.421 | -0.009 | 0.708 | 0.667 | -0.041 |
+
+### 16.8 分析
+
+**Hybrid Fusion 为什么失败？**
+
+1. **MRR 0.5568 为所有 reranker 配置最差**，甚至低于 Baseline（0.5692）。说明加了 Rewrite 反而比不用 Rewrite 差。
+
+2. **Medium 难度暴跌**：MRR 从 0.5020（Append）降到 0.4284（-7.4pp）。中等难度题需要改写来补全上下文，但 Hybrid Fusion 的 bonus-only 机制无法有效利用改写信号。
+
+3. **table_retrieval MRR -0.163**：表格类问题受影响最大。Rewrite-only 候选以 base_score 补入 top-k，挤占了 original CE 排序中本应在的表格 chunk。
+
+4. **β=0.01 太小**：3 票才 +0.03，不足以弥补排序差距。但如果增大 β，会违背"不推翻 original"的设计原则，退化为噪声。
+
+5. **rewrite-only 候选占位**：base_score 补入的 rewrite-only chunk 质量不可靠（无 CE 信号），占用了 top-k 位置。
+
+6. **耗时 3243s**：每个 rewrite query 独立做 Chroma+BM25，无共享，比 Append 慢 68%。
+
+### 16.9 结论
+
+1. **Hybrid Fusion 不推荐**：所有指标（除 R@10）均为最差，Medium 难度严重退化
+2. **Append 架构仍是最优**：Original 独占 CE 管线 + Rewrite skip_reranker 追加，简单有效
+3. **核心洞察**：Rewriter 的 RRF 信号质量远不如 Original 的 CE 信号，无论用 Late Fusion 还是 Hybrid Fusion 混合，都会稀释 Original CE 的精度优势
+4. **已回退 Append**，作为生产配置

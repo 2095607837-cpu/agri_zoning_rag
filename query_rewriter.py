@@ -18,9 +18,91 @@ from llm_client import call_llm
 
 BASE_DIR = Path(__file__).resolve().parent
 CACHE_FILE = BASE_DIR / "data" / "rewrite_cache.json"
+TERM_MAP_FILE = BASE_DIR / "data" / "terminology_mapping.json"
 
 _cache = OrderedDict()
 CACHE_MAX = 500
+
+# ── 术语映射表（口语→规范术语，确定性）──
+_term_map: dict[str, str] = {}   # 扁平表: 口语词 → 规范术语
+_term_categories: list[dict] = []  # 分类列表, 供 prompt 引用
+
+def _load_term_map():
+    """加载 terminology_mapping.json → 扁平 dict + 分类列表。"""
+    global _term_map, _term_categories
+    if not TERM_MAP_FILE.exists():
+        return
+    try:
+        with open(TERM_MAP_FILE, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception:
+        return
+
+    _term_categories = []
+    for cat_name, mappings in data.items():
+        if cat_name.startswith("_"):
+            continue
+        cat_entries = []
+        for spoken, standard in mappings.items():
+            # 跳过单字（确定性匹配用不上，prompt 中也误导）和自身映射（无增益）
+            if len(spoken) <= 1 or spoken == standard:
+                continue
+            _term_map[spoken] = standard
+            cat_entries.append({"spoken": spoken, "standard": standard})
+        if cat_entries:
+            _term_categories.append({"category": cat_name, "entries": cat_entries})
+
+
+def _apply_terminology_map(query: str) -> list[str]:
+    """确定性扫描 query 中已知口语词，返回映射后的规范术语列表（去重、最长匹配优先）。"""
+    if not _term_map:
+        return []
+    # 按口语词长度降序排列，确保长词优先匹配
+    sorted_keys = sorted(_term_map.keys(), key=len, reverse=True)
+    matched_terms: list[str] = []
+    matched_spans: list[tuple[int, int]] = []
+    for key in sorted_keys:
+        # 跳过单字（太容易误匹配）
+        if len(key) <= 1:
+            continue
+        # 查找所有非重叠匹配
+        start = 0
+        while True:
+            idx = query.find(key, start)
+            if idx == -1:
+                break
+            span = (idx, idx + len(key))
+            # 检查是否与已有匹配重叠
+            if not any(s <= span[0] < e or s < span[1] <= e for s, e in matched_spans):
+                matched_spans.append(span)
+                term = _term_map[key]
+                if term not in matched_terms:
+                    matched_terms.append(term)
+            start = idx + 1
+    return matched_terms
+
+
+def _build_term_map_prompt_snippet(max_entries: int = 60) -> str:
+    """从映射表生成 prompt 片段，均匀覆盖所有类别。"""
+    if not _term_categories:
+        return ""
+    n_cats = len(_term_categories)
+    per_cat = max(1, max_entries // n_cats)  # 每类均匀取
+    lines = []
+    shown = 0
+    for cat in _term_categories:
+        if shown >= max_entries:
+            break
+        for e in cat["entries"][:per_cat]:
+            if shown >= max_entries:
+                break
+            lines.append(f'  - "{e["spoken"]}" → {e["standard"]}')
+            shown += 1
+    return "\n".join(lines)
+
+
+# 模块加载时初始化
+_load_term_map()
 
 REWRITE_PROMPT = ChatPromptTemplate.from_messages([
     ("user", """你是一个农业气候区划领域的检索查询改写器。
@@ -45,24 +127,15 @@ REWRITE_PROMPT = ChatPromptTemplate.from_messages([
 - 每条从不同角度切入：如"指标/方法/阈值/空间分布/影响因素/等级划分/计算公式/历史变化"
 - 避免同义反复，确保命中不同 chunk
 
-### 口语→术语映射参考（normalize 时强制使用，无对应则跳过）
-- "冷害风险指数低风险区" → 冷害风险指数、等级划分、低风险区阈值
-- "生长季气候要素变化" → 生长季、气候要素、变化特征、趋势分析
-- "热量指标空间推算" → 空间推算方法、克里金/多元回归、无霜期/温度
-- "气候倾向率/保证率" → 气候倾向率、保证率、计算方法、适用条件
-- "普查技术规范" → 农业气候资源普查、技术规范、气候要素计算方法
-- "全国指标与本地化" → 全国农业气候区划、指标算法、本地化调整
-- "不同省份框架异同" → 框架设计、普查流程、指标体系、对比分析
-- "光照好不好/阳光够不够" → 日照百分率、日照时数、太阳辐射
-- "怕不怕冷/会不会太冷" → 低温冷害、霜冻、积温、冷害风险指数
-- "水太多/田里水多" → 渍涝、土壤含水量、水分亏缺指数
-- "什么时候种/收" → 播种期、成熟期、生育期、积温阈值
-- "选什么地方最好" → 适宜性区划、≥10℃活动积温、等级划分
-- "打药防虫" → 食心虫、综合气象风险指数、防治
-- "结果的时候" → 幼果期、花芽分化、萌芽期
-- "高温伤害/高温胁迫" → 高温热害指数
-- "缺水/干旱" → 干旱风险区划、水分亏缺指数、CWDI
-- "风刮得庄稼受不了/大风" → 干热风、高温低湿、农业气象灾害
+### 口语→术语映射表（normalize 时**强制查表**，不要自己猜！）
+以下映射表覆盖了农业气候区划领域的常见口语词及其对应规范术语。
+改写时**必须**先查下表：query 中出现左侧口语词，直接映射为右侧规范术语。
+表中**没有**的口语词才允许自行推断，但要保守——不确定就保持原表达。
+
+{term_map_snippet}
+
+如果问题中出现了上表**没有**的口语/模糊表达，参考上表的风格自行映射为知识库术语。
+不确定时保持原表达，不要臆造术语。
 
 ### 核心约束
 1. **意图保持**: 改写后与原问题意图完全一致，不扩大/缩小范围
@@ -125,19 +198,45 @@ Q: 内蒙古大豆区划和陕西苹果区划在指标体系上有什么差异�
 ])
 
 
-def _needs_rewrite(query: str, top1_sim: float = 0.0) -> bool:
-    """评分判断是否需要 LLM 改写。
-    跳过：极短查询（≤12字）或初次检索已足够好（top1_sim ≥ 0.70）。"""
+def _needs_rewrite(query: str, top1_sim: float = 0.0, top2_sim: float = 0.0) -> bool:
+    """多信号门控：判断是否需要 LLM 改写。
+
+    信号优先级（任一命中 → 触发改写）：
+      1. 已知口语词命中 → 直接触发（确定性最强）
+      2. 检索器不确定（top1-top2 margin < 0.03）→ 触发
+      3. top1 自身很低（< 0.72）→ 触发
+
+    同时满足以下所有条件才跳过 LLM：
+      - query > 12 字
+      - 口语词未命中
+      - margin ≥ 0.03（检索器确定）
+      - top1_sim ≥ 0.72（检索质量够好）
+    """
     if len(query) <= 12:
         return False
-    if top1_sim >= 0.70:
-        return False
-    return True
+
+    # 信号 1：已知口语词 → 一定改写
+    if _apply_terminology_map(query):
+        return True
+
+    # 信号 2：检索器不确定 → 改写
+    margin = top1_sim - top2_sim
+    if margin < 0.03:
+        return True
+
+    # 信号 3：top1 低于阈值 → 改写
+    if top1_sim < 0.72:
+        return True
+
+    return False
 
 
 def _llm_rewrite(query: str) -> dict:
     """一次 LLM 调用完成改写。"""
-    prompt = REWRITE_PROMPT.format(query=query)
+    prompt = REWRITE_PROMPT.format(
+        query=query,
+        term_map_snippet=_build_term_map_prompt_snippet(),
+    )
     prompt_str = prompt.to_string() if hasattr(prompt, 'to_string') else str(prompt)
     try:
         resp = call_llm(
@@ -221,17 +320,18 @@ def precompute_rewrites(queries: list[str], mode: str = "all"):
     print(f"[rewriter] 已缓存 {len(_cache)} 条改写结果 → {CACHE_FILE}")
 
 
-def expand_query(query: str, mode: str = "all", top1_sim: float = 0.0) -> list[str]:
+def expand_query(query: str, mode: str = "all", top1_sim: float = 0.0, top2_sim: float = 0.0) -> list[str]:
     """
     扩展查询，返回扩展后的查询列表供多路检索使用。
     mode: "keywords" | "multi_view" | "all"
-    top1_sim: 原始 query 检索 top-1 相似度，<0.70 才触发改写
+    top1_sim: 原始 query 检索 top-1 相似度
+    top2_sim: 原始 query 检索 top-2 相似度（用于 margin 门控）
     """
     cache_key = query.strip()
     if cache_key in _cache:
         _cache.move_to_end(cache_key)
         entry = _cache[cache_key]
-    elif not _needs_rewrite(cache_key, top1_sim):
+    elif not _needs_rewrite(cache_key, top1_sim, top2_sim):
         entry = {"rewrite_type": "none", "keywords": [], "sub_queries": [], "confidence": 1.0}
         _cache[cache_key] = entry
         _cache.move_to_end(cache_key)
@@ -245,6 +345,13 @@ def expand_query(query: str, mode: str = "all", top1_sim: float = 0.0) -> list[s
             _cache.popitem(last=False)
 
     queries = [query]
+
+    # 确定性术语映射：扫描 query 中已知口语词，注入规范术语关键词
+    mapped_terms = _apply_terminology_map(query)
+    if mode in ("keywords", "all"):
+        for term in mapped_terms:
+            if term and term not in queries:
+                queries.append(term)
 
     if mode in ("keywords", "all"):
         for kw in entry.get("keywords", []):

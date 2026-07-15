@@ -23,9 +23,14 @@ print(f"[eval] 总题数: {len(gs)} | In-domain: {len(indomain_qs)} | OOD: {len(
 
 # Load rewrite cache (all 200 questions already cached)
 from query_rewriter import expand_query
+from hybrid_search import HybridSearcher
+_searcher = HybridSearcher(enable_reranker=False)
 rewrite_map = {}
 for q in gs:
-    expanded = expand_query(q["question"], mode="all")
+    initial = _searcher.search(q["question"], top_k=2, expand_context=True)
+    top1_sim = initial[0].get("similarity", 0) if len(initial) > 0 else 0
+    top2_sim = initial[1].get("similarity", 0) if len(initial) > 1 else 0
+    expanded = expand_query(q["question"], mode="all", top1_sim=top1_sim, top2_sim=top2_sim)
     rewrite_map[q["question"]] = expanded[1:] if len(expanded) > 1 else []
 print(f"[eval] Rewrite: {sum(1 for v in rewrite_map.values() if v)}/{len(gs)} 题有改写查询", flush=True)
 
@@ -149,10 +154,9 @@ def run_eval(name, searcher, use_rewrite):
 
 
 # ── Init searchers ──
-from hybrid_search import HybridSearcher
 
 print("\n[eval] 加载 Searcher (no reranker)...", flush=True)
-searcher_base = HybridSearcher(enable_reranker=False)
+searcher_base = _searcher  # 复用 rewrite 阶段已初始化的 searcher
 
 print("[eval] 加载 Searcher (with reranker)...", flush=True)
 searcher_rerank = HybridSearcher(enable_reranker=True)

@@ -23,15 +23,19 @@ for c in chunks:
 indomain_qs = [q for q in gs if q["capability"] != "ood_detection"]
 print(f"[eval] In-domain: {len(indomain_qs)} 题", flush=True)
 
-from query_rewriter import expand_query, _needs_rewrite
+from query_rewriter import expand_query
+from hybrid_search import HybridSearcher
+_searcher = HybridSearcher(enable_reranker=False)
 rewrite_map = {}
 for q in indomain_qs:
-    ex = expand_query(q["question"], mode="all")
+    initial = _searcher.search(q["question"], top_k=2, expand_context=True)
+    top1_sim = initial[0].get("similarity", 0) if len(initial) > 0 else 0
+    top2_sim = initial[1].get("similarity", 0) if len(initial) > 1 else 0
+    ex = expand_query(q["question"], mode="all", top1_sim=top1_sim, top2_sim=top2_sim)
     rewrite_map[q["question"]] = ex[1:] if len(ex) > 1 else []
 print(f"[eval] Rewrite 缓存就绪：{sum(1 for v in rewrite_map.values() if v)}/{len(indomain_qs)} 有改写", flush=True)
 
-from hybrid_search import HybridSearcher
-searcher = HybridSearcher(enable_reranker=False)
+searcher = _searcher
 
 
 def recall_of(results, gold):

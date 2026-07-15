@@ -89,12 +89,13 @@ class RAGPipeline:
         """检索节点：原始 query 检索（供 Judge）+ 改写增强检索（供生成）。"""
         query = state["query"]
 
-        # 快速初始检索，获取 top-1 相似度用于改写决策
-        initial = self._searcher.search(query, top_k=1, expand_context=True)
-        top1_sim = initial[0].get("similarity", 0) if initial else 0
+        # 快速初始检索，获取 top-1/top-2 相似度用于多信号改写决策
+        initial = self._searcher.search(query, top_k=2, expand_context=True)
+        top1_sim = initial[0].get("similarity", 0) if len(initial) > 0 else 0
+        top2_sim = initial[1].get("similarity", 0) if len(initial) > 1 else 0
 
         if self.enable_rewrite:
-            search_queries = expand_query(query, "all", top1_sim=top1_sim)
+            search_queries = expand_query(query, "all", top1_sim=top1_sim, top2_sim=top2_sim)
             extra_queries = [sq for sq in search_queries if sq != query]
         else:
             search_queries = [query]

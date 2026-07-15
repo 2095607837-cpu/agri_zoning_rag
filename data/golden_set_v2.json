@@ -8537,62 +8537,6 @@
     "expected_context_expand": false
   },
   {
-    "id": "Q_L05",
-    "question": "冬小麦什么时候种什么时候收？",
-    "answer": "冬小麦一般在10月播种，次年5月下旬至6月上旬成熟收获。具体时间因不同产区纬度、海拔和气候条件不同而存在差异。新疆冬小麦越冬期120-130天，成熟期在6月中下旬至7月上旬。",
-    "capability": "query_rewrite",
-    "query_type": "fact",
-    "difficulty": "easy",
-    "gold_doc_ids": [
-      "D_P_R_410000_001-农业气候区划报告-河南省"
-    ],
-    "gold_sections": [
-      "s4"
-    ],
-    "gold_chunks": [
-      "D_P_R_410000_001-农业气候区划报告-河南省_s4"
-    ],
-    "retrieval_eval": {
-      "must_retrieve": [
-        "D_P_R_410000_001-农业气候区划报告-河南省_s4"
-      ],
-      "optional_retrieve": [
-        "D_P_R_410000_001-农业气候区划报告-河南省_s3"
-      ],
-      "negative_sections": []
-    },
-    "generator_eval": {
-      "must_include": [
-        "10月播种",
-        "5月下旬",
-        "6月上旬",
-        "成熟收获",
-        "越冬期"
-      ],
-      "must_not_include": [
-        "什么时候种",
-        "什么时候收"
-      ]
-    },
-    "expected_citation": [
-      {
-        "doc_id": "D_P_R_410000_001-农业气候区划报告-河南省",
-        "section": "s4",
-        "heading": "冬小麦生育期"
-      }
-    ],
-    "keywords": [
-      "冬小麦什么时候种什么时候收"
-    ],
-    "difficulty_score": 2,
-    "features": [
-      "rewrite"
-    ],
-    "rewrite_type": "lexical",
-    "expected_chunk_num": 1,
-    "expected_context_expand": false
-  },
-  {
     "id": "Q_L06",
     "question": "田里水太多对大豆有什么影响？",
     "answer": "渍涝使农田土壤含水量过湿或饱和，土壤大孔隙充水缺少空气，造成植株根部环境恶化，生长发育不良，导致减产或品质降低。",
@@ -8769,18 +8713,16 @@
       "新疆冬小麦气候区划报告"
     ],
     "gold_sections": [
-      "s9"
+      "D_P_R_650000_001-新疆冬小麦气候区划报告_sec_9"
     ],
     "gold_chunks": [
-      "新疆冬小麦气候区划报告_s9"
+      "D_P_R_650000_001-新疆冬小麦气候区划报告_s9"
     ],
     "retrieval_eval": {
       "must_retrieve": [
-        "新疆冬小麦气候区划报告_s9"
+        "D_P_R_650000_001-新疆冬小麦气候区划报告_s9"
       ],
-      "optional_retrieve": [
-        "新疆冬小麦气候区划报告_t8"
-      ],
+      "optional_retrieve": [],
       "negative_sections": []
     },
     "generator_eval": {
@@ -8933,18 +8875,16 @@
       "D_P_R_610000_001-陕西苹果气候区划报告"
     ],
     "gold_sections": [
-      "s8"
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_16"
     ],
     "gold_chunks": [
-      "D_P_R_610000_001-陕西苹果气候区划报告_s8"
+      "D_P_R_610000_001-陕西苹果气候区划报告_s16"
     ],
     "retrieval_eval": {
       "must_retrieve": [
-        "D_P_R_610000_001-陕西苹果气候区划报告_s8"
+        "D_P_R_610000_001-陕西苹果气候区划报告_s16"
       ],
-      "optional_retrieve": [
-        "D_P_R_610000_001-陕西苹果气候区划报告_s7"
-      ],
+      "optional_retrieve": [],
       "negative_sections": []
     },
     "generator_eval": {
