@@ -6,7 +6,6 @@
 
 | 日期 | 变更 |
 |------|------|
-| 2026-07-24 | **bge-small 切换 + chunks_split 迁移 + 诊断分桶**：embedding 模型从 bge-large-zh-v1.5→bge-small-zh-v1.5（1024→512 维），chunks 从 chunks.json→chunks_split.json（787 entries, 499 unique section IDs），新增诊断分桶（B/C-RRF/D-CE/E-改写/G-已修复）定位零召回失败环节。+Rewrite+Reranker: MRR=0.5638, R@10=72.1%, R@10=0=50/179。OOD 召回 80.0%。详见"十七、bge-small + chunks_split + 诊断分桶（2026-07-24）" |
 | 2026-07-04 | Baseline / +Rewrite / +Reranker 三配置完成，+Rewrite+Reranker 因嵌套线程池死锁挂起 |
 | 2026-07-05 | 修复：`search()` 新增 `skip_reranker` 参数，子查询跳过 CrossEncoder，CrossEncoder 调用从 1268 次降至 180 次 |
 | 2026-07-06 | +Rewrite+Reranker 配置完成，全四配置汇总 |
@@ -18,6 +17,7 @@
 | 2026-07-14 | **新 Rewrite Prompt + Gate 触发逻辑**：重写 `REWRITE_PROMPT`（none/normalize/expand 三类型）、`_needs_rewrite` 门控（length>12 + top1<0.70）、修复 Q_L09/Q_L12 gold 标注、移除 Q_L05。+Rewrite+Reranker：MRR=0.6169、R@10=83.8%、R@10=0=29（-9 vs 旧 rewrite）。详见"十四、新 Rewrite Prompt 与 Gate 触发（2026-07-14）" |
 | 2026-07-14 | **Late Fusion 架构**：全部 query（原始 + 改写）共享一轮 RRF 池→单次 CE 精排，替代旧 Append 架构（per-query RRF+CE→merge）。结果：MRR 和 Top1 下降（vs Append），R@5 略升。详见"十五、Late Fusion 架构评测（2026-07-14）" |
 | 2026-07-15 | **Hybrid Fusion 实验（已否定）**：Original 独立 CE + Rewrite RRF 投票加分（β=0.01）。R@10=82.7%（第二），但 MRR=0.5568 为所有 reranker 配置最差，甚至低于 Baseline。**已回退 Append。** 详见"十六、Hybrid Fusion 实验（2026-07-15，已否定）" |
+| 2026-07-24 | **bge-small 切换 + chunks_split 迁移 + 诊断分桶**：embedding 模型从 bge-large-zh-v1.5→bge-small-zh-v1.5（1024→512 维），chunks 从 chunks.json→chunks_split.json（787 entries, 499 unique section IDs），新增诊断分桶（B/C-RRF/D-CE/E-改写/G-已修复）定位零召回失败环节。+Rewrite+Reranker: MRR=0.5638, R@10=72.1%, R@10=0=50/179。OOD 召回 80.0%。详见"十七、bge-small + chunks_split + 诊断分桶（2026-07-24）" |
 
 ---
 
