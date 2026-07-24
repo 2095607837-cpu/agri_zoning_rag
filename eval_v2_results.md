@@ -17,28 +17,28 @@
 | 2026-07-14 | **新 Rewrite Prompt + Gate 触发逻辑**：重写 `REWRITE_PROMPT`（none/normalize/expand 三类型）、`_needs_rewrite` 门控（length>12 + top1<0.70）、修复 Q_L09/Q_L12 gold 标注、移除 Q_L05。+Rewrite+Reranker：MRR=0.6169、R@10=83.8%、R@10=0=29（-9 vs 旧 rewrite）。详见"十四、新 Rewrite Prompt 与 Gate 触发（2026-07-14）" |
 | 2026-07-14 | **Late Fusion 架构**：全部 query（原始 + 改写）共享一轮 RRF 池→单次 CE 精排，替代旧 Append 架构（per-query RRF+CE→merge）。结果：MRR 和 Top1 下降（vs Append），R@5 略升。详见"十五、Late Fusion 架构评测（2026-07-14）" |
 | 2026-07-15 | **Hybrid Fusion 实验（已否定）**：Original 独立 CE + Rewrite RRF 投票加分（β=0.01）。R@10=82.7%（第二），但 MRR=0.5568 为所有 reranker 配置最差，甚至低于 Baseline。**已回退 Append。** 详见"十六、Hybrid Fusion 实验（2026-07-15，已否定）" |
-| 2026-07-24 | **bge-small 切换 + chunks_split 迁移 + 诊断分桶**：embedding 模型从 bge-large-zh-v1.5→bge-small-zh-v1.5（1024→512 维），chunks 从 chunks.json→chunks_split.json（787 entries, 499 unique section IDs），新增诊断分桶（B/C-RRF/D-CE/E-改写/G-已修复）定位零召回失败环节。+Rewrite+Reranker: MRR=0.5638, R@10=72.1%, R@10=0=50/179。OOD 召回 80.0%。详见"十七、bge-small + chunks_split + 诊断分桶（2026-07-24）" |
+| 2026-07-24 | **chunks_split 迁移 + 三相管线 + 诊断分桶**：chunks 从 chunks.json→chunks_split.json（787 entries, 499 unique section IDs），search_multi_query 改为三相管线（Dense Protected→RRF+CE→Rewrite RRF-only），新增诊断分桶（B/C-RRF/D-CE/E-改写/G-已修复）定位零召回失败环节。+Rewrite+Reranker: MRR=0.5638, R@10=72.1%, R@10=0=50/179。OOD 召回 80.0%。详见"十七、chunks_split + 三相管线 + 诊断分桶（2026-07-24）" |
 
 ---
 
 ## 版本演进总览
 
-> 所有配置均为 Append 架构、RRF dense/BM25=0.7/0.3、alpha=0.2，除非特别注明。
-> **当前生产配置**：2026-07-14 New Rewrite Prompt Append（bge-large, chunks.json）。
-> ⚠ bge-small 全面劣于 bge-large，见末行。
+> 所有配置均使用 `BAAI/bge-small-zh-v1.5`（512-dim）、Append 架构、RRF dense/BM25=0.7/0.3、alpha=0.2，除非特别注明。
+> **当前生产配置**：2026-07-14 New Rewrite Prompt Append（chunks.json, 旧 Append 管线）。
+> ⚠ 2026-07-24（#10）切换 chunks_split + 三相管线后指标全面退化，见末行。
 
-| # | 版本 | 模型 | Chunks | 题数 | MRR | R@5 | R@10 | Top1 | R@10=0 | OOD | 耗时 |
-|---|------|------|--------|------|------|------|------|------|--------|-----|------|
-| 1 | 2026-07-06 Baseline | bge-large | chunks.json | 180 | 0.5692 | 70.6% | 78.3% | 47.8% | 39 | — | 18s |
-| 2 | 2026-07-06 +Rewrite only | bge-large | chunks.json | 180 | 0.4785 | 58.9% | 68.9% | 38.3% | 56 | — | 329s |
-| 3 | 2026-07-06 +Reranker only | bge-large | chunks.json | 180 | 0.6092 | 72.8% | 80.0% | 51.7% | 36 | — | 3499s |
-| 4 | 2026-07-06 +RW+Reranker (旧 prompt) | bge-large | chunks.json | 180 | 0.5938 | 70.6% | 78.9% | 50.0% | 38 | — | 79493s |
-| 5 | 2026-07-12 +Reranker only (pool=100) | bge-large | chunks.json | 180 | 0.6125 | 72.8% | 80.0% | 52.2% | 36 | — | 1788s |
-| 6 | 2026-07-13 alpha=0.2 (Reranker only) | bge-large | chunks.json | 180 | 0.6074 | 72.2% | **82.2%** | — | **32** | — | — |
-| **7** | **2026-07-14 New RW Prompt Append** | **bge-large** | chunks.json | **179** | **0.6169** | **76.0%** | **83.8%** | **52.0%** | **29** | **75.0%** | **1927s** |
-| 8 | 2026-07-14 Late Fusion | bge-large | chunks.json | 179 | 0.5758 | 75.4% | 81.0% | 45.8% | 34 | 75.0% | 1475s |
-| 9 | 2026-07-15 Hybrid Fusion (已否定) | bge-large | chunks.json | 179 | 0.5568 | 74.3% | 82.7% | 43.6% | 31 | 70.0% | 3243s |
-| 10 | 2026-07-24 bge-small + chunks_split | **bge-small** | chunks_split | 179 | 0.5638 | 66.5% | 72.1% | 48.0% | 50 | **80.0%** | 1556s |
+| # | 版本 | Chunks | 管线 | 题数 | MRR | R@5 | R@10 | Top1 | R@10=0 | OOD | 耗时 |
+|---|------|--------|------|------|------|------|------|------|--------|-----|------|
+| 1 | 2026-07-06 Baseline | chunks.json | RRF | 180 | 0.5692 | 70.6% | 78.3% | 47.8% | 39 | — | 18s |
+| 2 | 2026-07-06 +Rewrite only | chunks.json | Append | 180 | 0.4785 | 58.9% | 68.9% | 38.3% | 56 | — | 329s |
+| 3 | 2026-07-06 +Reranker only | chunks.json | RRF+CE | 180 | 0.6092 | 72.8% | 80.0% | 51.7% | 36 | — | 3499s |
+| 4 | 2026-07-06 +RW+Reranker (旧 prompt) | chunks.json | Append | 180 | 0.5938 | 70.6% | 78.9% | 50.0% | 38 | — | 79493s |
+| 5 | 2026-07-12 +Reranker only (pool=100) | chunks.json | RRF+CE | 180 | 0.6125 | 72.8% | 80.0% | 52.2% | 36 | — | 1788s |
+| 6 | 2026-07-13 alpha=0.2 (Reranker only) | chunks.json | RRF+CE | 180 | 0.6074 | 72.2% | **82.2%** | — | **32** | — | — |
+| **7** | **2026-07-14 New RW Prompt Append** | chunks.json | **Append** | **179** | **0.6169** | **76.0%** | **83.8%** | **52.0%** | **29** | **75.0%** | **1927s** |
+| 8 | 2026-07-14 Late Fusion | chunks.json | Late Fusion | 179 | 0.5758 | 75.4% | 81.0% | 45.8% | 34 | 75.0% | 1475s |
+| 9 | 2026-07-15 Hybrid Fusion (已否定) | chunks.json | Hybrid | 179 | 0.5568 | 74.3% | 82.7% | 43.6% | 31 | 70.0% | 3243s |
+| 10 | 2026-07-24 chunks_split + 三相管线 | **chunks_split** | **三相** | 179 | 0.5638 | 66.5% | 72.1% | 48.0% | 50 | **80.0%** | 1556s |
 
 **关键对比：**
 
@@ -49,9 +49,9 @@
 | 旧 RW prompt → 新 RW prompt | Rewrite 质量提升 | +0.0231 | +4.9pp | -9 |
 | Append → Late Fusion | 架构变更 | -0.0411 | -2.8pp | +5 |
 | Append → Hybrid Fusion | 架构变更 | -0.0601 | -1.1pp | +2 |
-| **bge-large → bge-small** | **模型降级** | **-0.0531** | **-11.7pp** | **+21** |
+| **chunks.json → chunks_split + 三相管线** | **数据+管线变更** | **-0.0531** | **-11.7pp** | **+21** |
 
-**按能力雷达（最新 bge-large 最优配置 #7 vs bge-small #10）：**
+**按能力雷达（#7 chunks.json/Append vs #10 chunks_split/三相管线）：**
 
 | Capability | #7 MRR | #7 R@10 | #10 MRR | #10 R@10 | MRR Δ | R@10 Δ |
 |------------|--------|---------|---------|----------|--------|--------|
@@ -63,7 +63,7 @@
 | numeric_retrieval | 0.827 | 95.0% | 0.685 | 85.0% | **-0.142** | -10.0 |
 | query_rewrite | 0.430 | 70.8% | 0.386 | 50.0% | -0.044 | **-20.8** |
 
-> bge-small 在 cross_section（-32pp）、table_retrieval（-25pp）、query_rewrite（-21pp）三个能力上退化最严重。仅 exact_retrieval 微涨（+5.7pp，猜测 chunks_split 更细粒度对精确匹配有利）。
+> chunks_split + 三相管线在 cross_section（-32pp）、table_retrieval（-25pp）、query_rewrite（-21pp）三个能力上退化最严重。仅 exact_retrieval 微涨（+5.7pp，猜测 chunks_split 更细粒度对精确匹配有利）。
 
 ---
 
@@ -913,7 +913,7 @@ OOD 召回率: 14/20 (70.0%)  漏判: 6
 
 ---
 
-## 十七、bge-small + chunks_split + 诊断分桶（2026-07-24）
+## 十七、chunks_split + 三相管线 + 诊断分桶（2026-07-24）
 
 评测集：`golden_set_v2.json` 199 题（in-domain 179 + OOD 20） | 脚本：`eval_v2_full.py`
 
@@ -921,9 +921,8 @@ OOD 召回率: 14/20 (70.0%)  漏判: 6
 
 | 变更 | 说明 |
 |------|------|
-| Embedding 模型 | `BAAI/bge-large-zh-v1.5`（1024-dim）→ `BAAI/bge-small-zh-v1.5`（512-dim） |
 | Chunks 源 | `chunks.json` → `chunks_split.json`（787 entries, 499 unique section IDs, 89 duplicate IDs with chunk_index） |
-| 评测架构 | `search_multi_query()` 三相管线：Dense Protected (Phase 1) → RRF+CE (Phase 2) → Rewrite RRF-only (Phase 3) |
+| 检索管线 | `search_multi_query()` 从旧 Append 改为三相管线：Dense Protected (Phase 1) → RRF+CE (Phase 2) → Rewrite RRF-only (Phase 3) |
 | 诊断分桶 | 新增 `eval_diagnostic.py` DiagnosticAnalyzer，逐题追溯 gold chunk 在管线中的排名变化 |
 | Gold 标注 | 5 个 EXCLUDED case 修复（PDF→DOCX 等价 chunk），282 个 gold_chunk 全部在 chunks_split.json 中存在 |
 | 进度输出 | 每 20 题输出进度、耗时、预估剩余时间 |
@@ -1081,10 +1080,10 @@ Gold 在 RRF top10 内，但 CE 精排后排名被推后至 top10 外。
 | Q_S08 | cross_section | easy | 3 |
 | Q_SR13 | query_rewrite | medium | 4 |
 
-### 17.7 vs 第十四节 Append（bge-large + chunks.json）
+### 17.7 vs 第十四节 Append（chunks.json + 旧 Append 管线）
 
-| 指标 | 十四节 (bge-large) | 本节 (bge-small) | Δ |
-|------|-------------------|------------------|----|
+| 指标 | 十四节 (chunks.json, 旧管线) | 本节 (chunks_split, 三相管线) | Δ |
+|------|----------------------------|------------------------------|----|
 | MRR | 0.6169 | 0.5638 | **-0.0531** |
 | R@5 | 76.0% | 66.5% | **-9.5pp** |
 | R@10 | 83.8% | 72.1% | **-11.7pp** |
@@ -1092,14 +1091,13 @@ Gold 在 RRF top10 内，但 CE 精排后排名被推后至 top10 外。
 | R@10=0 | 29 | 50 | **+21** |
 | OOD 召回 | 75.0% | 80.0% | **+5.0pp** |
 
-bge-small 相比 bge-large 全面退化，R@10 下降近 12pp。OOD 检测反升 5pp（可能是 top1_sim 整体降低后 high_sim 漏判减少）。
+chunks_split + 三相管线相比旧 chunks.json + Append 管线全面退化，R@10 下降近 12pp。需排查是 chunks_split 切分变细导致 embedding 信号稀释，还是三相管线 Dense Protected Merge 阶段存在问题。OOD 检测反升 5pp（可能 top1_sim 整体降低后 high_sim 漏判减少）。
 
 ### 17.8 代码改动
 
 | 文件 | 修改 |
 |------|------|
-| `step2_embed.py` | `EMBED_MODEL` → `BAAI/bge-small-zh-v1.5` |
-| `hybrid_search.py` | `EMBED_MODEL` → `BAAI/bge-small-zh-v1.5`（line 29） |
+| `hybrid_search.py` | `search_multi_query()` 改为三相管线（Dense Protected→RRF+CE→Rewrite RRF-only） |
 | `data/golden_set_v2.json` | 5 个 EXCLUDED case 修复（PDF→DOCX 等价 chunk），Q_L09/Q_L12 gold 修正 |
 | `eval_v2_full.py` | 数据源 → chunks_split.json，新增诊断分桶、进度输出 |
 | `eval_diagnostic.py`（新增） | DiagnosticAnalyzer：逐题追溯 gold 在 Dense→BM25→RRF→CE 管线排名 |
@@ -1115,7 +1113,7 @@ bge-small 相比 bge-large 全面退化，R@10 下降近 12pp。OOD 检测反升
 
 ### 17.10 后续建议
 
-1. **回退 bge-large**：bge-small 在所有指标上显著劣于 bge-large，建议回退
+1. **排查 chunks_split + 三相管线退化根因**：#10 在所有指标上显著劣于 #7（同模型），需逐环节对比旧 Append vs 新三相管线，定位退化环节
 2. **修复诊断复用**：DiagnosticAnalyzer 应接收主 eval 的 search_multi_query 结果，而非独立检索
 3. **RRF 权重调整**：8 题单通道强但被稀释 → 提高 Dense 权重（0.7→0.85）或动态权重
 4. **CE 候选池扩大**：4 题 CE 搅黄 → 增大 CE 候选池（30→50）、提高 alpha（0.2→0.3）
