@@ -10,7 +10,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 with open("data/golden_set_v2.json") as f:
     gs = json.load(f)
 
-with open("data/chunks.json") as f:
+with open("data/chunks_split.json") as f:
     chunks = json.load(f)
 
 # Build section_id → [chunk_id] mapping (one section can have multiple chunks)

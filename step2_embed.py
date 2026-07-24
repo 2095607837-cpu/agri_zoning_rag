@@ -22,8 +22,10 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
 
+
 BASE_DIR = Path(__file__).resolve().parent
 CHUNKS_PATH = BASE_DIR / "data" / "chunks.json"
+CHUNKS_SPLIT_PATH = BASE_DIR / "data" / "chunks_split.json"
 PERSIST_DIR = str(BASE_DIR / "vectordb")
 COLLECTION_NAME = "agri_zoning"
 EMBED_MODEL = "BAAI/bge-small-zh-v1.5"
@@ -37,7 +39,9 @@ TEXT_SPLITTER = RecursiveCharacterTextSplitter(
 
 # H3 子标题模式（用于 >3000 字章节的回退切分）
 _H3_SPLIT_RE = re.compile(
-    r'^\d+\.\d+[\.\、\s]'                         # 1.1  2.3.1
+    r'^#{1,4}\s+\d+\.\d+'                         # ### 2.1.1  #### 6.9.2.1（markdown + 编号）
+    r'|^#{1,4}\s+\S'                               # ### 算法概述  #### 产品规格（纯 markdown 标题）
+    r'|^\d+\.\d+[\.\、\s]'                         # 1.1  2.3.1（无 markdown 前缀的编号）
     r'|^\（\d+）'                                  # （1）（2）
     r'|^[\(（]\d+[\)）][\s]'                       # (1) 1)
 )
@@ -86,11 +90,6 @@ def load_documents() -> list[Document]:
     return docs
 
 
-def _has_table(content: str) -> bool:
-    """检测是否包含 markdown 表格"""
-    return bool(re.search(r'\|.+\|', content))
-
-
 def _split_by_h3(doc: Document) -> list[Document]:
     """将 >3000 字的章节按 H3 子标题回退切分，保留 heading_path 谱系。"""
     text = doc.page_content
@@ -127,7 +126,9 @@ def _split_by_h3(doc: Document) -> list[Document]:
         new_meta = dict(doc.metadata)
         new_meta["heading_path"] = new_path
         new_meta["heading_level"] = len(new_path)
-        new_meta["section_id"] = f"{doc.metadata.get('section_id', '')}_h3_{i}"
+        # 保留原始 section_id（保证 gold 匹配和上下文扩展仍按原 section 分组），
+        # 细粒度子标题仅追加到 heading_path。
+        new_meta["_h3_sub_index"] = i
 
         new_page_content = compact + content.strip()
 
@@ -155,18 +156,18 @@ def split_documents(docs: list[Document]) -> list[Document]:
     if h3_split_count:
         print(f"         H3 回退切分: +{h3_split_count} 个子章节")
 
-    # Phase 2: RecursiveCharacterTextSplitter
+    # Phase 2: RecursiveCharacterTextSplitter（所有 doc 统一走）
     to_split = []
     keep_intact = []
     for d in phase1:
-        if len(d.page_content) <= 800 or _has_table(d.page_content):
+        if len(d.page_content) <= 800:
             keep_intact.append(d)
         else:
             to_split.append(d)
 
     split_result = TEXT_SPLITTER.split_documents(to_split)
 
-    print(f"         免切分: {len(keep_intact)} 条 (≤800字或含表格)")
+    print(f"         免切分: {len(keep_intact)} 条 (≤800字)")
     print(f"         被切分: {len(to_split)} 条 → {len(split_result)} 条")
 
     all_docs = split_result + keep_intact
@@ -254,6 +255,19 @@ def main():
     print(f"         切分后 Document 数: {len(split_docs)}")
     avg_len = sum(len(d.page_content) for d in split_docs) / len(split_docs) if split_docs else 0
     print(f"         平均 chunk 长度: {avg_len:.0f} 字符")
+
+    # 保存切分结果供 hybrid_search BM25 端复用（保证 BM25 和 Chroma 同源）
+    split_data = []
+    for d in split_docs:
+        chunk_id = d.metadata.get("chunk_id", d.metadata.get("section_id", ""))
+        split_data.append({
+            "id": chunk_id,
+            "content": d.page_content,
+            "metadata": d.metadata,  # 保留完整 metadata 含 chunk_id
+        })
+    with open(CHUNKS_SPLIT_PATH, "w", encoding="utf-8") as f:
+        json.dump(split_data, f, ensure_ascii=False, indent=2)
+    print(f"         切分结果已保存: {CHUNKS_SPLIT_PATH} ({len(split_data)} chunks)")
 
     force = "--rebuild" in sys.argv
     vectorstore = build_vectorstore(split_docs, force_rebuild=force)

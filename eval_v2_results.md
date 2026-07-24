@@ -1,11 +1,12 @@
 # V2 Golden Set 全配置检索评测报告
 
-生成时间：2026-07-06 | 评测集：`golden_set_v2.json` | 200 题（in-domain 180 + OOD 20）
+生成时间：2026-07-06 | 最后更新：2026-07-24 | 评测集：`golden_set_v2.json` | 199 题（in-domain 179 + OOD 20）
 
 ## 变更日志
 
 | 日期 | 变更 |
 |------|------|
+| 2026-07-24 | **bge-small 切换 + chunks_split 迁移 + 诊断分桶**：embedding 模型从 bge-large-zh-v1.5→bge-small-zh-v1.5（1024→512 维），chunks 从 chunks.json→chunks_split.json（787 entries, 499 unique section IDs），新增诊断分桶（B/C-RRF/D-CE/E-改写/G-已修复）定位零召回失败环节。+Rewrite+Reranker: MRR=0.5638, R@10=72.1%, R@10=0=50/179。OOD 召回 80.0%。详见"十七、bge-small + chunks_split + 诊断分桶（2026-07-24）" |
 | 2026-07-04 | Baseline / +Rewrite / +Reranker 三配置完成，+Rewrite+Reranker 因嵌套线程池死锁挂起 |
 | 2026-07-05 | 修复：`search()` 新增 `skip_reranker` 参数，子查询跳过 CrossEncoder，CrossEncoder 调用从 1268 次降至 180 次 |
 | 2026-07-06 | +Rewrite+Reranker 配置完成，全四配置汇总 |
@@ -17,6 +18,52 @@
 | 2026-07-14 | **新 Rewrite Prompt + Gate 触发逻辑**：重写 `REWRITE_PROMPT`（none/normalize/expand 三类型）、`_needs_rewrite` 门控（length>12 + top1<0.70）、修复 Q_L09/Q_L12 gold 标注、移除 Q_L05。+Rewrite+Reranker：MRR=0.6169、R@10=83.8%、R@10=0=29（-9 vs 旧 rewrite）。详见"十四、新 Rewrite Prompt 与 Gate 触发（2026-07-14）" |
 | 2026-07-14 | **Late Fusion 架构**：全部 query（原始 + 改写）共享一轮 RRF 池→单次 CE 精排，替代旧 Append 架构（per-query RRF+CE→merge）。结果：MRR 和 Top1 下降（vs Append），R@5 略升。详见"十五、Late Fusion 架构评测（2026-07-14）" |
 | 2026-07-15 | **Hybrid Fusion 实验（已否定）**：Original 独立 CE + Rewrite RRF 投票加分（β=0.01）。R@10=82.7%（第二），但 MRR=0.5568 为所有 reranker 配置最差，甚至低于 Baseline。**已回退 Append。** 详见"十六、Hybrid Fusion 实验（2026-07-15，已否定）" |
+
+---
+
+## 版本演进总览
+
+> 所有配置均为 Append 架构、RRF dense/BM25=0.7/0.3、alpha=0.2，除非特别注明。
+> **当前生产配置**：2026-07-14 New Rewrite Prompt Append（bge-large, chunks.json）。
+> ⚠ bge-small 全面劣于 bge-large，见末行。
+
+| # | 版本 | 模型 | Chunks | 题数 | MRR | R@5 | R@10 | Top1 | R@10=0 | OOD | 耗时 |
+|---|------|------|--------|------|------|------|------|------|--------|-----|------|
+| 1 | 2026-07-06 Baseline | bge-large | chunks.json | 180 | 0.5692 | 70.6% | 78.3% | 47.8% | 39 | — | 18s |
+| 2 | 2026-07-06 +Rewrite only | bge-large | chunks.json | 180 | 0.4785 | 58.9% | 68.9% | 38.3% | 56 | — | 329s |
+| 3 | 2026-07-06 +Reranker only | bge-large | chunks.json | 180 | 0.6092 | 72.8% | 80.0% | 51.7% | 36 | — | 3499s |
+| 4 | 2026-07-06 +RW+Reranker (旧 prompt) | bge-large | chunks.json | 180 | 0.5938 | 70.6% | 78.9% | 50.0% | 38 | — | 79493s |
+| 5 | 2026-07-12 +Reranker only (pool=100) | bge-large | chunks.json | 180 | 0.6125 | 72.8% | 80.0% | 52.2% | 36 | — | 1788s |
+| 6 | 2026-07-13 alpha=0.2 (Reranker only) | bge-large | chunks.json | 180 | 0.6074 | 72.2% | **82.2%** | — | **32** | — | — |
+| **7** | **2026-07-14 New RW Prompt Append** | **bge-large** | chunks.json | **179** | **0.6169** | **76.0%** | **83.8%** | **52.0%** | **29** | **75.0%** | **1927s** |
+| 8 | 2026-07-14 Late Fusion | bge-large | chunks.json | 179 | 0.5758 | 75.4% | 81.0% | 45.8% | 34 | 75.0% | 1475s |
+| 9 | 2026-07-15 Hybrid Fusion (已否定) | bge-large | chunks.json | 179 | 0.5568 | 74.3% | 82.7% | 43.6% | 31 | 70.0% | 3243s |
+| 10 | 2026-07-24 bge-small + chunks_split | **bge-small** | chunks_split | 179 | 0.5638 | 66.5% | 72.1% | 48.0% | 50 | **80.0%** | 1556s |
+
+**关键对比：**
+
+| 对比维度 | 变化 | MRR Δ | R@10 Δ | R@10=0 Δ |
+|----------|------|--------|--------|-----------|
+| Baseline → +Reranker only | Reranker 单开 | **+0.0433** | **+1.7pp** | -3 |
+| Baseline → +RW+Reranker (新 prompt) | Rewrite + Reranker 全开 | **+0.0477** | **+5.5pp** | **-10** |
+| 旧 RW prompt → 新 RW prompt | Rewrite 质量提升 | +0.0231 | +4.9pp | -9 |
+| Append → Late Fusion | 架构变更 | -0.0411 | -2.8pp | +5 |
+| Append → Hybrid Fusion | 架构变更 | -0.0601 | -1.1pp | +2 |
+| **bge-large → bge-small** | **模型降级** | **-0.0531** | **-11.7pp** | **+21** |
+
+**按能力雷达（最新 bge-large 最优配置 #7 vs bge-small #10）：**
+
+| Capability | #7 MRR | #7 R@10 | #10 MRR | #10 R@10 | MRR Δ | R@10 Δ |
+|------------|--------|---------|---------|----------|--------|--------|
+| exact_retrieval | 0.784 | 88.6% | 0.779 | 94.3% | -0.005 | **+5.7** |
+| context_expansion | 0.768 | 92.0% | 0.784 | 84.0% | +0.016 | -8.0 |
+| cross_section | 0.482 | 88.0% | 0.385 | 56.0% | **-0.097** | **-32.0** |
+| cross_document | 0.455 | 70.0% | 0.393 | 66.7% | -0.062 | -3.3 |
+| table_retrieval | 0.560 | 85.0% | 0.484 | 60.0% | -0.076 | **-25.0** |
+| numeric_retrieval | 0.827 | 95.0% | 0.685 | 85.0% | **-0.142** | -10.0 |
+| query_rewrite | 0.430 | 70.8% | 0.386 | 50.0% | -0.044 | **-20.8** |
+
+> bge-small 在 cross_section（-32pp）、table_retrieval（-25pp）、query_rewrite（-21pp）三个能力上退化最严重。仅 exact_retrieval 微涨（+5.7pp，猜测 chunks_split 更细粒度对精确匹配有利）。
 
 ---
 
@@ -863,3 +910,212 @@ OOD 召回率: 14/20 (70.0%)  漏判: 6
 2. **Append 架构仍是最优**：Original 独占 CE 管线 + Rewrite skip_reranker 追加，简单有效
 3. **核心洞察**：Rewriter 的 RRF 信号质量远不如 Original 的 CE 信号，无论用 Late Fusion 还是 Hybrid Fusion 混合，都会稀释 Original CE 的精度优势
 4. **已回退 Append**，作为生产配置
+
+---
+
+## 十七、bge-small + chunks_split + 诊断分桶（2026-07-24）
+
+评测集：`golden_set_v2.json` 199 题（in-domain 179 + OOD 20） | 脚本：`eval_v2_full.py`
+
+### 17.1 变更内容
+
+| 变更 | 说明 |
+|------|------|
+| Embedding 模型 | `BAAI/bge-large-zh-v1.5`（1024-dim）→ `BAAI/bge-small-zh-v1.5`（512-dim） |
+| Chunks 源 | `chunks.json` → `chunks_split.json`（787 entries, 499 unique section IDs, 89 duplicate IDs with chunk_index） |
+| 评测架构 | `search_multi_query()` 三相管线：Dense Protected (Phase 1) → RRF+CE (Phase 2) → Rewrite RRF-only (Phase 3) |
+| 诊断分桶 | 新增 `eval_diagnostic.py` DiagnosticAnalyzer，逐题追溯 gold chunk 在管线中的排名变化 |
+| Gold 标注 | 5 个 EXCLUDED case 修复（PDF→DOCX 等价 chunk），282 个 gold_chunk 全部在 chunks_split.json 中存在 |
+| 进度输出 | 每 20 题输出进度、耗时、预估剩余时间 |
+
+**配置**：+Rewrite + Reranker（Append 架构），alpha=0.2, pool_size=max(top_k*4,20), top_k=10, expand_context=True。
+
+### 17.2 整体指标
+
+```
+题目数: 179 (In-domain)  耗时: 1556s (~26 min)
+
+  MRR:             0.5638
+  Recall@5:        0.6648 (66.5%)
+  Recall@10:       0.7207 (72.1%)
+  Top-1 命中率:    0.4804 (48.0%)
+  平均命中 chunk:  1.6 / 1.6
+  Recall@10=0:     50/179 (27.9%)
+```
+
+### 17.3 按 Capability
+
+| Capability | n | MRR | R@5 | R@10 | Top1 |
+|------------|----|------|------|------|------|
+| exact_retrieval | 35 | 0.779 | 0.914 | 0.943 | 0.686 |
+| context_expansion | 25 | 0.784 | 0.840 | 0.840 | 0.720 |
+| cross_section | 25 | 0.385 | 0.560 | 0.560 | 0.280 |
+| cross_document | 30 | 0.393 | 0.500 | 0.667 | 0.300 |
+| table_retrieval | 20 | 0.484 | 0.600 | 0.600 | 0.400 |
+| numeric_retrieval | 20 | 0.685 | 0.750 | 0.850 | 0.600 |
+| query_rewrite | 24 | 0.386 | 0.417 | 0.500 | 0.333 |
+
+### 17.4 按 Difficulty
+
+| Difficulty | n | MRR | R@5 | R@10 |
+|------------|----|------|------|------|
+| easy | 131 | 0.624 | 0.718 | 0.756 |
+| medium | 37 | 0.442 | 0.541 | 0.622 |
+| hard | 11 | 0.258 | 0.455 | 0.636 |
+
+### 17.5 OOD 检测
+
+| 指标 | 值 |
+|------|-----|
+| OOD 召回率 | 16/20 (80.0%) |
+| 漏判 | 4 |
+| Judge 分层 | signal=0, high_sim=2, score=9, llm=9 |
+
+vs 第十四节（75.0%, 5 漏判）：OOD 提升 5pp，漏判减少 1 题。
+
+### 17.6 诊断分桶 — 50 题零召回定位
+
+诊断分析针对 +Rewrite+Reranker 配置下的 50 道 R@10=0 题目，逐题追溯 gold chunk 在 Dense→BM25→RRF→CE 管线中的排名变化。
+
+#### 环节汇总
+
+| 环节 | 题数 | 占比 | 建议 |
+|------|------|------|------|
+| B-检索层-低余弦断连 | 2 | 4% | 优化 query 改写（口语→术语）、增大 Dense pool、优化 chunk 切分 |
+| C-RRF融合-单通道强但被稀释 | 8 | 16% | 提高 Dense 权重 (0.7→0.85)、增大 RRF pool |
+| C-RRF融合-排名偏低 | 3 | 6% | 扩大候选池或调 RRF 权重 |
+| C-RRF融合-排名靠后 | 9 | 18% | 检索信号不足 — 提升检索质量是根本 |
+| D-CE精排-严重搅黄 | 4 | 8% | 增加 alpha (0.2→0.3)、扩大 CE 候选池 (30→50) |
+| G-已修复 | 24 | 48% | 诊断独立检索时复现，主 eval 与诊断搜索参数差异导致 |
+
+#### B-检索层-低余弦断连（2 题）
+
+| ID | Capability | Difficulty | Query | cos | 原因 |
+|----|-----------|------------|-------|-----|------|
+| Q_L11 | query_rewrite | easy | 种大豆选什么地方最好？ | 0.507 | 语义鸿沟，口语→术语映射失败 |
+| Q_D29 | cross_document | hard | 陕西苹果品质区划和新疆冬小麦品质区划... | 0.650 | 双通道 top100 均无 gold |
+
+#### C-RRF融合-单通道强但被稀释（8 题）
+
+Dense 或 BM25 单通道 top10 内有 gold，但 RRF 融合后被另一通道噪声稀释至 top10 外。
+
+| ID | Capability | Difficulty | D Rank | B Rank | RRF Rank | CE Rank |
+|----|-----------|------------|--------|--------|----------|---------|
+| Q_C25 | context_expansion | easy | 6 | -1 | 16 | 12 |
+| Q_D26 | cross_document | medium | 6 | 9 | 11 | 18 |
+| Q_T09 | table_retrieval | easy | 7 | -1 | 14 | 11 |
+| Q_E13 | exact_retrieval | easy | 7 | 2 | 13 | 10 |
+| Q_N11 | numeric_retrieval | easy | 9 | -1 | 23 | 12 |
+| Q_D10 | cross_document | medium | 28 | 6 | 27 | 12 |
+| Q_L08 | query_rewrite | medium | 9 | 1 | 14 | 16 |
+| Q_D20 | cross_document | medium | 27 | 1 | 20 | 13 |
+
+#### C-RRF融合-排名偏低（3 题）
+
+Gold 在 RRF pool 内（top 30），但排名偏低无法进入 CE 候选。
+
+| ID | Capability | Difficulty | RRF Rank |
+|----|-----------|------------|-----------|
+| Q_S01 | cross_section | medium | 20 |
+| Q_D05 | cross_document | hard | 28 |
+| Q_E33 | exact_retrieval | easy | 15 |
+
+#### C-RRF融合-排名靠后（9 题）
+
+Gold 在 RRF pool 外（>30），CE 未获得 gold。
+
+| ID | Capability | Difficulty | RRF Rank |
+|----|-----------|------------|-----------|
+| Q_D11 | cross_document | medium | 50 |
+| Q_T28 | table_retrieval | easy | 50 |
+| Q_SR01 | query_rewrite | medium | 37 |
+| Q_N13 | numeric_retrieval | easy | 39 |
+| Q_SR03 | query_rewrite | medium | 49 |
+| Q_L01 | query_rewrite | medium | 67 |
+| Q_D04 | cross_document | hard | 69 |
+| Q_L07 | query_rewrite | easy | 41 |
+| Q_L02 | query_rewrite | easy | 47 |
+
+#### D-CE精排-严重搅黄（4 题）
+
+Gold 在 RRF top10 内，但 CE 精排后排名被推后至 top10 外。
+
+| ID | Capability | Difficulty | RRF Rank | CE Rank | Δ |
+|----|-----------|------------|----------|---------|---|
+| Q_S05 | cross_section | easy | 7 | 14 | +7 |
+| Q_S15 | cross_section | easy | 5 | 12 | +7 |
+| Q_D28 | cross_document | hard | 4 | 18 | +14 |
+| Q_C08 | context_expansion | easy | 5 | 13 | +8 |
+
+#### G-已修复（24 题）
+
+诊断独立检索时这 24 题 gold 进入 CE top-10（通过 R@10），但主 eval 报告为 R@10=0。原因：
+1. **HNSH 非确定性**：ChromaDB HNSW 图搜索每次返回略有不同
+2. **参数差异**：诊断 top_k=30（pool_size=120）vs 主 eval top_k=10（pool_size=40）
+3. **expand_context 差异**：主 eval 开启上下文扩展，诊断 CE 搜索关闭
+
+| ID | Capability | Difficulty | CE Rank |
+|----|-----------|------------|---------|
+| Q_S04 | cross_section | easy | 3 |
+| Q_T31 | table_retrieval | easy | 2 |
+| Q_C07 | context_expansion | easy | 1 |
+| Q_S22 | cross_section | easy | 8 |
+| Q_N14 | numeric_retrieval | easy | 6 |
+| Q_T23 | table_retrieval | easy | 4 |
+| Q_T20 | table_retrieval | easy | 8 |
+| Q_D06 | cross_document | medium | 1 |
+| Q_T29 | table_retrieval | easy | 6 |
+| Q_T16 | table_retrieval | medium | 4 |
+| Q_SR09 | query_rewrite | easy | 4 |
+| Q_D16 | cross_document | medium | 8 |
+| Q_S07 | cross_section | easy | 9 |
+| Q_S26 | cross_section | medium | 6 |
+| Q_T24 | table_retrieval | easy | 7 |
+| Q_S23 | cross_section | easy | 6 |
+| Q_S14 | cross_section | easy | 9 |
+| Q_C23 | context_expansion | easy | 7 |
+| Q_S03 | cross_section | easy | 8 |
+| Q_L12 | query_rewrite | easy | 5 |
+| Q_SR02 | query_rewrite | easy | 9 |
+| Q_SR06 | query_rewrite | easy | 7 |
+| Q_S08 | cross_section | easy | 3 |
+| Q_SR13 | query_rewrite | medium | 4 |
+
+### 17.7 vs 第十四节 Append（bge-large + chunks.json）
+
+| 指标 | 十四节 (bge-large) | 本节 (bge-small) | Δ |
+|------|-------------------|------------------|----|
+| MRR | 0.6169 | 0.5638 | **-0.0531** |
+| R@5 | 76.0% | 66.5% | **-9.5pp** |
+| R@10 | 83.8% | 72.1% | **-11.7pp** |
+| Top1 | 52.0% | 48.0% | **-4.0pp** |
+| R@10=0 | 29 | 50 | **+21** |
+| OOD 召回 | 75.0% | 80.0% | **+5.0pp** |
+
+bge-small 相比 bge-large 全面退化，R@10 下降近 12pp。OOD 检测反升 5pp（可能是 top1_sim 整体降低后 high_sim 漏判减少）。
+
+### 17.8 代码改动
+
+| 文件 | 修改 |
+|------|------|
+| `step2_embed.py` | `EMBED_MODEL` → `BAAI/bge-small-zh-v1.5` |
+| `hybrid_search.py` | `EMBED_MODEL` → `BAAI/bge-small-zh-v1.5`（line 29） |
+| `data/golden_set_v2.json` | 5 个 EXCLUDED case 修复（PDF→DOCX 等价 chunk），Q_L09/Q_L12 gold 修正 |
+| `eval_v2_full.py` | 数据源 → chunks_split.json，新增诊断分桶、进度输出 |
+| `eval_diagnostic.py`（新增） | DiagnosticAnalyzer：逐题追溯 gold 在 Dense→BM25→RRF→CE 管线排名 |
+| `query_rewriter.py` | `_load_cache()` 修复返回值 bug（曾返回 None） |
+| `eval_v2_retrieval.py`, `eval_v2_rerank_rewrite.py`, `eval_rewrite_recall.py`, `eval_rewrite_gated.py`, `diagnose_zero_recall.py`, `eval_30_quick.py` | chunks.json → chunks_split.json |
+
+### 17.9 已知限制
+
+1. **HNSW 非确定性**：ChromaDB 默认 HNSW 索引每次检索结果不完全一致
+2. **诊断与主 eval 结果不一致**：诊断独立检索（top_k=30, expand_context=False），与主 eval（top_k=10, expand_context=True）参数不同。24 题 G-已修复即此差异导致。应改为诊断复用主 eval 搜索结果
+3. **Embedding 语义鸿沟**：口语化问法与定义类文本 embedding 相似度低，是 query_rewrite 类别零召回主因
+4. **Cross-document 仍是短板**：MRR=0.393, R@10=66.7%，跨文档语义关联检索能力不足
+
+### 17.10 后续建议
+
+1. **回退 bge-large**：bge-small 在所有指标上显著劣于 bge-large，建议回退
+2. **修复诊断复用**：DiagnosticAnalyzer 应接收主 eval 的 search_multi_query 结果，而非独立检索
+3. **RRF 权重调整**：8 题单通道强但被稀释 → 提高 Dense 权重（0.7→0.85）或动态权重
+4. **CE 候选池扩大**：4 题 CE 搅黄 → 增大 CE 候选池（30→50）、提高 alpha（0.2→0.3）

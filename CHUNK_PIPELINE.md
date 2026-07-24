@@ -2,7 +2,7 @@
 
 > 完整记录从原始文档到检索结果的全链路 chunk 处理逻辑
 >
-> **最后更新**: 2026-06-29 (v1.11 Section Quality Filter + PDF Layout Phase 1)
+> **最后更新**: 2026-07-24 (v1.15 表格线性化回归 step1 + 行窗口拆表)
 
 ---
 
@@ -10,6 +10,10 @@
 
 | 日期 | 版本 | 变更 |
 |------|------|------|
+| 2026-07-24 | v1.15 | **表格线性化回归 step1 + 行窗口拆表**：linearize_chunks.py 废弃，线性化移到 step1 解析阶段；step2 删除所有表格专用逻辑（Phase 1.5 移除），统一走 TextSplitter；拆表从"一行一 chunk"改为"≤800 字行窗口" |
+| 待实施 | v1.14 | **XLSX/CSV 逐行线性化**：parse_xlsx/parse_csv 当前仅保留前 5 行，其余数据不可检索；改为每行独立线性化 chunk，可选保留统计摘要 chunk |
+| 2026-07-22 | v1.13 | step1 移除表格线性化，pipe 原样保留；step2 新增 Phase 1.5 表格拆行 + 逐行线性化 |
+| 2026-07-20 | v1.12 | step2 H3 子标题回退切分（>3000 字），498→753 chunks；BM25/Chroma 同源切分 |
 | 2026-06-29 | v1.11 | Section Quality Filter (三层过滤) + PDF Layout 解析 Phase 1 (fitz dict 模式、布局标题检测、页眉页脚去重) + metadata.type / layout_mode |
 | 2026-06-26 | v1.8 | compact header 修复，MRR 恢复到 0.8333 |
 
@@ -18,37 +22,130 @@
 ## 总览
 
 ```
-源文件 (.docx/.pdf/.xlsx/.csv)
-    │
-    ▼ step1_parse.py   — 解析 → Block 列表 → Section 构建 → Section Quality Filter
-    │
-    │  DOCX: 样式标题 (H1/H2/H3) → Section
-    │  PDF:  fitz dict 模式 (布局感知) → 字号/加粗/坐标 → P70/P90 标题检测
-    │        ├─ 页眉页脚去重 (跨页频率 >40%)
-    │        └─ fallback: text 模式 (正则标题)
-    │
-    │  Section Quality Filter (三层):
-    │    Layer 0: 结构识别 → Drop TOC/模板注释, Merge 连续表格
-    │    Layer 1: 语义判断 → Merge 空标题/过渡句/PDF断句, Keep 完整句
-    │    Layer 2: 长度兜底 → Merge 极短无句末片段
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         Chunk Pipeline 全流程                           │
+└─────────────────────────────────────────────────────────────────────────┘
+
+源文件 (.docx / .pdf / .xlsx / .csv)
     │
     ▼
-chunks.json            — 每个 chunk 含 heading_path / section_id / type / layout_mode
-    │
-    ▼ step2_embed.py   — H3回退切分 → RecursiveCharacterTextSplitter(800/150)
-    │                    page_content = heading_path + 正文
-    │                    按 section_id 分配 chunk_index / chunk_count
-    │
-    ├─ BM25 索引 ───── 从 vectordb 构建（与 Dense 同一套子块）
+╔═════════════════════════════════════════════════════════════════════════╗
+║                      step1_parse.py  —  解析                           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  ① 文件 → Block 列表                                                   ║
+║     DOCX: python-docx → 段落 + style (Heading 1/2/3)                   ║
+║     PDF:  fitz dict → 逐行 + 字号/加粗/坐标                           ║
+║           ├─ 页眉页脚去重 (跨页 >40%)                                  ║
+║           └─ P70/P90 标题检测                                          ║
+║     XLSX: openpyxl → sheet → 统计+采样                                 ║
+║     CSV:  csv.DictReader → 统计+采样                                   ║
+║                                                                         ║
+║  ② Block → Section                                                     ║
+║     Tier 1: DOCX 样式标题 (H2 切边界, H3 内联)                         ║
+║     Tier 2: 正则标题 (第X章/一、/1.1/（1）...)                         ║
+║     Tier 3: 固定长度 ~800 字句边界切分 (兜底)                          ║
+║                                                                         ║
+║  ③ Section Quality Filter (三层)                                       ║
+║     L0: Drop 目录/模板注释, Merge 连续表格                             ║
+║     L1: Merge 空标题/过渡句/PDF断句, Keep 完整短句                     ║
+║     L2: Merge 极短无句末片段                                           ║
+║                                                                         ║
+║  ④ Section → Chunk                                                     ║
+║     section_id = {doc_stem}_sec_{si}                                    ║
+║     id         = {doc_stem}_s{si}                                       ║
+║     metadata   = { section_id, heading_path, province,                 ║
+║                    crop, zoning, type, layout_mode }                    ║
+║     content    = section 原文 (pipe 表格原样)                           ║
+║                                                                         ║
+║  ⑤ 文档去重 (_dedup_documents)                                         ║
+║     同(省份,作物,区划)的 DOCX/PDF → 保留内容更丰富者                    ║
+║     另一份标记 excluded=True，不进入下游                                ║
+║                                                                         ║
+║  ⑥ 质量标记 (_tag_chunk_quality)                                       ║
+║     <50 字 → quality=low                                                ║
+║                                                                         ║
+║  ⑦ 表格线性化 + 拆分 (_linearize_and_split_tables)                     ║
+║     type=table 的 chunk → linearize() 转为自然语言                      ║
+║     线性化失败 → 保留原内容                                             ║
+║     线性化后 >800 字 → 按句号边界拆分子 chunk (行窗口)                  ║
+║     每个子 chunk 保留上下文前缀                                          ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
     │
     ▼
-vectordb/              — 向量库，含 heading_path 语义信号
+data/chunks.json  (514 条, avg 541 字, 表格线性化率 100%)
     │
-    ▼ hybrid_search.py — RRF 融合 → [Reranker] → 同 section 上下文扩展(±1)
+    │  load_documents():
+    │    - 跳过 excluded=True / quality=low
+    │    - page_content = [省份 作物 区划] + 正文
+    │    - 保留 section_id, heading_path 等 metadata
     │
     ▼
-top_k 结果 → Judge → Generate
+╔═════════════════════════════════════════════════════════════════════════╗
+║                step2_embed.py  —  切分 + 索引                           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  ┌─ Phase 1: H3 回退切分 ──────────────────────────────────┐          ║
+║  │  章节 >3000 字 → 按子标题切开，保留 heading_path        │          ║
+║  └──────────────────────────────────────────────────────────┘          ║
+║                         │                                               ║
+║                         ▼                                               ║
+║  ┌─ Phase 2: RecursiveCharacterTextSplitter ───────────────┐          ║
+║  │  所有 doc 统一处理 (表格已在 step1 线性化，无特殊路径)    │          ║
+║  │    ≤800 字 → keep_intact                                 │          ║
+║  │    >800 字 → TextSplitter (800/chunk, 150 overlap)       │          ║
+║  └──────────────────────────────────────────────────────────┘          ║
+║                         │                                               ║
+║                         ▼                                               ║
+║  ┌─ Phase 2.5: 补回 compact header ────────────────────────┐          ║
+║  │  切分后子块丢失 [省份 作物 区划] 前缀 → 补回             │          ║
+║  └──────────────────────────────────────────────────────────┘          ║
+║                         │                                               ║
+║                         ▼                                               ║
+║  ┌─ Phase 3: 分配 chunk_index / chunk_count ───────────────┐          ║
+║  │  按 section_id 分组编号，用于检索时 expand_context       │          ║
+║  └──────────────────────────────────────────────────────────┘          ║
+║                         │                                               ║
+║                         ▼                                               ║
+║  build_vectorstore():                                                   ║
+║    HuggingFaceEmbeddings (bge-large-zh-v1.5, 1024维)                    ║
+║    ChromaDB (cosine)                                                    ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+    │
+    ▼
+data/chunks_split.json  (787 条, avg 374 字)  +  vectordb/  (787 vectors)
+    │
+    ▼
+╔═════════════════════════════════════════════════════════════════════════╗
+║                hybrid_search.py  —  检索 + 融合                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  Query → [改写] → Dense Protected Merge (top-K 保序)                   ║
+║                → RRF (Dense 0.7 + BM25 0.3, K=60)                     ║
+║                → CE 精排 (bge-reranker-v2-m3, 长度归一化 λ=0.1)        ║
+║                → Rewrite RRF-only 补充                                 ║
+║                → expand_context (±1 同 section chunk)                  ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+    │
+    ▼
+top-K 结果 → Judge → Generate
 ```
+
+## 对比
+
+| | v1.13 (旧) | v1.15 (新) |
+|---|---|---|
+| 表格线性化位置 | step2 Phase 1.5 | step1 解析阶段 |
+| 表格线性化率 | 仅拆分的 32 表 | **100%** (所有 type=table) |
+| table chunk 粒度 | 一行 = 1 个 chunk | ≤800 字行窗口 (多行合并) |
+| embedding 信号 | 单行向量 | 多行窗口向量，上下文完整 |
+| step2 表格专用代码 | ~85 行 (Phase 1.5) | 0 行 |
+| chunks_split 总数 | 822 | 787 |
+| avg chunk 长度 | 361 | 374 |
+| raw pipe 残留 | 有 (不拆的表) | 0 |
 
 ---
 
@@ -199,12 +296,13 @@ L1 没覆盖到的极短片段，最后一道防线：
 |------|--------|--------|
 | **DOCX 切分** | 遇 Heading 就切，H1/H2/H3 平级 | H1 文档标题，H2 章节边界，H3+ 内联正文 |
 | **层级信息** | 仅 section_title，父子关系丢失 | heading_path 完整谱系：`["黑龙江大豆区划", "区划指标", "冷害指数"]` |
-| **page_content** | `[省份 作物 区划]` header + 正文 | `[省份 作物 区划]` compact header + `heading_path` + 正文（v1.8 修复） |
+| **page_content** | `[省份 作物 区划]` header + 正文 | `[省份 作物 区划]` compact header + 正文；heading_path 仅保留在 metadata（v1.9 精简） |
 | **大章节处理** | 无中间层，直接切 1000 字子块 | >3000 字先按 H3 回退切分，保留 path，再走 800/150 |
 | **切分参数** | chunk_size=1000, overlap=200 | chunk_size=800, overlap=150 |
 | **parent-child** | parent_content = 完整章节全文 | 按 section_id + chunk_index 同 section ±1 窗口扩展 |
 | **上下文扩展** | 命中子块 → 展开全部父文档（可能万字） | 命中子块 → 同 section 内前1+当前+后1 chunks |
 | **BM25 数据源** | 从 raw chunks.json 构建（step1 原始大小） | 从 vectordb 构建（与 Dense 共享同一套子块） |
+| **表格处理** | step1 整表线性化为自然语言 | step1 表格线性化 + 行窗口拆分，step2 统一 TextSplitter |
 | **降级策略** | 无标题 → 每 3 段一个 chunk | 无 style 标题 → 正则识别 → 仍失败 → 固定长度 ~800 字/句边界 |
 | **metadata 字段** | province, crop, zoning, section_title | + doc_id, section_id, heading_path, heading_level, chunk_index, chunk_count |
 
@@ -478,7 +576,7 @@ page_content = path_str + "\n\n" + c["content"]
 # "黑龙江省大豆冷害气候风险区划 > 一、数据来源与处理\n\n正文..."
 ```
 
-**v1.8 方案（当前）**：compact header + heading_path 共存
+**v1.8 方案**：compact header + heading_path 共存
 ```python
 compact = f"[{province} {crop} {zoning_type}] "  # 三元组关键词锚点
 path_str = " > ".join(heading_path) if heading_path else ""
@@ -486,9 +584,20 @@ page_content = compact + path_str + "\n\n" + c["content"]
 # "[黑龙江 大豆 冷害风险区划] 黑龙江省大豆冷害气候风险区划 > 一、数据来源与处理\n\n正文..."
 ```
 
+**v1.9 方案（当前）**：compact header only，heading_path 仅保留在 metadata
+```python
+compact = _compact_header(m)   # f"[{province} {crop} {zoning_type}] "
+page_content = compact + c["content"] if compact else c["content"]
+# "[黑龙江 大豆 冷害风险区划] 表2-1 陕西富士系苹果种植气候适宜性区划指标\n\n..."
+```
+
+**演进说明**：
+
 v1.7 用 heading_path 替代三元组 header 后 MRR -11.2%（0.4958→0.4402）。根因：BGE embedding 对所有 token 平均池化，heading_path 的冗余词（"技术规范""初稿""3.3区化方法"）稀释了核心关键词的信号权重。PDF 文档 heading_path 仅为文件名（如 `D_P_R_150000_001-内蒙古区划报告`），信号更弱。
 
-v1.8 修复：compact header 提供高密度关键词锚点（15 字符，100% 信号密度），heading_path 保留在 page_content 中提供层级语义，同时也在 metadata 中驱动 section 级上下文扩展。MRR 恢复到 0.8333。
+v1.8 修复：compact header 提供高密度关键词锚点 + heading_path 提供层级语义，MRR 恢复到 0.8333。
+
+v1.9 精简：将 heading_path 从 page_content 移除，仅保留在 metadata 中。原因：heading_path 在 page_content 中的增量收益有限（compact header 已提供省份/作物/区划信号），且对表格型 chunk 会进一步稀释 compact header 的信号密度。当前 page_content = `[省份 作物 区划]` + 正文，heading_path 仅参与 metadata 驱动的 section 级上下文扩展。
 
 ### H3 回退切分（新增）
 
@@ -515,16 +624,43 @@ Sub 3: heading_path = ["黑龙江", "区划指标", "2.3 分级标准"]  (~1700�
 | chunk_overlap | 200 | 150 | 减少冗余，检索精度更高 |
 | separators | 不变 | `["\n\n", "\n", "。", "；", "，", " ", ""]` | 句边界优先 |
 
+### 表格线性化 + 行窗口拆分（step1，v1.15）
+
+表格线性化从 step2 移回 step1 解析阶段，在去重和质量标记之后执行。所有 type=table 的 chunk 调用 `linearize()` 转为自然语言，>800 字的按句号边界拆分为行窗口子 chunk。
+
+```
+v1.13 (旧) : parse → pipe 原样保留 → step2 Phase 1.5 → 拆分判断 → 逐行线性化 (一行一 chunk)
+v1.15 (新) : parse → pipe 原样保留 → 去重/质量标记 → linearize() → ≤800字行窗口拆分
+```
+
+**线性化效果示例**：
+
+```
+输入 pipe:
+| 区划因子 | 适宜 | 最适宜 | 不适宜 |
+| X1(℃)   | 8.5~12.5 | 9.5~11.5 | ≤2.9 |
+| X2(mm)   | 501~800 | 600~750 | ≥1000 |
+
+输出自然语言:
+陕西苹果种植气候区划中，该表格为区划指标体系，列出X1、X2等2项因子的适宜、最适宜、不适宜分级阈值。X1℃：适宜 8.5至12.5，最适宜 9.5至11.5，不适宜 ≤2.9。X2mm：适宜 501至800，最适宜 600至750，不适宜 ≥1000。
+```
+
+**行窗口拆分**：线性化后 >800 字 → 以句号为分隔符，按 800 字窗口分组多行。每个子 chunk 保留上下文前缀。当前仅 1 表触发拆分（陕西苹果区划报告 s1，拆为 2 块）。
+
+**linearize_chunks.py 废弃**：该脚本是 v1.13 架构下的独立后处理工具，v1.15 后不再使用。
+
 ### 切分决策
 
 ```
-839 条 step1 chunk
+N 条 step1 chunk (已线性化表格)
     │
-    ├── Phase 1: >3000 字 → H3 回退切分 (+62 子章节)
+    ├── Phase 1: >3000 字 → H3 回退切分 (+116 子章节)
     │
-    ├── Phase 2: RecursiveCharacterTextSplitter
-    │     ├── ≤800字 或 含表格 → 免切分 (818 条)
-    │     └── >800字 → 切分为 800 字子块 (83 条 → 235 条)
+    ├── Phase 2: RecursiveCharacterTextSplitter (所有 doc 统一)
+    │     ├── ≤800 字 → 免切分
+    │     └── >800 字 → 切分为 800 字子块
+    │
+    ├── Phase 2.5: 子块补回 compact header
     │
     └── Phase 3: 按 section_id 分组，分配 chunk_index / chunk_count
 ```
@@ -550,14 +686,16 @@ d.metadata["chunk_count"] = 3
 
 ChromaDB `vectordb/`
 
-| 指标 | 旧值 | 新值 |
+| 指标 | v1.13 | v1.15 |
 |------|------|------|
-| 向量总数 | 1088 | **1053** |
-| 免切分 | 988 | 818 |
-| 被切分源 | 72 | 83 |
-| 切分后子块 | 100 | 235 |
-| H3 回退切分 | 无 | +62 子章节 |
-| 平均 chunk 长度 | ~490 字符 | **530** 字符 |
+| 向量总数 | 822 | **787** |
+| 免切分 | 606 | 525 |
+| 被切分源 | 75 | 90 |
+| 切分后子块 | 216 | 262 |
+| H3 回退切分 | +116 子章节 | +116 子章节 |
+| 表格线性化率 | 部分 (仅拆分的表) | **100%** |
+| raw pipe 残留 | 有 | 0 |
+| 平均 chunk 长度 | 361 字符 | 374 字符 |
 
 ---
 
@@ -690,20 +828,19 @@ heading_path: 黑龙江大豆区划 > 二、区划指标与方法 > 冷害指数
 
 ## 数值总结
 
-| 阶段 | 产物 | 旧值 | 新值 (v1.11) |
-|------|------|------|------|
-| step1 解析 | chunks.json 总条数 | 1177 | **516** |
-| step1 有效 | 排除 excluded + low | 1060 | **513** |
-| step1 过滤 | Section Quality Filter | 无 | 三层过滤，丢弃+合并 |
-| step1 PDF | 解析模式 | text only | dict (9/9 PDF, 0 回退) |
-| step1 metadata | 新增字段 | — | type + layout_mode |
-| step2 H3 回退 | 大章节切分 | 无 | +62 子章节 |
-| step2 免切分 | ≤800字/含表格 | 988 | 818 |
-| step2 切分 | >800字 → 子块 | 72→100 | 83→235 |
-| step2 总计 | vectordb 向量 | 1088 | 1061 |
-| 平均 chunk 长度 | — | ~490 字符 | **547** 字符 |
-| PDF <100字碎片 | — | — | 45/252 (18%) |
-| 低质量标记 | — | — | 3/516 (0.6%) |
+| 阶段 | 产物 | v1.11 | v1.13 | v1.15 |
+|------|------|------|------|------|
+| step1 解析 | chunks.json 总条数 | 516 | 513 | 514 |
+| step1 表格 | 线性化 | — | — (在 step2) | 85/245 (35%) |
+| step1 表格 | 拆分 (≤800字行窗口) | — | — | 1 表→2 块 |
+| step2 H3 回退 | 大章节切分 | +62 | +116 | +116 |
+| step2 免切分 | ≤800字 | 818 | 606 | 525 |
+| step2 切分 | >800字 → 子块 | 83→235 | 75→216 | 90→262 |
+| step2 表格专用代码 | Phase 1.5 | — | ~85 行 | 0 |
+| step2 总计 | vectordb 向量 | 1061 | 822 | 787 |
+| 表格线性化率 | final chunks | — | 部分 | **100%** |
+| raw pipe 残留 | final chunks | — | 有 | 0 |
+| 平均 chunk 长度 | — | 547 | 361 | 374 |
 
 ---
 

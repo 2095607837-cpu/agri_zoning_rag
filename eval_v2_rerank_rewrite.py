@@ -9,7 +9,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 print("[eval] 加载数据...", flush=True)
 with open("data/golden_set_v2.json") as f:
     gs = json.load(f)
-with open("data/chunks.json") as f:
+with open("data/chunks_split.json") as f:
     chunks = json.load(f)
 
 sec_to_cids = {}
@@ -21,18 +21,23 @@ ood_qs = [q for q in gs if q["capability"] == "ood_detection"]
 indomain_qs = [q for q in gs if q["capability"] != "ood_detection"]
 print(f"[eval] In-domain: {len(indomain_qs)} | OOD: {len(ood_qs)}", flush=True)
 
-# Load rewrite cache
-from query_rewriter import expand_query
+# Load rewrite — 直接调用 expand_query()，不读缓存文件
+from query_rewriter import expand_query, _save_cache
 from hybrid_search import HybridSearcher
+from eval_diagnostic import DiagnosticAnalyzer
+
 _searcher = HybridSearcher(enable_reranker=True)
 rewrite_map = {}
+print("[eval] 生成改写（实时，不走缓存）...", flush=True)
 for q in gs:
     initial = _searcher.search(q["question"], top_k=2, expand_context=True)
     top1_sim = initial[0].get("similarity", 0) if len(initial) > 0 else 0
     top2_sim = initial[1].get("similarity", 0) if len(initial) > 1 else 0
     expanded = expand_query(q["question"], mode="all", top1_sim=top1_sim, top2_sim=top2_sim)
     rewrite_map[q["question"]] = expanded[1:] if len(expanded) > 1 else []
-print(f"[eval] Rewrite: {sum(1 for v in rewrite_map.values() if v)}/{len(gs)} 题有改写", flush=True)
+_save_cache()
+n_rw = sum(1 for v in rewrite_map.values() if v)
+print(f"[eval] Rewrite: {n_rw}/{len(gs)} 题有改写", flush=True)
 
 print("[eval] 开始评测 +Rewrite + Reranker (子查询跳过reranker)...", flush=True)
 searcher = _searcher
@@ -183,5 +188,17 @@ print(f"  {'Baseline':<38s} {'0.5692':>6s}  {'0.7056':>6s}  {'0.7833':>6s}  {'0.
 print(f"  {'+Rewrite only':<38s} {'0.4785':>6s}  {'0.5889':>6s}  {'0.6889':>6s}  {'0.3833':>6s}  {'56':>7s}")
 print(f"  {'+Reranker only':<38s} {'0.6092':>6s}  {'0.7278':>6s}  {'0.8000':>6s}  {'0.5167':>6s}  {'36':>7s}")
 print(f"  {'+Rewrite + Reranker':<38s} {mrr:>6.4f}  {recall_5:>6.4f}  {recall_10:>6.4f}  {top1_hit:>6.4f}  {len(zero_recall):>7d}")
+
+# ── 漏召回多环节诊断 ──
+if zero_recall:
+    analyzer = DiagnosticAnalyzer(searcher, chunks, rewrite_map)
+    zero_ids = {r["id"] for r in zero_recall}
+    zero_qs = [q for q in indomain_qs if q["id"] in zero_ids]
+    print(f"\n[eval] 运行多环节诊断...", flush=True)
+    diag_rows = analyzer.analyze(zero_qs)
+    analyzer.print_report(diag_rows)
+    with open("diagnose_zero_recall.json", "w", encoding="utf-8") as f:
+        json.dump(diag_rows, f, ensure_ascii=False, indent=2)
+    print(f"\n  saved: diagnose_zero_recall.json")
 
 print(f"\n  评测完成")

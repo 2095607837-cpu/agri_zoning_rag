@@ -20,6 +20,15 @@ from typing import Optional
 from pathlib import Path
 from collections import defaultdict
 
+from table_linearizer import (
+    linearize,
+    _parse_pipe_table,
+    _linearize_parsed,
+    _build_context,
+    _detect_table_schema,
+    _build_caption,
+)
+
 BASE_DIR = Path(__file__).resolve().parent
 DATA_SRC = Path(os.environ.get("DATA_SRC", "/Users/han/大模型自研代码/农业区划算法"))
 OUTPUT = BASE_DIR / "data" / "chunks.json"
@@ -234,22 +243,63 @@ def _next_starts_continuation(next_sec: dict) -> bool:
 
 # ── Layer 0: 结构识别 ───────────────────────────────────
 
+_TABLE_CAPTION_PAT = re.compile(r'^表\s*[0-9一二三四五六七八九十]+([-.．][0-9]+)*')
+_UNIT_SYM_PAT = re.compile(
+    r'℃|°C|mm|毫米|cm|厘米|米|km|'
+    r'%|％|kg|g|t|hm²|亩|'
+    r'≥|≤|>|<'
+)
+
+
 def _is_table_block(sec: dict) -> bool:
-    """识别表格结构：pipe 数 > 3 或含连续数字列。"""
+    """识别表格结构：pipe 硬通过 → 数字行占比 → 多特征打分（无 pipe 的 PDF 表格）。
+
+    Stage 1 (硬规则，存量行为不变):
+      - pipe > 3: markdown 表格（DOCX/XLSX 产出），强结构信号
+      - 数字行 > 60%: fitz 合并成数字密集长行的 PDF 表格
+    Stage 2 (多特征打分，补召回):
+      - PDF 提取会把表格单元格拆成逐行短文本（0 pipe、数字行占比略低于 60%），
+        Stage 1 漏判 → type=text → 跳过线性化 → 检索失败（如 Q_L07 陕西苹果区划指标表）。
+      - 特征: 表题行前5行(+2), 数字行占比分段(≥0.6→+2, ≥0.5→+1),
+        单位符号(+1), 连续数字行(+1), 阈值 4.
+    """
     body = _body_text(sec)
     if not body:
         return False
-    # Pipe 数量 > 3（至少 2 列）
-    pipe_count = body.count('|')
-    if pipe_count > 3:
+    # Stage 1a: Pipe 数量 > 3（至少 2 列）
+    if body.count('|') > 3:
         return True
-    # 检测连续数字列（>60% 行含数字）
     lines = [l.strip() for l in body.split("\n") if l.strip()]
-    if len(lines) >= 2:
-        digit_lines = sum(1 for l in lines if re.search(r'\b\d+\.?\d*\b', l))
-        if digit_lines > len(lines) * 0.6:
-            return True
-    return False
+    if len(lines) < 2:
+        return False
+    has_digit = [bool(re.search(r'\b\d+\.?\d*\b', l)) for l in lines]
+    digit_lines = sum(has_digit)
+    numeric_ratio = digit_lines / len(lines)
+    # Stage 1b: 连续数字列（>60% 行含数字）
+    if numeric_ratio > 0.6:
+        return True
+    # Stage 2: 多特征打分
+    score = 0
+    # 表题：前 5 个非空行（PDF 提取常在表题前插入页码）
+    for line in lines[:5]:
+        if _TABLE_CAPTION_PAT.match(line):
+            score += 2
+            break
+    # 数字行占比：分段得分
+    if numeric_ratio >= 0.60:
+        score += 2
+    elif numeric_ratio >= 0.50:
+        score += 1
+    if len(_UNIT_SYM_PAT.findall(body)) >= 2:
+        score += 1
+    # 连续数字行：正文极少出现数字-数字-数字的密集排列
+    max_consec = consec = 0
+    for d in has_digit:
+        consec = consec + 1 if d else 0
+        max_consec = max(max_consec, consec)
+    if max_consec >= 5:
+        score += 1
+    return score >= 4
 
 
 def _merge_table_block(sections: list[dict], start_idx: int) -> tuple[int, list[dict]]:
@@ -1227,6 +1277,85 @@ def parse_all(src_dir: str) -> list[dict]:
     return all_chunks
 
 
+def _linearize_and_split_tables(chunks: list[dict]) -> list[dict]:
+    """对 table 类型 chunk 做线性化，并按 ≤800 字拆分为子 chunk（行窗口）。"""
+    expanded = []
+    table_count = 0
+    linearized_count = 0
+    split_count = 0
+
+    for c in chunks:
+        if c["metadata"].get("type") != "table":
+            expanded.append(c)
+            continue
+
+        table_count += 1
+        content = c["content"]
+        metadata = c["metadata"]
+
+        # 尝试线性化
+        result = linearize(content, metadata)
+        if result is None:
+            expanded.append(c)
+            continue
+
+        linearized_count += 1
+
+        # 按 ≤800 字拆分，保留行边界（以 。 为分隔）
+        if len(result) <= 800:
+            c["content"] = result
+            expanded.append(c)
+            continue
+
+        # 分离前缀（上下文 + caption）和数据行
+        first_period = result.find("。")
+        if first_period < 0:
+            c["content"] = result
+            expanded.append(c)
+            continue
+
+        prefix = result[:first_period + 1]
+        data = result[first_period + 1:]
+
+        # 数据行按 。 拆分
+        data_sentences = [s.strip() + "。" for s in data.split("。") if s.strip()]
+
+        # 按 800 字分组
+        sub_chunks = []
+        current = prefix
+        for s in data_sentences:
+            if len(current) + len(s) > 800 and current != prefix:
+                sub_chunks.append(current)
+                current = prefix + s
+            else:
+                current += s
+
+        if current != prefix:
+            sub_chunks.append(current)
+
+        if len(sub_chunks) <= 1:
+            c["content"] = result
+            expanded.append(c)
+            continue
+
+        split_count += 1
+        base_id = c["id"]
+        base_meta = dict(metadata)
+        for i, sc in enumerate(sub_chunks):
+            new_meta = dict(base_meta)
+            new_meta["_table_chunk_index"] = i
+            new_meta["_table_chunk_count"] = len(sub_chunks)
+            expanded.append({
+                "id": f"{base_id}_t{i}" if i > 0 else base_id,
+                "content": sc,
+                "metadata": new_meta,
+            })
+
+    if linearized_count:
+        print(f"\n  表格: {table_count} → 线性化 {linearized_count} → 拆分 {split_count}")
+    return expanded
+
+
 def main():
     print(f"数据源: {DATA_SRC}")
     print(f"输出: {OUTPUT}")
@@ -1261,6 +1390,7 @@ def main():
 
     deduped = _dedup_documents(deduped)
     deduped = _tag_chunk_quality(deduped)
+    deduped = _linearize_and_split_tables(deduped)
 
     source_types = {}
     provinces = {}

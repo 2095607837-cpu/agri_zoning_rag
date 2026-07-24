@@ -8,8 +8,10 @@ Dense + BM25 → RRF 融合 → CrossEncoder 精排 → top-k。
   results = searcher.search("大豆冷害区划指标", top_k=5)
 """
 
+import math
 import os
 import json
+import re
 from pathlib import Path
 
 from langchain.schema import Document
@@ -20,25 +22,46 @@ from langchain_huggingface import HuggingFaceEmbeddings
 import numpy as np
 
 BASE_DIR = Path(__file__).resolve().parent
-CHUNKS_PATH = BASE_DIR / "data" / "chunks.json"
+CHUNKS_PATH = BASE_DIR / "data" / "chunks_split.json"
+CHUNKS_RAW_PATH = BASE_DIR / "data" / "chunks.json"  # fallback: step2 未运行时的原始数据
 PERSIST_DIR = str(BASE_DIR / "vectordb")
 COLLECTION_NAME = "agri_zoning"
 EMBED_MODEL = "BAAI/bge-small-zh-v1.5"
 
+# 专业词正则：保留缩写、符号+数值、单位、希腊字母作为完整 BM25 token
+_TECH_TOKEN_RE = re.compile(
+    r'[A-Z]{2,}\d*'                              # FCV, GIS, AHP, ET0, DEM
+    r'|[A-Z][a-z]+\d*'                            # Py, Rn, Kc
+    r'|[Δ∇∂αβγ][A-Z]?\d*(?:[-–]\d*)?'       # ΔT5-9, ΔT
+    r'|[≥≤<>＜＞][-]?\d+(?:\.\d+)?[℃°C%天月年hd]?'  # ≥10℃, ≤5500
+    r'|\d+(?:\.\d+)?[~～\-]\d+(?:\.\d+)?[℃°C%天月年hd]?'  # 5-9月, 8.5~12.5
+    r'|\d+(?:\.\d+)?[℃°C%hm²kmhd]{1,3}'          # 10℃, 30%, hm², 20h
+)
+
 
 def bm25_tokenize(text: str) -> list[str]:
-    """中文 BM25 分词：单字 + 双字 bigram，无外部依赖。
+    """中文 BM25 分词：单字 + 双字 bigram + 专业词正则保留。
 
-    langchain BM25Retriever 默认 `text.split()` 对中文失效（整段成一个 token，
-    查询永远匹配不上）。改用字 + bigram：查询"大豆冷害"与文档都切成
-    ['大','豆','冷','害','大豆','豆冷','冷害']，含"大豆"的文档即可在 bigram 上命中。
+    langchain BM25Retriever 默认 `text.split()` 对中文失效。单字+bigram 解决
+    中文切分问题；正则保留 FCV/ΔT5-9/≥10℃ 等专业词，避免被拆成无意义单字。
     """
     text = text.replace("\n", " ").strip()
+
+    # 提取专业 token
+    tech_tokens = [t for t in _TECH_TOKEN_RE.findall(text) if len(t) > 1]
+
+    # 单字 + bigram
     tokens = [ch for ch in text if not ch.isspace()]
     for i in range(len(text) - 1):
         bigram = text[i:i + 2]
         if not bigram[0].isspace() and not bigram[1].isspace():
             tokens.append(bigram)
+
+    # 追加专业 token（去重）
+    for t in tech_tokens:
+        if t not in tokens:
+            tokens.append(t)
+
     return tokens
 
 
@@ -129,47 +152,31 @@ class HybridSearcher:
         return self._embeddings
 
     def _init(self):
-        print("[HybridSearcher] 初始化...")
-        self._embeddings = HuggingFaceEmbeddings(
-            model_name=EMBED_MODEL,
-            model_kwargs={"device": "cpu"},
-            encode_kwargs={"normalize_embeddings": True},
-        )
+        from concurrent.futures import ThreadPoolExecutor
+
+        print(f"[HybridSearcher] 初始化 (model={EMBED_MODEL})...")
+
+        # 并行：加载 embedding 模型 + 读取 chunks 构建 Section 索引
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            emb_future = pool.submit(
+                HuggingFaceEmbeddings,
+                model_name=EMBED_MODEL,
+                model_kwargs={"device": "cpu"},
+                encode_kwargs={"normalize_embeddings": True},
+            )
+
+            chunks_future = pool.submit(self._load_chunks)
+
+            self._embeddings = emb_future.result()
+            print(f"[HybridSearcher] Embedding 模型就绪")
+            self._section_index, bm25_docs, self._chunk_id_map = chunks_future.result()
+            print(f"[HybridSearcher] BM25 数据就绪 ({len(bm25_docs)} docs)")
 
         self._vectorstore = Chroma(
             collection_name=COLLECTION_NAME,
             embedding_function=self._embeddings,
             persist_directory=PERSIST_DIR,
         )
-
-        # BM25 + Section Index — 直接从 chunks.json 构建，不依赖 Chroma
-        with open(CHUNKS_PATH, encoding="utf-8") as f:
-            chunks = json.load(f)
-
-        bm25_docs = []
-        self._chunk_id_map: dict[str, str] = {}  # content[:80] → chunk_id
-        for c in chunks:
-            content = c["content"]
-            meta = dict(c["metadata"])
-            cid = c["id"]
-            meta["chunk_id"] = cid
-            # 若 content[:80] 碰撞，后出现的覆盖（罕见，且不劣于直接用 content[:80] 去重）
-            self._chunk_id_map[content[:80]] = cid
-
-            sid = meta.get("section_id", "")
-            if sid:
-                idx = len(self._section_index.get(sid, []))
-                meta["chunk_index"] = idx
-                self._section_index.setdefault(sid, []).append({
-                    "content": content,
-                    "metadata": meta,
-                    "chunk_index": idx,
-                })
-
-            bm25_docs.append(Document(page_content=content, metadata=meta))
-
-        for sid in self._section_index:
-            self._section_index[sid].sort(key=lambda x: x["chunk_index"])
 
         self._bm25_retriever = BM25Retriever.from_documents(
             bm25_docs, preprocess_func=bm25_tokenize
@@ -181,6 +188,42 @@ class HybridSearcher:
 
         print(f"[HybridSearcher] 就绪 (docs={len(bm25_docs)}, sections={len(self._section_index)}, "
               f"reranker={'on' if self.enable_reranker else 'off'})")
+
+    @staticmethod
+    def _load_chunks() -> tuple[dict, list, dict]:
+        """加载 chunks 并构建 section_index + chunk_id_map（与 embedding 模型加载并行）。"""
+        actual_path = CHUNKS_PATH if CHUNKS_PATH.exists() else CHUNKS_RAW_PATH
+        with open(actual_path, encoding="utf-8") as f:
+            chunks = json.load(f)
+
+        from collections import defaultdict
+        section_index: dict[str, list[dict]] = defaultdict(list)
+        chunk_id_map: dict[str, str] = {}
+        bm25_docs = []
+
+        for c in chunks:
+            content = c["content"]
+            meta = dict(c["metadata"])
+            cid = c["id"]
+            meta["chunk_id"] = cid
+            chunk_id_map[content[:80]] = cid
+
+            sid = meta.get("section_id", "")
+            if sid:
+                idx = len(section_index[sid])
+                meta["chunk_index"] = idx
+                section_index[sid].append({
+                    "content": content,
+                    "metadata": meta,
+                    "chunk_index": idx,
+                })
+
+            bm25_docs.append(Document(page_content=content, metadata=meta))
+
+        for sid in section_index:
+            section_index[sid].sort(key=lambda x: x["chunk_index"])
+
+        return dict(section_index), bm25_docs, chunk_id_map
 
     def _chunk_key(self, doc) -> str:
         """解析 Document 或 result dict → chunk_id（fallback: content[:80]）。"""
@@ -217,14 +260,20 @@ class HybridSearcher:
         return expanded
 
     def _rrf_ce_fusion(self, query: str, rrf_scores: dict, doc_store: dict,
-                        candidate_keys: list[str], top_k: int, alpha: float) -> list[dict]:
-        """CE 精排 + RRF-CE alpha 融合，返回 top_k 结果。"""
+                        candidate_keys: list[str], top_k: int, alpha: float,
+                        lambda_length: float = 0.1) -> list[dict]:
+        """CE 精排 + RRF-CE alpha 融合，返回 top_k 结果。
+
+        lambda_length: 长度归一化系数。CE 原始分减去 λ·log(len(content))，
+                       抵消 CrossEncoder 天然偏长文本的 bias（长 chunk 有更多关键词）。
+        """
         candidates = []
         for key in candidate_keys:
             content, metadata, cosine_sim = doc_store[key]
             candidates.append({
                 "content": content, "metadata": metadata,
                 "dense_similarity": cosine_sim or 0.0,
+                "_len": len(content),
             })
 
         if not self._reranker:
@@ -240,8 +289,12 @@ class HybridSearcher:
         self._reranker._load()
         ce_pairs = [(query, c["content"][:500]) for c in candidates]
         with self._reranker._infer_lock:
-            ce_scores = [float(x) for x in self._reranker._model.predict(
+            raw_ce = [float(x) for x in self._reranker._model.predict(
                 ce_pairs, show_progress_bar=False)]
+
+        # 长度归一化：抵消 CE 长文本偏好 bias
+        ce_scores = [raw - lambda_length * math.log(c["_len"])
+                      for raw, c in zip(raw_ce, candidates)]
 
         if alpha > 0.0:
             rrf_vals = [rrf_scores[k] for k in candidate_keys]
@@ -278,29 +331,49 @@ class HybridSearcher:
     def search_multi_query(
         self, query: str, top_k: int = 5, expand_context: bool = True,
         extra_queries=None, w_dense: float = 0.7, w_bm25: float = 0.3,
-        alpha: float = 0.2,
+        alpha: float = 0.2, lambda_length: float = 0.1,
+        dense_protect_k: int = 5,
     ):
-        """Append 架构：Original 独占 CE 管线，Rewrite 以 RRF-only 补充。
+        """Dense Protected Merge + Append 架构。
 
-        Original → RRF+CE → 排在前面（高质量 CE 信号）
-        Rewrite → RRF-only → 去重追加到后面（不干扰 original 排序）
+        Dense top-K → 直接保序（避免 BM25 干扰 Dense 高置信结果）
+        RRF+CE    → 去重追加（高质量 CE 信号，排 Dense 保护之后）
+        Rewrite   → RRF-only 去重追加（不干扰前面排序）
 
         子查询跳过 CE 避免了噪声干扰，同时保留改写召回的高价值 chunk。
         """
         if not extra_queries:
-            results = self.search(query, top_k=top_k, expand_context=expand_context)
+            results = self.search(query, top_k=top_k, expand_context=expand_context,
+                                  lambda_length=lambda_length)
             return results, results
 
-        # Original query → 完整 RRF+CE 管线
+        # Phase 1: Dense Protected — 直接从 Chroma 取 top-K，保序
+        dense_raw = self._vectorstore.similarity_search_with_score(query, k=dense_protect_k)
+        protected = []
+        for doc, l2_dist in dense_raw:
+            protected.append({
+                "content": doc.page_content,
+                "metadata": doc.metadata,
+                "similarity": round(1.0 - l2_dist, 4),
+                "dense_similarity": round(1.0 - l2_dist, 4),
+            })
+        seen = {self._chunk_key(r) for r in protected}
+        final = list(protected)
+
+        # Phase 2: Original query → 完整 RRF+CE 管线，去重追加
         results = self.search(
             query, top_k=top_k, expand_context=False,
-            w_dense=w_dense, w_bm25=w_bm25, alpha=alpha,
+            w_dense=w_dense, w_bm25=w_bm25, alpha=alpha, lambda_length=lambda_length,
         )
-        seen = {self._chunk_key(r) for r in results}
+        for r in results:
+            key = self._chunk_key(r)
+            if key not in seen:
+                seen.add(key)
+                final.append(r)
 
-        # Rewrite queries → RRF-only (skip CE)，去重追加
+        # Phase 3: Rewrite queries → RRF-only (skip CE)，去重追加
         for rq in extra_queries:
-            if len(results) >= top_k * 3:
+            if len(final) >= top_k * 3:
                 break
             rq_results = self.search(
                 rq, top_k=top_k, expand_context=False,
@@ -310,38 +383,51 @@ class HybridSearcher:
                 key = self._chunk_key(r)
                 if key not in seen:
                     seen.add(key)
-                    results.append(r)
+                    final.append(r)
 
-        results = results[:top_k]
+        final = final[:top_k]
 
         if expand_context:
-            results = self._expand_results(results)
+            final = self._expand_results(final)
 
-        return results, results
+        return final, final
 
     def search(self, query: str, top_k: int = 5, expand_context: bool = False,
                skip_reranker: bool = False, w_dense: float = 0.7, w_bm25: float = 0.3,
-               alpha: float = 0.2) -> list[dict]:
+               alpha: float = 0.2, lambda_length: float = 0.1) -> list[dict]:
         """单 query 混合检索（RRF 融合 + CE 精排 + 可选上下文扩展）。"""
         pool_size = max(top_k * 4, 20)
         RRF_K = 60
         rrf_scores: dict[str, float] = {}
         doc_store: dict[str, tuple] = {}  # key → (content, metadata, cosine_sim)
+        dense_keys: set[str] = set()
+        bm25_keys: set[str] = set()
 
         chroma_raw = self._vectorstore.similarity_search_with_score(query, k=pool_size)
         bm25_docs = self._bm25_retriever.invoke(query)[:pool_size]
 
         for rank, (doc, l2_dist) in enumerate(chroma_raw):
             key = self._chunk_key(doc)
+            dense_keys.add(key)
             rrf_scores[key] = rrf_scores.get(key, 0) + w_dense / (RRF_K + rank)
             if key not in doc_store:
                 doc_store[key] = (doc.page_content, doc.metadata, round(1.0 - l2_dist, 4))
 
         for rank, doc in enumerate(bm25_docs):
             key = self._chunk_key(doc)
+            bm25_keys.add(key)
             rrf_scores[key] = rrf_scores.get(key, 0) + w_bm25 / (RRF_K + rank)
             if key not in doc_store:
                 doc_store[key] = (doc.page_content, doc.metadata, None)
+
+        # Single-channel boost: compensate missing channel weight
+        for key in rrf_scores:
+            in_dense = key in dense_keys
+            in_bm25 = key in bm25_keys
+            if in_dense and not in_bm25:
+                rrf_scores[key] = rrf_scores[key] / w_dense
+            elif in_bm25 and not in_dense:
+                rrf_scores[key] = rrf_scores[key] / w_bm25
 
         # BM25-only 补算余弦相似度
         bm25_only = [k for k in doc_store if doc_store[k][2] is None]
@@ -354,12 +440,20 @@ class HybridSearcher:
                             / (np.linalg.norm(query_emb) * np.linalg.norm(doc_emb) + 1e-8))
                 doc_store[key] = (content, metadata, round(sim, 4))
 
-        rerank_input = min(top_k * 3, 40)
-        sorted_keys = sorted(rrf_scores, key=lambda k: -rrf_scores[k])[:rerank_input]
+        # CE 候选池：RRF top-30 ∪ Dense top-5（去重）
+        # Dense top-5 直接保送，不受 BM25 噪声稀释影响
+        rrf_top30 = sorted(rrf_scores, key=lambda k: -rrf_scores[k])[:30]
+        rrf_top30_set = set(rrf_top30)
+        dense_top5_keys = []
+        for doc, _ in chroma_raw[:5]:
+            key = self._chunk_key(doc)
+            if key not in rrf_top30_set and key not in dense_top5_keys:
+                dense_top5_keys.append(key)
+        sorted_keys = rrf_top30 + dense_top5_keys
 
         if self._reranker and not skip_reranker:
             results = self._rrf_ce_fusion(query, rrf_scores, doc_store,
-                                           sorted_keys, top_k, alpha)
+                                           sorted_keys, top_k, alpha, lambda_length)
         else:
             results = []
             for key in sorted_keys[:top_k]:

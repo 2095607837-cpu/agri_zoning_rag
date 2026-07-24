@@ -19,9 +19,41 @@ from llm_client import call_llm
 BASE_DIR = Path(__file__).resolve().parent
 CACHE_FILE = BASE_DIR / "data" / "rewrite_cache.json"
 TERM_MAP_FILE = BASE_DIR / "data" / "terminology_mapping.json"
+SYNONYM_FILE = BASE_DIR / "data" / "synonym_dictionary.json"
 
 _cache = OrderedDict()
 CACHE_MAX = 500
+
+# ── 同义词词典（规范术语 → 同义词列表）──
+_synonym_dict: dict[str, list[str]] = {}
+
+def _load_synonym_dict():
+    global _synonym_dict
+    if not SYNONYM_FILE.exists():
+        return
+    try:
+        with open(SYNONYM_FILE, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        for k, v in data.items():
+            if k.startswith("_"):
+                continue
+            _synonym_dict[k] = v
+    except Exception:
+        pass
+
+
+def _expand_with_synonyms(terms: list[str], max_syn: int = 3) -> list[str]:
+    """对术语列表按同义词词典扩展，每个术语最多取 max_syn 个同义词。"""
+    if not _synonym_dict:
+        return []
+    expanded = []
+    for term in terms:
+        if term in _synonym_dict:
+            synonyms = _synonym_dict[term]
+            for s in synonyms[:max_syn]:
+                if s and s not in expanded and s not in terms:
+                    expanded.append(s)
+    return expanded
 
 # ── 术语映射表（口语→规范术语，确定性）──
 _term_map: dict[str, str] = {}   # 扁平表: 口语词 → 规范术语
@@ -103,6 +135,7 @@ def _build_term_map_prompt_snippet(max_entries: int = 60) -> str:
 
 # 模块加载时初始化
 _load_term_map()
+_load_synonym_dict()
 
 REWRITE_PROMPT = ChatPromptTemplate.from_messages([
     ("user", """你是一个农业气候区划领域的检索查询改写器。
@@ -110,7 +143,7 @@ REWRITE_PROMPT = ChatPromptTemplate.from_messages([
 ## Step 1: 判断改写类型
 
 - **none**: 问题已是标准术语+完整检索语句，直接检索。sub_queries 留空，keywords 仅抽取核心实体。适用：普通事实查询、定义查询、单实体查询、已有标准术语的"方法/评价"类查询。
-- **normalize**: 问题需要术语标准化（口语→术语、简称→全称、同义词→标准名），但问题结构不变。标准化包括：①口语→术语（"光照好不好"→日照百分率/日照时数）②简称→全称（"积温"→≥10℃活动积温）③模糊→精确（"冷害"→低温冷害/冷害风险指数）。**必须将口语/同义词映射为知识库中的精确术语**。
+- **normalize**: 问题需要术语标准化（口语→术语、简称→全称、同义词→标准名），但问题结构不变。标准化包括：①口语→术语（"光照好不好"→日照百分率/日照时数）②简称→全称（"积温"→≥10℃活动积温）③模糊→精确（"冷害"→低温冷害/冷害风险指数）④灾害否定→安全保障（"冻不坏"="不发生冻害"→安全越冬，不是越冬冻害；"不旱"="不发生干旱"→水分保障，不是干旱）⑤抽象科学概念→领域术语（"低温累积效应"即"低温冷害对产量的累积影响"→低温冷害/冷害风险指数）⑥抽象流程词→具体方法词（"工作流程"→技术流程/技术路线）⑦**口语适宜性查询→分层术语链**（如"种X选什么地方最好"=极简口语，keywords和sub_queries需覆盖不同抽象层级：动作层"X种植"→框架层"适宜性区划/气候区划"→结果层"种植适宜区/适宜种植区"，每层1-2个词，确保不同层级的chunk都能命中）。**必须将口语/同义词/抽象概念映射为知识库中的精确术语**。
 - **expand**: 仅当一个问题天然需要多个独立检索才能完整回答时使用。必须满足：①同时询问多个不同对象 ②明确包含多个比较维度 ③答案分散在不同 section。普通事实查询、定义查询、单实体查询禁止 expand。
 
 ## Step 2: 执行改写
@@ -123,7 +156,7 @@ REWRITE_PROMPT = ChatPromptTemplate.from_messages([
 - 若不能确定，保持原表达，不要推测
 
 ### 子查询（sub_queries，数组，最多3条）
-- 仅 rewrite_type=expand 时需要；none/normalize 时留空
+- rewrite_type=expand 时必须产出。normalize 时通常留空，但**口语适宜性查询（规则⑦）例外**：可用 sub_queries 覆盖不同抽象层级，如"X种植适宜性区划""X适宜种植区"。
 - 每条从不同角度切入：如"指标/方法/阈值/空间分布/影响因素/等级划分/计算公式/历史变化"
 - 避免同义反复，确保命中不同 chunk
 
@@ -145,6 +178,7 @@ REWRITE_PROMPT = ChatPromptTemplate.from_messages([
 5. **不过度改写**: 不改比改错好。不凭空添加"原因/措施/解决方案"
 6. **知识库优先**: 优先使用知识库已有术语，不确定时保持原表达
 7. **术语加权**: 对于包含口语/同义/模糊表达的问题，必须映射为知识库精确术语，提升术语加权召回
+8. **灾害否定=安全保障**: "冻不坏"="冻害"+"不"=不发生冻害→安全越冬，不是越冬冻害；"不旱"="干旱"+"不"=不发生干旱→水分保障，不是干旱。**禁止**把灾害否定映射为灾害名称。
 
 ## Step 3: 自检
 
@@ -156,6 +190,8 @@ REWRITE_PROMPT = ChatPromptTemplate.from_messages([
 ⑤ 是否误将简单查询判为 expand？
 ⑥ 口语/同义词是否已映射为知识库精确术语？
 ⑦ 限定条件（如"低风险区""1961-1990年"）是否保留？
+⑧ 否定/肯定极性是否正确？（"冻不坏"→安全越冬，不是越冬冻害）
+⑨ 抽象概念是否已映射为领域术语？（"低温累积效应"→低温冷害；"工作流程"→技术流程；"生育期长度"→生育期天数）
 
 如有问题，修正后再输出。
 
@@ -163,6 +199,9 @@ REWRITE_PROMPT = ChatPromptTemplate.from_messages([
 
 Q: 种大豆需要多少积温才够？
 → {{"rewrite_type": "normalize", "keywords": ["大豆", "≥10℃活动积温", "积温阈值"], "sub_queries": [], "confidence": 0.95}}
+
+Q: 种大豆选什么地方最好？
+→ {{"rewrite_type": "normalize", "keywords": ["大豆", "大豆种植", "适宜性区划", "种植适宜区"], "sub_queries": ["大豆种植适宜性区划", "大豆适宜种植区"], "confidence": 0.88}}
 
 Q: 农业上说的光照好不好用什么指标衡量？
 → {{"rewrite_type": "normalize", "keywords": ["日照百分率", "日照时数", "太阳辐射"], "sub_queries": [], "confidence": 0.92}}
@@ -191,6 +230,15 @@ Q: 苹果成熟期是什么时候？
 Q: 内蒙古大豆区划和陕西苹果区划在指标体系上有什么差异？
 → {{"rewrite_type": "expand", "keywords": ["内蒙古", "大豆", "陕西", "苹果", "指标体系"], "sub_queries": ["内蒙古大豆区划指标体系", "陕西苹果区划指标体系"], "confidence": 0.88}}
 
+Q: 低温累积效应如何影响大豆产量？
+→ {{"rewrite_type": "normalize", "keywords": ["大豆", "低温冷害", "冷害风险指数", "减产机制"], "sub_queries": [], "confidence": 0.85}}
+
+Q: 陕西苹果区划从数据收集到最终区划图输出的完整工作流程是什么？
+→ {{"rewrite_type": "normalize", "keywords": ["陕西", "苹果", "气候区划", "技术流程", "技术路线"], "sub_queries": [], "confidence": 0.88}}
+
+Q: 新疆冬小麦越冬期长度？
+→ {{"rewrite_type": "normalize", "keywords": ["新疆", "冬小麦", "越冬期", "越冬期天数"], "sub_queries": [], "confidence": 0.90}}
+
 用户问题：{query}
 
 仅输出 JSON（不要输出其他内容）：
@@ -212,7 +260,7 @@ def _needs_rewrite(query: str, top1_sim: float = 0.0, top2_sim: float = 0.0) -> 
       - margin ≥ 0.03（检索器确定）
       - top1_sim ≥ 0.72（检索质量够好）
     """
-    if len(query) <= 12:
+    if len(query) <= 6:
         return False
 
     # 信号 1：已知口语词 → 一定改写
@@ -288,13 +336,16 @@ def _llm_rewrite(query: str) -> dict:
 def _load_cache():
     """从文件加载改写缓存到内存 LRU。"""
     if not CACHE_FILE.exists():
-        return
+        return {}
     try:
         with open(CACHE_FILE, "r", encoding="utf-8") as f:
             data = json.load(f)
         for k, v in data.items():
             if k not in _cache:
                 _cache[k] = v
+        return data
+    except Exception:
+        return {}
         for k in data:
             if k in _cache:
                 _cache.move_to_end(k)
@@ -332,7 +383,9 @@ def expand_query(query: str, mode: str = "all", top1_sim: float = 0.0, top2_sim:
         _cache.move_to_end(cache_key)
         entry = _cache[cache_key]
     elif not _needs_rewrite(cache_key, top1_sim, top2_sim):
-        entry = {"rewrite_type": "none", "keywords": [], "sub_queries": [], "confidence": 1.0}
+        # gate 不触发 LLM 改写时，确定性术语映射仍可能有产出
+        mapped = _apply_terminology_map(cache_key)
+        entry = {"rewrite_type": "none", "keywords": mapped, "sub_queries": [], "confidence": 1.0}
         _cache[cache_key] = entry
         _cache.move_to_end(cache_key)
         _save_cache()
@@ -357,6 +410,13 @@ def expand_query(query: str, mode: str = "all", top1_sim: float = 0.0, top2_sim:
         for kw in entry.get("keywords", []):
             if kw and kw not in queries:
                 queries.append(kw)
+
+    # 同义词扩展：对已收集的规范术语查同义词词典，追加为额外检索词
+    all_terms = list(mapped_terms) + entry.get("keywords", [])
+    synonym_terms = _expand_with_synonyms(all_terms)
+    for st in synonym_terms:
+        if st and st not in queries:
+            queries.append(st)
 
     if mode in ("multi_view", "all"):
         for sq in entry.get("sub_queries", []):

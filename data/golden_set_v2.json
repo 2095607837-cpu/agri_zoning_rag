@@ -10,7 +10,7 @@
       "黑龙江农业气候资源普查技术规范2025"
     ],
     "gold_sections": [
-      "s0"
+      "s1"
     ],
     "gold_chunks": [
       "黑龙江农业气候资源普查技术规范2025_s0"
@@ -41,7 +41,7 @@
     "expected_citation": [
       {
         "doc_id": "黑龙江农业气候资源普查技术规范2025",
-        "section": "s0",
+        "section": "s1",
         "heading": "概述"
       }
     ],
@@ -120,7 +120,7 @@
       "黑龙江农业气候资源普查技术规范2025"
     ],
     "gold_sections": [
-      "s4"
+      "s1"
     ],
     "gold_chunks": [
       "黑龙江农业气候资源普查技术规范2025_s4"
@@ -149,7 +149,7 @@
     "expected_citation": [
       {
         "doc_id": "黑龙江农业气候资源普查技术规范2025",
-        "section": "s4",
+        "section": "s1",
         "heading": "无霜期"
       }
     ],
@@ -440,7 +440,7 @@
       "黑龙江农业生产普查技术规范2025"
     ],
     "gold_sections": [
-      "s0"
+      "s1"
     ],
     "gold_chunks": [
       "黑龙江农业生产普查技术规范2025_s0"
@@ -469,7 +469,7 @@
     "expected_citation": [
       {
         "doc_id": "黑龙江农业生产普查技术规范2025",
-        "section": "s0",
+        "section": "s1",
         "heading": "普查基本原则"
       }
     ],
@@ -1017,7 +1017,7 @@
       "D_P_R_410000_001-农业气候区划报告-河南省"
     ],
     "gold_sections": [
-      "s0"
+      "s1"
     ],
     "gold_chunks": [
       "D_P_R_410000_001-农业气候区划报告-河南省_s0"
@@ -1047,7 +1047,7 @@
     "expected_citation": [
       {
         "doc_id": "D_P_R_410000_001-农业气候区划报告-河南省",
-        "section": "s0",
+        "section": "s1",
         "heading": "农业气象灾害概述"
       }
     ],
@@ -1172,13 +1172,13 @@
     "query_type": "fact",
     "difficulty": "easy",
     "gold_doc_ids": [
-      "D_P_R_650000_001-新疆冬小麦气候区划报告"
+      "新疆冬小麦气候区划报告"
     ],
     "gold_sections": [
-      "s0"
+      "s1"
     ],
     "gold_chunks": [
-      "D_P_R_650000_001-新疆冬小麦气候区划报告_s0"
+      "新疆冬小麦气候区划报告_s1"
     ],
     "retrieval_eval": {
       "must_retrieve": [
@@ -1203,8 +1203,8 @@
     },
     "expected_citation": [
       {
-        "doc_id": "D_P_R_650000_001-新疆冬小麦气候区划报告",
-        "section": "s0",
+        "doc_id": "新疆冬小麦气候区划报告",
+        "section": "s1",
         "heading": "地理位置"
       }
     ],
@@ -1226,13 +1226,13 @@
     "query_type": "fact",
     "difficulty": "easy",
     "gold_doc_ids": [
-      "D_P_R_650000_001-新疆冬小麦气候区划报告"
+      "新疆冬小麦气候区划报告"
     ],
     "gold_sections": [
-      "s4"
+      "s1"
     ],
     "gold_chunks": [
-      "D_P_R_650000_001-新疆冬小麦气候区划报告_s4"
+      "新疆冬小麦气候区划报告_s1"
     ],
     "retrieval_eval": {
       "must_retrieve": [
@@ -1257,8 +1257,8 @@
     },
     "expected_citation": [
       {
-        "doc_id": "D_P_R_650000_001-新疆冬小麦气候区划报告",
-        "section": "s4",
+        "doc_id": "新疆冬小麦气候区划报告",
+        "section": "s1",
         "heading": "冬小麦品种"
       }
     ],
@@ -1334,7 +1334,7 @@
       "D_P_R_360000_001-江西柑橘气候区划报告"
     ],
     "gold_sections": [
-      "s0"
+      "s1"
     ],
     "gold_chunks": [
       "D_P_R_360000_001-江西柑橘气候区划报告_s0"
@@ -1366,7 +1366,7 @@
     "expected_citation": [
       {
         "doc_id": "D_P_R_360000_001-江西柑橘气候区划报告",
-        "section": "s0",
+        "section": "s1",
         "heading": "极端天气事件"
       }
     ],
@@ -1548,7 +1548,7 @@
       "辽宁省生态气象和卫星遥感中心-算法说明文档"
     ],
     "gold_sections": [
-      "s4"
+      "s1"
     ],
     "gold_chunks": [
       "辽宁省生态气象和卫星遥感中心-算法说明文档_s4"
@@ -1576,7 +1576,7 @@
     "expected_citation": [
       {
         "doc_id": "辽宁省生态气象和卫星遥感中心-算法说明文档",
-        "section": "s4",
+        "section": "s1",
         "heading": "干旱灾害区划"
       }
     ],
@@ -2602,7 +2602,7 @@
       "D_P_R_410000_001-农业气候区划报告-河南省"
     ],
     "gold_sections": [
-      "s4",
+      "s1",
       "s39"
     ],
     "gold_chunks": [
@@ -2658,7 +2658,7 @@
       "黑龙江省大豆冷害气候风险区划技术规范（初稿）"
     ],
     "gold_sections": [
-      "s4",
+      "s1",
       "s5"
     ],
     "gold_chunks": [
@@ -2691,7 +2691,7 @@
     "expected_citation": [
       {
         "doc_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）",
-        "section": "s4",
+        "section": "s1",
         "heading": "层次分析法"
       }
     ],
@@ -2995,7 +2995,7 @@
       "黑龙江省大豆渍涝气候风险区划技术规范（初稿）"
     ],
     "gold_sections": [
-      "s4",
+      "s1",
       "s2"
     ],
     "gold_chunks": [
@@ -3028,7 +3028,7 @@
     "expected_citation": [
       {
         "doc_id": "黑龙江省大豆渍涝气候风险区划技术规范（初稿）",
-        "section": "s4",
+        "section": "s1",
         "heading": "渍涝要素指标"
       }
     ],
@@ -3051,8 +3051,7 @@
       "D_P_R_230000_001-农业气候区划报告"
     ],
     "gold_sections": [
-      "s1",
-      "s0"
+      "s1"
     ],
     "gold_chunks": [
       "D_P_R_230000_001-农业气候区划报告_s1",
@@ -3165,7 +3164,7 @@
       "黑龙江省大豆产量气候区划技术规范(初稿)"
     ],
     "gold_sections": [
-      "s0",
+      "s1",
       "t0"
     ],
     "gold_chunks": [
@@ -3336,7 +3335,7 @@
       "黑龙江省大豆冷害气候风险区划技术规范（初稿）"
     ],
     "gold_sections": [
-      "s0",
+      "s1",
       "s3",
       "t9"
     ],
@@ -3372,7 +3371,7 @@
     "expected_citation": [
       {
         "doc_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）",
-        "section": "s0",
+        "section": "s1",
         "heading": "低温冷害定义"
       }
     ],
@@ -3523,7 +3522,7 @@
     "gold_sections": [
       "s7",
       "s8",
-      "s9"
+      "s5"
     ],
     "gold_chunks": [
       "新疆冬小麦气候区划报告_s7",
@@ -3557,7 +3556,7 @@
     "expected_citation": [
       {
         "doc_id": "新疆冬小麦气候区划报告",
-        "section": "s9",
+        "section": "s5",
         "heading": "区划维度"
       }
     ],
@@ -3955,7 +3954,6 @@
     "gold_sections": [
       "s1",
       "s2",
-      "s4",
       "s5"
     ],
     "gold_chunks": [
@@ -4004,7 +4002,7 @@
       },
       {
         "doc_id": "辽宁省生态气象和卫星遥感中心-算法说明文档",
-        "section": "s4",
+        "section": "s1",
         "heading": "干旱灾害区划"
       },
       {
@@ -4112,7 +4110,7 @@
       "新疆冬小麦气候区划报告"
     ],
     "gold_sections": [
-      "s9",
+      "s5",
       "s10"
     ],
     "gold_chunks": [
@@ -4148,7 +4146,7 @@
     "expected_citation": [
       {
         "doc_id": "新疆冬小麦气候区划报告",
-        "section": "s9",
+        "section": "s5",
         "heading": "种植适宜区"
       },
       {
@@ -4180,7 +4178,7 @@
     "gold_sections": [
       "s7",
       "s8",
-      "s9"
+      "s5"
     ],
     "gold_chunks": [
       "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s7",
@@ -4390,7 +4388,7 @@
     "gold_sections": [
       "s2",
       "s3",
-      "s4"
+      "s1"
     ],
     "gold_chunks": [
       "黑龙江省大豆种植气候区划技术规范(初稿）1120_s2",
@@ -4436,7 +4434,7 @@
       },
       {
         "doc_id": "黑龙江省大豆种植气候区划技术规范(初稿）1120",
-        "section": "s4",
+        "section": "s1",
         "heading": "GIS叠加制图"
       }
     ],
@@ -4459,7 +4457,7 @@
       "D_P_R_360000_001-江西柑橘气候区划报告"
     ],
     "gold_sections": [
-      "s4",
+      "s1",
       "s5"
     ],
     "gold_chunks": [
@@ -4495,7 +4493,7 @@
     "expected_citation": [
       {
         "doc_id": "D_P_R_360000_001-江西柑橘气候区划报告",
-        "section": "s4",
+        "section": "s1",
         "heading": "宽皮桔适宜性指标"
       },
       {
@@ -4526,7 +4524,7 @@
     ],
     "gold_sections": [
       "s3",
-      "s4"
+      "s1"
     ],
     "gold_chunks": [
       "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_s3",
@@ -4566,7 +4564,7 @@
       },
       {
         "doc_id": "黑龙江省大豆渍涝气候风险区划技术规范（初稿）",
-        "section": "s4",
+        "section": "s1",
         "heading": "渍涝指标计算与风险分级"
       }
     ],
@@ -4662,7 +4660,7 @@
       "D_P_R_410000_001-农业气候区划报告-河南省"
     ],
     "gold_sections": [
-      "s4",
+      "s1",
       "s5",
       "s37"
     ],
@@ -4700,7 +4698,7 @@
     "expected_citation": [
       {
         "doc_id": "D_P_R_410000_001-农业气候区划报告-河南省",
-        "section": "s4",
+        "section": "s1",
         "heading": "冬小麦生育期"
       },
       {
@@ -4877,8 +4875,7 @@
       "黑龙江农业生产普查技术规范2025"
     ],
     "gold_sections": [
-      "s0",
-      "s0"
+      "s1"
     ],
     "gold_chunks": [
       "黑龙江农业气候资源普查技术规范2025_s0",
@@ -4911,12 +4908,12 @@
     "expected_citation": [
       {
         "doc_id": "黑龙江农业气候资源普查技术规范2025",
-        "section": "s0",
+        "section": "s1",
         "heading": "概述"
       },
       {
         "doc_id": "黑龙江农业生产普查技术规范2025",
-        "section": "s0",
+        "section": "s1",
         "heading": "普查基本原则"
       }
     ],
@@ -4940,7 +4937,7 @@
       "黑龙江省大豆霜冻气候风险区划技术规范（初稿）"
     ],
     "gold_sections": [
-      "s0",
+      "s1",
       "s1"
     ],
     "gold_chunks": [
@@ -4975,7 +4972,7 @@
     "expected_citation": [
       {
         "doc_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）",
-        "section": "s0",
+        "section": "s1",
         "heading": "低温冷害定义"
       },
       {
@@ -5004,8 +5001,7 @@
       "农业气候区划指标算法说明文档（陕西-算法说明文档-梁轶）20250926"
     ],
     "gold_sections": [
-      "s1",
-      "s0"
+      "s1"
     ],
     "gold_chunks": [
       "气科院-农业气候区划指标算法说明文档-王旗_s1",
@@ -5042,7 +5038,7 @@
       },
       {
         "doc_id": "农业气候区划指标算法说明文档（陕西-算法说明文档-梁轶）20250926",
-        "section": "s0",
+        "section": "s1",
         "heading": "陕西本地化说明"
       }
     ],
@@ -5201,7 +5197,7 @@
       "新疆冬小麦气候区划报告"
     ],
     "gold_sections": [
-      "s0",
+      "s1",
       "s2"
     ],
     "gold_chunks": [
@@ -5237,7 +5233,7 @@
     "expected_citation": [
       {
         "doc_id": "D_P_R_410000_001-农业气候区划报告-河南省",
-        "section": "s0",
+        "section": "s1",
         "heading": "农业气象灾害概述"
       },
       {
@@ -5268,8 +5264,7 @@
       "新疆农业气候资源普查技术规范"
     ],
     "gold_sections": [
-      "s0",
-      "s0"
+      "s1"
     ],
     "gold_chunks": [
       "黑龙江农业气候资源普查技术规范2025_s0",
@@ -5303,12 +5298,12 @@
     "expected_citation": [
       {
         "doc_id": "黑龙江农业气候资源普查技术规范2025",
-        "section": "s0",
+        "section": "s1",
         "heading": "概述"
       },
       {
         "doc_id": "新疆农业气候资源普查技术规范",
-        "section": "s0",
+        "section": "s1",
         "heading": "新疆普查概述"
       }
     ],
@@ -5337,7 +5332,6 @@
     ],
     "gold_sections": [
       "s1",
-      "s0",
       "s1",
       "s1"
     ],
@@ -5379,7 +5373,7 @@
       },
       {
         "doc_id": "农业气候区划指标算法说明文档（陕西-算法说明文档-梁轶）20250926",
-        "section": "s0",
+        "section": "s1",
         "heading": "陕西本地化说明"
       }
     ],
@@ -5538,8 +5532,7 @@
       "D_P_R_150000_001-内蒙古区划报告"
     ],
     "gold_sections": [
-      "s1",
-      "s4"
+      "s1"
     ],
     "gold_chunks": [
       "D_P_R_230000_001-农业气候区划报告_s1",
@@ -5578,7 +5571,7 @@
       },
       {
         "doc_id": "D_P_R_150000_001-内蒙古区划报告",
-        "section": "s4",
+        "section": "s1",
         "heading": "无霜期变化趋势"
       }
     ],
@@ -5939,11 +5932,11 @@
     ],
     "gold_sections": [
       "s1",
-      "s0"
+      "t4"
     ],
     "gold_chunks": [
       "黑龙江农业气候资源普查技术规范2025_s1",
-      "新疆农业气候资源普查清单_s0"
+      "新疆农业气候资源普查清单_t4"
     ],
     "retrieval_eval": {
       "must_retrieve": [
@@ -5979,8 +5972,8 @@
       },
       {
         "doc_id": "新疆农业气候资源普查清单",
-        "section": "s0",
-        "heading": "新疆普查清单"
+        "section": "t4",
+        "heading": "降水要素"
       }
     ],
     "keywords": [
@@ -6071,8 +6064,7 @@
       "农业气候区划指标算法说明文档（陕西-算法说明文档-梁轶）20250926"
     ],
     "gold_sections": [
-      "s1",
-      "s0"
+      "s1"
     ],
     "gold_chunks": [
       "农业气候区划指标算法说明文档（新疆农业气象台-算法说明文档-郑新倩）_s1",
@@ -6112,7 +6104,7 @@
       },
       {
         "doc_id": "农业气候区划指标算法说明文档（陕西-算法说明文档-梁轶）20250926",
-        "section": "s0",
+        "section": "s1",
         "heading": "陕西本地化说明"
       }
     ],
@@ -6138,7 +6130,7 @@
       "新疆冬小麦气候区划报告"
     ],
     "gold_sections": [
-      "s0",
+      "s1",
       "s7"
     ],
     "gold_chunks": [
@@ -6174,7 +6166,7 @@
     "expected_citation": [
       {
         "doc_id": "黑龙江省大豆产量气候区划技术规范(初稿)",
-        "section": "s0",
+        "section": "s1",
         "heading": "产量区划方法"
       },
       {
@@ -6273,7 +6265,7 @@
       "D_P_R_410000_001-农业气候区划报告-河南省"
     ],
     "gold_sections": [
-      "s4",
+      "s1",
       "s39"
     ],
     "gold_chunks": [
@@ -6310,7 +6302,7 @@
     "expected_citation": [
       {
         "doc_id": "黑龙江省大豆渍涝气候风险区划技术规范（初稿）",
-        "section": "s4",
+        "section": "s1",
         "heading": "渍涝要素指标"
       },
       {
@@ -6341,7 +6333,7 @@
       "D_P_R_150000_001-内蒙古区划报告"
     ],
     "gold_sections": [
-      "s0",
+      "s1",
       "s8"
     ],
     "gold_chunks": [
@@ -6377,7 +6369,7 @@
     "expected_citation": [
       {
         "doc_id": "D_P_R_230000_001-农业气候区划报告",
-        "section": "s0",
+        "section": "s1",
         "heading": "区划报告概述"
       },
       {
@@ -6409,12 +6401,12 @@
       "新疆冬小麦气候区划报告"
     ],
     "gold_sections": [
-      "s4",
-      "s9"
+      "s30",
+      "s5"
     ],
     "gold_chunks": [
-      "D_P_R_410000_001-农业气候区划报告-河南省_s4",
-      "新疆冬小麦气候区划报告_s9"
+      "D_P_R_410000_001-农业气候区划报告-河南省_s30",
+      "新疆冬小麦气候区划报告_s5"
     ],
     "retrieval_eval": {
       "must_retrieve": [
@@ -6445,12 +6437,12 @@
     "expected_citation": [
       {
         "doc_id": "D_P_R_410000_001-农业气候区划报告-河南省",
-        "section": "s4",
+        "section": "s30",
         "heading": "冬小麦生育期"
       },
       {
         "doc_id": "新疆冬小麦气候区划报告",
-        "section": "s9",
+        "section": "s5",
         "heading": "种植适宜区"
       }
     ],
@@ -6612,7 +6604,7 @@
     ],
     "gold_sections": [
       "s2",
-      "s4"
+      "s1"
     ],
     "gold_chunks": [
       "气科院-农业气候区划指标算法说明文档-王旗_s2",
@@ -6652,7 +6644,7 @@
       },
       {
         "doc_id": "农业气候区划指标算法说明文档（新疆农业气象台-算法说明文档-郑新倩）",
-        "section": "s4",
+        "section": "s1",
         "heading": "产量区划方法"
       }
     ],
@@ -6680,11 +6672,11 @@
     ],
     "gold_sections": [
       "s17",
-      "s8"
+      "t11"
     ],
     "gold_chunks": [
       "D_P_R_610000_001-陕西苹果气候区划报告_s17",
-      "新疆冬小麦气候区划报告_s8"
+      "新疆冬小麦气候区划报告_t11"
     ],
     "retrieval_eval": {
       "must_retrieve": [
@@ -6747,7 +6739,7 @@
       "D_P_R_150000_001-内蒙古区划报告"
     ],
     "gold_sections": [
-      "s4",
+      "s1",
       "s21"
     ],
     "gold_chunks": [
@@ -6783,7 +6775,7 @@
     "expected_citation": [
       {
         "doc_id": "辽宁省生态气象和卫星遥感中心-算法说明文档",
-        "section": "s4",
+        "section": "s1",
         "heading": "干旱灾害区划"
       },
       {
@@ -7316,7 +7308,7 @@
       "D_P_R_150000_001-内蒙古区划报告"
     ],
     "gold_sections": [
-      "s4"
+      "s1"
     ],
     "gold_chunks": [
       "D_P_R_150000_001-内蒙古区划报告_s4"
@@ -7344,7 +7336,7 @@
     "expected_citation": [
       {
         "doc_id": "D_P_R_150000_001-内蒙古区划报告",
-        "section": "s4",
+        "section": "s1",
         "heading": "无霜期变化趋势"
       }
     ],
@@ -7901,7 +7893,7 @@
       "新疆冬小麦气候区划报告"
     ],
     "gold_sections": [
-      "s9"
+      "s5"
     ],
     "gold_chunks": [
       "新疆冬小麦气候区划报告_s9"
@@ -7930,7 +7922,7 @@
     "expected_citation": [
       {
         "doc_id": "新疆冬小麦气候区划报告",
-        "section": "s9",
+        "section": "s5",
         "heading": "种植适宜区"
       }
     ],
@@ -8433,7 +8425,7 @@
       "黑龙江省大豆冷害气候风险区划技术规范（初稿）"
     ],
     "gold_sections": [
-      "s0"
+      "s1"
     ],
     "gold_chunks": [
       "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s0"
@@ -8463,7 +8455,7 @@
     "expected_citation": [
       {
         "doc_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）",
-        "section": "s0",
+        "section": "s1",
         "heading": "低温冷害定义"
       }
     ],
@@ -8713,10 +8705,10 @@
       "新疆冬小麦气候区划报告"
     ],
     "gold_sections": [
-      "D_P_R_650000_001-新疆冬小麦气候区划报告_sec_9"
+      "s5"
     ],
     "gold_chunks": [
-      "D_P_R_650000_001-新疆冬小麦气候区划报告_s9"
+      "新疆冬小麦气候区划报告_s5"
     ],
     "retrieval_eval": {
       "must_retrieve": [
@@ -8739,7 +8731,7 @@
     "expected_citation": [
       {
         "doc_id": "新疆冬小麦气候区划报告",
-        "section": "s9",
+        "section": "s5",
         "heading": "种植适宜区"
       }
     ],
@@ -8765,7 +8757,7 @@
       "D_P_R_360000_001-江西柑橘气候区划报告"
     ],
     "gold_sections": [
-      "s0"
+      "s1"
     ],
     "gold_chunks": [
       "D_P_R_360000_001-江西柑橘气候区划报告_s0"
@@ -8794,7 +8786,7 @@
     "expected_citation": [
       {
         "doc_id": "D_P_R_360000_001-江西柑橘气候区划报告",
-        "section": "s0",
+        "section": "s1",
         "heading": "极端天气事件"
       }
     ],
@@ -9375,7 +9367,7 @@
       "黑龙江省大豆冷害气候风险区划技术规范（初稿）"
     ],
     "gold_sections": [
-      "s9"
+      "s5"
     ],
     "gold_chunks": [
       "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s9"
@@ -9405,7 +9397,7 @@
     "expected_citation": [
       {
         "doc_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）",
-        "section": "s9",
+        "section": "s5",
         "heading": "暴露度与脆弱性评估"
       }
     ],

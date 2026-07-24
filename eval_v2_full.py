@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
-"""V2 Golden Set 全配置检索评测 — Baseline / +Rewrite / +Reranker / +Both"""
+"""V2 Golden Set 全配置检索评测 — Baseline / +Rewrite / +Reranker / +Both
++ 诊断分桶 (定位零召回失败环节)"""
 
 import json, sys, time
 import numpy as np
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from eval_diagnostic import DiagnosticAnalyzer
 
 print("[eval] 加载数据...", flush=True)
 with open("data/golden_set_v2.json") as f:
     gs = json.load(f)
-with open("data/chunks.json") as f:
+with open("data/chunks_split.json") as f:
     chunks = json.load(f)
 
 sec_to_cids = {}
@@ -77,11 +79,19 @@ def run_eval(name, searcher, use_rewrite):
 
     t0 = time.time()
     results = []
+    total = len(indomain_qs)
     workers = 4
     with ThreadPoolExecutor(max_workers=workers) as ex:
         futures = {ex.submit(run_one, q, searcher, use_rewrite): q["id"] for q in indomain_qs}
+        done = 0
         for f in as_completed(futures):
             results.append(f.result())
+            done += 1
+            if done % 20 == 0 or done == total:
+                pct = done * 100 // total
+                elapsed = time.time() - t0
+                eta = elapsed / done * (total - done) if done > 0 else 0
+                print(f"  [{name}] 进度: {done}/{total} ({pct}%) 耗时: {elapsed:.0f}s 预估剩余: {eta:.0f}s", flush=True)
 
     elapsed = time.time() - t0
     n = len(results)
@@ -149,8 +159,12 @@ def run_eval(name, searcher, use_rewrite):
             print(f"  {r['id']} ({r['capability']}, {r['difficulty']}): {q['question'][:80]}")
 
     sys.stdout.flush()
+    # 零召回详情：id + question 映射供诊断用
+    zero_details = [{"id": r["id"], "question": next(x for x in gs if x["id"] == r["id"])["question"]}
+                    for r in zero_recall]
     return {"name": name, "mrr": mrr, "recall_5": recall_5, "recall_10": recall_10,
-            "top1_hit": top1_hit, "zero_recall": len(zero_recall), "elapsed": elapsed}
+            "top1_hit": top1_hit, "zero_recall": len(zero_recall), "elapsed": elapsed,
+            "zero_details": zero_details, "results": results}
 
 
 # ── Init searchers ──
@@ -218,6 +232,31 @@ print(f"  {'Config':<38s} {'MRR':>6s}  {'R@5':>6s}  {'R@10':>6s}  {'Top1':>6s}  
 print(f"  {'-'*80}")
 for r in all_results:
     print(f"  {r['name']:<38s} {r['mrr']:>6.4f}  {r['recall_5']:>6.4f}  {r['recall_10']:>6.4f}  {r['top1_hit']:>6.4f}  {r['zero_recall']:>7d}  {r['elapsed']:>5.1f}s")
+
+best = all_results[-1]  # +Rewrite + Reranker
+best_searcher = searcher_rerank
+best_config_name = best["name"]
+
+print(f"\n[{'='*60}]", flush=True)
+print(f"  诊断分桶 — {best_config_name} 零召回题定位失败环节", flush=True)
+print(f"[{'='*60}]", flush=True)
+
+zero_qs = []
+for zd in best["zero_details"]:
+    q = next(x for x in gs if x["id"] == zd["id"])
+    zero_qs.append(q)
+
+if zero_qs:
+    analyzer = DiagnosticAnalyzer(best_searcher, chunks, rewrite_map)
+    diag_rows = analyzer.analyze(zero_qs)
+    analyzer.print_report(diag_rows)
+
+    # 保存
+    with open("diagnose_v2_full.json", "w", encoding="utf-8") as f:
+        json.dump(diag_rows, f, ensure_ascii=False, indent=2)
+    print(f"\n  诊断结果已保存: diagnose_v2_full.json")
+else:
+    print("  无零召回题，跳过诊断")
 
 print(f"\n  评测完成")
 print(f"[{'='*60}]")
