@@ -1,15 +1,5 @@
 """
-OOD Judge
-
-四层判断：
-  1. 信号层: 无结果 → reject
-  2. 高置信层: similarity >= 0.75 → answer（极高置信度，OOD 仅 3/20 误过）
-  3. 分数层: similarity < 0.65 → reject（OOD 6/20 在此层，In-domain 误拒 ~6%）
-  4. LLM 层: 模糊区间 [0.65, 0.75) → LLM 细判（约 25% 查询）
-
-阈值来源: 2026-07-02 对 golden_set_v2 200 题实测标定
-  OOD sim ∈ [0.51, 0.79], In-domain sim ∈ [0.49, 0.91]
-  两者高度重叠，无法纯阈值分离，需 LLM 层处理模糊区间。
+OOD Judge — 两层判断
 
 用法:
   from judge import judge
@@ -43,9 +33,7 @@ JUDGE_PROMPT = ChatPromptTemplate.from_messages([
 {{"decision": "YES"|"NO"|"PARTIAL", "reason": "一句话理由", "confidence": 0.0-1.0}}"""),
 ])
 
-# 2026-07-02 标定: OOD P95=0.79 但 In-domain P5=0.65, 重叠严重
-HIGH_SIM = 0.75   # ≥此值直接放行（OOD 3/20 误过, In-domain ~69% 快速通过）
-LOW_SIM = 0.65    # <此值直接拒绝（OOD 6/20 在此层, In-domain 误拒 ~6%）
+DIRECT_THRESHOLD = 0.70  # top1_sim ≥ 此值直接放行，< 此值走 LLM 判定
 
 
 def judge(query: str, results: list[dict]) -> dict:
@@ -54,38 +42,26 @@ def judge(query: str, results: list[dict]) -> dict:
 
     Returns:
         {"decision": "answer"|"reject"|"fallback", "reason": "...",
-         "confidence": float, "method": "signal"|"score"|"high_sim"|"llm"}
+         "confidence": float, "method": "direct"|"llm"}
     """
     if not results:
-        return {"decision": "reject", "reason": "无检索结果", "confidence": 1.0, "method": "signal"}
+        return {"decision": "reject", "reason": "无检索结果", "confidence": 1.0, "method": "direct"}
 
     top1 = results[0]
-    # 优先用 dense_similarity（余弦相似度），fallback 到 similarity
     sim = top1.get("dense_similarity", top1.get("similarity", 0))
 
-    # Layer 2: 高置信度放行
-    if sim >= HIGH_SIM:
+    if sim >= DIRECT_THRESHOLD:
         return {
             "decision": "answer",
-            "reason": f"similarity={sim:.3f} >= {HIGH_SIM}, 高置信度",
+            "reason": f"similarity={sim:.3f} >= {DIRECT_THRESHOLD}",
             "confidence": float(min(1.0, sim)),
-            "method": "high_sim",
+            "method": "direct",
         }
 
-    # Layer 3: 低分直接拒绝
-    if sim < LOW_SIM:
-        return {
-            "decision": "reject",
-            "reason": f"similarity={sim:.3f} < {LOW_SIM}",
-            "confidence": 0.9,
-            "method": "score",
-        }
-
-    # Layer 4: LLM 细判 — 模糊区间 [0.65, 0.75)，约 25% 查询
     try:
         return _llm_judge(query, results[:3])
     except Exception:
-        return {"decision": "fallback", "reason": f"similarity={sim:.3f} 模糊区间", "confidence": 0.5, "method": "score"}
+        return {"decision": "fallback", "reason": f"similarity={sim:.3f} LLM 异常", "confidence": 0.5, "method": "llm"}
 
 
 def _llm_judge(query: str, results: list[dict]) -> dict:

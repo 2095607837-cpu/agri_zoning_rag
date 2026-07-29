@@ -1,11 +1,13 @@
 # V2 Golden Set 全配置检索评测报告
 
-生成时间：2026-07-06 | 最后更新：2026-07-24 | 评测集：`golden_set_v2.json` | 199 题（in-domain 179 + OOD 20）
+生成时间：2026-07-06 | 最后更新：2026-07-29 | 评测集：`golden_set_v2.json` | 199 题（in-domain 179 + OOD 20）
 
 ## 变更日志
 
 | 日期 | 变更 |
 |------|------|
+| 2026-07-29 | **三池分离 Query Rewrite + Hit Boost 0.002**：rewrite 从 2 池（Keyword+SubQuery）重构为 3 池（Keyword≤6/BM25-only + RewriteQuery≤2/Dense+BM25 + SubQuery≤3/Dense+BM25），新增 `rewrite_queries` 字段（完整句子改写）。Hit Boost 从 0.10/0.15 降至 0.002。+Rewrite+Reranker: MRR=0.5172, R@10=87.2%, R@10=0=23。详见"十九、三池分离 Query Rewrite（2026-07-29）" |
+| 2026-07-28 | **Parallel Evidence Merge 架构**：search_multi_query 改为并行 RRF→Evidence Merge（Hit Boost + Dense Protect）→ Global Pool → CE Rerank。search_multi_query 返回值修正为 (judge_results, merged)。评估改为 chunk 级直接对比 + section 级辅助。+Rewrite+Reranker: MRR=0.5469, R@10=86.6%, R@10=0=24。详见"十八、Parallel Evidence Merge（2026-07-28）" |
 | 2026-07-04 | Baseline / +Rewrite / +Reranker 三配置完成，+Rewrite+Reranker 因嵌套线程池死锁挂起 |
 | 2026-07-05 | 修复：`search()` 新增 `skip_reranker` 参数，子查询跳过 CrossEncoder，CrossEncoder 调用从 1268 次降至 180 次 |
 | 2026-07-06 | +Rewrite+Reranker 配置完成，全四配置汇总 |
@@ -24,8 +26,8 @@
 ## 版本演进总览
 
 > 所有配置均使用 `BAAI/bge-small-zh-v1.5`（512-dim）、Append 架构、RRF dense/BM25=0.7/0.3、alpha=0.2，除非特别注明。
-> **当前生产配置**：2026-07-14 New Rewrite Prompt Append（chunks.json, 旧 Append 管线）。
-> ⚠ 2026-07-24（#10）切换 chunks_split + 三相管线后指标全面退化，见末行。
+> **当前生产配置**：2026-07-29 三池分离 Rewrite（chunks_split, Evidence Merge, Hit Boost 0.002）。
+> ⚠ 2026-07-24（#10）切换 chunks_split + 三相管线后指标全面退化。2026-07-28（#11）Evidence Merge 大幅恢复。2026-07-29（#12）三池分离 R@10 创新高（87.2%）。
 
 | # | 版本 | Chunks | 管线 | 题数 | MRR | R@5 | R@10 | Top1 | R@10=0 | OOD | 耗时 |
 |---|------|--------|------|------|------|------|------|------|--------|-----|------|
@@ -39,6 +41,8 @@
 | 8 | 2026-07-14 Late Fusion | chunks.json | Late Fusion | 179 | 0.5758 | 75.4% | 81.0% | 45.8% | 34 | 75.0% | 1475s |
 | 9 | 2026-07-15 Hybrid Fusion (已否定) | chunks.json | Hybrid | 179 | 0.5568 | 74.3% | 82.7% | 43.6% | 31 | 70.0% | 3243s |
 | 10 | 2026-07-24 chunks_split + 三相管线 | **chunks_split** | **三相** | 179 | 0.5638 | 66.5% | 72.1% | 48.0% | 50 | **80.0%** | 1556s |
+| **11** | **2026-07-28 Parallel Evidence Merge** | chunks_split | **Evidence Merge** | **179** | **0.5469** | **74.3%** | **86.6%** | **39.7%** | **24** | 55.0% | **3533s** |
+| **12** | **2026-07-29 三池分离 Rewrite** | chunks_split | **Evidence Merge** | **179** | **0.5172** | **72.1%** | **87.2%** | **34.6%** | **23** | 55.0% | **3710s** |
 
 **关键对比：**
 
@@ -50,6 +54,7 @@
 | Append → Late Fusion | 架构变更 | -0.0411 | -2.8pp | +5 |
 | Append → Hybrid Fusion | 架构变更 | -0.0601 | -1.1pp | +2 |
 | **chunks.json → chunks_split + 三相管线** | **数据+管线变更** | **-0.0531** | **-11.7pp** | **+21** |
+| **#11 → #12 三池分离 + Hit Boost 0.002** | **Rewrite 重构** | -0.0297 | +0.6pp | -1 |
 
 **按能力雷达（#7 chunks.json/Append vs #10 chunks_split/三相管线）：**
 
@@ -1117,3 +1122,285 @@ chunks_split + 三相管线相比旧 chunks.json + Append 管线全面退化，R
 2. **修复诊断复用**：DiagnosticAnalyzer 应接收主 eval 的 search_multi_query 结果，而非独立检索
 3. **RRF 权重调整**：8 题单通道强但被稀释 → 提高 Dense 权重（0.7→0.85）或动态权重
 4. **CE 候选池扩大**：4 题 CE 搅黄 → 增大 CE 候选池（30→50）、提高 alpha（0.2→0.3）
+
+---
+
+## 十八、Parallel Evidence Merge（2026-07-28）
+
+评测集：`golden_set_v2.json` 199 题（in-domain 179 + OOD 20） | 脚本：`eval_v2_full.py`
+
+### 18.1 变更内容
+
+| 变更 | 说明 |
+|------|------|
+| 检索架构 | `search_multi_query` 从 Append 改为 Parallel Evidence Merge：Original + SubQueries 并行 Dense+BM25→RRF → 去重 + Hit Boost + Dense Protect → Global Pool → CE Rerank |
+| 返回值修正 | `search_multi_query` 返回 `(judge_results, merged)` — judge_results 为原始查询独立 CE 结果（供 OOD Judge），merged 为 Evidence Merge 合并结果（供生成/评估） |
+| 评估逻辑 | 从 section 展开展平改为 chunk 级直接 ID 对比（primary）+ section 级辅助 |
+| `_rrf_retrieve` 提取 | 单查询 Dense+BM25→RRF 融合逻辑提取为独立方法 |
+| `search()` 重构 | 复用 `_rrf_retrieve` + `_rrf_ce_fusion` |
+| OOD Judge | 4 层简化为 2 层：direct（top1_sim ≥ 0.70） / llm |
+
+**配置**：+Rewrite + Reranker，alpha=0.2, lambda_length=0.1, expand_context=False（eval），orig_dense_k=30, orig_bm25_k=20, subq_dense_k=20, subq_bm25_k=10。
+
+**检索流程**：
+
+```
+Query + SubQueries (并行)
+  │
+  ├─ Original:  Dense k=30  + BM25 k=20  → RRF (K=60, 0.7/0.3)
+  ├─ SubQ_1:    Dense k=20  + BM25 k=10  → RRF
+  ├─ SubQ_2:    Dense k=20  + BM25 k=10  → RRF
+  └─ ...
+  │
+  ├─ Evidence Merge: max(RRF) 去重 + 来源追踪
+  ├─ Hit Boost: 2 查询命中 +0.10, 3+ 查询命中 +0.15
+  ├─ Per-query Dense Protect: 每个查询 Dense top-2 保送
+  │
+  ├─ Global Pool: RRF top-40 ∪ Dense Protect → cap 50
+  ├─ CE Rerank (CrossEncoder bge-reranker-v2-m3, 使用 Original Query)
+  ├─ Alpha Fusion: final = 0.2 × RRF_norm + 0.8 × CE_norm
+  └─ Output: top_k = 10
+```
+
+### 18.2 整体指标
+
+```
+题目数: 179 (In-domain)  耗时: 3532.8s (~59 min)
+
+  ── Chunk 级（基础指标）──
+  MRR:             0.5469
+  Recall@5:        0.7430 (74.3%)
+  Recall@10:       0.8659 (86.6%)
+  Top-1 命中率:    0.3966 (39.7%)
+  平均命中 chunk:  1.1 / 1.6
+  Recall@10=0:     24/179 (13.4%)
+
+  ── Section 级（辅助指标）──
+  MRR:             0.5469
+  Recall@5:        0.7430 (74.3%)
+  Recall@10:       0.8659 (86.6%)
+```
+
+### 18.3 按 Capability (Chunk 级)
+
+| Capability | n | MRR | R@5 | R@10 | Top1 |
+|------------|----|------|------|------|------|
+| exact_retrieval | 35 | 0.719 | 0.914 | 0.971 | 0.543 |
+| context_expansion | 25 | 0.660 | 0.840 | 0.960 | 0.560 |
+| cross_section | 25 | 0.424 | 0.800 | 0.880 | 0.240 |
+| cross_document | 30 | 0.418 | 0.633 | 0.733 | 0.267 |
+| table_retrieval | 20 | 0.468 | 0.650 | 0.950 | 0.250 |
+| numeric_retrieval | 20 | 0.800 | 0.900 | 0.900 | 0.700 |
+| query_rewrite | 24 | 0.322 | 0.417 | 0.667 | 0.208 |
+
+### 18.4 按 Difficulty (Chunk 级)
+
+| Difficulty | n | MRR | R@5 | R@10 |
+|------------|----|------|------|------|
+| easy | 131 | 0.601 | 0.809 | 0.908 |
+| medium | 37 | 0.414 | 0.595 | 0.811 |
+| hard | 11 | 0.352 | 0.455 | 0.545 |
+
+### 18.5 OOD 检测 (20 题)
+
+| 指标 | 值 |
+|------|-----|
+| OOD 召回率 | 11/20 (55.0%) |
+| 漏判 | 9 |
+| Judge 分层 | direct=7, llm=13 |
+
+9 题漏判中 7 题被 direct 放行（top1_sim ≥ 0.70），0.70 阈值偏低。
+
+### 18.6 诊断分桶（24 题零召回）
+
+| 环节 | 题数 | 占比 | 建议 |
+|------|------|------|------|
+| C-RRF融合-单通道强但被稀释 | 17 | 70.8% | 提高单通道权重或抑制噪声 |
+| D-CE精排-搅黄 | 4 | 16.7% | 增加 alpha、扩大 CE 候选池 |
+| B-检索层-低余弦断连 | 2 | 8.3% | 优化 query 改写（口语→术语） |
+| E-改写层-命中但未进top10 | 1 | 4.2% | 优化 merge 策略 |
+
+### 18.7 vs 三相管线（第十七节）
+
+| 指标 | 三相管线 (#10) | Evidence Merge (#11) | Δ |
+|------|---------------|---------------------|----|
+| MRR | 0.5638 | 0.5469 | -0.0169 |
+| R@5 | 66.5% | 74.3% | **+7.8pp** |
+| R@10 | 72.1% | 86.6% | **+14.5pp** |
+| Top1 | 48.0% | 39.7% | -8.3pp |
+| R@10=0 | 50 | 24 | **-26 题** |
+| OOD 召回 | 80.0% | 55.0% | -25.0pp |
+
+**分析**：
+- **R@10 大幅提升 +14.5pp**：Evidence Merge 的 Hit Boost + Dense Protect 机制将子查询的高质量结果有效并入候选池，零召回从 50 降至 24
+- **MRR 微降 -0.017**：合并后的排序中，第一位命中率下降（Top1 39.7% vs 48.0%），说明 Evidence Merge 更擅长"召回"而非"精排第一位"
+- **OOD 下降 -25pp**：三相管线 expand_context=True 时 similarity 更高，Evidence Merge eval 用 expand_context=False 导致 direct 阈值更容易被触发。需要重新校准 0.70 阈值
+- **query_rewrite 仍是最大短板**：MRR=0.322, R@10=66.7%
+
+### 18.8 最大瓶颈：C-RRF融合-单通道强但被稀释（17/24 = 70.8%）
+
+17 道零召回的 gold chunk 在 BM25 或 Dense 单通道 top10 内，但 RRF 融合后被另一通道噪声稀释。典型：
+- BM25 单通道命中但 Dense 噪声大 → RRF 排名跌出 top10
+- Dense 单通道命中但 BM25 灌入干扰 chunk → 稀释 Dense 信号
+
+### 18.9 代码改动
+
+| 文件 | 修改 |
+|------|------|
+| `hybrid_search.py` | 新增 `_rrf_retrieve()` 单查询 Dense+BM25→RRF 方法 |
+| `hybrid_search.py` | `search_multi_query()` 重写为 Parallel Evidence Merge |
+| `hybrid_search.py` | `search()` 重构复用 `_rrf_retrieve` + `_rrf_ce_fusion` |
+| `hybrid_search.py` | `_rrf_ce_fusion` 新增 `lambda_length` 长度归一化 |
+| `hybrid_search.py` | `search_multi_query` 返回 `(judge_results, merged)` |
+| `eval_v2_full.py` | `run_one` chunk 级直接 ID 对比 + section 级辅助 |
+| `eval_v2_full.py` | `run_one` 调用侧 `_, results = search_multi_query(...)` |
+| `judge.py` | OOD Judge 从 4 层简化为 2 层（direct ≥0.70 / llm） |
+| `CHUNK_PIPELINE.md` | 更新为 Parallel Evidence Merge 架构文档 |
+
+### 18.10 后续建议
+
+1. **RRF 权重调优**：70.8% 零召回是单通道被稀释，尝试提高 Dense 权重（0.7→0.85）或动态权重
+2. **OOD 阈值重校准**：Evidence Merge + expand_context=False 下 OOD 仅 55%，需扫描 direct 阈值
+3. **query_rewrite 专项优化**：口语→术语映射是最弱环节，考虑加入同义词词典或 fine-tuned embedding
+4. **子查询质量过滤**：部分改写查询引入噪声，可考虑对子查询做质量评分后再决定是否加入 Evidence Merge
+
+---
+
+## 十九、三池分离 Query Rewrite + Hit Boost 0.002（2026-07-29）
+
+### 19.1 变更概要
+
+| 变更 | 旧 | 新 |
+|------|----|----|
+| Rewrite 池结构 | Keyword + SubQuery 2池 | Keyword + RewriteQuery + SubQuery 3池 |
+| Rewrite Queries | 无此字段 | 新增，完整句子改写（≤2，hard 3） |
+| Keyword 限制 | ≤4，hard 5 | ≤6，hard 6 |
+| Keyword 检索方式 | Dense+BM25（同其他 extra query） | BM25 only |
+| SubQuery 限制 | 无 | ≤3，hard 4 |
+| Hit Boost | 2命中+0.10 / 3命中+0.15 | 统一+0.002（固定值） |
+| `_llm_rewrite` 返回值 | 缺失 `rewrite_queries` key | 三字段完整 |
+| `_load_cache` | 有死代码（return 后不可达） | 已清理 |
+
+### 19.2 全指标
+
+| 指标 | 值 |
+|------|----|
+| 题目数 | 179 |
+| MRR | **0.5172** |
+| Recall@5 | **72.1%** |
+| Recall@10 | **87.2%** |
+| Top-1 命中率 | 34.6% |
+| 平均命中 chunk | 1.1 / 1.6 |
+| Recall@10=0 | **23/179** |
+| Section MRR | 0.5172 |
+| Section R@10 | 87.2% |
+| OOD 召回率 | 11/20 (55.0%) |
+| 耗时 | 3710s (62 min) |
+
+### 19.3 按 Capability（Chunk 级）
+
+| Capability | n | MRR | R@5 | R@10 | Top1 |
+|------------|:--:|------|------|------|------|
+| exact_retrieval | 35 | 0.738 | 88.6% | **97.1%** | 60.0% |
+| context_expansion | 25 | 0.567 | 88.0% | 96.0% | 32.0% |
+| table_retrieval | 20 | 0.422 | 75.0% | 95.0% | 15.0% |
+| numeric_retrieval | 20 | 0.708 | 90.0% | 90.0% | 55.0% |
+| cross_section | 25 | 0.385 | 52.0% | 80.0% | 28.0% |
+| cross_document | 30 | 0.376 | 60.0% | 80.0% | 20.0% |
+| query_rewrite | 24 | 0.377 | 50.0% | **70.8%** | 25.0% |
+
+### 19.4 按 Difficulty
+
+| Difficulty | n | MRR | R@5 | R@10 |
+|------------|:--:|------|------|------|
+| easy | 131 | 0.5788 | 79.4% | 90.1% |
+| medium | 37 | 0.3644 | 56.8% | 81.1% |
+| hard | 11 | 0.2979 | 36.4% | 72.7% |
+
+### 19.5 Rewrite 统计
+
+| 池 | 检索方式 | 平均 | 最大 | LLM 覆盖率 |
+|----|----------|:--:|:--:|:--:|
+| Rewrite Query | Dense+BM25 | 0.4 | 1 | 87/199 (43.7%) |
+| Sub Query | Dense+BM25 | 0.5 | 4 | 36/199 (18.1%) |
+| Keyword | BM25 only | 4.3 | 8 (截断到6) | 188/199 (94.5%) |
+| **Dense+BM25 总量** | | **~1.9** | | |
+| **BM25-only 总量** | | **~4.3** | | |
+
+> LLM keywords 有 74/199 (37%) 超过 prompt 约定 ≤4，以 cross_document 和多因子复杂题为主。代码 hard cap=6 兜底截断。
+
+### 19.6 OOD 检测
+
+| 指标 | 值 |
+|------|:--:|
+| 检出率 | 11/20 (55.0%) |
+| Judge 分层 | direct=7, llm=13 |
+| 漏判 | 9 (7 direct, 2 llm) |
+
+**漏判原因分析：**
+- direct 误过 (7/9)：top1_sim ≥0.70，但实际无法回答（如 OOD 问题与库内文档标题相似度高）
+- llm 误判 (2/9)：LLM 认为参考资料能回答但实际上不完整或跨文档矛盾
+
+### 19.7 诊断分桶（23 道零召回）
+
+| 环节 | 题数 | 占比 | 说明 |
+|------|:--:|:--:|------|
+| B-检索层-低余弦断连 | 1 | 4.3% | 口语→术语语义鸿沟 |
+| B-检索层-高余弦未召回 | 1 | 4.3% | cos=0.650 双通道均未命中 |
+| **C-RRF融合-单通道强但被稀释** | **6** | **26.1%** | Dense/BM25 一通道 top10 另一通道噪声稀释 |
+| C-RRF融合-排名偏低 | 4 | 17.4% | Gold 在 RRF pool 内但 10-30 名 |
+| C-RRF融合-排名靠后 | 6 | 26.1% | Gold 在 RRF pool 外 (>30) |
+| D-CE精排-严重搅黄 | 1 | 4.3% | RRF=2 → CE=28 |
+| D-CE精排-轻微搅黄 | 1 | 4.3% | RRF=8 → CE=13 |
+| E-改写层-命中但未合并 | 2 | 8.7% | 改写命中 gold 但 merge 未选入 |
+| E-改写层-改写未命中 | 1 | 4.3% | 5 个改写均未命中 gold |
+
+**环节汇总：**
+
+| 环节 | 题数 | 占比 | 建议 |
+|------|:--:|:--:|------|
+| C-RRF融合层 | 16 | 69.6% | 提高 Dense 权重、增大 RRF pool |
+| E-改写层 | 3 | 13.0% | 放宽 gate 阈值、改写质量优化 |
+| B-检索层 | 2 | 8.7% | 口语→术语映射、chunk 切分优化 |
+| D-CE精排层 | 2 | 8.7% | 增加 alpha、扩大 CE 候选池 |
+
+### 19.8 vs v1.18（#11）对比
+
+| 指标 | #11 Evidence Merge | #12 三池分离 | 变化 |
+|------|:--:|:--:|:--:|
+| MRR | 0.5469 | 0.5172 | **-0.0297** |
+| R@5 | 74.3% | 72.1% | -2.2pp |
+| R@10 | 86.6% | 87.2% | **+0.6pp** |
+| Top-1 | 39.7% | 34.6% | -5.1pp |
+| R@10=0 | 24 | 23 | **-1** |
+| OOD | 55.0% | 55.0% | 持平 |
+
+**分析：**
+- MRR/Top-1 下降主因：Hit Boost 从 0.10/0.15→0.002，多查询交叉验证信号消失，gold chunk 不再因多路命中获得排名加成
+- R@10 微涨：三池分离减少了 keyword 的 Dense 噪声，BM25-only 的 keyword 更聚焦
+- R@10=0 减 1 题：keyword BM25-only 对个别题有帮助
+- OOD 持平（55%）：阈值问题未解决，与 rewrite 变更无关
+
+### 19.9 代码改动
+
+| 文件 | 修改 |
+|------|------|
+| `query_rewriter.py` | Prompt 新增 `rewrite_queries` 字段（15 个 few-shot 全部更新） |
+| `query_rewriter.py` | `expand_query()` 三池分离：Keyword(BM25-only) + RewriteQuery + SubQuery |
+| `query_rewriter.py` | Keyword hard cap 5→6，SubQuery hard 4，Rewrite hard 3 |
+| `query_rewriter.py` | 新增 `get_keywords()` 函数暴露 kw_pool |
+| `query_rewriter.py` | 修复 `_llm_rewrite()` 4处缺失 `rewrite_queries` 的 bug |
+| `query_rewriter.py` | 清理 `_load_cache()` 死代码 |
+| `hybrid_search.py` | Hit Boost 从 0.10/0.15 改为 0.002 |
+| `hybrid_search.py` | `search_multi_query()` 新增 `keyword_queries` 参数 |
+| `hybrid_search.py` | Keyword 查询只走 BM25（dense_k=0），不走 Dense |
+| `eval_v2_full.py` | 新增 `keyword_map`，`run_one()` 和 OOD 评测传 `keyword_queries` |
+| `CHUNK_PIPELINE.md` | 更新为三池分离架构、Hit Boost=0.002 |
+
+### 19.10 后续建议
+
+1. **Hit Boost 恢复交叉验证信号**：当前 0.002 对排名几乎无影响，考虑改为 `0.002 × N`（线性加权）或恢复较小的固定值如 0.02/0.03
+2. **RRF 权重调优**：69.6% 零召回仍是单通道稀释，Dense 权重 0.7→0.85 或动态权重
+3. **OOD direct 阈值**：7/9 漏判因 similarity≥0.70 直接放行，考虑提高到 0.78 或引入 LLM 二次确认
+4. **Rewrite Query 利用率**：LLM 仅 43.7% 生成 rewrite_queries，且最多 1 个（prompt 允许 2），考虑强化 prompt 引导
+5. **keyword 超限控制**：74/199 超 prompt ≤4 约定，本次已放宽到 ≤6 并 hard cap=6，后续观察 LM 行为

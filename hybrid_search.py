@@ -13,6 +13,7 @@ import os
 import json
 import re
 from pathlib import Path
+from typing import Optional
 
 from langchain.schema import Document
 from langchain_community.retrievers import BM25Retriever
@@ -328,83 +329,26 @@ class HybridSearcher:
                 })
         return results
 
-    def search_multi_query(
-        self, query: str, top_k: int = 5, expand_context: bool = True,
-        extra_queries=None, w_dense: float = 0.7, w_bm25: float = 0.3,
-        alpha: float = 0.2, lambda_length: float = 0.1,
-        dense_protect_k: int = 5,
-    ):
-        """Dense Protected Merge + Append 架构。
+    def _rrf_retrieve(
+        self, query: str, dense_k: int, bm25_k: int,
+        w_dense: float = 0.7, w_bm25: float = 0.3,
+    ) -> tuple[dict, dict, list]:
+        """单查询 Dense+BM25→RRF 融合（不含 CE）。
 
-        Dense top-K → 直接保序（避免 BM25 干扰 Dense 高置信结果）
-        RRF+CE    → 去重追加（高质量 CE 信号，排 Dense 保护之后）
-        Rewrite   → RRF-only 去重追加（不干扰前面排序）
-
-        子查询跳过 CE 避免了噪声干扰，同时保留改写召回的高价值 chunk。
+        Returns:
+            (rrf_scores, doc_store, chroma_raw)
+            rrf_scores:  key → rrf_score (已含 single-channel boost)
+            doc_store:   key → (content, metadata, cosine_sim)
+            chroma_raw:  [(doc, l2_dist), ...] 供 Dense Protect 使用
         """
-        if not extra_queries:
-            results = self.search(query, top_k=top_k, expand_context=expand_context,
-                                  lambda_length=lambda_length)
-            return results, results
-
-        # Phase 1: Dense Protected — 直接从 Chroma 取 top-K，保序
-        dense_raw = self._vectorstore.similarity_search_with_score(query, k=dense_protect_k)
-        protected = []
-        for doc, l2_dist in dense_raw:
-            protected.append({
-                "content": doc.page_content,
-                "metadata": doc.metadata,
-                "similarity": round(1.0 - l2_dist, 4),
-                "dense_similarity": round(1.0 - l2_dist, 4),
-            })
-        seen = {self._chunk_key(r) for r in protected}
-        final = list(protected)
-
-        # Phase 2: Original query → 完整 RRF+CE 管线，去重追加
-        results = self.search(
-            query, top_k=top_k, expand_context=False,
-            w_dense=w_dense, w_bm25=w_bm25, alpha=alpha, lambda_length=lambda_length,
-        )
-        for r in results:
-            key = self._chunk_key(r)
-            if key not in seen:
-                seen.add(key)
-                final.append(r)
-
-        # Phase 3: Rewrite queries → RRF-only (skip CE)，去重追加
-        for rq in extra_queries:
-            if len(final) >= top_k * 3:
-                break
-            rq_results = self.search(
-                rq, top_k=top_k, expand_context=False,
-                skip_reranker=True, w_dense=w_dense, w_bm25=w_bm25,
-            )
-            for r in rq_results:
-                key = self._chunk_key(r)
-                if key not in seen:
-                    seen.add(key)
-                    final.append(r)
-
-        final = final[:top_k]
-
-        if expand_context:
-            final = self._expand_results(final)
-
-        return final, final
-
-    def search(self, query: str, top_k: int = 5, expand_context: bool = False,
-               skip_reranker: bool = False, w_dense: float = 0.7, w_bm25: float = 0.3,
-               alpha: float = 0.2, lambda_length: float = 0.1) -> list[dict]:
-        """单 query 混合检索（RRF 融合 + CE 精排 + 可选上下文扩展）。"""
-        pool_size = max(top_k * 4, 20)
         RRF_K = 60
         rrf_scores: dict[str, float] = {}
-        doc_store: dict[str, tuple] = {}  # key → (content, metadata, cosine_sim)
+        doc_store: dict[str, tuple] = {}
         dense_keys: set[str] = set()
         bm25_keys: set[str] = set()
 
-        chroma_raw = self._vectorstore.similarity_search_with_score(query, k=pool_size)
-        bm25_docs = self._bm25_retriever.invoke(query)[:pool_size]
+        chroma_raw = self._vectorstore.similarity_search_with_score(query, k=dense_k)
+        bm25_docs = self._bm25_retriever.invoke(query)[:bm25_k]
 
         for rank, (doc, l2_dist) in enumerate(chroma_raw):
             key = self._chunk_key(doc)
@@ -420,14 +364,14 @@ class HybridSearcher:
             if key not in doc_store:
                 doc_store[key] = (doc.page_content, doc.metadata, None)
 
-        # Single-channel boost: compensate missing channel weight
+        # Single-channel boost
         for key in rrf_scores:
             in_dense = key in dense_keys
             in_bm25 = key in bm25_keys
             if in_dense and not in_bm25:
-                rrf_scores[key] = rrf_scores[key] / w_dense
+                rrf_scores[key] /= w_dense
             elif in_bm25 and not in_dense:
-                rrf_scores[key] = rrf_scores[key] / w_bm25
+                rrf_scores[key] /= w_bm25
 
         # BM25-only 补算余弦相似度
         bm25_only = [k for k in doc_store if doc_store[k][2] is None]
@@ -440,8 +384,107 @@ class HybridSearcher:
                             / (np.linalg.norm(query_emb) * np.linalg.norm(doc_emb) + 1e-8))
                 doc_store[key] = (content, metadata, round(sim, 4))
 
+        return rrf_scores, doc_store, chroma_raw
+
+    def search_multi_query(
+        self, query: str, top_k: int = 5, expand_context: bool = True,
+        extra_queries=None, keyword_queries=None,
+        w_dense: float = 0.7, w_bm25: float = 0.3,
+        alpha: float = 0.2, lambda_length: float = 0.1,
+        orig_dense_k: int = 30, orig_bm25_k: int = 20,
+        subq_dense_k: int = 20, subq_bm25_k: int = 10,
+    ):
+        """Parallel Evidence Merge 架构。
+
+        Original + SubQueries 并行 Dense+BM25→RRF →
+        Evidence Merge（去重 + Hit Boost + Dense Protect）→ Global Pool →
+        CE Rerank（使用 Original Query）→ Top K。
+
+        Returns:
+            (judge_results, merged): judge_results 为原始查询独立 CE 结果（供 OOD Judge），
+            merged 为 Evidence Merge 合并结果（供生成/评估）。
+        """
+        # 原始查询独立 CE 结果（供 OOD Judge 判定检索质量）
+        judge_results = self.search(query, top_k=top_k, expand_context=expand_context,
+                                    lambda_length=lambda_length)
+
+        if not extra_queries:
+            return judge_results, judge_results
+
+        # ── Phase 1: 并行 RRF 检索 ──
+        global_rrf: dict[str, float] = {}
+        global_store: dict[str, tuple] = {}
+        global_sources: dict[str, list[str]] = {}  # key → ["Original", "SubQ", ...]
+        dense_protect_pool: set[str] = set()
+
+        def _collect(q: str, dense_k: int, bm25_k: int, label: str):
+            rrf, store, chroma_raw = self._rrf_retrieve(q, dense_k, bm25_k)
+            for key, score in rrf.items():
+                if key in global_rrf:
+                    global_rrf[key] = max(global_rrf[key], score)
+                    global_store[key] = store[key]  # 用最新 store（cosine 不变）
+                    global_sources[key].append(label)
+                else:
+                    global_rrf[key] = score
+                    global_store[key] = store[key]
+                    global_sources[key] = [label]
+            # 当前查询 Dense top-2 保送
+            for doc, _ in chroma_raw[:2]:
+                key = self._chunk_key(doc)
+                if key in store:
+                    dense_protect_pool.add(key)
+
+        _collect(query, orig_dense_k, orig_bm25_k, "Original")
+        for rq in extra_queries:
+            _collect(rq, subq_dense_k, subq_bm25_k, "SubQ")
+        if keyword_queries:
+            for kw in keyword_queries:
+                _collect(kw, dense_k=0, bm25_k=subq_bm25_k, label="Keyword")
+
+        # ── Phase 2: Hit Boost ──
+        for key in global_rrf:
+            hit_count = len(global_sources[key])
+            global_rrf[key] += 0.002 * hit_count
+
+        # ── Phase 3: Global Candidate Pool ──
+        sorted_keys = sorted(global_rrf, key=lambda k: -global_rrf[k])
+        pool = sorted_keys[:40]  # RRF top-40
+
+        # Dense Protect: 逐查询 top-2 保送，保证跨文档 diversity
+        for key in dense_protect_pool:
+            if key in global_store and key not in pool:
+                pool.append(key)
+        pool = pool[:50]
+
+        # ── Phase 4: CE Rerank（使用 Original Query）──
+        if self._reranker:
+            results = self._rrf_ce_fusion(query, global_rrf, global_store,
+                                           pool, top_k, alpha, lambda_length)
+        else:
+            results = []
+            for key in pool[:top_k]:
+                content, metadata, sim = global_store[key]
+                results.append({
+                    "content": content, "metadata": metadata,
+                    "similarity": sim or 0.0, "dense_similarity": sim or 0.0,
+                })
+
+        if expand_context:
+            results = self._expand_results(results)
+
+        return judge_results, results
+
+    def search(self, query: str, top_k: int = 5, expand_context: bool = False,
+               skip_reranker: bool = False, w_dense: float = 0.7, w_bm25: float = 0.3,
+               alpha: float = 0.2, lambda_length: float = 0.1,
+               ce_protect_keys: Optional[list[str]] = None) -> list[dict]:
+        """单 query 混合检索（RRF 融合 + CE 精排 + 可选上下文扩展）。"""
+        pool_size = max(top_k * 4, 20)
+
+        rrf_scores, doc_store, chroma_raw = self._rrf_retrieve(
+            query, dense_k=pool_size, bm25_k=pool_size)
+
         # CE 候选池：RRF top-30 ∪ Dense top-5（去重）
-        # Dense top-5 直接保送，不受 BM25 噪声稀释影响
         rrf_top30 = sorted(rrf_scores, key=lambda k: -rrf_scores[k])[:30]
         rrf_top30_set = set(rrf_top30)
         dense_top5_keys = []
@@ -450,6 +493,13 @@ class HybridSearcher:
             if key not in rrf_top30_set and key not in dense_top5_keys:
                 dense_top5_keys.append(key)
         sorted_keys = rrf_top30 + dense_top5_keys
+
+        if ce_protect_keys:
+            existing = set(sorted_keys)
+            for key in ce_protect_keys:
+                if key in doc_store and key not in existing:
+                    sorted_keys.append(key)
+                    existing.add(key)
 
         if self._reranker and not skip_reranker:
             results = self._rrf_ce_fusion(query, rrf_scores, doc_store,

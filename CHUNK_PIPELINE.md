@@ -2,7 +2,7 @@
 
 > 完整记录从原始文档到检索结果的全链路 chunk 处理逻辑
 >
-> **最后更新**: 2026-07-24 (v1.15 表格线性化回归 step1 + 行窗口拆表)
+> **最后更新**: 2026-07-29 (v1.19 Query Rewrite 三池分离)
 
 ---
 
@@ -10,6 +10,10 @@
 
 | 日期 | 版本 | 变更 |
 |------|------|------|
+| 2026-07-29 | v1.19 | **Query Rewrite 三池分离**：expand_query 从 Keyword/SubQuery 二池改为 Keyword/RewriteQuery/SubQuery 三池分离合并；LLM Prompt 新增 `rewrite_queries` 字段（完整句子改写）；各池加硬限制：Keyword≤5, RewriteQuery≤3, SubQuery≤4；清除旧 rewrite_cache.json |
+| 2026-07-27 | v1.18 | **Parallel Evidence Merge 架构**：多子查询从 Append 改为并行召回+Evidence Merge（去重+Hit Boost+Global Pool），Rewrite 不再被截断丢弃；Dense Protect 从全局 top-5 改为逐查询 top-2；OOD Judge 简化为 direct≥0.70 / llm 两层；移除 Context Expansion |
+| 2026-07-27 | v1.17 | **评估逻辑修复**：Chunk 级评估从 section-展平-截断改为 chunk_id 直接比对 gold_chunks；新增 Section 级作为辅助指标；修复"找到但算零召回"的假阳性问题（60% 零召回题实为 CE 已命中但被 [:10] 截断挤出） |
+| 2026-07-27 | v1.16 | **检索管线修复**：Dense Protected Merge 从"占位保序"改为"保送 CE 候选池"，Dense top-K 不再绕过 CE 占前 5 位，只确保进入 CE 候选池与其他候选公平竞争 |
 | 2026-07-24 | v1.15 | **表格线性化回归 step1 + 行窗口拆表**：linearize_chunks.py 废弃，线性化移到 step1 解析阶段；step2 删除所有表格专用逻辑（Phase 1.5 移除），统一走 TextSplitter；拆表从"一行一 chunk"改为"≤800 字行窗口" |
 | 待实施 | v1.14 | **XLSX/CSV 逐行线性化**：parse_xlsx/parse_csv 当前仅保留前 5 行，其余数据不可检索；改为每行独立线性化 chunk，可选保留统计摘要 chunk |
 | 2026-07-22 | v1.13 | step1 移除表格线性化，pipe 原样保留；step2 新增 Phase 1.5 表格拆行 + 逐行线性化 |
@@ -109,7 +113,7 @@ data/chunks.json  (514 条, avg 541 字, 表格线性化率 100%)
 ║                         │                                               ║
 ║                         ▼                                               ║
 ║  build_vectorstore():                                                   ║
-║    HuggingFaceEmbeddings (bge-large-zh-v1.5, 1024维)                    ║
+║    HuggingFaceEmbeddings (bge-small-zh-v1.5, 512维)                    ║
 ║    ChromaDB (cosine)                                                    ║
 ║                                                                         ║
 ╚═════════════════════════════════════════════════════════════════════════╝
@@ -119,19 +123,66 @@ data/chunks_split.json  (787 条, avg 374 字)  +  vectordb/  (787 vectors)
     │
     ▼
 ╔═════════════════════════════════════════════════════════════════════════╗
-║                hybrid_search.py  —  检索 + 融合                        ║
+║                hybrid_search.py  —  检索 + 融合 + 评估                  ║
 ╠═════════════════════════════════════════════════════════════════════════╣
 ║                                                                         ║
-║  Query → [改写] → Dense Protected Merge (top-K 保序)                   ║
-║                → RRF (Dense 0.7 + BM25 0.3, K=60)                     ║
-║                → CE 精排 (bge-reranker-v2-m3, 长度归一化 λ=0.1)        ║
-║                → Rewrite RRF-only 补充                                 ║
-║                → expand_context (±1 同 section chunk)                  ║
+║  Query: "新疆冬小麦和河南冬小麦品种有什么不同？"                         ║
+║    │                                                                     ║
+║    ├── [改写] expand_query → 三池合并输出                                 ║
+║    │   ┌─ Keyword 池 (词/短语, ≤4, hard 5) ───────────────────┐          ║
+║    │   │  术语映射 _apply_terminology_map()                    │          ║
+║    │   │  + 同义词扩展 _expand_with_synonyms()                 │          ║
+║    │   │  + LLM keywords                                      │          ║
+║    │   │  → 增强 BM25 召回                                    │          ║
+║    │   └──────────────────────────────────────────────────────┘          ║
+║    │   ┌─ Rewrite Query 池 (完整句子, ≤2, hard 3) ───────────┐          ║
+║    │   │  LLM rewrite_queries（不同表达重述同一问题）           │          ║
+║    │   │  → 增强 Dense + BM25 双通道                          │          ║
+║    │   └──────────────────────────────────────────────────────┘          ║
+║    │   ┌─ SubQuery 池 (完整句子, ≤3, hard 4) ────────────────┐          ║
+║    │   │  LLM sub_queries（拆分复杂问题为独立子问题）           │          ║
+║    │   │  → 支持并行检索/多跳检索                              │          ║
+║    │   └──────────────────────────────────────────────────────┘          ║
+║    │   输出顺序: Rewrite Query → SubQuery → Keyword                      ║
+║    │                                                                     ║
+║    ├── Parallel 并行检索 ───────────────────────────────────────        ║
+║    │                                                                     ║
+║    │   Original                SubQ1                SubQ2                ║
+║    │   Dense 30  BM25 20      Dense 20  BM25 10   Dense 20  BM25 10    ║
+║    │     │         │            │         │          │         │         ║
+║    │     └── RRF ──┘            └── RRF ──┘          └── RRF ──┘         ║
+║    │     top 20                 top 10               top 10              ║
+║    │                                                                     ║
+║    ├── Evidence Merge (证据合并) ────────────────────────────────        ║
+║    │   ① 去重: 同 chunk → 保留一个, 记录来源 ["Original","SubQ1"]        ║
+║    │   ② Hit Boost: +0.002 × N（N=命中查询数，线性交叉验证信号）                      ║
+║    │   ③ 合并后 ≈ 30~40 unique                                          ║
+║    │                                                                     ║
+║    ├── Dense Protect (逐查询保护) ───────────────────────────────        ║
+║    │   旧: 全局 top-5         → 可能全是一个文档                          ║
+║    │   新: Original top-2 + SubQ1 top-2 + SubQ2 top-2                   ║
+║    │   → 保证跨文档 diversity                                           ║
+║    │                                                                     ║
+║    ├── Global Candidate Pool: 30~50 unique ─────────────────────        ║
+║    │                                                                     ║
+║    ├── CE Rerank ─── bge-reranker-v2-m3                                ║
+║    │    Query = Original Query (不是 SubQuery)                           ║
+║    │    alpha=0.2 (20% RRF + 80% CE), λ=0.1                             ║
+║    │    30~50 → Top 10                                                   ║
+║    │                                                                     ║
+║    ▼                                                                     ║
+║  最终 10 条                                                              ║
+║    │                                                                     ║
+║    ▼                                                                     ║
+║  ┌─ 评估 ───────────────────────────────────────────────────────┐       ║
+║  │  Chunk 级: chunk_id 直接比对 gold_chunks   (基础指标)         │       ║
+║  │  Section 级: section_id 命中 gold section  (辅助指标)         │       ║
+║  └──────────────────────────────────────────────────────────────┘       ║
 ║                                                                         ║
 ╚═════════════════════════════════════════════════════════════════════════╝
     │
     ▼
-top-K 结果 → Judge → Generate
+top-K 结果 → Judge (direct ≥0.70 / llm) → Generate
 ```
 
 ## 对比
@@ -701,128 +752,291 @@ ChromaDB `vectordb/`
 
 ## 第3层：BM25 索引 + Section 索引 (hybrid_search.py)
 
-### 数据源变更
+### 数据源
 
-**旧方案**：从 raw chunks.json 构建（与 Dense 不同源）
-
-```python
-raw_chunks = json.load("chunks.json")
-bm25_docs = [Document(page_content=c["content"], metadata=c["metadata"])
-             for c in raw_chunks if not c.get("excluded")]
-```
-
-**新方案**：从 Chroma vectordb 构建（与 Dense 同一套子块）
+BM25 与 Chroma Dense 使用**同一套 chunks_split.json**（787 条），通过 `_load_chunks()` 并行加载：
 
 ```python
-all_data = self._vectorstore.get(include=["documents", "metadatas"])
-bm25_docs = [Document(page_content=content, metadata=meta)
-             for content, meta in zip(all_data["documents"], all_data["metadatas"])]
+# Dense: ChromaDB 向量检索
+self._vectorstore = Chroma(collection_name="agri_zoning", ...)
+
+# BM25: 从 chunks_split.json 构建 (与 Dense 同源)
+self._bm25_retriever = BM25Retriever.from_documents(
+    bm25_docs, preprocess_func=bm25_tokenize
+)
+self._bm25_retriever.k = 20  # 实际检索返回数
 ```
+
+### BM25 中文分词器
+
+```python
+_TECH_TOKEN_RE = re.compile(
+    r'[A-Z]{2,}\d*'           # FCV, GIS, AHP, ET0, DEM
+    r'|[Δ∇∂αβγ][A-Z]?\d*'    # ΔT5-9
+    r'|[≥≤<>]\d+[℃°C%]?'     # ≥10℃, ≤5500
+    r'|\d+~?\d*[℃°C%hm²]'    # 10℃, 30%, hm²
+)
+
+def bm25_tokenize(text):
+    1. 专业词正则提取 → tech_tokens
+    2. 单字 + 双字 bigram (中文无空格分词) → tokens
+    3. 专业词去重追加
+    return tokens
+```
+
+默认 `text.split()` 对中文完全失效（无空格）。单字+bigram 保证中文切分；正则保留专业术语不被拆散。
 
 ### 两个索引对比
 
 | | Chroma (Dense) | BM25 |
 |---|---|---|
-| **数据源** | step2 切分后的 1053 条 | 同一套 1053 条 |
-| **metadata** | heading_path, section_id, chunk_index, chunk_count | 相同 |
-| **匹配方式** | 语义相似（cosine） | 关键词精确匹配（TF-IDF） |
+| **数据源** | chunks_split.json (787 条向量化) | chunks_split.json (787 条) |
+| **返回数** | pool_size=40 | k=20 (≤ pool_size) |
+| **匹配方式** | 余弦相似度 (cosine, 512-dim) | TF-IDF 关键词精确匹配 |
+| **元数据** | heading_path, section_id, chunk_index, chunk_count | 相同 |
 
-### Section 索引（新增）
+### Section 索引
 
-检索初始化时同时构建 section 索引，供上下文扩展使用：
+初始化时构建，供上下文扩展和评估使用：
 
 ```python
 self._section_index = {
     "doc1_sec_0": [
-        {"content": "...", "chunk_index": 0},
-        {"content": "...", "chunk_index": 1},
-        {"content": "...", "chunk_index": 2},
-    ],
-    "doc1_sec_1": [
-        {"content": "...", "chunk_index": 0},
-        {"content": "...", "chunk_index": 1},
+        {"content": "...", "chunk_index": 0, "metadata": {...}},
+        {"content": "...", "chunk_index": 1, "metadata": {...}},
     ],
 }
 ```
 
 ---
 
-## 第4层：检索时融合 + 上下文扩展
+## 第4层：检索管线详解 (hybrid_search.py)
 
-### 完整流程
-
-```
-用户 query: "黑龙江大豆冷害区划选用了哪些指标？"
-    │
-    ├── Step 1: Chroma Dense 检索 (k=pool_size)
-    │
-    ├── Step 2: BM25 关键词检索 (k=pool_size)
-    │
-    ├── Step 3: RRF 融合
-    │     weights: Dense=0.7, BM25=0.3, K=60
-    │
-    ├── Step 4: [可选] Reranker 精排 (bge-reranker-v2-m3)
-    │
-    ├── Step 5: [可选] expand_context — 同 section 上下文扩展
-    │     命中 chunk (section_id=sec_A, chunk_index=2, chunk_count=4)
-    │     ↓
-    │     start = max(0, 2-1) = 1
-    │     end   = min(3, 2+1)   = 3
-    │     ↓
-    │     返回: chunk_1 + chunk_2 + chunk_3 (同一 section 内)
-    │     ↓
-    │     最终: heading_path + "\n\n---\n\n" + chunk1 + chunk2 + chunk3
-    │
-    └── Step 6: 返回 top_k 结果
-```
-
-### 上下文扩展对比
-
-**旧方案 expand_parent**：
+### 整体架构：Parallel Evidence Merge
 
 ```
-命中子块 → r["content"] = parent_content (完整章节，可能万字)
-多个结果命中同一 parent → 保留一个（按 parent[:120] 去重）
+Query: "新疆冬小麦和河南冬小麦品种有什么不同？"
+  │
+  ├── [改写] expand_query → 三池合并
+  │     Rewrite Query: "新疆冬小麦与河南冬小麦品种对比"
+  │     SubQuery:     "新疆冬小麦主栽品种有哪些"
+  │     SubQuery:     "河南冬小麦主栽品种有哪些"
+  │     Keyword:      "新疆", "冬小麦", "河南", "品种"
+  │     → 合并输出: [Rewrite Query, SubQuery1, SubQuery2, Keyword1, ...]
+  │
+  ├── Parallel 并行检索 ──────────────────────────────────────
+  │
+  │   Original                        SubQ1              SubQ2
+  │   Dense 30  BM25 20              Dense 20  BM25 10   Dense 20  BM25 10
+  │     │         │                    │         │          │         │
+  │     └── RRF ──┘                    └── RRF ──┘          └── RRF ──┘
+  │     top 20                         top 10               top 10
+  │
+  ├── Evidence Merge (证据合并) ──────────────────────────────
+  │
+  │   ① 去重: 相同 chunk → 保留一个，记录来源
+  │      例: chunk_A 同时被 Original 和 SubQ1 命中
+  │           → {chunk: "新疆冬小麦...", sources: ["Original", "SubQ1"]}
+  │
+	  │   ② Hit Boost: +0.002 × N（N=命中查询数，线性交叉验证信号）
+  │
+  │   ③ Original(CE) > SubQ(RRF) > 仅单次命中
+  │      合并后 ≈ 30~40 unique chunks
+  │
+  ├── Dense Protect (逐查询保护) ─────────────────────────────
+  │
+  │   旧: 全局 Dense top-5 → 可能全是一个文档
+  │   新: 每个查询各保护 top-2
+  │     Original Dense top-2  → 保送
+  │     SubQ1   Dense top-2  → 保送
+  │     SubQ2   Dense top-2  → 保送
+  │     → 保证跨文档/跨区域的 diversity
+  │
+  ├── Global Candidate Pool: 30~50 unique ───────────────────
+  │
+  │   不要太大，CE 是瓶颈
+  │
+  ├── CE Rerank ─────────────────────────────────────────────
+  │
+  │   关键: 用 Original Query，不是 SubQuery
+  │   输入: "新疆冬小麦和河南冬小麦品种有什么不同？"
+  │   候选: 30~50 chunks（混合来源）
+  │   模型: bge-reranker-v2-m3
+  │   融合: alpha=0.2 (20% RRF + 80% CE), λ=0.1 长度归一化
+  │
+  ├── Top 10
+  │
+  └── Section 优先扩展
+       cross_document: ±1 chunk 同 section
+       table: 展开整表
 ```
 
-问题：子块只相关 200 字，但返回了完整 5000 字章节，大部分内容对当前 query 无帮助。
-
-**新方案 expand_context**：
+### 数量流追踪
 
 ```
-命中子块 → 取同 section 内 [chunk_index-1, chunk_index, chunk_index+1]
-         → heading_path 前置一次
-         → 永不越界（start ≥ 0, end < chunk_count）
-         → 同窗口去重（section_id:start:end）
+Query: "新疆冬小麦和河南冬小麦品种有什么不同？"
+  │
+  ├── [改写] Rewrite Query ×1 + SubQuery ×2 + Keyword ×4 = 7 extra queries
+  │
+  ├── Parallel 召回 ────────────────────────────────────────
+  │   Original:       Dense 30 + BM25 20 → RRF → top 20
+  │   Rewrite Query:  Dense 20 + BM25 10 → RRF → top 10
+  │   SubQuery ×2:    Dense 20 + BM25 10 → RRF → top 10 ×2
+  │   Keyword ×4:     Dense 20 + BM25 10 → RRF → top 10 ×4
+  │
+  ├── Evidence Merge ───────────────────────────────────────
+	  │   去重 + Hit Boost(+0.002×N) → ~40~60 unique
+  │
+  ├── Dense Protect: 1+7 × top-2 → +0~16 → ~50~65 unique
+  │
+  ├── CE Rerank: 50~65 → 10
+  │
+  ▼
+最终 10 条
 ```
 
-示例：
+| 环节 | 数量 | 说明 |
+|------|------|------|
+| Original Dense | **30** | 原始查询语义最准，最大召回 |
+| Original BM25 | **20** | 同上 |
+| SubQ Dense | **20** | 子查询语义偏差，减少召回 |
+| SubQ BM25 | **10** | 同上 |
+| Original RRF 输出 | **20** | 高质量，多贡献 |
+| SubQ RRF 输出 | **10** /条 | 补充 diversity |
+| Evidence Merge 后 | **30~40** | 去重后 |
+| Dense Protect | **+0~6** | 3 查询 × top-2 |
+| CE 候选池 | **35~50** | 合并去重 |
+| CE 输出 | **10** | top_k |
+| 最终返回 | **10** | |
+
+### 多子查询融合策略
+
+**当前问题**：Append 架构中 Rewrite 结果追加到末尾后被 `[:10]` 截断，Rewrite 全部白算。
+
+**解决方案**：Evidence Merge — 所有查询的结果在进入 CE 之前合并到一个 Global Pool，平等竞争。
 
 ```
-# 命中 section A 的 chunk_2 (chunk_count=4)
-start = 1, end = 3
+旧 Append:
+  Original(CE) → [0..9] | Rewrite1(RRF) → [10..19] | Rewrite2(RRF) → [20..29]
+  → [:10] 截断 → 只有 Original
 
-结果:
-heading_path: 黑龙江大豆区划 > 二、区划指标与方法 > 冷害指数
-
---- (chunk_1 内容)
---- (chunk_2 内容，命中块)
---- (chunk_3 内容)
+新 Parallel Merge:
+  Original(CE) ─┐
+  SubQ1(RRF)   ─┼── Evidence Merge (去重/Hit Boost) → Global Pool 30~50
+  SubQ2(RRF)   ─┘                                        │
+                                                    CE Rerank → Top 10
 ```
 
-| 场景 | expand_parent (旧) | expand_context (新) |
-|------|-------------------|---------------------|
-| 命中短章节(800字) | 返回完整 800 字 | 返回完整 800 字 (1 chunk = 整个 section) |
-| 命中长章节(5000字) | 返回完整 5000 字 | 返回 ~2400 字 (3 × 800) |
-| 命中 section 第一个 chunk | 返回完整 5000 字 | 返回 ~1600 字 (chunk_0 + chunk_1) |
-| 命中 section 最后一个 chunk | 返回完整 5000 字 | 返回 ~1600 字 (chunk_{n-1} + chunk_n) |
+### 关键参数总表
+
+| 参数 | 值 | 说明 |
+|------|-----|------|
+| Original Dense | **30** | 原始查询语义最准 |
+| Original BM25 | **20** | |
+| SubQ Dense | **20** | 子查询语义偏差，降低召回 |
+| SubQ BM25 | **10** | |
+| RRF_K | **60** | RRF 平滑常数 |
+| w_dense / w_bm25 | **0.7 / 0.3** | |
+| Single-channel boost | **on** | 单通道命中补偿 |
+| CE 候选池 | **35~50** | RRF merge + Dense protect |
+| alpha | **0.2** | 20% RRF + 80% CE |
+| lambda_length | **0.1** | CE 长度归一化 |
+| Dense Protect | **每查询 top-2** | 保证跨文档 diversity |
+| CE Query | **Original Query** | 最终要回答的是原始问题 |
+
+### 改写触发逻辑
+
+```
+query → search(top_k=2) → top1_sim, top2_sim
+  → expand_query(mode="all", top1_sim, top2_sim)
+    → 内置 gate: length≤6 或 (top1_sim≥0.72 且 margin≥0.03 且无口语词) → 跳过 LLM
+    → 否则 → LLM 改写 → 三池产出
+```
+
+### expand_query 三池合并逻辑
+
+```
+┌─ Keyword 池 ────────────────────────────────────────────────┐
+│ 目的: 补充检索关键词，增强 BM25                                │
+│ 来源: 术语映射 + 同义词扩展 + LLM keywords                     │
+│ 形式: 词/短语                                                │
+│ 限制: ≤4（hard 5）                                           │
+└──────────────────────────────────────────────────────────────┘
+
+┌─ Rewrite Query 池 ──────────────────────────────────────────┐
+│ 目的: 用不同表达重述同一问题，增强 Dense+BM25 双通道             │
+│ 来源: LLM rewrite_queries                                    │
+│ 形式: 完整句子                                                │
+│ 限制: ≤2（hard 3）                                           │
+└──────────────────────────────────────────────────────────────┘
+
+┌─ SubQuery 池 ───────────────────────────────────────────────┐
+│ 目的: 拆分复杂问题为独立子问题，支持并行/多跳检索                │
+│ 来源: LLM sub_queries                                        │
+│ 形式: 完整句子                                                │
+│ 限制: ≤3（hard 4）                                           │
+└──────────────────────────────────────────────────────────────┘
+
+合并输出顺序: Rewrite Query → SubQuery → Keyword
+  → extra_queries 送入 search_multi_query Parallel Evidence Merge
+```
+
+| 池 | 来源 | 形式 | Target | Hard Limit |
+|----|------|------|:--:|:--:|
+| Keyword | 术语映射 + 同义词 + LLM keywords | 词/短语 | ≤4 | **5** |
+| Rewrite Query | LLM rewrite_queries | 完整句子 | ≤2 | **3** |
+| SubQuery | LLM sub_queries | 完整句子 | ≤3 | **4** |
+
+### BM25 中文分词
+
+```
+bm25_tokenize(text):
+  1. 专业词正则提取: FCV, GIS, ΔT5-9, ≥10℃, 5-9月, 10℃, 30% 等
+  2. 单字 + bigram (中文无空格分词)
+  3. 专业词去重追加
+  → langChain BM25Retriever 使用此分词器 (preprocess_func)
+```
+
+### RRF Single-Channel Boost
+
+```python
+# 仅单通道命中的 key，补偿缺失通道的权重
+for key in rrf_scores:
+    if in_dense and not in_bm25:
+        rrf_scores[key] /= 0.7   # 升权：Dense 独有
+    elif in_bm25 and not in_dense:
+        rrf_scores[key] /= 0.3   # 升权：BM25 独有
+```
+
+防止某些结果因为只在一个通道出现而被 RRF 过度惩罚。
+
+### 评估指标 (eval_v2_full.py)
+
+```
+Chunk 级 (基础):
+  chunk_ids = [result.metadata.chunk_id for result in results[:10]]
+  recall_10 = any(cid in gold_chunks for cid in chunk_ids[:10])
+  → 直接比对检索结果的 chunk_id 是否命中标注的 gold_chunk_id
+
+Section 级 (辅助):
+  section_ids = [result.metadata.section_id for result in results[:10]]
+  sec_recall_10 = any(sid in gold_sections for sid in section_ids[:10])
+  → 命中 gold chunk 所在 section 即算成功 (比 chunk 级宽松)
+```
+
+### OOD Judge
+
+```
+top1_sim ≥ 0.70 → direct → Answer
+top1_sim < 0.70 → LLM 判定 → Answer / Reject
+```
 
 ### Similarity 字段说明
 
 | 字段 | 含义 | 用途 |
 |------|------|------|
 | `similarity` | 排序分（有 reranker 时为 rerank_score，无时为 RRF score 或余弦相似度） | 返回排序 |
-| `dense_similarity` | Chroma 真实余弦相似度 | Judge OOD 判定（阈值 0.46） |
+| `dense_similarity` | Chroma 真实余弦相似度 | Judge OOD 判定 |
 
 ---
 

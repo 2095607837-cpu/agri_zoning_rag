@@ -148,17 +148,29 @@ REWRITE_PROMPT = ChatPromptTemplate.from_messages([
 
 ## Step 2: 执行改写
 
-### 关键词（keywords，数组，最多5个）
+### 关键词（keywords，数组，词/短语，≤6）
+- 目的：补充检索关键词，增强 BM25 召回
 - 按此顺序排列：地区 → 对象（作物/灾种）→ 术语 → 限定条件（数值/时间/等级）
 - 仅包含：实体、专业术语、限定条件
 - **禁止**：完整句子、泛化词（农业/植物/果树/作物/栽培）、上位概念
-- **必须**：将口语/同义词映射为知识库精确术语，例如："冷害风险指数低风险区"→"冷害风险指数"+"低风险区/等级划分"；"生长季各气候要素变化"→"生长季"+"气候要素"+"变化特征/趋势"
+- **必须**：将口语/同义词映射为知识库精确术语
 - 若不能确定，保持原表达，不要推测
 
-### 子查询（sub_queries，数组，最多3条）
-- rewrite_type=expand 时必须产出。normalize 时通常留空，但**口语适宜性查询（规则⑦）例外**：可用 sub_queries 覆盖不同抽象层级，如"X种植适宜性区划""X适宜种植区"。
+### 改写查询（rewrite_queries，数组，完整句子，≤2）
+- 目的：用不同表达方式重述同一问题，增强 Dense+BM25 双通道召回
+- normalize 时产出 1~2 条：将口语化/模糊表达改写为标准术语+完整句式
+  - 例："种大豆需要多少积温才够？" → "大豆种植所需的≥10℃活动积温阈值是多少？"
+  - 例："光照好不好用什么指标衡量？" → "农业气候资源中衡量光照条件的指标有哪些？"
+- expand 时可产出 1 条，从整体视角重述（不是拆分）
+- none 时留空
+- **禁止**：与原始 query 逐字相同、改变问题范围
+
+### 子查询（sub_queries，数组，完整句子，≤3）
+- 目的：将复杂问题拆分为独立子问题，支持并行检索/多跳检索
+- rewrite_type=expand 时必须产出。normalize 时通常留空，但口语适宜性查询例外
 - 每条从不同角度切入：如"指标/方法/阈值/空间分布/影响因素/等级划分/计算公式/历史变化"
 - 避免同义反复，确保命中不同 chunk
+- **禁止**：与 rewrite_queries 重复、与原始 query 逐字相同
 
 ### 口语→术语映射表（normalize 时**强制查表**，不要自己猜！）
 以下映射表覆盖了农业气候区划领域的常见口语词及其对应规范术语。
@@ -191,58 +203,59 @@ REWRITE_PROMPT = ChatPromptTemplate.from_messages([
 ⑥ 口语/同义词是否已映射为知识库精确术语？
 ⑦ 限定条件（如"低风险区""1961-1990年"）是否保留？
 ⑧ 否定/肯定极性是否正确？（"冻不坏"→安全越冬，不是越冬冻害）
-⑨ 抽象概念是否已映射为领域术语？（"低温累积效应"→低温冷害；"工作流程"→技术流程；"生育期长度"→生育期天数）
+⑨ 抽象概念是否已映射为领域术语？
+⑩ rewrite_queries 是否与原始 query 表达不同但意图一致？是否误将简单查询判为 expand？
 
 如有问题，修正后再输出。
 
 ## Few-shot
 
 Q: 种大豆需要多少积温才够？
-→ {{"rewrite_type": "normalize", "keywords": ["大豆", "≥10℃活动积温", "积温阈值"], "sub_queries": [], "confidence": 0.95}}
+→ {{"rewrite_type": "normalize", "keywords": ["大豆", "≥10℃活动积温", "积温阈值"], "rewrite_queries": ["大豆种植所需的≥10℃活动积温阈值是多少？"], "sub_queries": [], "confidence": 0.95}}
 
 Q: 种大豆选什么地方最好？
-→ {{"rewrite_type": "normalize", "keywords": ["大豆", "大豆种植", "适宜性区划", "种植适宜区"], "sub_queries": ["大豆种植适宜性区划", "大豆适宜种植区"], "confidence": 0.88}}
+→ {{"rewrite_type": "normalize", "keywords": ["大豆", "大豆种植", "适宜性区划", "种植适宜区"], "rewrite_queries": ["大豆种植的气候适宜区如何划分？"], "sub_queries": ["大豆种植适宜性区划", "大豆适宜种植区"], "confidence": 0.88}}
 
 Q: 农业上说的光照好不好用什么指标衡量？
-→ {{"rewrite_type": "normalize", "keywords": ["日照百分率", "日照时数", "太阳辐射"], "sub_queries": [], "confidence": 0.92}}
+→ {{"rewrite_type": "normalize", "keywords": ["日照百分率", "日照时数", "太阳辐射"], "rewrite_queries": ["农业气候资源中衡量光照条件的指标有哪些？"], "sub_queries": [], "confidence": 0.92}}
 
 Q: 冷害风险指数低风险区范围？
-→ {{"rewrite_type": "normalize", "keywords": ["冷害风险指数", "低风险区", "等级划分"], "sub_queries": [], "confidence": 0.85}}
+→ {{"rewrite_type": "normalize", "keywords": ["冷害风险指数", "低风险区", "等级划分"], "rewrite_queries": ["冷害风险指数的低风险区如何划分？"], "sub_queries": [], "confidence": 0.85}}
 
 Q: 黑龙江省生长季（5-9月）各气候要素在1961-1990年和1991-2020年两个时段有什么变化特征？
-→ {{"rewrite_type": "normalize", "keywords": ["黑龙江", "生长季", "5-9月", "气候要素", "变化特征", "1961-1990", "1991-2020"], "sub_queries": [], "confidence": 0.88}}
+→ {{"rewrite_type": "normalize", "keywords": ["黑龙江", "生长季", "5-9月", "气候要素", "变化特征", "1961-1990", "1991-2020"], "rewrite_queries": [], "sub_queries": [], "confidence": 0.88}}
 
 Q: 黑龙江省气候资源普查中，温度和无霜期天数等热量指标的空间推算采用什么方法？具体步骤是什么？
-→ {{"rewrite_type": "normalize", "keywords": ["黑龙江", "气候资源普查", "温度", "无霜期", "空间推算方法"], "sub_queries": [], "confidence": 0.85}}
+→ {{"rewrite_type": "normalize", "keywords": ["黑龙江", "气候资源普查", "温度", "无霜期", "空间推算方法"], "rewrite_queries": [], "sub_queries": [], "confidence": 0.85}}
 
 Q: 什么是界限温度？农业气候资源普查中常用的界限温度有哪些？
-→ {{"rewrite_type": "none", "keywords": ["界限温度", "农业气候资源普查"], "sub_queries": [], "confidence": 0.98}}
+→ {{"rewrite_type": "none", "keywords": ["界限温度", "农业气候资源普查"], "rewrite_queries": [], "sub_queries": [], "confidence": 0.98}}
 
 Q: 黑龙江大豆的低温冷害和霜冻在定义、致灾机理和区划指标上有什么不同？
-→ {{"rewrite_type": "expand", "keywords": ["黑龙江", "大豆", "低温冷害", "霜冻"], "sub_queries": ["大豆低温冷害定义与致灾机理", "大豆霜冻定义与致灾机理", "低温冷害与霜冻区划指标对比"], "confidence": 0.90}}
+→ {{"rewrite_type": "expand", "keywords": ["黑龙江", "大豆", "低温冷害", "霜冻"], "rewrite_queries": ["黑龙江大豆低温冷害与霜冻的对比分析"], "sub_queries": ["大豆低温冷害定义与致灾机理", "大豆霜冻定义与致灾机理", "低温冷害与霜冻区划指标对比"], "confidence": 0.90}}
 
 Q: 陕西省苹果品质气候区划采用什么方法进行综合评价？
-→ {{"rewrite_type": "none", "keywords": ["陕西", "苹果", "品质气候区划", "综合评价"], "sub_queries": [], "confidence": 0.96}}
+→ {{"rewrite_type": "none", "keywords": ["陕西", "苹果", "品质气候区划", "综合评价"], "rewrite_queries": [], "sub_queries": [], "confidence": 0.96}}
 
 Q: 苹果成熟期是什么时候？
-→ {{"rewrite_type": "none", "keywords": ["苹果", "成熟期"], "sub_queries": [], "confidence": 0.99}}
+→ {{"rewrite_type": "none", "keywords": ["苹果", "成熟期"], "rewrite_queries": [], "sub_queries": [], "confidence": 0.99}}
 
 Q: 内蒙古大豆区划和陕西苹果区划在指标体系上有什么差异？
-→ {{"rewrite_type": "expand", "keywords": ["内蒙古", "大豆", "陕西", "苹果", "指标体系"], "sub_queries": ["内蒙古大豆区划指标体系", "陕西苹果区划指标体系"], "confidence": 0.88}}
+→ {{"rewrite_type": "expand", "keywords": ["内蒙古", "大豆", "陕西", "苹果", "指标体系"], "rewrite_queries": ["内蒙古大豆与陕西苹果区划指标体系对比"], "sub_queries": ["内蒙古大豆区划指标体系", "陕西苹果区划指标体系"], "confidence": 0.88}}
 
 Q: 低温累积效应如何影响大豆产量？
-→ {{"rewrite_type": "normalize", "keywords": ["大豆", "低温冷害", "冷害风险指数", "减产机制"], "sub_queries": [], "confidence": 0.85}}
+→ {{"rewrite_type": "normalize", "keywords": ["大豆", "低温冷害", "冷害风险指数", "减产机制"], "rewrite_queries": ["低温冷害对大豆产量的影响机制是什么？"], "sub_queries": [], "confidence": 0.85}}
 
 Q: 陕西苹果区划从数据收集到最终区划图输出的完整工作流程是什么？
-→ {{"rewrite_type": "normalize", "keywords": ["陕西", "苹果", "气候区划", "技术流程", "技术路线"], "sub_queries": [], "confidence": 0.88}}
+→ {{"rewrite_type": "normalize", "keywords": ["陕西", "苹果", "气候区划", "技术流程", "技术路线"], "rewrite_queries": ["陕西苹果气候区划的技术路线和实施步骤"], "sub_queries": [], "confidence": 0.88}}
 
 Q: 新疆冬小麦越冬期长度？
-→ {{"rewrite_type": "normalize", "keywords": ["新疆", "冬小麦", "越冬期", "越冬期天数"], "sub_queries": [], "confidence": 0.90}}
+→ {{"rewrite_type": "normalize", "keywords": ["新疆", "冬小麦", "越冬期", "越冬期天数"], "rewrite_queries": ["新疆冬小麦越冬期的天数是多少？"], "sub_queries": [], "confidence": 0.90}}
 
 用户问题：{query}
 
 仅输出 JSON（不要输出其他内容）：
-{{"rewrite_type": "none|normalize|expand", "keywords": ["kw1", "kw2"], "sub_queries": ["sq1"], "confidence": 0.0-1.0}}"""),
+{{"rewrite_type": "none|normalize|expand", "keywords": ["kw1"], "rewrite_queries": ["rw1"], "sub_queries": ["sq1"], "confidence": 0.0-1.0}}"""),
 ])
 
 
@@ -299,7 +312,7 @@ def _llm_rewrite(query: str) -> dict:
         else:
             raise ValueError("No JSON in response")
     except Exception:
-        return {"rewrite_type": "none", "keywords": [], "sub_queries": [], "confidence": 0.0}
+        return {"rewrite_type": "none", "keywords": [], "rewrite_queries": [], "sub_queries": [], "confidence": 0.0}
 
     # Normalize keywords: handle both array and legacy comma-string format
     raw_kw = parsed.get("keywords", [])
@@ -315,6 +328,13 @@ def _llm_rewrite(query: str) -> dict:
     else:
         sub_queries = [q.strip() for q in raw_sq if q and q.strip() and q.strip() != query]
 
+    # Normalize rewrite_queries: handle both array and legacy string format
+    raw_rq = parsed.get("rewrite_queries", [])
+    if isinstance(raw_rq, str):
+        rewrite_queries = [q.strip() for q in raw_rq.split("\n") if q.strip() and q.strip() != query]
+    else:
+        rewrite_queries = [q.strip() for q in raw_rq if q and q.strip() and q.strip() != query]
+
     rewrite_type = parsed.get("rewrite_type", "normalize")
     if rewrite_type not in ("none", "normalize", "expand"):
         rewrite_type = "normalize"
@@ -328,6 +348,7 @@ def _llm_rewrite(query: str) -> dict:
     return {
         "rewrite_type": rewrite_type,
         "keywords": keywords,
+        "rewrite_queries": rewrite_queries,
         "sub_queries": sub_queries,
         "confidence": confidence,
     }
@@ -346,11 +367,6 @@ def _load_cache():
         return data
     except Exception:
         return {}
-        for k in data:
-            if k in _cache:
-                _cache.move_to_end(k)
-    except Exception:
-        pass
 
 
 def _save_cache():
@@ -385,7 +401,7 @@ def expand_query(query: str, mode: str = "all", top1_sim: float = 0.0, top2_sim:
     elif not _needs_rewrite(cache_key, top1_sim, top2_sim):
         # gate 不触发 LLM 改写时，确定性术语映射仍可能有产出
         mapped = _apply_terminology_map(cache_key)
-        entry = {"rewrite_type": "none", "keywords": mapped, "sub_queries": [], "confidence": 1.0}
+        entry = {"rewrite_type": "none", "keywords": mapped, "rewrite_queries": [], "sub_queries": [], "confidence": 1.0}
         _cache[cache_key] = entry
         _cache.move_to_end(cache_key)
         _save_cache()
@@ -399,32 +415,65 @@ def expand_query(query: str, mode: str = "all", top1_sim: float = 0.0, top2_sim:
 
     queries = [query]
 
-    # 确定性术语映射：扫描 query 中已知口语词，注入规范术语关键词
-    mapped_terms = _apply_terminology_map(query)
+    # ── Keyword 池：术语映射 + 同义词 + LLM keywords（词/短语，≤6，hard 6）──
+    kw_pool = []
     if mode in ("keywords", "all"):
+        mapped_terms = _apply_terminology_map(query)
         for term in mapped_terms:
-            if term and term not in queries:
-                queries.append(term)
+            if term and term not in kw_pool:
+                kw_pool.append(term)
 
-    if mode in ("keywords", "all"):
+        all_terms = list(mapped_terms) + entry.get("keywords", [])
+        synonym_terms = _expand_with_synonyms(all_terms)
+        for st in synonym_terms:
+            if st and st not in kw_pool:
+                kw_pool.append(st)
+
         for kw in entry.get("keywords", []):
-            if kw and kw not in queries:
-                queries.append(kw)
+            if kw and kw not in kw_pool:
+                kw_pool.append(kw)
 
-    # 同义词扩展：对已收集的规范术语查同义词词典，追加为额外检索词
-    all_terms = list(mapped_terms) + entry.get("keywords", [])
-    synonym_terms = _expand_with_synonyms(all_terms)
-    for st in synonym_terms:
-        if st and st not in queries:
-            queries.append(st)
+    MAX_KEYWORD = 6       # hard limit
+    kw_pool = kw_pool[:MAX_KEYWORD]
 
+    # ── Rewrite Query 池（完整句子改写，≤2，hard 3）──
+    rw_pool = []
+    if mode in ("multi_view", "all"):
+        for rq in entry.get("rewrite_queries", []):
+            if rq and rq not in queries and rq not in rw_pool:
+                rw_pool.append(rq)
+
+    MAX_REWRITE = 3       # hard limit
+    rw_pool = rw_pool[:MAX_REWRITE]
+
+    # ── SubQuery 池（拆分复杂问题，≤3，hard 4）──
+    sq_pool = []
     if mode in ("multi_view", "all"):
         for sq in entry.get("sub_queries", []):
-            if sq and sq not in queries:
-                queries.append(sq)
+            if sq and sq not in queries and sq not in sq_pool:
+                sq_pool.append(sq)
+
+    MAX_SUBQUERY = 4      # hard limit
+    sq_pool = sq_pool[:MAX_SUBQUERY]
+
+    # ── 注册关键词供 BM25-only 检索 ──
+    _kw_registry[cache_key] = list(kw_pool)
+
+    # ── 合并输出：Rewrite Query → SubQuery（Keyword 不在此处，走 BM25-only）──
+    extra = list(rw_pool)
+    for sq in sq_pool:
+        if sq not in extra:
+            extra.append(sq)
+
+    for t in extra:
+        queries.append(t)
 
     return queries
 
 
-# 模块导入时自动加载持久化缓存
-_load_cache()
+_kw_registry: dict[str, list[str]] = {}
+
+
+def get_keywords(query: str) -> list[str]:
+    """返回最近一次 expand_query 为该 query 提取的关键词列表。"""
+    return _kw_registry.get(query.strip(), [])
