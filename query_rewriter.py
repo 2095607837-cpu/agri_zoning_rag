@@ -436,14 +436,14 @@ def expand_query(query: str, mode: str = "all", top1_sim: float = 0.0, top2_sim:
     MAX_KEYWORD = 6       # hard limit
     kw_pool = kw_pool[:MAX_KEYWORD]
 
-    # ── Rewrite Query 池（完整句子改写，≤2，hard 3）──
+    # ── Rewrite Query 池（完整句子改写，≤2，hard 2）──
     rw_pool = []
     if mode in ("multi_view", "all"):
         for rq in entry.get("rewrite_queries", []):
             if rq and rq not in queries and rq not in rw_pool:
                 rw_pool.append(rq)
 
-    MAX_REWRITE = 3       # hard limit
+    MAX_REWRITE = 2       # hard limit
     rw_pool = rw_pool[:MAX_REWRITE]
 
     # ── SubQuery 池（拆分复杂问题，≤3，hard 4）──
@@ -456,8 +456,10 @@ def expand_query(query: str, mode: str = "all", top1_sim: float = 0.0, top2_sim:
     MAX_SUBQUERY = 4      # hard limit
     sq_pool = sq_pool[:MAX_SUBQUERY]
 
-    # ── 注册关键词供 BM25-only 检索 ──
+    # ── 注册各类型查询供 eval 分路传递 ──
     _kw_registry[cache_key] = list(kw_pool)
+    _rw_registry[cache_key] = list(rw_pool)
+    _sq_registry[cache_key] = list(sq_pool)
 
     # ── 合并输出：Rewrite Query → SubQuery（Keyword 不在此处，走 BM25-only）──
     extra = list(rw_pool)
@@ -472,8 +474,20 @@ def expand_query(query: str, mode: str = "all", top1_sim: float = 0.0, top2_sim:
 
 
 _kw_registry: dict[str, list[str]] = {}
+_rw_registry: dict[str, list[str]] = {}
+_sq_registry: dict[str, list[str]] = {}
 
 
 def get_keywords(query: str) -> list[str]:
     """返回最近一次 expand_query 为该 query 提取的关键词列表。"""
     return _kw_registry.get(query.strip(), [])
+
+
+def get_rewrite_queries(query: str) -> list[str]:
+    """返回最近一次 expand_query 为该 query 生成的 rewrite queries（完整句子改写）。"""
+    return _rw_registry.get(query.strip(), [])
+
+
+def get_sub_queries(query: str) -> list[str]:
+    """返回最近一次 expand_query 为该 query 生成的 sub queries（子问题拆分）。"""
+    return _sq_registry.get(query.strip(), [])

@@ -368,7 +368,10 @@ def _is_value_line(line: str) -> bool:
     # 数字开头: "42.0", "1961", "-1394", "+312504"
     # 比较/范围开头: "<260", ">400", "≥10℃", "≤5500", "5000~10000"
     if v[0].isdigit():
-        # 数字+中文标签模式: "6-8月空气", "1月平均气温（℃）" → 非值行
+        # 含比较/范围符 → 值行（如 "6—8 月平均气温≥26.0℃"）
+        if any(c in v for c in '≤≥<>＜＞~～'):
+            return True
+        # 数字+纯中文标签模式: "6-8月空气", "1月平均气温（℃）" → 非值行
         cjk = sum(1 for c in v if '一' <= c <= '鿿')
         if cjk >= len(v) * 0.3:
             return False
@@ -380,6 +383,9 @@ def _is_value_line(line: str) -> bool:
         return True
     # PDF 断行续值: "或12.6~15.4", "和12.6~15.4" 等
     if v[0] in '或和及' and len(v) >= 2 and _HAS_DIGIT.search(v):
+        return True
+    # 字母前缀+比较符: "S<200", "RH<70", "T低<6"
+    if re.match(r'^[A-Za-z].*[＜＞≤≥<>]', v) and _HAS_DIGIT.search(v):
         return True
     return False
 
@@ -397,7 +403,7 @@ def _linearize_pdf_table(content: str, metadata: dict) -> Optional[str]:
             cap_idx = i
             break
     if cap_idx is None:
-        return None
+        return _linearize_flat_cells(lines, metadata)
 
     after_cap = lines[cap_idx + 1:]
     if len(after_cap) < 4:
@@ -507,3 +513,147 @@ def _linearize_pdf_table(content: str, metadata: dict) -> Optional[str]:
             result = caption + "。" + result
 
     return result
+
+
+# ── 无表题 PDF 表格（flat-cell 重建）──────────────────────────
+
+def _is_pure_score(line: str) -> bool:
+    """纯评分数字: "30", "20", "5", "0" (1-3 位数字)。"""
+    v = line.strip()
+    return len(v) <= 3 and v.isdigit()
+
+
+def _linearize_flat_cells(lines: list[str], metadata: dict) -> Optional[str]:
+    """处理无 '表X' 标识的 PDF 扁平化单元格表格。"""
+    if len(lines) < 8:
+        return None
+
+    # 前置过滤：短行多 + 数字多 → 类表格结构
+    short_ratio = sum(1 for l in lines if len(l) < 30) / len(lines)
+    digit_ratio = sum(1 for l in lines if _HAS_DIGIT.search(l)) / len(lines)
+    if short_ratio < 0.8 or digit_ratio < 0.3:
+        return None
+
+    # 跳过含长文本的段落（>50字 → 不是表）
+    long_count = sum(1 for l in lines if len(l) > 50)
+    if long_count >= len(lines) * 0.15:
+        return None
+
+    ctx = _build_context(metadata)
+    prefix = f"{ctx}中，" if ctx else ""
+    st = metadata.get("section_title", "")
+
+    # 判断：全值行 or 混合？
+    value_flags = [_is_value_line(l) for l in lines]
+    value_ratio = sum(value_flags) / len(value_flags)
+    # >95% 值行 → 按全值行处理，个别噪音行丢弃
+    if value_ratio > 0.95:
+        value_lines = [l for l, f in zip(lines, value_flags) if f]
+        return _linearize_flat_all_values(value_lines, prefix)
+    elif value_ratio > 0.5:
+        return _linearize_flat_mixed(lines, value_flags, prefix, st)
+    else:
+        return None
+
+
+def _is_range_val(v: str) -> bool:
+    """检测值是否为范围/条件表达式（含范围符、比较符、至、或/且）。"""
+    return any(c in v for c in '～~＜＞≤≥<>或且至-') and _HAS_DIGIT.search(v)
+
+
+def _linearize_flat_all_values(lines: list[str], prefix: str) -> Optional[str]:
+    """全值行 flat-cell 表格：交替 (范围, 评分) 对。"""
+    pairs = []
+    i = 0
+    while i + 1 < len(lines):
+        a = _clean_value(lines[i])
+        b = _clean_value(lines[i + 1])
+        if not a or not b:
+            i += 1
+            continue
+        a_is_range = _is_range_val(a)
+        b_is_range = _is_range_val(b)
+        if a_is_range and not b_is_range:
+            pairs.append(f"{a}→{b}分")
+        elif not a_is_range and b_is_range:
+            pairs.append(f"{b}→{a}分")
+        else:
+            pairs.append(f"{a} {b}")
+        i += 2
+
+    if len(pairs) < 4:
+        return None
+
+    # 按 80 字分组
+    groups = []
+    buf = []
+    for p in pairs:
+        buf.append(p)
+        if len("；".join(buf)) > 80:
+            buf.pop()
+            groups.append("；".join(buf))
+            buf = [p]
+    if buf:
+        groups.append("；".join(buf))
+
+    return f"{prefix}{'。'.join(groups)}"
+
+
+def _linearize_flat_mixed(
+    lines: list[str], value_flags: list[bool], prefix: str, section_title: str
+) -> Optional[str]:
+    """混合标签+值的 flat-cell 表格。"""
+    # Step 1: 找 indicator 边界（长非值行 >=4字）
+    boundaries = []  # [(start_idx, label)]
+    for i, l in enumerate(lines):
+        if not value_flags[i]:
+            clean = _clean_value(l)
+            if clean and len(clean) >= 4:
+                boundaries.append((i, clean))
+
+    if not boundaries:
+        return None
+
+    # Step 2: 按 indicator 分组
+    groups = []  # [(label, [all_lines])]
+    for bi, (start, label) in enumerate(boundaries):
+        end = boundaries[bi + 1][0] if bi + 1 < len(boundaries) else len(lines)
+        group_lines = lines[start + 1:end]
+        groups.append((label, group_lines))
+
+    # Step 3: 每组内分离值行和注释行（短非值行）
+    sentences = []
+    for label, group_lines in groups:
+        vals = []
+        notes = []
+        for l in group_lines:
+            clean = _clean_value(l)
+            if not clean:
+                continue
+            if _is_value_line(l):
+                vals.append(clean)
+            elif len(clean) < 4:
+                notes.append(clean)
+
+        if not vals:
+            continue
+
+        if len(vals) <= 4:
+            val_str = "，".join(vals)
+        else:
+            chunks = []
+            for j in range(0, len(vals), 3):
+                chunks.append("，".join(vals[j:j + 3]))
+            val_str = "；".join(chunks)
+
+        if notes:
+            note_str = "（" + "、".join(notes) + "）"
+            sentences.append(f"{label}：{val_str}{note_str}")
+        else:
+            sentences.append(f"{label}：{val_str}")
+
+    if not sentences:
+        return None
+
+    return f"{prefix}{'。'.join(sentences)}"
+

@@ -18,7 +18,7 @@
 
 用法:
   from eval_diagnostic import DiagnosticAnalyzer
-  analyzer = DiagnosticAnalyzer(searcher, chunks, rewrite_map)
+  analyzer = DiagnosticAnalyzer(searcher, chunks, rw_map, sq_map)
   report = analyzer.analyze(zero_recall_questions)
   analyzer.print_report(report)
 """
@@ -30,20 +30,26 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 class DiagnosticAnalyzer:
-    def __init__(self, searcher, chunks: list, rewrite_map: dict[str, list[str]]):
+    def __init__(self, searcher, chunks: list, rw_map: dict[str, list[str]], sq_map: dict[str, list[str]]):
         self.searcher = searcher
         self.emb = searcher.embeddings
-        self.rewrite_map = rewrite_map
+        self.rw_map = rw_map
+        self.sq_map = sq_map
         self.cid_to_chunk = {}
         for c in chunks:
             cid = c["id"]
             if cid not in self.cid_to_chunk or c.get("metadata", {}).get("chunk_index", 0) == 0:
                 self.cid_to_chunk[cid] = c
+        self.sid_to_chunks = {}  # source_id → [chunk, ...]（稳定索引，切分后仍可用）
+        for c in chunks:
+            sid = c.get("source_id", c["metadata"].get("section_id", ""))
+            if sid:
+                self.sid_to_chunks.setdefault(sid, []).append(c)
         self.sec_to_cids = {}
         for c in chunks:
             self.sec_to_cids.setdefault(c["metadata"]["section_id"], []).append(c["id"])
 
-    def analyze(self, zero_qs: list[dict], workers: int = 4) -> list[dict]:
+    def analyze(self, zero_qs: list[dict], workers: int = 6) -> list[dict]:
         """对 R@10=0 的题逐环节采集信号，返回诊断结果列表。"""
         rows = []
         with ThreadPoolExecutor(max_workers=workers) as ex:
@@ -55,7 +61,8 @@ class DiagnosticAnalyzer:
     def _diagnose_one(self, q: dict) -> dict:
         query = q["question"]
         gold_cids = q["gold_chunks"]
-        extra = self.rewrite_map.get(query, [])
+        rw_list = self.rw_map.get(query, [])
+        sq_list = self.sq_map.get(query, [])
 
         row = {
             "id": q["id"], "query": query,
@@ -64,8 +71,19 @@ class DiagnosticAnalyzer:
         }
 
         # ── Layer 1: 数据层 ──
+        # 优先用 chunk_id 直查，失败则回退到 source_id（切分参数变化后 chunk_id 可能失效）
         gold_contents = [self.cid_to_chunk[cid] for cid in gold_cids if cid in self.cid_to_chunk]
-        missing = [cid for cid in gold_cids if cid not in self.cid_to_chunk]
+        if not gold_contents:
+            gold_sids = set()
+            for cid in gold_cids:
+                # 尝试从 chunk_id 提取 source_id 前缀匹配
+                for sid, s_chunks in self.sid_to_chunks.items():
+                    if sid in cid or cid.startswith(sid.rsplit("_", 1)[0]):
+                        gold_contents.extend(s_chunks)
+                        gold_sids.add(sid)
+            gold_contents = gold_contents[:5]  # 限制数量
+        missing = [cid for cid in gold_cids if cid not in self.cid_to_chunk and not any(
+            sid in cid or cid.startswith(sid.rsplit("_", 1)[0]) for sid in self.sid_to_chunks)]
         row["gold_missing"] = missing
         if not gold_contents:
             row["category"] = "A-数据层"
@@ -128,7 +146,8 @@ class DiagnosticAnalyzer:
 
         # ── Layer 3: 精排层（Append CE） ──
         _, ce_results = self.searcher.search_multi_query(
-            query, top_k=30, expand_context=False, extra_queries=extra)
+            query, top_k=30, expand_context=False,
+            rewrite_queries=rw_list, sub_queries=sq_list)
         ce_sids = [r["metadata"].get("section_id", "") for r in ce_results]
         row["ce_rank"] = next((i for i, s in enumerate(ce_sids) if s in gold_sections), -1)
         if row["rrf_rank"] >= 0 and row["ce_rank"] >= 0:
@@ -138,11 +157,12 @@ class DiagnosticAnalyzer:
         row["top1_sim"] = ce_results[0].get("dense_similarity", ce_results[0].get("similarity", 0)) if ce_results else 0
 
         # ── Layer 4: 改写层 ──
-        row["has_rewrite"] = len(extra) > 0
-        row["rewrite_count"] = len(extra)
-        if extra:
+        all_extra = rw_list + sq_list
+        row["has_rewrite"] = len(all_extra) > 0
+        row["rewrite_count"] = len(all_extra)
+        if all_extra:
             rw_hit = False
-            for rq in extra:
+            for rq in all_extra:
                 rq_results = self.searcher.search(rq, top_k=20, expand_context=False, skip_reranker=True)
                 rq_sids = [rr["metadata"].get("section_id", "") for rr in rq_results]
                 if any(s in gold_sections for s in rq_sids):

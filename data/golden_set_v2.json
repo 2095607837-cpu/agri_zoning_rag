@@ -51,7 +51,13 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江农业气候资源普查技术规范2025_sec_0"
+    ],
+    "answer_evidence": [
+      "农业气候资源是指在一定经济技术条件"
+    ]
   },
   {
     "id": "Q_E02",
@@ -107,7 +113,15 @@
       "numeric"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江农业气候资源普查技术规范2025_sec_3"
+    ],
+    "answer_evidence": [
+      "10℃",
+      "12.5℃",
+      "常用的界限温度"
+    ]
   },
   {
     "id": "Q_E03",
@@ -159,7 +173,11 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江农业气候资源普查技术规范2025_sec_4"
+    ],
+    "answer_evidence": []
   },
   {
     "id": "Q_E04",
@@ -214,7 +232,15 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江农业气候资源普查技术规范2025_sec_5"
+    ],
+    "answer_evidence": [
+      "实际日照时间与可能日照",
+      "全天无云时应有的日照",
+      "它表明了气候条件"
+    ]
   },
   {
     "id": "Q_E05",
@@ -266,7 +292,14 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江农业气候资源普查技术规范2025_sec_6"
+    ],
+    "answer_evidence": [
+      "某一界限指标",
+      "对气候条件"
+    ]
   },
   {
     "id": "Q_E06",
@@ -321,7 +354,13 @@
       "numeric"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江农业气候资源普查技术规范2025_sec_13"
+    ],
+    "answer_evidence": [
+      "为回归系数"
+    ]
   },
   {
     "id": "Q_E07",
@@ -374,7 +413,15 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江农业气候资源普查技术规范2025_sec_17"
+    ],
+    "answer_evidence": [
+      "气象数据序列长度",
+      "农业气候指标",
+      "际情况和作物生长发育所需的气象指标"
+    ]
   },
   {
     "id": "Q_E08",
@@ -427,7 +474,10 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江农业气候资源普查技术规范2025_sec_1"
+    ]
   },
   {
     "id": "Q_E09",
@@ -479,7 +529,10 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江农业生产普查技术规范2025_sec_0"
+    ]
   },
   {
     "id": "Q_E10",
@@ -531,7 +584,10 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江农业生产普查技术规范2025_sec_1"
+    ]
   },
   {
     "id": "Q_E11",
@@ -584,7 +640,16 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江农业生产普查技术规范2025_sec_2"
+    ],
+    "answer_evidence": [
+      ">70%",
+      "盖度大于50",
+      "合理株数70",
+      "主要靠天然降水"
+    ]
   },
   {
     "id": "Q_E12",
@@ -637,7 +702,17 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_150000_001-内蒙古区划报告_sec_1"
+    ],
+    "answer_evidence": [
+      "500mm",
+      "降水量在50",
+      "总面积的70",
+      "旱灾占44",
+      "计频率在95"
+    ]
   },
   {
     "id": "Q_E13",
@@ -691,7 +766,17 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_150000_001-内蒙古区划报告_sec_2"
+    ],
+    "answer_evidence": [
+      "≥10℃",
+      "10℃",
+      "2945.4℃",
+      "3000℃·d",
+      "2000℃"
+    ]
   },
   {
     "id": "Q_E14",
@@ -743,7 +828,16 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_150000_001-内蒙古区划报告_sec_7"
+    ],
+    "answer_evidence": [
+      "占全国的12",
+      "面积达到123",
+      "总面积的90",
+      "由于特殊的地理位置和气候条件"
+    ]
   },
   {
     "id": "Q_E15",
@@ -795,7 +889,17 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_150000_001-内蒙古区划报告_sec_10"
+    ],
+    "answer_evidence": [
+      "≥10℃",
+      "1700℃",
+      "2800℃",
+      "10℃",
+      "2400℃"
+    ]
   },
   {
     "id": "Q_E16",
@@ -849,7 +953,15 @@
       "numeric"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_1"
+    ],
+    "answer_evidence": [
+      "共包括48",
+      "榆林市等4",
+      "陕西苹果气候区划"
+    ]
   },
   {
     "id": "Q_E17",
@@ -901,7 +1013,10 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_7"
+    ]
   },
   {
     "id": "Q_E18",
@@ -952,7 +1067,15 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_10"
+    ],
+    "answer_evidence": [
+      "陕西苹果气候区划",
+      "果种植气候适宜性区划指标",
+      "陕西富士系苹果种植气候适宜性区划"
+    ]
   },
   {
     "id": "Q_E19",
@@ -1004,7 +1127,17 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_30"
+    ],
+    "answer_evidence": [
+      "性为72",
+      "一致性为68",
+      "一致性为75",
+      "西苹果产量气候区划",
+      "与其所处不同苹果产量气候区划等级"
+    ]
   },
   {
     "id": "Q_E20",
@@ -1057,7 +1190,14 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_0"
+    ],
+    "answer_evidence": [
+      "风等气象条件",
+      "其四由气象因子"
+    ]
   },
   {
     "id": "Q_E21",
@@ -1109,7 +1249,17 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_37"
+    ],
+    "answer_evidence": [
+      "≤0℃",
+      "1.5℃",
+      "期间遭遇0",
+      "研究使用低温指数",
+      "来表示河南省冬小麦的晚霜冻气候区划"
+    ]
   },
   {
     "id": "Q_E22",
@@ -1162,7 +1312,13 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_3"
+    ],
+    "answer_evidence": [
+      "为干热风高风险"
+    ]
   },
   {
     "id": "Q_E23",
@@ -1216,7 +1372,17 @@
       "numeric"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "新疆冬小麦气候区划报告_sec_1"
+    ],
+    "answer_evidence": [
+      "≥10℃",
+      "2200 km",
+      "1500km",
+      "104km",
+      "5600 km"
+    ]
   },
   {
     "id": "Q_E24",
@@ -1268,7 +1434,17 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "新疆冬小麦气候区划报告_sec_1"
+    ],
+    "answer_evidence": [
+      "≥10℃",
+      "2200 km",
+      "1500km",
+      "104km",
+      "5600 km"
+    ]
   },
   {
     "id": "Q_E25",
@@ -1321,7 +1497,17 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "新疆冬小麦气候区划报告_sec_2"
+    ],
+    "answer_evidence": [
+      "10天",
+      "30℃",
+      "36℃",
+      "31℃",
+      "34℃"
+    ]
   },
   {
     "id": "Q_E26",
@@ -1376,7 +1562,15 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_360000_001-江西柑橘气候区划报告_sec_0"
+    ],
+    "answer_evidence": [
+      "特别是20",
+      "先后出现1998",
+      "洪水以及2022"
+    ]
   },
   {
     "id": "Q_E27",
@@ -1431,7 +1625,17 @@
       "numeric"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_360000_001-江西柑橘气候区划报告_sec_5"
+    ],
+    "answer_evidence": [
+      "≥10℃",
+      "10℃",
+      "指标见表2",
+      "皮桔类等4",
+      "江西柑橘气候区划"
+    ]
   },
   {
     "id": "Q_E28",
@@ -1483,7 +1687,17 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "气科院-农业气候区划指标算法说明文档-王旗_sec_1"
+    ],
+    "answer_evidence": [
+      "≥10℃",
+      "10℃",
+      "1900℃",
+      "250mm",
+      "分辨率为0"
+    ]
   },
   {
     "id": "Q_E29",
@@ -1535,7 +1749,17 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "气科院-农业气候区划指标算法说明文档-王旗_sec_2"
+    ],
+    "answer_evidence": [
+      "分辨率为0",
+      "收集1991",
+      "全国范围内的春大豆与夏大豆产量区划",
+      "基于高稳系数",
+      "进行大豆产量区划"
+    ]
   },
   {
     "id": "Q_E30",
@@ -1586,7 +1810,17 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "辽宁省生态气象和卫星遥感中心-算法说明文档_sec_4"
+    ],
+    "answer_evidence": [
+      "10d",
+      "20d",
+      "30d",
+      "40d",
+      "50d"
+    ]
   },
   {
     "id": "Q_E31",
@@ -1639,7 +1873,13 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_sec_1"
+    ],
+    "answer_evidence": [
+      "造成植株根部环境条件"
+    ]
   },
   {
     "id": "Q_E32",
@@ -1691,7 +1931,15 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆品质气候区划技术规范(初稿)_sec_3"
+    ],
+    "answer_evidence": [
+      "高油大豆的等级指标",
+      "针对气象条件",
+      "所决定的大豆品质开展的农业气候区划"
+    ]
   },
   {
     "id": "Q_E33",
@@ -1704,14 +1952,14 @@
       "新疆冬小麦气候区划报告"
     ],
     "gold_sections": [
-      "s7"
+      "s5"
     ],
     "gold_chunks": [
-      "新疆冬小麦气候区划报告_s7"
+      "新疆冬小麦气候区划报告_s5"
     ],
     "retrieval_eval": {
       "must_retrieve": [
-        "新疆冬小麦气候区划报告_s7"
+        "新疆冬小麦气候区划报告_s5"
       ],
       "optional_retrieve": [
         "新疆冬小麦气候区划报告_t6"
@@ -1734,8 +1982,8 @@
     "expected_citation": [
       {
         "doc_id": "新疆冬小麦气候区划报告",
-        "section": "s7",
-        "heading": "产量划分标准"
+        "section": "s5",
+        "heading": "冬小麦产量气候区划"
       }
     ],
     "keywords": [
@@ -1746,7 +1994,17 @@
       "numeric"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "新疆冬小麦气候区划报告_sec_5"
+    ],
+    "answer_evidence": [
+      "≥0℃",
+      "≤0℃",
+      "≥35℃",
+      "≥30℃",
+      "≥10℃"
+    ]
   },
   {
     "id": "Q_E34",
@@ -1798,7 +2056,13 @@
       "numeric"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆病虫害（食心虫）气候风险区划技术规范(初稿) _table_0"
+    ],
+    "answer_evidence": [
+      "大豆食心虫综合气象风险指数"
+    ]
   },
   {
     "id": "Q_E35",
@@ -1852,7 +2116,17 @@
       "numeric"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_230000_001-农业气候区划报告_sec_2"
+    ],
+    "answer_evidence": [
+      "≥10℃",
+      "14℃",
+      "16℃",
+      "17℃",
+      "10℃"
+    ]
   },
   {
     "id": "Q_C01",
@@ -1907,7 +2181,18 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 2,
-    "expected_context_expand": true
+    "expected_context_expand": true,
+    "gold_source": [
+      "黑龙江农业气候资源普查技术规范2025_sec_15",
+      "黑龙江农业气候资源普查技术规范2025_sec_16"
+    ],
+    "answer_evidence": [
+      "属于距离权重系数",
+      "为该点对应的权重系数",
+      "无霜期天数等热量指标",
+      "分别建立热量指标",
+      "海拔高度等地理因子"
+    ]
   },
   {
     "id": "Q_C02",
@@ -1965,7 +2250,18 @@
       "numeric"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": true
+    "expected_context_expand": true,
+    "gold_source": [
+      "黑龙江农业气候资源普查技术规范2025_sec_8",
+      "黑龙江农业气候资源普查技术规范2025_sec_7"
+    ],
+    "answer_evidence": [
+      "10℃",
+      "限温度为10",
+      "积温计算有活动积温和有效积温",
+      "式中为活动积温",
+      "为有效积温"
+    ]
   },
   {
     "id": "Q_C03",
@@ -2020,7 +2316,18 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 2,
-    "expected_context_expand": true
+    "expected_context_expand": true,
+    "gold_source": [
+      "黑龙江农业气候资源普查技术规范2025_sec_11",
+      "黑龙江农业气候资源普查技术规范2025_sec_12"
+    ],
+    "answer_evidence": [
+      "此类推到365",
+      "总辐射的0",
+      "为实际日照",
+      "为可能日照",
+      "为地球轨道偏心率订正系数"
+    ]
   },
   {
     "id": "Q_C04",
@@ -2077,7 +2384,18 @@
       "numeric"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": true
+    "expected_context_expand": true,
+    "gold_source": [
+      "黑龙江农业气候资源普查技术规范2025_sec_13",
+      "黑龙江农业气候资源普查技术规范2025_sec_14"
+    ],
+    "answer_evidence": [
+      "为回归系数",
+      "范中选用80",
+      "使用该方法的前提条件",
+      "为保证率等级下的标准化系数",
+      "故标准化系数"
+    ]
   },
   {
     "id": "Q_C05",
@@ -2136,7 +2454,18 @@
       "multi_hop"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": true
+    "expected_context_expand": true,
+    "gold_source": [
+      "黑龙江省大豆冷害气候风险区划技术规范（初稿）_sec_2",
+      "黑龙江省大豆冷害气候风险区划技术规范（初稿）_sec_1"
+    ],
+    "answer_evidence": [
+      "黑龙江省83",
+      "象观测站1961",
+      "象观测站5",
+      "将全省83",
+      "个气象站5"
+    ]
   },
   {
     "id": "Q_C06",
@@ -2192,7 +2521,16 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 2,
-    "expected_context_expand": true
+    "expected_context_expand": true,
+    "gold_source": [
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_1",
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_2"
+    ],
+    "answer_evidence": [
+      "这时一般全省性降水",
+      "气温高降水",
+      "初夏的降水"
+    ]
   },
   {
     "id": "Q_C07",
@@ -2248,7 +2586,18 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 2,
-    "expected_context_expand": true
+    "expected_context_expand": true,
+    "gold_source": [
+      "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_sec_1",
+      "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_sec_2"
+    ],
+    "answer_evidence": [
+      "温度低于0",
+      "温度降至0",
+      "在每年的4",
+      "温下降到0",
+      "是指近地面空气中水汽直接凝华在温度"
+    ]
   },
   {
     "id": "Q_C08",
@@ -2303,7 +2652,18 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 2,
-    "expected_context_expand": true
+    "expected_context_expand": true,
+    "gold_source": [
+      "黑龙江省大豆种植气候区划技术规范(初稿）1120_sec_2",
+      "黑龙江省大豆种植气候区划技术规范(初稿）1120_sec_3"
+    ],
+    "answer_evidence": [
+      "≥10℃",
+      "≥1600℃",
+      "≥80天",
+      "≤80天",
+      "10℃"
+    ]
   },
   {
     "id": "Q_C09",
@@ -2361,7 +2721,18 @@
       "numeric"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": true
+    "expected_context_expand": true,
+    "gold_source": [
+      "D_P_R_150000_001-内蒙古区划报告_sec_21",
+      "D_P_R_150000_001-内蒙古区划报告_sec_22"
+    ],
+    "answer_evidence": [
+      "数划分为4",
+      "得到孕灾环境敏感性指数",
+      "蒙古自治区大豆孕灾环境敏感性指数",
+      "<150 mm",
+      "150 mm"
+    ]
   },
   {
     "id": "Q_C10",
@@ -2418,7 +2789,18 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 2,
-    "expected_context_expand": true
+    "expected_context_expand": true,
+    "gold_source": [
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_23",
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_24"
+    ],
+    "answer_evidence": [
+      "种强度等级致灾因子",
+      "相应灾损系数",
+      "危险性风险指数",
+      "至北采用3",
+      "个区域4"
+    ]
   },
   {
     "id": "Q_C11",
@@ -2475,7 +2857,18 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 2,
-    "expected_context_expand": true
+    "expected_context_expand": true,
+    "gold_source": [
+      "D_P_R_150000_001-内蒙古区划报告_sec_46",
+      "D_P_R_150000_001-内蒙古区划报告_sec_45"
+    ],
+    "answer_evidence": [
+      "24℃",
+      "25℃",
+      "化蛹期从7",
+      "月中旬至8",
+      "降雨量在100"
+    ]
   },
   {
     "id": "Q_C12",
@@ -2530,7 +2923,18 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 2,
-    "expected_context_expand": true
+    "expected_context_expand": true,
+    "gold_source": [
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_31",
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_29"
+    ],
+    "answer_evidence": [
+      "可知1961",
+      "相较于1961",
+      "光合生产潜力是指在温度",
+      "年和1991",
+      "其中1961"
+    ]
   },
   {
     "id": "Q_C13",
@@ -2589,7 +2993,18 @@
       "numeric"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": true
+    "expected_context_expand": true,
+    "gold_source": [
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_14",
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_15"
+    ],
+    "answer_evidence": [
+      "1587.3h",
+      "1340.0h",
+      "1580.0h",
+      "1350.0h",
+      "1320.0h"
+    ]
   },
   {
     "id": "Q_C14",
@@ -2645,7 +3060,18 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 2,
-    "expected_context_expand": true
+    "expected_context_expand": true,
+    "gold_source": [
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_4",
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_39"
+    ],
+    "answer_evidence": [
+      "下旬期到6",
+      "日照时数3",
+      "先根据表3",
+      "个因子作为麦收期连阴雨指数",
+      "分别对降水"
+    ]
   },
   {
     "id": "Q_C15",
@@ -2701,7 +3127,18 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 2,
-    "expected_context_expand": true
+    "expected_context_expand": true,
+    "gold_source": [
+      "黑龙江省大豆冷害气候风险区划技术规范（初稿）_sec_4",
+      "黑龙江省大豆冷害气候风险区划技术规范（初稿）_sec_5"
+    ],
+    "answer_evidence": [
+      "权重见表3",
+      "为致灾因子危险性指数",
+      "种致灾因子",
+      "种致灾因子权重系数",
+      "该项所对应的指标比指标"
+    ]
   },
   {
     "id": "Q_C16",
@@ -2758,7 +3195,18 @@
       "numeric"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": true
+    "expected_context_expand": true,
+    "gold_source": [
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_18",
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_19"
+    ],
+    "answer_evidence": [
+      "92 天",
+      "80 天",
+      "90 天",
+      "60 天",
+      "40 天"
+    ]
   },
   {
     "id": "Q_C17",
@@ -2814,7 +3262,18 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 2,
-    "expected_context_expand": true
+    "expected_context_expand": true,
+    "gold_source": [
+      "D_P_R_150000_001-内蒙古区划报告_sec_30",
+      "D_P_R_150000_001-内蒙古区划报告_sec_31"
+    ],
+    "answer_evidence": [
+      "5 天",
+      "10 天",
+      "76\n\n天",
+      "每个站点1991",
+      "豆出苗后5"
+    ]
   },
   {
     "id": "Q_C18",
@@ -2870,7 +3329,18 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 2,
-    "expected_context_expand": true
+    "expected_context_expand": true,
+    "gold_source": [
+      "新疆冬小麦气候区划报告_sec_8",
+      "新疆冬小麦气候区划报告_sec_5"
+    ],
+    "answer_evidence": [
+      "≥0℃",
+      "≤0℃",
+      "≥35℃",
+      "≥30℃",
+      "≥10℃"
+    ]
   },
   {
     "id": "Q_C19",
@@ -2927,7 +3397,18 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 2,
-    "expected_context_expand": true
+    "expected_context_expand": true,
+    "gold_source": [
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_20",
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_18"
+    ],
+    "answer_evidence": [
+      "越冬冻害等五种主要气象灾害气候风险",
+      "气候风险区划指标",
+      "生育期需水量和无降水",
+      "技术在农业气候区划",
+      "极大提高了区划"
+    ]
   },
   {
     "id": "Q_C20",
@@ -2982,7 +3463,18 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 2,
-    "expected_context_expand": true
+    "expected_context_expand": true,
+    "gold_source": [
+      "辽宁省生态气象和卫星遥感中心-算法说明文档_sec_5",
+      "辽宁省生态气象和卫星遥感中心-算法说明文档_sec_6"
+    ],
+    "answer_evidence": [
+      "≥10℃",
+      "10℃",
+      "基于1961",
+      "间分辨率30",
+      "年和1991"
+    ]
   },
   {
     "id": "Q_C21",
@@ -3038,7 +3530,18 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 2,
-    "expected_context_expand": true
+    "expected_context_expand": true,
+    "gold_source": [
+      "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_sec_4",
+      "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_sec_2"
+    ],
+    "answer_evidence": [
+      "≥50 mm",
+      "≤100mm",
+      "≥100 mm",
+      "≤250mm",
+      "≥250 mm"
+    ]
   },
   {
     "id": "Q_C22",
@@ -3095,7 +3598,18 @@
       "numeric"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": true
+    "expected_context_expand": true,
+    "gold_source": [
+      "D_P_R_230000_001-农业气候区划报告_sec_1",
+      "D_P_R_230000_001-农业气候区划报告_sec_0"
+    ],
+    "answer_evidence": [
+      "439.5mm",
+      "554.8mm",
+      "459.6mm",
+      "677.8mm",
+      "475mm"
+    ]
   },
   {
     "id": "Q_C23",
@@ -3151,7 +3665,18 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 2,
-    "expected_context_expand": true
+    "expected_context_expand": true,
+    "gold_source": [
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_38",
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_37"
+    ],
+    "answer_evidence": [
+      "海拔730",
+      "展面积约276",
+      "农业用地24",
+      "植区尚有4",
+      "种植气候适宜性区划"
+    ]
   },
   {
     "id": "Q_C24",
@@ -3207,7 +3732,14 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 2,
-    "expected_context_expand": true
+    "expected_context_expand": true,
+    "gold_source": [
+      "黑龙江省大豆产量气候区划技术规范(初稿)_table_0",
+      "黑龙江省大豆产量气候区划技术规范(初稿)_sec_0"
+    ],
+    "answer_evidence": [
+      "周边区域30"
+    ]
   },
   {
     "id": "Q_C25",
@@ -3263,7 +3795,18 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 2,
-    "expected_context_expand": true
+    "expected_context_expand": true,
+    "gold_source": [
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_22",
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_15"
+    ],
+    "answer_evidence": [
+      "≥10℃",
+      "10℃",
+      "降水量和4",
+      "为苹果气候品质综合评价指数",
+      "为苹果产量气候区划"
+    ]
   },
   {
     "id": "Q_S01",
@@ -3322,7 +3865,18 @@
       "table"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_150000_001-内蒙古区划报告_sec_20",
+      "D_P_R_150000_001-内蒙古区划报告_sec_11"
+    ],
+    "answer_evidence": [
+      "≥10℃",
+      "10℃",
+      "内蒙古农业气候区划",
+      "构建大豆种植气候区划指数",
+      "分别建立1961"
+    ]
   },
   {
     "id": "Q_S02",
@@ -3383,7 +3937,17 @@
       "table"
     ],
     "expected_chunk_num": 3,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆冷害气候风险区划技术规范（初稿）_table_9",
+      "黑龙江省大豆冷害气候风险区划技术规范（初稿）_sec_3",
+      "黑龙江省大豆冷害气候风险区划技术规范（初稿）_sec_0"
+    ],
+    "answer_evidence": [
+      "低气温在0",
+      "日平均气温低于作物生长发育适宜温度",
+      "的下限指标"
+    ]
   },
   {
     "id": "Q_S03",
@@ -3446,7 +4010,20 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 4,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江农业气候资源普查技术规范2025_sec_13",
+      "黑龙江农业气候资源普查技术规范2025_sec_7",
+      "黑龙江农业气候资源普查技术规范2025_sec_11",
+      "黑龙江农业气候资源普查技术规范2025_sec_12"
+    ],
+    "answer_evidence": [
+      "10℃",
+      "限温度为10",
+      "积温计算有活动积温和有效积温",
+      "式中为活动积温",
+      "为有效积温"
+    ]
   },
   {
     "id": "Q_S04",
@@ -3507,7 +4084,19 @@
       "table"
     ],
     "expected_chunk_num": 3,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_17",
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_15",
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_10"
+    ],
+    "answer_evidence": [
+      "陕西苹果气候区划",
+      "果种植气候适宜性区划指标",
+      "陕西富士系苹果种植气候适宜性区划",
+      "10℃",
+      "稳定通过10"
+    ]
   },
   {
     "id": "Q_S05",
@@ -3568,7 +4157,19 @@
       "table"
     ],
     "expected_chunk_num": 3,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "新疆冬小麦气候区划报告_sec_8",
+      "新疆冬小麦气候区划报告_sec_7",
+      "新疆冬小麦气候区划报告_sec_9"
+    ],
+    "answer_evidence": [
+      "≥0℃",
+      "≥35℃",
+      "2200 ℃",
+      "35℃",
+      "10 d"
+    ]
   },
   {
     "id": "Q_S06",
@@ -3631,7 +4232,19 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 3,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_37",
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_43",
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_2"
+    ],
+    "answer_evidence": [
+      "≤0℃",
+      "1.5℃",
+      "期间遭遇0",
+      "研究使用低温指数",
+      "来表示河南省冬小麦的晚霜冻气候区划"
+    ]
   },
   {
     "id": "Q_S07",
@@ -3694,7 +4307,19 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 3,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_150000_001-内蒙古区划报告_sec_21",
+      "D_P_R_150000_001-内蒙古区划报告_sec_30",
+      "D_P_R_150000_001-内蒙古区划报告_sec_45"
+    ],
+    "answer_evidence": [
+      "数划分为4",
+      "得到孕灾环境敏感性指数",
+      "蒙古自治区大豆孕灾环境敏感性指数",
+      "5 天",
+      "10 天"
+    ]
   },
   {
     "id": "Q_S08",
@@ -3752,7 +4377,19 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 3,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_20",
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_10",
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_30"
+    ],
+    "answer_evidence": [
+      "陕西苹果气候区划",
+      "果种植气候适宜性区划指标",
+      "陕西富士系苹果种植气候适宜性区划",
+      "技术在农业气候区划",
+      "极大提高了区划"
+    ]
   },
   {
     "id": "Q_S09",
@@ -3813,7 +4450,17 @@
       "table"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_23",
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_24"
+    ],
+    "answer_evidence": [
+      "≥0℃",
+      "河南气候区划",
+      "河南省优质专用小麦农业气候区划指标",
+      "全生育期降水"
+    ]
   },
   {
     "id": "Q_S10",
@@ -3875,7 +4522,19 @@
       "table"
     ],
     "expected_chunk_num": 3,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆种植气候区划技术规范(初稿）1120_table_2",
+      "黑龙江省大豆种植气候区划技术规范(初稿）1120_sec_2",
+      "黑龙江省大豆种植气候区划技术规范(初稿）1120_table_1"
+    ],
+    "answer_evidence": [
+      "≥10℃",
+      "≥1600℃",
+      "≥80天",
+      "≤80天",
+      "10℃"
+    ]
   },
   {
     "id": "Q_S11",
@@ -3939,7 +4598,18 @@
       "table"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_150000_001-内蒙古区划报告_sec_38",
+      "D_P_R_150000_001-内蒙古区划报告_sec_39"
+    ],
+    "answer_evidence": [
+      "面积如表6",
+      "划面积为114",
+      "面积合计47",
+      "地面积的41",
+      "面积合计67"
+    ]
   },
   {
     "id": "Q_S13",
@@ -4017,7 +4687,20 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 4,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "辽宁省生态气象和卫星遥感中心-算法说明文档_sec_1",
+      "辽宁省生态气象和卫星遥感中心-算法说明文档_sec_4",
+      "辽宁省生态气象和卫星遥感中心-算法说明文档_sec_5",
+      "辽宁省生态气象和卫星遥感中心-算法说明文档_sec_2"
+    ],
+    "answer_evidence": [
+      "≥10℃",
+      "10℃",
+      "基于1961",
+      "年和1991",
+      "间分辨率30m"
+    ]
   },
   {
     "id": "Q_S14",
@@ -4097,7 +4780,20 @@
       "numeric"
     ],
     "expected_chunk_num": 4,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_18",
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_14",
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_20",
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_12"
+    ],
+    "answer_evidence": [
+      "2160~2380℃·d",
+      "2350~2500℃·d",
+      "≥0℃",
+      "2606.18℃·d",
+      "2380℃·d"
+    ]
   },
   {
     "id": "Q_S15",
@@ -4163,7 +4859,18 @@
       "numeric"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "新疆冬小麦气候区划报告_sec_10",
+      "新疆冬小麦气候区划报告_sec_9"
+    ],
+    "answer_evidence": [
+      "新疆冬小麦干热风风险区划",
+      "全疆范围内西部麦区的风险",
+      "其中低风险",
+      "疆在海拔1000",
+      "疆在海拔1500"
+    ]
   },
   {
     "id": "Q_S16",
@@ -4231,7 +4938,19 @@
       "multi_hop"
     ],
     "expected_chunk_num": 3,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆冷害气候风险区划技术规范（初稿）_sec_8",
+      "黑龙江省大豆冷害气候风险区划技术规范（初稿）_sec_7",
+      "黑龙江省大豆冷害气候风险区划技术规范（初稿）_sec_9"
+    ],
+    "answer_evidence": [
+      "率大小为100m",
+      "险性划分4",
+      "为孕灾环境危险性指数",
+      "种孕灾环境权重系数",
+      "孕灾环境危险性各因子"
+    ]
   },
   {
     "id": "Q_S17",
@@ -4303,7 +5022,17 @@
       "numeric"
     ],
     "expected_chunk_num": 3,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_30",
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_31",
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_29"
+    ],
+    "answer_evidence": [
+      "可知1961",
+      "相较于1961",
+      "光合生产潜力是指在温度"
+    ]
   },
   {
     "id": "Q_S18",
@@ -4373,7 +5102,19 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 3,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_150000_001-内蒙古区划报告_sec_35",
+      "D_P_R_150000_001-内蒙古区划报告_sec_19",
+      "D_P_R_150000_001-内蒙古区划报告_sec_11"
+    ],
+    "answer_evidence": [
+      "≥10℃",
+      "10℃",
+      "内蒙古农业气候区划",
+      "构建大豆种植气候区划指数",
+      "为平均温度"
+    ]
   },
   {
     "id": "Q_S19",
@@ -4444,7 +5185,19 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 3,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆种植气候区划技术规范(初稿）1120_sec_2",
+      "黑龙江省大豆种植气候区划技术规范(初稿）1120_sec_4",
+      "黑龙江省大豆种植气候区划技术规范(初稿）1120_sec_3"
+    ],
+    "answer_evidence": [
+      "≥10℃",
+      "≥1600℃",
+      "≥80天",
+      "≤80天",
+      "10℃"
+    ]
   },
   {
     "id": "Q_S20",
@@ -4510,7 +5263,18 @@
       "numeric"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_360000_001-江西柑橘气候区划报告_sec_5",
+      "D_P_R_360000_001-江西柑橘气候区划报告_sec_4"
+    ],
+    "answer_evidence": [
+      "江西柑橘气候区划",
+      "柑橘木虱气候区划指标",
+      "个维度的权重系数",
+      "≥10℃",
+      "10℃"
+    ]
   },
   {
     "id": "Q_S21",
@@ -4574,7 +5338,18 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_sec_3",
+      "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_sec_4"
+    ],
+    "answer_evidence": [
+      "10d",
+      "缺失超过5",
+      "缺失大于10d",
+      "据缺失在10d",
+      "≥50 mm"
+    ]
   },
   {
     "id": "Q_S22",
@@ -4647,7 +5422,19 @@
       "numeric"
     ],
     "expected_chunk_num": 3,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_22",
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_21",
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_17"
+    ],
+    "answer_evidence": [
+      "陕西苹果气候区划",
+      "表示区划对象的气候综合条件",
+      "次适宜和不适宜四个等级",
+      "富士系苹果气候因子",
+      "≥10℃"
+    ]
   },
   {
     "id": "Q_S23",
@@ -4718,7 +5505,19 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 3,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_4",
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_37",
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_5"
+    ],
+    "answer_evidence": [
+      "下旬期到6",
+      "数据包括1961",
+      "年河南省122",
+      "≤0℃",
+      "1.5℃"
+    ]
   },
   {
     "id": "Q_S24",
@@ -4789,7 +5588,19 @@
     "difficulty_score": 1,
     "features": [],
     "expected_chunk_num": 3,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_150000_001-内蒙古区划报告_sec_47",
+      "D_P_R_150000_001-内蒙古区划报告_sec_46",
+      "D_P_R_150000_001-内蒙古区划报告_sec_45"
+    ],
+    "answer_evidence": [
+      "24℃",
+      "25℃",
+      "化蛹期从7",
+      "月中旬至8",
+      "降雨量在100"
+    ]
   },
   {
     "id": "Q_S25",
@@ -4861,7 +5672,19 @@
       "numeric"
     ],
     "expected_chunk_num": 3,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_230000_001-农业气候区划报告_sec_3",
+      "D_P_R_230000_001-农业气候区划报告_sec_1",
+      "D_P_R_230000_001-农业气候区划报告_sec_2"
+    ],
+    "answer_evidence": [
+      "439.5mm",
+      "554.8mm",
+      "459.6mm",
+      "677.8mm",
+      "475mm"
+    ]
   },
   {
     "id": "Q_D01",
@@ -4923,7 +5746,14 @@
     "difficulty_score": 3,
     "features": [],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江农业气候资源普查技术规范2025_sec_0",
+      "黑龙江农业生产普查技术规范2025_sec_0"
+    ],
+    "answer_evidence": [
+      "农业气候资源是指在一定经济技术条件"
+    ]
   },
   {
     "id": "Q_D02",
@@ -4987,7 +5817,18 @@
     "difficulty_score": 3,
     "features": [],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_sec_1",
+      "黑龙江省大豆冷害气候风险区划技术规范（初稿）_sec_0"
+    ],
+    "answer_evidence": [
+      "低气温在0",
+      "日平均气温低于作物生长发育适宜温度",
+      "的下限指标",
+      "温度低于0",
+      "温度降至0"
+    ]
   },
   {
     "id": "Q_D03",
@@ -5050,7 +5891,18 @@
       "multi_hop"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "农业气候区划指标算法说明文档（陕西-算法说明文档-梁轶）20250926_sec_0",
+      "气科院-农业气候区划指标算法说明文档-王旗_sec_1"
+    ],
+    "answer_evidence": [
+      "≥10℃",
+      "10℃",
+      "1900℃",
+      "250mm",
+      "分辨率为0"
+    ]
   },
   {
     "id": "Q_D04",
@@ -5116,7 +5968,18 @@
       "multi_hop"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_150000_001-内蒙古区划报告_sec_11",
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_10"
+    ],
+    "answer_evidence": [
+      "≥10℃",
+      "10℃",
+      "内蒙古农业气候区划",
+      "构建大豆种植气候区划指数",
+      "陕西苹果气候区划"
+    ]
   },
   {
     "id": "Q_D05",
@@ -5183,7 +6046,18 @@
       "multi_hop"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_230000_001-农业气候区划报告_sec_3",
+      "D_P_R_150000_001-内蒙古区划报告_sec_11"
+    ],
+    "answer_evidence": [
+      "140℃·d",
+      "120℃·d",
+      "180℃·d",
+      "200℃·d",
+      "30mm"
+    ]
   },
   {
     "id": "Q_D06",
@@ -5250,7 +6124,18 @@
       "multi_hop"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "新疆冬小麦气候区划报告_sec_2",
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_0"
+    ],
+    "answer_evidence": [
+      "风等气象条件",
+      "其四由气象因子",
+      "10天",
+      "30℃",
+      "36℃"
+    ]
   },
   {
     "id": "Q_D07",
@@ -5315,7 +6200,14 @@
       "multi_hop"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江农业气候资源普查技术规范2025_sec_0",
+      "新疆农业气候资源普查技术规范_sec_0"
+    ],
+    "answer_evidence": [
+      "农业气候资源是指在一定经济技术条件"
+    ]
   },
   {
     "id": "Q_D09",
@@ -5385,7 +6277,20 @@
       "multi_hop"
     ],
     "expected_chunk_num": 4,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "农业气候区划指标算法说明文档（新疆农业气象台-算法说明文档-郑新倩）_sec_1",
+      "辽宁省生态气象和卫星遥感中心-算法说明文档_sec_1",
+      "农业气候区划指标算法说明文档（陕西-算法说明文档-梁轶）20250926_sec_0",
+      "气科院-农业气候区划指标算法说明文档-王旗_sec_1"
+    ],
+    "answer_evidence": [
+      "≥10℃",
+      "10℃",
+      "1900℃",
+      "250mm",
+      "分辨率为0"
+    ]
   },
   {
     "id": "Q_D10",
@@ -5451,7 +6356,18 @@
       "multi_hop"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_23",
+      "气科院-农业气候区划指标算法说明文档-王旗_sec_3"
+    ],
+    "answer_evidence": [
+      "≥0℃",
+      "河南气候区划",
+      "河南省优质专用小麦农业气候区划指标",
+      "全生育期降水",
+      "样本数按8"
+    ]
   },
   {
     "id": "Q_D11",
@@ -5518,7 +6434,18 @@
       "multi_hop"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江农业气候资源普查技术规范2025_sec_7",
+      "D_P_R_150000_001-内蒙古区划报告_sec_11"
+    ],
+    "answer_evidence": [
+      "10℃",
+      "限温度为10",
+      "积温计算有活动积温和有效积温",
+      "式中为活动积温",
+      "为有效积温"
+    ]
   },
   {
     "id": "Q_D12",
@@ -5584,7 +6511,18 @@
       "multi_hop"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_150000_001-内蒙古区划报告_sec_4",
+      "D_P_R_230000_001-农业气候区划报告_sec_1"
+    ],
+    "answer_evidence": [
+      "439.5mm",
+      "554.8mm",
+      "459.6mm",
+      "677.8mm",
+      "475mm"
+    ]
   },
   {
     "id": "Q_D13",
@@ -5651,7 +6589,12 @@
       "multi_hop"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "辽宁省生态气象和卫星遥感中心-算法说明文档_sec_5",
+      "黑龙江省大豆冷害气候风险区划技术规范（初稿）_sec_3"
+    ],
+    "answer_evidence": []
   },
   {
     "id": "Q_D14",
@@ -5718,7 +6661,17 @@
       "multi_hop"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆干旱气候风险区划技术规范（初稿）_sec_2",
+      "D_P_R_150000_001-内蒙古区划报告_sec_21"
+    ],
+    "answer_evidence": [
+      "10天",
+      "的大小为0",
+      "本标准取10",
+      "作物某10"
+    ]
   },
   {
     "id": "Q_D15",
@@ -5784,7 +6737,18 @@
       "multi_hop"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_360000_001-江西柑橘气候区划报告_sec_5",
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_10"
+    ],
+    "answer_evidence": [
+      "陕西苹果气候区划",
+      "果种植气候适宜性区划指标",
+      "陕西富士系苹果种植气候适宜性区划",
+      "≥10℃",
+      "10℃"
+    ]
   },
   {
     "id": "Q_D16",
@@ -5851,7 +6815,18 @@
       "multi_hop"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_sec_1",
+      "D_P_R_150000_001-内蒙古区划报告_sec_30"
+    ],
+    "answer_evidence": [
+      "温度低于0",
+      "温度降至0",
+      "在每年的4",
+      "温下降到0",
+      "是指近地面空气中水汽直接凝华在温度"
+    ]
   },
   {
     "id": "Q_D17",
@@ -5917,7 +6892,18 @@
       "multi_hop"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "新疆冬小麦气候区划报告_sec_2",
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_3"
+    ],
+    "answer_evidence": [
+      "为干热风高风险",
+      "10天",
+      "30℃",
+      "36℃",
+      "31℃"
+    ]
   },
   {
     "id": "Q_D18",
@@ -5984,7 +6970,15 @@
       "multi_hop"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江农业气候资源普查技术规范2025_sec_1",
+      "新疆农业气候资源普查清单_table_4"
+    ],
+    "answer_evidence": [
+      "日最大降水",
+      "最大日降水"
+    ]
   },
   {
     "id": "Q_D19",
@@ -6050,7 +7044,18 @@
       "multi_hop"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_150000_001-内蒙古区划报告_sec_21",
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_23"
+    ],
+    "answer_evidence": [
+      "数划分为4",
+      "得到孕灾环境敏感性指数",
+      "蒙古自治区大豆孕灾环境敏感性指数",
+      "种强度等级致灾因子",
+      "相应灾损系数"
+    ]
   },
   {
     "id": "Q_D20",
@@ -6116,7 +7121,18 @@
       "multi_hop"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "农业气候区划指标算法说明文档（陕西-算法说明文档-梁轶）20250926_sec_0",
+      "农业气候区划指标算法说明文档（新疆农业气象台-算法说明文档-郑新倩）_sec_1"
+    ],
+    "answer_evidence": [
+      "≥10℃",
+      "≥35℃",
+      "≥2300℃",
+      "10℃",
+      "5cm"
+    ]
   },
   {
     "id": "Q_D21",
@@ -6184,7 +7200,18 @@
       "multi_hop"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "新疆冬小麦气候区划报告_sec_7",
+      "黑龙江省大豆产量气候区划技术规范(初稿)_sec_0"
+    ],
+    "answer_evidence": [
+      "周边区域30",
+      "≥0℃",
+      "≥35℃",
+      "2200 ℃",
+      "35℃"
+    ]
   },
   {
     "id": "Q_D22",
@@ -6251,7 +7278,18 @@
       "multi_hop"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_150000_001-内蒙古区划报告_sec_35",
+      "黑龙江省大豆品质气候区划技术规范(初稿)_sec_3"
+    ],
+    "answer_evidence": [
+      "内蒙古自治区大豆品质气候区划指标",
+      "关键气象影响因子",
+      "月上旬累计降水",
+      "高油大豆的等级指标",
+      "针对气象条件"
+    ]
   },
   {
     "id": "Q_D23",
@@ -6319,7 +7357,18 @@
       "multi_hop"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_39",
+      "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_sec_4"
+    ],
+    "answer_evidence": [
+      "≥50 mm",
+      "≤100mm",
+      "≥100 mm",
+      "≤250mm",
+      "≥250 mm"
+    ]
   },
   {
     "id": "Q_D24",
@@ -6387,7 +7436,18 @@
       "multi_hop"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_150000_001-内蒙古区划报告_sec_8",
+      "D_P_R_230000_001-农业气候区划报告_sec_0"
+    ],
+    "answer_evidence": [
+      "≥10℃",
+      "10℃",
+      "5 d",
+      "2661.5℃·d",
+      "2936.6℃·d"
+    ]
   },
   {
     "id": "Q_D25",
@@ -6406,7 +7466,7 @@
     ],
     "gold_chunks": [
       "D_P_R_410000_001-农业气候区划报告-河南省_s30",
-      "新疆冬小麦气候区划报告_s5"
+      "D_P_R_650000_001-新疆冬小麦气候区划报告_s9"
     ],
     "retrieval_eval": {
       "must_retrieve": [
@@ -6455,7 +7515,19 @@
       "multi_hop"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_30",
+      "D_P_R_650000_001-新疆冬小麦气候区划报告_sec_9"
+    ],
+    "answer_evidence": [
+      "越冬期",
+      "120～130 d",
+      "安全越冬",
+      "≥0℃积温",
+      "孕穗至黄熟期",
+      "积雪覆盖"
+    ]
   },
   {
     "id": "Q_D26",
@@ -6522,7 +7594,18 @@
       "multi_hop"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_sec_2",
+      "黑龙江省大豆冷害气候风险区划技术规范（初稿）_sec_2"
+    ],
+    "answer_evidence": [
+      "黑龙江省83",
+      "象观测站1961",
+      "象观测站5",
+      "将全省83",
+      "个气象站5"
+    ]
   },
   {
     "id": "Q_D27",
@@ -6589,7 +7672,17 @@
       "multi_hop"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆种植气候区划技术规范(初稿）1120_table_1",
+      "D_P_R_150000_001-内蒙古区划报告_sec_19"
+    ],
+    "answer_evidence": [
+      "为平均温度",
+      "出权重等1",
+      "黑龙江大豆种植区划",
+      "个维度的权重系数"
+    ]
   },
   {
     "id": "Q_D28",
@@ -6657,7 +7750,18 @@
       "multi_hop"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "气科院-农业气候区划指标算法说明文档-王旗_sec_2",
+      "农业气候区划指标算法说明文档（新疆农业气象台-算法说明文档-郑新倩）_sec_4"
+    ],
+    "answer_evidence": [
+      "分辨率为0",
+      "收集1991",
+      "全国范围内的春大豆与夏大豆产量区划",
+      "基于高稳系数",
+      "进行大豆产量区划"
+    ]
   },
   {
     "id": "Q_D29",
@@ -6725,7 +7829,16 @@
       "multi_hop"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "新疆冬小麦气候区划报告_table_11",
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_17"
+    ],
+    "answer_evidence": [
+      "陕西苹果气候区划",
+      "伸阻力等4",
+      "新疆冬小麦气候区划"
+    ]
   },
   {
     "id": "Q_D30",
@@ -6793,7 +7906,18 @@
       "multi_hop"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "辽宁省生态气象和卫星遥感中心-算法说明文档_sec_4",
+      "D_P_R_150000_001-内蒙古区划报告_sec_21"
+    ],
+    "answer_evidence": [
+      "10d",
+      "20d",
+      "30d",
+      "40d",
+      "50d"
+    ]
   },
   {
     "id": "Q_T03",
@@ -6849,7 +7973,14 @@
       "table"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆冷害气候风险区划技术规范（初稿）_table_9"
+    ],
+    "answer_evidence": [
+      "风险区等4",
+      "列出低风险"
+    ]
   },
   {
     "id": "Q_T04",
@@ -6906,7 +8037,16 @@
       "table"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆种植气候区划技术规范(初稿）1120_table_0"
+    ],
+    "answer_evidence": [
+      "≥10℃",
+      "10℃",
+      "候区划等1",
+      "黑龙江大豆种植区划"
+    ]
   },
   {
     "id": "Q_T08",
@@ -6961,7 +8101,13 @@
       "table"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆病虫害（食心虫）气候风险区划技术规范(初稿) _table_0"
+    ],
+    "answer_evidence": [
+      "大豆食心虫综合气象风险指数"
+    ]
   },
   {
     "id": "Q_T09",
@@ -7016,7 +8162,10 @@
       "table"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆产量气候区划技术规范(初稿)_table_0"
+    ]
   },
   {
     "id": "Q_T11",
@@ -7076,7 +8225,15 @@
       "table"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆种植气候区划技术规范(初稿）1120_table_1"
+    ],
+    "answer_evidence": [
+      "出权重等1",
+      "黑龙江大豆种植区划",
+      "个维度的权重系数"
+    ]
   },
   {
     "id": "Q_T12",
@@ -7132,7 +8289,15 @@
       "table"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "气科院-农业气候区划指标算法说明文档-王旗_table_1"
+    ],
+    "answer_evidence": [
+      "气象灾害区划",
+      "大豆干旱灾害区划",
+      "大豆低温灾害区划"
+    ]
   },
   {
     "id": "Q_T16",
@@ -7188,7 +8353,10 @@
       "table"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_table_1"
+    ]
   },
   {
     "id": "Q_T20",
@@ -7243,7 +8411,13 @@
       "table"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆品质气候区划技术规范(初稿)_table_0"
+    ],
+    "answer_evidence": [
+      "黑龙江大豆品质区划"
+    ]
   },
   {
     "id": "Q_N01",
@@ -7295,7 +8469,16 @@
       "numeric"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_150000_001-内蒙古区划报告_sec_11"
+    ],
+    "answer_evidence": [
+      "≥10℃",
+      "10℃",
+      "内蒙古农业气候区划",
+      "构建大豆种植气候区划指数"
+    ]
   },
   {
     "id": "Q_N02",
@@ -7348,7 +8531,17 @@
       "numeric"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_150000_001-内蒙古区划报告_sec_4"
+    ],
+    "answer_evidence": [
+      "＞0℃",
+      "≤0℃",
+      "3.186d",
+      "160d",
+      "408.2mm"
+    ]
   },
   {
     "id": "Q_N03",
@@ -7400,7 +8593,17 @@
       "numeric"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_14"
+    ],
+    "answer_evidence": [
+      "1587.3h",
+      "1340.0h",
+      "1580.0h",
+      "1350.0h",
+      "1320.0h"
+    ]
   },
   {
     "id": "Q_N04",
@@ -7452,7 +8655,17 @@
       "numeric"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_15"
+    ],
+    "answer_evidence": [
+      "1474.8h",
+      "1230.0h",
+      "3.6h",
+      "35.0h",
+      "92.2h"
+    ]
   },
   {
     "id": "Q_N05",
@@ -7505,7 +8718,16 @@
       "numeric"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_150000_001-内蒙古区划报告_sec_8"
+    ],
+    "answer_evidence": [
+      "值出现在2000",
+      "均单产1300",
+      "单产1600",
+      "平均单产1589"
+    ]
   },
   {
     "id": "Q_N06",
@@ -7558,7 +8780,16 @@
       "numeric"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_150000_001-内蒙古区划报告_sec_8"
+    ],
+    "answer_evidence": [
+      "值出现在2000",
+      "均单产1300",
+      "单产1600",
+      "平均单产1589"
+    ]
   },
   {
     "id": "Q_N07",
@@ -7613,7 +8844,17 @@
       "numeric"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_150000_001-内蒙古区划报告_sec_5"
+    ],
+    "answer_evidence": [
+      "635.7mm",
+      "305.7mm",
+      "量出现在1998",
+      "年为635",
+      "量出现在2001"
+    ]
   },
   {
     "id": "Q_N08",
@@ -7667,7 +8908,17 @@
       "numeric"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_230000_001-农业气候区划报告_sec_1"
+    ],
+    "answer_evidence": [
+      "439.5mm",
+      "554.8mm",
+      "459.6mm",
+      "677.8mm",
+      "475mm"
+    ]
   },
   {
     "id": "Q_N09",
@@ -7721,7 +8972,17 @@
       "numeric"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_19"
+    ],
+    "answer_evidence": [
+      "0.4 天",
+      "6 天",
+      "水日数每10",
+      "年减少超6",
+      "年河南冬小麦全生育期降水"
+    ]
   },
   {
     "id": "Q_N10",
@@ -7774,7 +9035,15 @@
       "numeric"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_10"
+    ],
+    "answer_evidence": [
+      "陕西苹果气候区划",
+      "果种植气候适宜性区划指标",
+      "陕西富士系苹果种植气候适宜性区划"
+    ]
   },
   {
     "id": "Q_N11",
@@ -7828,7 +9097,15 @@
       "numeric"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_11"
+    ],
+    "answer_evidence": [
+      "≥26.0℃",
+      "26.0℃",
+      "陕西苹果气候区划"
+    ]
   },
   {
     "id": "Q_N12",
@@ -7880,7 +9157,17 @@
       "numeric"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_360000_001-江西柑橘气候区划报告_sec_5"
+    ],
+    "answer_evidence": [
+      "≥10℃",
+      "10℃",
+      "指标见表2",
+      "皮桔类等4",
+      "江西柑橘气候区划"
+    ]
   },
   {
     "id": "Q_N13",
@@ -7896,11 +9183,11 @@
       "s5"
     ],
     "gold_chunks": [
-      "新疆冬小麦气候区划报告_s9"
+      "新疆冬小麦气候区划报告_s5"
     ],
     "retrieval_eval": {
       "must_retrieve": [
-        "新疆冬小麦气候区划报告_s9"
+        "新疆冬小麦气候区划报告_s5"
       ],
       "optional_retrieve": [
         "新疆冬小麦气候区划报告_t8"
@@ -7934,7 +9221,17 @@
       "numeric"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "新疆冬小麦气候区划报告_sec_5"
+    ],
+    "answer_evidence": [
+      "≥0℃",
+      "≤0℃",
+      "≥35℃",
+      "≥30℃",
+      "≥10℃"
+    ]
   },
   {
     "id": "Q_N14",
@@ -7987,7 +9284,17 @@
       "numeric"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_230000_001-农业气候区划报告_sec_3"
+    ],
+    "answer_evidence": [
+      "140℃·d",
+      "120℃·d",
+      "180℃·d",
+      "200℃·d",
+      "30mm"
+    ]
   },
   {
     "id": "Q_N15",
@@ -8040,7 +9347,17 @@
       "numeric"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_21"
+    ],
+    "answer_evidence": [
+      "643.4mm",
+      "620mm",
+      "640mm",
+      "595mm",
+      "590mm"
+    ]
   },
   {
     "id": "Q_N16",
@@ -8094,7 +9411,15 @@
       "numeric"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_150000_001-内蒙古区划报告_sec_21"
+    ],
+    "answer_evidence": [
+      "数划分为4",
+      "得到孕灾环境敏感性指数",
+      "蒙古自治区大豆孕灾环境敏感性指数"
+    ]
   },
   {
     "id": "Q_N17",
@@ -8146,7 +9471,16 @@
       "numeric"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_16"
+    ],
+    "answer_evidence": [
+      "河南省1961",
+      "效辐射在1455",
+      "大都在1575",
+      "最高可达1708"
+    ]
   },
   {
     "id": "Q_N18",
@@ -8196,7 +9530,13 @@
       "numeric"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆病虫害（食心虫）气候风险区划技术规范(初稿) _table_0"
+    ],
+    "answer_evidence": [
+      "大豆食心虫综合气象风险指数"
+    ]
   },
   {
     "id": "Q_N19",
@@ -8248,7 +9588,14 @@
       "numeric"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆冷害气候风险区划技术规范（初稿）_table_9"
+    ],
+    "answer_evidence": [
+      "风险区等4",
+      "列出低风险"
+    ]
   },
   {
     "id": "Q_N20",
@@ -8301,7 +9648,15 @@
       "numeric"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_1"
+    ],
+    "answer_evidence": [
+      "共包括48",
+      "榆林市等4",
+      "陕西苹果气候区划"
+    ]
   },
   {
     "id": "Q_L01",
@@ -8358,7 +9713,16 @@
     ],
     "rewrite_type": "lexical",
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_150000_001-内蒙古区划报告_sec_11"
+    ],
+    "answer_evidence": [
+      "≥10℃",
+      "10℃",
+      "内蒙古农业气候区划",
+      "构建大豆种植气候区划指数"
+    ]
   },
   {
     "id": "Q_L02",
@@ -8412,7 +9776,15 @@
     ],
     "rewrite_type": "lexical",
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江农业气候资源普查技术规范2025_sec_5"
+    ],
+    "answer_evidence": [
+      "实际日照时间与可能日照",
+      "全天无云时应有的日照",
+      "它表明了气候条件"
+    ]
   },
   {
     "id": "Q_L03",
@@ -8469,7 +9841,15 @@
     ],
     "rewrite_type": "lexical",
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆冷害气候风险区划技术规范（初稿）_sec_0"
+    ],
+    "answer_evidence": [
+      "低气温在0",
+      "日平均气温低于作物生长发育适宜温度",
+      "的下限指标"
+    ]
   },
   {
     "id": "Q_L04",
@@ -8526,7 +9906,17 @@
     ],
     "rewrite_type": "lexical",
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "新疆冬小麦气候区划报告_sec_2"
+    ],
+    "answer_evidence": [
+      "10天",
+      "30℃",
+      "36℃",
+      "31℃",
+      "34℃"
+    ]
   },
   {
     "id": "Q_L06",
@@ -8581,7 +9971,13 @@
     ],
     "rewrite_type": "lexical",
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_sec_1"
+    ],
+    "answer_evidence": [
+      "造成植株根部环境条件"
+    ]
   },
   {
     "id": "Q_L07",
@@ -8638,7 +10034,15 @@
     ],
     "rewrite_type": "lexical",
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_10"
+    ],
+    "answer_evidence": [
+      "陕西苹果气候区划",
+      "果种植气候适宜性区划指标",
+      "陕西富士系苹果种植气候适宜性区划"
+    ]
   },
   {
     "id": "Q_L08",
@@ -8692,7 +10096,13 @@
     ],
     "rewrite_type": "lexical",
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆病虫害（食心虫）气候风险区划技术规范(初稿) _table_0"
+    ],
+    "answer_evidence": [
+      "大豆食心虫综合气象风险指数"
+    ]
   },
   {
     "id": "Q_L09",
@@ -8744,7 +10154,17 @@
     ],
     "rewrite_type": "lexical",
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "新疆冬小麦气候区划报告_sec_5"
+    ],
+    "answer_evidence": [
+      "≥0℃",
+      "≤0℃",
+      "≥35℃",
+      "≥30℃",
+      "≥10℃"
+    ]
   },
   {
     "id": "Q_L10",
@@ -8799,7 +10219,15 @@
     ],
     "rewrite_type": "lexical",
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_360000_001-江西柑橘气候区划报告_sec_0"
+    ],
+    "answer_evidence": [
+      "特别是20",
+      "先后出现1998",
+      "洪水以及2022"
+    ]
   },
   {
     "id": "Q_L11",
@@ -8854,7 +10282,16 @@
     ],
     "rewrite_type": "lexical",
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_150000_001-内蒙古区划报告_sec_11"
+    ],
+    "answer_evidence": [
+      "≥10℃",
+      "10℃",
+      "内蒙古农业气候区划",
+      "构建大豆种植气候区划指数"
+    ]
   },
   {
     "id": "Q_L12",
@@ -8907,7 +10344,17 @@
     ],
     "rewrite_type": "lexical",
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_16"
+    ],
+    "answer_evidence": [
+      "≥10℃",
+      "10℃",
+      "70mm",
+      "500mm",
+      "14.7℃"
+    ]
   },
   {
     "id": "Q_SR01",
@@ -8963,7 +10410,17 @@
     ],
     "rewrite_type": "semantic",
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "气科院-农业气候区划指标算法说明文档-王旗_sec_5"
+    ],
+    "answer_evidence": [
+      "≥30℃",
+      "≥35℃",
+      "<20℃",
+      "30℃",
+      "35℃"
+    ]
   },
   {
     "id": "Q_SR02",
@@ -9018,7 +10475,16 @@
     ],
     "rewrite_type": "semantic",
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆干旱气候风险区划技术规范（初稿）_sec_2"
+    ],
+    "answer_evidence": [
+      "10天",
+      "的大小为0",
+      "本标准取10",
+      "作物某10"
+    ]
   },
   {
     "id": "Q_SR03",
@@ -9073,7 +10539,11 @@
     ],
     "rewrite_type": "semantic",
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆冷害气候风险区划技术规范（初稿）_sec_3"
+    ],
+    "answer_evidence": []
   },
   {
     "id": "Q_SR04",
@@ -9128,7 +10598,13 @@
     ],
     "rewrite_type": "semantic",
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_7"
+    ],
+    "answer_evidence": [
+      "总辐射的0"
+    ]
   },
   {
     "id": "Q_SR05",
@@ -9187,7 +10663,10 @@
     ],
     "rewrite_type": "semantic",
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_8"
+    ]
   },
   {
     "id": "Q_SR06",
@@ -9242,7 +10721,15 @@
     ],
     "rewrite_type": "semantic",
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_29"
+    ],
+    "answer_evidence": [
+      "可知1961",
+      "相较于1961",
+      "光合生产潜力是指在温度"
+    ]
   },
   {
     "id": "Q_SR07",
@@ -9298,7 +10785,15 @@
     ],
     "rewrite_type": "semantic",
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_21"
+    ],
+    "answer_evidence": [
+      "表示区划对象的气候综合条件",
+      "次适宜和不适宜四个等级",
+      "富士系苹果气候因子"
+    ]
   },
   {
     "id": "Q_SR08",
@@ -9354,7 +10849,15 @@
     ],
     "rewrite_type": "semantic",
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_150000_001-内蒙古区划报告_sec_21"
+    ],
+    "answer_evidence": [
+      "数划分为4",
+      "得到孕灾环境敏感性指数",
+      "蒙古自治区大豆孕灾环境敏感性指数"
+    ]
   },
   {
     "id": "Q_SR09",
@@ -9410,7 +10913,17 @@
     ],
     "rewrite_type": "semantic",
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆冷害气候风险区划技术规范（初稿）_sec_9"
+    ],
+    "answer_evidence": [
+      "权重见表8",
+      "率大小为100m",
+      "露度划分4",
+      "为权重系数",
+      "年承灾体暴露度各因子"
+    ]
   },
   {
     "id": "Q_SR10",
@@ -9467,7 +10980,15 @@
     ],
     "rewrite_type": "semantic",
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_11"
+    ],
+    "answer_evidence": [
+      "2 d",
+      "其值为4",
+      "算方法见6"
+    ]
   },
   {
     "id": "Q_SR11",
@@ -9523,7 +11044,13 @@
     ],
     "rewrite_type": "semantic",
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_410000_001-农业气候区划报告-河南省_sec_36"
+    ],
+    "answer_evidence": [
+      "个时间单位的水分亏缺指数"
+    ]
   },
   {
     "id": "Q_SR12",
@@ -9579,7 +11106,15 @@
     ],
     "rewrite_type": "semantic",
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "D_P_R_610000_001-陕西苹果气候区划报告_sec_20"
+    ],
+    "answer_evidence": [
+      "技术在农业气候区划",
+      "极大提高了区划",
+      "为农业气候区划"
+    ]
   },
   {
     "id": "Q_SR13",
@@ -9636,7 +11171,14 @@
     ],
     "rewrite_type": "semantic",
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆冷害气候风险区划技术规范（初稿）_sec_6"
+    ],
+    "answer_evidence": [
+      "查找平均随机一致性指标",
+      "阶判断矩阵的平均随机一致性指标"
+    ]
   },
   {
     "id": "Q_O01",
@@ -10402,7 +11944,14 @@
       "table"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "2025河南小麦品质_病害区划算法_table_1"
+    ],
+    "answer_evidence": [
+      "定时间等4",
+      "河南冬小麦品质区划"
+    ]
   },
   {
     "id": "Q_T22",
@@ -10461,7 +12010,14 @@
       "table"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "2025河南小麦品质_病害区划算法_table_4"
+    ],
+    "answer_evidence": [
+      "条锈病等2",
+      "河南冬小麦品质区划"
+    ]
   },
   {
     "id": "Q_T23",
@@ -10521,7 +12077,16 @@
       "table"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "辽宁省生态气象和卫星遥感中心-算法说明文档_table_2"
+    ],
+    "answer_evidence": [
+      "≥10℃",
+      "10℃",
+      "列出生长季降水",
+      "最适宜分级阈值"
+    ]
   },
   {
     "id": "Q_T24",
@@ -10581,7 +12146,13 @@
       "table"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "辽宁省生态气象和卫星遥感中心-算法说明文档_table_12"
+    ],
+    "answer_evidence": [
+      "一般分级阈值"
+    ]
   },
   {
     "id": "Q_T25",
@@ -10641,7 +12212,17 @@
       "table"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "辽宁省生态气象和卫星遥感中心-算法说明文档_table_37"
+    ],
+    "answer_evidence": [
+      "1.0℃",
+      "2.0℃",
+      "3.0℃",
+      "4.5℃",
+      "4.0℃"
+    ]
   },
   {
     "id": "Q_T26",
@@ -10702,7 +12283,14 @@
       "table"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆冷害气候风险区划技术规范（初稿）_table_8"
+    ],
+    "answer_evidence": [
+      "列出致灾因子危险性指数权重系数",
+      "承灾体暴露度指数权重系数"
+    ]
   },
   {
     "id": "Q_T27",
@@ -10764,7 +12352,15 @@
       "table"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_table_4"
+    ],
+    "answer_evidence": [
+      "灾能力等4",
+      "列出致灾因子",
+      "个维度的权重系数"
+    ]
   },
   {
     "id": "Q_T28",
@@ -10824,7 +12420,10 @@
       "table"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆产量气候区划技术规范(初稿)_table_2"
+    ]
   },
   {
     "id": "Q_T29",
@@ -10885,7 +12484,14 @@
       "table"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "农业气候区划指标算法说明文档（新疆农业气象台-算法说明文档-郑新倩）_table_18"
+    ],
+    "answer_evidence": [
+      "重度等3",
+      "新疆气候区划"
+    ]
   },
   {
     "id": "Q_T30",
@@ -10944,7 +12550,17 @@
       "table"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "新疆冬小麦气候区划报告_table_12"
+    ],
+    "answer_evidence": [
+      "≥ 0.5 mm",
+      "20℃",
+      "0.5 mm",
+      "25℃",
+      "平均温度9"
+    ]
   },
   {
     "id": "Q_T31",
@@ -11004,7 +12620,14 @@
       "table"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "新疆冬小麦气候区划报告_table_9"
+    ],
+    "answer_evidence": [
+      "高产区等4",
+      "新疆冬小麦气候区划"
+    ]
   },
   {
     "id": "Q_T32",
@@ -11067,7 +12690,14 @@
       "table"
     ],
     "expected_chunk_num": 1,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_table_5"
+    ],
+    "answer_evidence": [
+      "级分区等2",
+      "项因子的等级分区分级阈值"
+    ]
   },
   {
     "id": "Q_S26",
@@ -11137,7 +12767,17 @@
       "numeric"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "辽宁省生态气象和卫星遥感中心-算法说明文档_table_37",
+      "辽宁省生态气象和卫星遥感中心-算法说明文档_table_2"
+    ],
+    "answer_evidence": [
+      "≥10℃",
+      "10℃",
+      "列出生长季降水",
+      "最适宜分级阈值"
+    ]
   },
   {
     "id": "Q_D31",
@@ -11209,6 +12849,15 @@
       "multi_hop"
     ],
     "expected_chunk_num": 2,
-    "expected_context_expand": false
+    "expected_context_expand": false,
+    "gold_source": [
+      "黑龙江省大豆冷害气候风险区划技术规范（初稿）_table_8",
+      "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_table_4"
+    ],
+    "answer_evidence": [
+      "列出致灾因子危险性指数权重系数",
+      "承灾体暴露度指数权重系数",
+      "灾能力等4"
+    ]
   }
 ]

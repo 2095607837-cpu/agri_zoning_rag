@@ -81,6 +81,8 @@ def load_documents() -> list[Document]:
             metadata={
                 **c["metadata"],
                 "chunk_id": c["id"],
+                "source_id": c.get("source_id", c["metadata"].get("section_id", "")),
+                "chunk_version": c.get("chunk_version", 1),
             },
         ))
     if skipped_excluded:
@@ -263,6 +265,8 @@ def main():
         split_data.append({
             "id": chunk_id,
             "content": d.page_content,
+            "source_id": d.metadata.get("source_id", d.metadata.get("section_id", "")),
+            "chunk_version": d.metadata.get("chunk_version", 1),
             "metadata": d.metadata,  # 保留完整 metadata 含 chunk_id
         })
     with open(CHUNKS_SPLIT_PATH, "w", encoding="utf-8") as f:

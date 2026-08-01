@@ -2,7 +2,7 @@
 
 > 完整记录从原始文档到检索结果的全链路 chunk 处理逻辑
 >
-> **最后更新**: 2026-07-29 (v1.19 Query Rewrite 三池分离)
+> **最后更新**: 2026-07-29 (v2.0 Union + Dynamic Coverage 架构)
 
 ---
 
@@ -10,7 +10,8 @@
 
 | 日期 | 版本 | 变更 |
 |------|------|------|
-| 2026-07-29 | v1.19 | **Query Rewrite 三池分离**：expand_query 从 Keyword/SubQuery 二池改为 Keyword/RewriteQuery/SubQuery 三池分离合并；LLM Prompt 新增 `rewrite_queries` 字段（完整句子改写）；各池加硬限制：Keyword≤5, RewriteQuery≤3, SubQuery≤4；清除旧 rewrite_cache.json |
+| 2026-07-29 | v2.0 | **Union + Dynamic Coverage 架构**：① Keywords 不再独立检索，拼入 Original BM25 增强关键词召回；② 检索管线从 Parallel Evidence Merge + Dense Protect 改为 Union + RRF + Evidence Voting(3档) + Dynamic Coverage Reservation(40%/20%/40%) + Global Fill → CE Rerank；③ 候选结构增加 best_channel/best_rank；④ Rewrite 上限 ≤2(hard 2)；⑤ eval 侧 Rewrite/SubQ 分路传递，各自独立配额 |
+| 2026-07-29 | v1.19 | **Query Rewrite 三池分离**：expand_query 从 Keyword/SubQuery 二池改为 Keyword/RewriteQuery/SubQuery 三池分离合并；LLM Prompt 新增 `rewrite_queries` 字段（完整句子改写）；各池加硬限制：Keyword≤6, RewriteQuery≤2, SubQuery≤4 |
 | 2026-07-27 | v1.18 | **Parallel Evidence Merge 架构**：多子查询从 Append 改为并行召回+Evidence Merge（去重+Hit Boost+Global Pool），Rewrite 不再被截断丢弃；Dense Protect 从全局 top-5 改为逐查询 top-2；OOD Judge 简化为 direct≥0.70 / llm 两层；移除 Context Expansion |
 | 2026-07-27 | v1.17 | **评估逻辑修复**：Chunk 级评估从 section-展平-截断改为 chunk_id 直接比对 gold_chunks；新增 Section 级作为辅助指标；修复"找到但算零召回"的假阳性问题（60% 零召回题实为 CE 已命中但被 [:10] 截断挤出） |
 | 2026-07-27 | v1.16 | **检索管线修复**：Dense Protected Merge 从"占位保序"改为"保送 CE 候选池"，Dense top-K 不再绕过 CE 占前 5 位，只确保进入 CE 候选池与其他候选公平竞争 |
@@ -128,50 +129,40 @@ data/chunks_split.json  (787 条, avg 374 字)  +  vectordb/  (787 vectors)
 ║                                                                         ║
 ║  Query: "新疆冬小麦和河南冬小麦品种有什么不同？"                         ║
 ║    │                                                                     ║
-║    ├── [改写] expand_query → 三池合并输出                                 ║
-║    │   ┌─ Keyword 池 (词/短语, ≤4, hard 5) ───────────────────┐          ║
-║    │   │  术语映射 _apply_terminology_map()                    │          ║
-║    │   │  + 同义词扩展 _expand_with_synonyms()                 │          ║
-║    │   │  + LLM keywords                                      │          ║
-║    │   │  → 增强 BM25 召回                                    │          ║
+║    ├── [改写] expand_query → 三池产出                                    ║
+║    │   ┌─ Keyword 池 (词/短语, ≤6, hard 6) ───────────────────┐          ║
+║    │   │  术语映射 + 同义词扩展 + LLM keywords                  │          ║
+║    │   │  → 拼入 Original BM25 query 增强关键词召回            │          ║
 ║    │   └──────────────────────────────────────────────────────┘          ║
-║    │   ┌─ Rewrite Query 池 (完整句子, ≤2, hard 3) ───────────┐          ║
+║    │   ┌─ Rewrite Query 池 (完整句子, ≤2, hard 2) ───────────┐          ║
 ║    │   │  LLM rewrite_queries（不同表达重述同一问题）           │          ║
-║    │   │  → 增强 Dense + BM25 双通道                          │          ║
+║    │   │  → Dense20 + BM2510 → RRF                            │          ║
 ║    │   └──────────────────────────────────────────────────────┘          ║
-║    │   ┌─ SubQuery 池 (完整句子, ≤3, hard 4) ────────────────┐          ║
+║    │   ┌─ SubQuery 池 (完整句子, ≤4, hard 4) ────────────────┐          ║
 ║    │   │  LLM sub_queries（拆分复杂问题为独立子问题）           │          ║
-║    │   │  → 支持并行检索/多跳检索                              │          ║
+║    │   │  → Dense20 + BM2510 → RRF                            │          ║
 ║    │   └──────────────────────────────────────────────────────┘          ║
-║    │   输出顺序: Rewrite Query → SubQuery → Keyword                      ║
 ║    │                                                                     ║
-║    ├── Parallel 并行检索 ───────────────────────────────────────        ║
+║    ├── Phase 1: Union 并路采集 + Dict 去重 ─────────────────────        ║
+║    │   Original: Dense30 + BM25(keyword增强)20 → 自然去重                ║
+║    │   Rewrite:  每路 Dense20+BM2510 → 自然去重                          ║
+║    │   SubQuery: 每路 Dense20+BM2510 → 自然去重                          ║
+║    │   Global Merge — chunk_id 去重, 无截断                              ║
 ║    │                                                                     ║
-║    │   Original                SubQ1                SubQ2                ║
-║    │   Dense 30  BM25 20      Dense 20  BM25 10   Dense 20  BM25 10    ║
-║    │     │         │            │         │          │         │         ║
-║    │     └── RRF ──┘            └── RRF ──┘          └── RRF ──┘         ║
-║    │     top 20                 top 10               top 10              ║
+║    ├── Phase 2: Evidence Voting + Retrieval Prior ─────────────        ║
+║    │   Evidence: 1路→0, 2路→δ(0.002), ≥3路→2δ(0.004)                   ║
+║    │   Retrieval Prior = 0.7×RRF_norm + 0.3×Evidence_norm              ║
 ║    │                                                                     ║
-║    ├── Evidence Merge (证据合并) ────────────────────────────────        ║
-║    │   ① 去重: 同 chunk → 保留一个, 记录来源 ["Original","SubQ1"]        ║
-║    │   ② Hit Boost: +0.002 × N（N=命中查询数，线性交叉验证信号）                      ║
-║    │   ③ 合并后 ≈ 30~40 unique                                          ║
+║    ├── Phase 3: Dynamic Coverage Reservation (≤50) ────────────        ║
+║    │   Original=20(40%) | Rewrite=10(20%) | SubQ均分20(40%)             ║
+║    │   Global Fill 补齐到 50                                             ║
 ║    │                                                                     ║
-║    ├── Dense Protect (逐查询保护) ───────────────────────────────        ║
-║    │   旧: 全局 top-5         → 可能全是一个文档                          ║
-║    │   新: Original top-2 + SubQ1 top-2 + SubQ2 top-2                   ║
-║    │   → 保证跨文档 diversity                                           ║
-║    │                                                                     ║
-║    ├── Global Candidate Pool: 30~50 unique ─────────────────────        ║
-║    │                                                                     ║
-║    ├── CE Rerank ─── bge-reranker-v2-m3                                ║
-║    │    Query = Original Query (不是 SubQuery)                           ║
-║    │    alpha=0.2 (20% RRF + 80% CE), λ=0.1                             ║
-║    │    30~50 → Top 10                                                   ║
+║    ├── Phase 4: CE Rerank — bge-reranker-v2-m3                         ║
+║    │   Final = 0.8×CE_norm + 0.2×Retrieval_Prior, λ=0.1               ║
+║    │   50 → Top K (默认 10)                                              ║
 ║    │                                                                     ║
 ║    ▼                                                                     ║
-║  最终 10 条                                                              ║
+║  最终 10 条 → ±1 chunk 上下文扩展                                        ║
 ║    │                                                                     ║
 ║    ▼                                                                     ║
 ║  ┌─ 评估 ───────────────────────────────────────────────────────┐       ║
@@ -812,63 +803,69 @@ self._section_index = {
 
 ## 第4层：检索管线详解 (hybrid_search.py)
 
-### 整体架构：Parallel Evidence Merge
+### 整体架构：Union + Evidence Voting + Dynamic Coverage → CE Rerank
 
 ```
 Query: "新疆冬小麦和河南冬小麦品种有什么不同？"
   │
-  ├── [改写] expand_query → 三池合并
-  │     Rewrite Query: "新疆冬小麦与河南冬小麦品种对比"
-  │     SubQuery:     "新疆冬小麦主栽品种有哪些"
-  │     SubQuery:     "河南冬小麦主栽品种有哪些"
-  │     Keyword:      "新疆", "冬小麦", "河南", "品种"
-  │     → 合并输出: [Rewrite Query, SubQuery1, SubQuery2, Keyword1, ...]
+  ├── [改写] expand_query → 三池产出
+  │     Keywords (≤6):    "新疆", "冬小麦", "河南", "品种", "主栽品种"
+  │     Rewrite  (≤2):    "新疆冬小麦与河南冬小麦品种对比"
+  │     SubQuery (≤4):    "新疆冬小麦主栽品种有哪些", "河南冬小麦主栽品种有哪些"
   │
-  ├── Parallel 并行检索 ──────────────────────────────────────
+  ├── Phase 1: 并路采集 + Dict 去重 ─────────────────────────
   │
-  │   Original                        SubQ1              SubQ2
-  │   Dense 30  BM25 20              Dense 20  BM25 10   Dense 20  BM25 10
-  │     │         │                    │         │          │         │
-  │     └── RRF ──┘                    └── RRF ──┘          └── RRF ──┘
-  │     top 20                         top 10               top 10
+  │   ① Original (qid=0)
+  │      Dense Top30 + BM25(Query+Keywords) Top20
+  │      → 每路内部 RRF → dict 自然去重
   │
-  ├── Evidence Merge (证据合并) ──────────────────────────────
+  │   ② Rewrite × N (qid=1..N, N≤2)   每路: Dense20+BM2510
+  │   ③ SubQuery × M (qid=N+1.., M≤4)  每路: Dense20+BM2510
   │
-  │   ① 去重: 相同 chunk → 保留一个，记录来源
-  │      例: chunk_A 同时被 Original 和 SubQ1 命中
-  │           → {chunk: "新疆冬小麦...", sources: ["Original", "SubQ1"]}
+  │   Global Merge — chunk_id 去重, 无截断
+  │   每条候选:
+  │   { chunk_id, text, sources: ["Original-Dense","SubQ2-BM25"],
+  │     query_hits: {0,3}, dense_rank, bm25_rank,
+  │     best_channel: "Dense", best_rank: 3,
+  │     rrf_prior, cosine_sim }
   │
-	  │   ② Hit Boost: +0.002 × N（N=命中查询数，线性交叉验证信号）
+  ├── Phase 2: Evidence Voting + Retrieval Prior ────────────
   │
-  │   ③ Original(CE) > SubQ(RRF) > 仅单次命中
-  │      合并后 ≈ 30~40 unique chunks
+  │   Evidence (δ=0.002):
+  │     len(query_hits)=1  →  0
+  │                   =2  →  δ    (0.002)
+  │                   ≥3  →  2δ   (0.004)
   │
-  ├── Dense Protect (逐查询保护) ─────────────────────────────
+  │   Retrieval Prior = 0.7 × RRF_norm + 0.3 × Evidence_norm
+  │   → 按 Retrieval Prior 降序排列
   │
-  │   旧: 全局 Dense top-5 → 可能全是一个文档
-  │   新: 每个查询各保护 top-2
-  │     Original Dense top-2  → 保送
-  │     SubQ1   Dense top-2  → 保送
-  │     SubQ2   Dense top-2  → 保送
-  │     → 保证跨文档/跨区域的 diversity
+  ├── Phase 3: Dynamic Coverage Reservation (≤50) ───────────
   │
-  ├── Global Candidate Pool: 30~50 unique ───────────────────
+  │   ┌──────────┬────────┬──────────────────────────┐
+  │   │ 来源      │  占比   │ 配额                     │
+  │   ├──────────┼────────┼──────────────────────────┤
+  │   │ Original  │  40%   │ 20 = 50×40%             │
+  │   │ Rewrite   │  20%   │ 10 (N个共享)             │
+  │   │ SubQuery  │  40%   │ 20 (M个均分)             │
+  │   │ 候补      │   —    │ Global Fill 补齐到 50    │
+  │   └──────────┴────────┴──────────────────────────┘
   │
-  │   不要太大，CE 是瓶颈
+  │   SubQ 均分: 2个→[10,10]  3个→[7,7,6]  4个→[5,5,5,5]
+  │   优先级: Original → SubQ₁ → SubQ₂ → ... → Rewrite → 候补
+  │   候补: 未入配额的候选按 Retrieval Prior 竞争剩余名额
   │
-  ├── CE Rerank ─────────────────────────────────────────────
+  ├── Phase 4: CE Rerank + Prior 融合 ──────────────────────
   │
-  │   关键: 用 Original Query，不是 SubQuery
-  │   输入: "新疆冬小麦和河南冬小麦品种有什么不同？"
-  │   候选: 30~50 chunks（混合来源）
-  │   模型: bge-reranker-v2-m3
-  │   融合: alpha=0.2 (20% RRF + 80% CE), λ=0.1 长度归一化
+  │   候选池 ≤50 → CrossEncoder (bge-reranker-v2-m3)
+  │   Query = Original Query (仅用原始查询文本)
+  │   CE 长度归一化: raw - 0.1×log(len(content))
   │
-  ├── Top 10
+  │   Final = 0.8 × CE_norm + 0.2 × Retrieval_Prior
+  │   (Retrieval_Prior 已在 [0,1], 不二次归一化)
   │
-  └── Section 优先扩展
-       cross_document: ±1 chunk 同 section
-       table: 展开整表
+  ├── Top K (默认 10)
+  │
+  └── Context Expansion: ±1 chunk (同 section)
 ```
 
 ### 数量流追踪
@@ -876,20 +873,23 @@ Query: "新疆冬小麦和河南冬小麦品种有什么不同？"
 ```
 Query: "新疆冬小麦和河南冬小麦品种有什么不同？"
   │
-  ├── [改写] Rewrite Query ×1 + SubQuery ×2 + Keyword ×4 = 7 extra queries
+  ├── [改写] Rewrite ×1 + SubQuery ×2 + Keyword ×5
   │
-  ├── Parallel 召回 ────────────────────────────────────────
-  │   Original:       Dense 30 + BM25 20 → RRF → top 20
-  │   Rewrite Query:  Dense 20 + BM25 10 → RRF → top 10
-  │   SubQuery ×2:    Dense 20 + BM25 10 → RRF → top 10 ×2
-  │   Keyword ×4:     Dense 20 + BM25 10 → RRF → top 10 ×4
+  ├── Phase 1 并路采集 ─────────────────────────────────────
+  │   Original:            Dense 30 + BM25(keyword增强) 20 → 自然去重
+  │   Rewrite ×1:          Dense 20 + BM25 10              → 自然去重
+  │   SubQuery ×2:         每路 Dense 20 + BM25 10         → 自然去重
+  │   Keywords:            不独立检索, 拼入 Original BM25
   │
-  ├── Evidence Merge ───────────────────────────────────────
-	  │   去重 + Hit Boost(+0.002×N) → ~40~60 unique
+  ├── Global Merge: chunk_id 去重, 无截断
   │
-  ├── Dense Protect: 1+7 × top-2 → +0~16 → ~50~65 unique
+  ├── Phase 2: Evidence Voting + Retrieval Prior 排序
   │
-  ├── CE Rerank: 50~65 → 10
+  ├── Phase 3: Dynamic Coverage → 50
+  │     Original=20, Rewrite=10, SubQ: 2个→[10,10]
+  │     候补补齐剩余 → 50
+  │
+  ├── Phase 4: CE Rerank: 50 → Top 10
   │
   ▼
 最终 10 条
@@ -898,33 +898,35 @@ Query: "新疆冬小麦和河南冬小麦品种有什么不同？"
 | 环节 | 数量 | 说明 |
 |------|------|------|
 | Original Dense | **30** | 原始查询语义最准，最大召回 |
-| Original BM25 | **20** | 同上 |
-| SubQ Dense | **20** | 子查询语义偏差，减少召回 |
-| SubQ BM25 | **10** | 同上 |
-| Original RRF 输出 | **20** | 高质量，多贡献 |
-| SubQ RRF 输出 | **10** /条 | 补充 diversity |
-| Evidence Merge 后 | **30~40** | 去重后 |
-| Dense Protect | **+0~6** | 3 查询 × top-2 |
-| CE 候选池 | **35~50** | 合并去重 |
+| Original BM25 | **20** | Keywords 拼入 query 增强关键词召回 |
+| Rewrite Dense | **20** | ≤2 路 |
+| Rewrite BM25 | **10** | ≤2 路 |
+| SubQ Dense | **20** | ≤4 路 |
+| SubQ BM25 | **10** | ≤4 路 |
+| Global Merge | **自然去重** | 无截断, 无人工上限 |
+| CE 候选池 | **≤50** | Dynamic Coverage + Global Fill |
 | CE 输出 | **10** | top_k |
-| 最终返回 | **10** | |
+| 最终返回 | **10** | ±1 chunk 上下文扩展 |
 
-### 多子查询融合策略
-
-**当前问题**：Append 架构中 Rewrite 结果追加到末尾后被 `[:10]` 截断，Rewrite 全部白算。
-
-**解决方案**：Evidence Merge — 所有查询的结果在进入 CE 之前合并到一个 Global Pool，平等竞争。
+### 多子查询融合策略演进
 
 ```
-旧 Append:
+v1.18 Append:
   Original(CE) → [0..9] | Rewrite1(RRF) → [10..19] | Rewrite2(RRF) → [20..29]
-  → [:10] 截断 → 只有 Original
+  → [:10] 截断 → 只有 Original, Rewrite 全部白算
 
-新 Parallel Merge:
+v1.19 Evidence Merge:
   Original(CE) ─┐
   SubQ1(RRF)   ─┼── Evidence Merge (去重/Hit Boost) → Global Pool 30~50
   SubQ2(RRF)   ─┘                                        │
                                                     CE Rerank → Top 10
+
+v2.0 Union + Dynamic Coverage (当前):
+  各路 Dense+BM25→RRF → Union 自然去重 (无截断)
+    → Retrieval Prior (70%RRF + 30%Evidence) 排序
+    → Dynamic Coverage: Original 40% + Rewrite 20% + SubQ 40%
+    → Global Fill 补齐 50 → CE Rerank → Top 10
+  Keywords 不再独立检索, 拼入 Original BM25 增强
 ```
 
 ### 关键参数总表
@@ -932,16 +934,17 @@ Query: "新疆冬小麦和河南冬小麦品种有什么不同？"
 | 参数 | 值 | 说明 |
 |------|-----|------|
 | Original Dense | **30** | 原始查询语义最准 |
-| Original BM25 | **20** | |
-| SubQ Dense | **20** | 子查询语义偏差，降低召回 |
-| SubQ BM25 | **10** | |
+| Original BM25 | **20** | Keyword 增强 |
+| SubQ Dense (Rewrite/SubQ) | **20** | |
+| SubQ BM25 (Rewrite/SubQ) | **10** | |
 | RRF_K | **60** | RRF 平滑常数 |
-| w_dense / w_bm25 | **0.7 / 0.3** | |
-| Single-channel boost | **on** | 单通道命中补偿 |
-| CE 候选池 | **35~50** | RRF merge + Dense protect |
-| alpha | **0.2** | 20% RRF + 80% CE |
+| w_dense / w_bm25 | **0.7 / 0.3** | RRF 通道权重 |
+| Evidence δ | **0.002** | 2路=δ, ≥3路=2δ |
+| Retrieval Prior | **0.7×RRF + 0.3×Ev** | Phase 2 融合 |
+| CE 候选池 (MAX_POOL) | **50** | Dynamic Coverage 截断 |
+| Coverage 配比 | **40%/20%/40%** | Orig=20, RW=10, SubQ均分20 |
+| alpha (CE fusion) | **0.2** | 20% Prior + 80% CE |
 | lambda_length | **0.1** | CE 长度归一化 |
-| Dense Protect | **每查询 top-2** | 保证跨文档 diversity |
 | CE Query | **Original Query** | 最终要回答的是原始问题 |
 
 ### 改写触发逻辑
@@ -953,39 +956,39 @@ query → search(top_k=2) → top1_sim, top2_sim
     → 否则 → LLM 改写 → 三池产出
 ```
 
-### expand_query 三池合并逻辑
+### expand_query 三池输出
 
 ```
 ┌─ Keyword 池 ────────────────────────────────────────────────┐
-│ 目的: 补充检索关键词，增强 BM25                                │
+│ 目的: 拼入 Original BM25 query，增强关键词召回               │
 │ 来源: 术语映射 + 同义词扩展 + LLM keywords                     │
 │ 形式: 词/短语                                                │
-│ 限制: ≤4（hard 5）                                           │
+│ 限制: ≤6 (hard 6)                                           │
+│ 检索: 不独立检索，拼入 Original 的 BM25 query 文本            │
 └──────────────────────────────────────────────────────────────┘
 
 ┌─ Rewrite Query 池 ──────────────────────────────────────────┐
 │ 目的: 用不同表达重述同一问题，增强 Dense+BM25 双通道             │
 │ 来源: LLM rewrite_queries                                    │
 │ 形式: 完整句子                                                │
-│ 限制: ≤2（hard 3）                                           │
+│ 限制: ≤2 (hard 2)                                           │
+│ 检索: 每路 Dense20 + BM2510 → RRF                            │
 └──────────────────────────────────────────────────────────────┘
 
 ┌─ SubQuery 池 ───────────────────────────────────────────────┐
 │ 目的: 拆分复杂问题为独立子问题，支持并行/多跳检索                │
 │ 来源: LLM sub_queries                                        │
 │ 形式: 完整句子                                                │
-│ 限制: ≤3（hard 4）                                           │
+│ 限制: ≤4 (hard 4)                                           │
+│ 检索: 每路 Dense20 + BM2510 → RRF                            │
 └──────────────────────────────────────────────────────────────┘
-
-合并输出顺序: Rewrite Query → SubQuery → Keyword
-  → extra_queries 送入 search_multi_query Parallel Evidence Merge
 ```
 
-| 池 | 来源 | 形式 | Target | Hard Limit |
-|----|------|------|:--:|:--:|
-| Keyword | 术语映射 + 同义词 + LLM keywords | 词/短语 | ≤4 | **5** |
-| Rewrite Query | LLM rewrite_queries | 完整句子 | ≤2 | **3** |
-| SubQuery | LLM sub_queries | 完整句子 | ≤3 | **4** |
+| 池 | 来源 | 形式 | 检索方式 | Target | Hard Limit |
+|----|------|------|----------|:--:|:--:|
+| Keyword | 术语映射 + 同义词 + LLM keywords | 词/短语 | 拼入 Original BM25 | ≤6 | **6** |
+| Rewrite Query | LLM rewrite_queries | 完整句子 | Dense20+BM2510→RRF | ≤2 | **2** |
+| SubQuery | LLM sub_queries | 完整句子 | Dense20+BM2510→RRF | ≤4 | **4** |
 
 ### BM25 中文分词
 

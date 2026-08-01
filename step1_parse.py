@@ -65,9 +65,9 @@ _TIER2_PATTERNS = [
     (re.compile(r'^第[一二三四五六七八九十\d]+节[\s　]'),                                         'section'),   # 第2节
     (re.compile(r'^[一二三四五六七八九十]+[、．.\s]'),                                          'cn_num'),     # 一、二、
     (re.compile(r'^（[一二三四五六七八九十]+）'),                                               'cn_paren'),   # （一）（二）
-    (re.compile(r'^\d+\.\d+\.\d+(?:\.\d+)?[\s　]'),                                            'num_dot3'),   # 5.2.4 / 2.3.1.1
-    (re.compile(r'^\d+\.\d+[\s　]'),                                                            'num_dot2'),   # 5.2 / 6.1
-    (re.compile(r'^\d+[\.\、][\s　]'),                                                          'num_dot1'),   # 1. / 3、
+    (re.compile(r'^\d+\.\d+\.\d+(?:\.\d+)?'),                                                  'num_dot3'),   # 5.2.4 / 2.3.1.1
+    (re.compile(r'^\d+\.\d+'),                                                                  'num_dot2'),   # 5.2 / 6.1
+    (re.compile(r'^\d+[\.\、]'),                                                                  'num_dot1'),   # 1. / 3、
     (re.compile(r'^（\d+）'),                                                                    'digit_paren'),# （1）（2）
     (re.compile(r'^[\(（]\d+[\)）][\s　]'),                                                     'digit_paren2'),# (1) / 1)
     (re.compile(r'^附录[一二三四五六七八九十A-Z]?'),                                            'appendix'),   # 附录A / 附录一
@@ -538,6 +538,8 @@ def _sections_to_chunks(sections: list[dict], doc_stem: str, fname: str,
         chunks.append({
             "id": f"{doc_stem}_s{si}",
             "content": full_text,
+            "source_id": section_id,
+            "chunk_version": 1,
             "metadata": {
                 "doc_id": doc_stem,
                 "section_id": section_id,
@@ -612,6 +614,8 @@ def _extract_tables(doc, doc_stem: str, fname: str,
         chunks.append({
             "id": f"{doc_stem}_t{i}",
             "content": table_text,
+            "source_id": section_id,
+            "chunk_version": 1,
             "metadata": {
                 "doc_id": doc_stem,
                 "section_id": section_id,
@@ -1019,6 +1023,8 @@ def parse_xlsx(filepath: str) -> list[dict]:
         chunks.append({
             "id": f"{doc_stem}_{sheet_name}",
             "content": full_text,
+            "source_id": section_id,
+            "chunk_version": 1,
             "metadata": {
                 "doc_id": doc_stem,
                 "section_id": section_id,
@@ -1100,6 +1106,8 @@ def parse_csv(filepath: str) -> list[dict]:
     return [{
         "id": doc_stem,
         "content": "\n".join(text_parts),
+        "source_id": doc_stem,
+        "chunk_version": 1,
         "metadata": {
             "doc_id": doc_stem,
             "section_id": doc_stem,
@@ -1348,6 +1356,8 @@ def _linearize_and_split_tables(chunks: list[dict]) -> list[dict]:
             expanded.append({
                 "id": f"{base_id}_t{i}" if i > 0 else base_id,
                 "content": sc,
+                "source_id": c.get("source_id", c["metadata"].get("section_id", base_id)),
+                "chunk_version": 1,
                 "metadata": new_meta,
             })
 

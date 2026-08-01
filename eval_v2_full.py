@@ -16,17 +16,25 @@ with open("data/chunks_split.json") as f:
 
 # chunk_id → section_id 映射（供 section 级评测用）
 cid_to_sid = {c["id"]: c["metadata"]["section_id"] for c in chunks}
+# source_id → section_id 映射（稳定标识，切分参数变化后仍可匹配）
+source_to_sid = {}
+for c in chunks:
+    sid = c.get("source_id", c["metadata"].get("section_id", ""))
+    if sid:
+        source_to_sid.setdefault(sid, set()).add(c["metadata"]["section_id"])
 
 ood_qs = [q for q in gs if q["capability"] == "ood_detection"]
 indomain_qs = [q for q in gs if q["capability"] != "ood_detection"]
 print(f"[eval] 总题数: {len(gs)} | In-domain: {len(indomain_qs)} | OOD: {len(ood_qs)}", flush=True)
 
 # Load rewrite cache (all 200 questions already cached)
-from query_rewriter import expand_query, get_keywords
+from query_rewriter import expand_query, get_keywords, get_rewrite_queries, get_sub_queries
 from hybrid_search import HybridSearcher
 _searcher = HybridSearcher(enable_reranker=False)
 rewrite_map = {}
 keyword_map = {}
+rw_map = {}
+sq_map = {}
 for q in gs:
     initial = _searcher.search(q["question"], top_k=2, expand_context=True)
     top1_sim = initial[0].get("similarity", 0) if len(initial) > 0 else 0
@@ -34,6 +42,8 @@ for q in gs:
     expanded = expand_query(q["question"], mode="all", top1_sim=top1_sim, top2_sim=top2_sim)
     rewrite_map[q["question"]] = expanded[1:] if len(expanded) > 1 else []
     keyword_map[q["question"]] = get_keywords(q["question"])
+    rw_map[q["question"]] = get_rewrite_queries(q["question"])
+    sq_map[q["question"]] = get_sub_queries(q["question"])
 print(f"[eval] Rewrite: {sum(1 for v in rewrite_map.values() if v)}/{len(gs)} 题有改写查询", flush=True)
 print(f"[eval] Keywords (BM25-only): {sum(1 for v in keyword_map.values() if v)}/{len(gs)} 题有关键词", flush=True)
 
@@ -42,19 +52,28 @@ def run_one(q, searcher, use_rewrite):
     query = q["question"]
     gold = set(q["gold_chunks"])
     gold_sections = {cid_to_sid[cid] for cid in gold if cid in cid_to_sid}
+    # 回退：chunk_id 失效时（如重新切分后），通过 source_id 匹配
+    if not gold_sections:
+        for cid in gold:
+            # 尝试将旧 chunk_id 简化为 document stem，匹配 source_id
+            doc_stem = cid.rsplit("_s", 1)[0] if "_s" in cid else cid.rsplit("_t", 1)[0] if "_t" in cid else cid
+            for sid, secs in source_to_sid.items():
+                if sid.startswith(doc_stem):
+                    gold_sections.update(secs)
     top_k = 10
 
     if use_rewrite:
-        extra = rewrite_map.get(query, [])
+        rw_queries = rw_map.get(query, [])
+        sq_queries = sq_map.get(query, [])
         kws = keyword_map.get(query, [])
         _, results = searcher.search_multi_query(
             query, top_k=top_k, expand_context=False,
-            extra_queries=extra, keyword_queries=kws,
+            rewrite_queries=rw_queries, sub_queries=sq_queries, keyword_queries=kws,
         )
     else:
         results = searcher.search(query, top_k=top_k, expand_context=False)
 
-    # ── Chunk 级评测（基础指标）──
+    # ── Chunk 级评测（chunk_id 精确匹配）──
     chunk_ids = [r.get("metadata", {}).get("chunk_id", "") for r in results[:top_k]]
 
     rr = 0.0
@@ -92,7 +111,7 @@ def run_eval(name, searcher, use_rewrite):
     t0 = time.time()
     results = []
     total = len(indomain_qs)
-    workers = 4
+    workers = 6  # M4 10-core, MPS serialized GPU
     with ThreadPoolExecutor(max_workers=workers) as ex:
         futures = {ex.submit(run_one, q, searcher, use_rewrite): q["id"] for q in indomain_qs}
         done = 0
@@ -147,14 +166,14 @@ def run_eval(name, searcher, use_rewrite):
     zero_recall = [r for r in results if not r["recall_10"]]
 
     print(f"\n  题目数: {n}  耗时: {elapsed:.1f}s")
-    print(f"  ── Chunk 级（基础指标）──")
+    print(f"  ── Chunk 级（chunk_id 精确匹配）──")
     print(f"    MRR:             {mrr:.4f}")
     print(f"    Recall@5:        {recall_5:.4f} ({recall_5*100:.1f}%)")
     print(f"    Recall@10:       {recall_10:.4f} ({recall_10*100:.1f}%)")
     print(f"    Top-1 命中率:    {top1_hit:.4f} ({top1_hit*100:.1f}%)")
     print(f"    平均命中 chunk:  {avg_hits:.1f} / {np.mean([r['gold_count'] for r in results]):.1f}")
     print(f"    Recall@10=0:     {len(zero_recall)}/{n}")
-    print(f"  ── Section 级（辅助指标）──")
+    print(f"  ── Section 级（section_id 匹配）──")
     print(f"    MRR:             {sec_mrr:.4f}")
     print(f"    Recall@5:        {sec_recall_5:.4f} ({sec_recall_5*100:.1f}%)")
     print(f"    Recall@10:       {sec_recall_10:.4f} ({sec_recall_10*100:.1f}%)")
@@ -214,11 +233,12 @@ from judge import judge
 ood_results = {"detected": 0, "missed": 0, "by_method": defaultdict(int), "details": []}
 for q in ood_qs:
     query = q["question"]
-    extra = rewrite_map.get(query, [])
+    rw_queries = rw_map.get(query, [])
+    sq_queries = sq_map.get(query, [])
     kws = keyword_map.get(query, [])
     judge_results, merged = searcher_rerank.search_multi_query(
         query, top_k=5, expand_context=True,
-        extra_queries=extra, keyword_queries=kws,
+        rewrite_queries=rw_queries, sub_queries=sq_queries, keyword_queries=kws,
     )
     j = judge(query, judge_results)
     if j["decision"] == "reject":
@@ -269,7 +289,7 @@ for zd in best["zero_details"]:
     zero_qs.append(q)
 
 if zero_qs:
-    analyzer = DiagnosticAnalyzer(best_searcher, chunks, rewrite_map)
+    analyzer = DiagnosticAnalyzer(best_searcher, chunks, rw_map, sq_map)
     diag_rows = analyzer.analyze(zero_qs)
     analyzer.print_report(diag_rows)
 

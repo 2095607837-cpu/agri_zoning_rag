@@ -3,3 +3,7 @@ vectordb/
 __pycache__/
 .env
 .DS_Store
+*.bak
+*.old-v3
+diagnose_*.json
+data/rewrite_cache.json

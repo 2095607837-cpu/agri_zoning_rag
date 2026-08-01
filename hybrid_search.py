@@ -12,6 +12,7 @@ import math
 import os
 import json
 import re
+import threading
 from pathlib import Path
 from typing import Optional
 
@@ -66,6 +67,25 @@ def bm25_tokenize(text: str) -> list[str]:
     return tokens
 
 
+class ThreadSafeEmbeddings:
+    """MPS 线程安全包装。MPS 不支持并发推理，所有 embedding 调用串行化。"""
+
+    def __init__(self, embeddings):
+        self._embeddings = embeddings
+        self._lock = threading.Lock()
+
+    def embed_query(self, text: str):
+        with self._lock:
+            return self._embeddings.embed_query(text)
+
+    def embed_documents(self, texts: list[str]):
+        with self._lock:
+            return self._embeddings.embed_documents(texts)
+
+    def __getattr__(self, name):
+        return getattr(self._embeddings, name)
+
+
 class Reranker:
     """BGE CrossEncoder 精排器（模块级单例，避免重复加载模型）。"""
 
@@ -89,8 +109,8 @@ class Reranker:
             if self._model is not None:
                 return
             from sentence_transformers import CrossEncoder
-            print(f"[Reranker] 加载 {self._model_name}...")
-            self._model = CrossEncoder(self._model_name, device="cpu")
+            print(f"[Reranker] 加载 {self._model_name} (mps)...")
+            self._model = CrossEncoder(self._model_name, device="mps")
 
     def rerank(self, query: str, candidates: list[dict], top_k: int = 5) -> list[dict]:
         """重排序。candidates 中已有 dense_similarity（余弦相似度），reranker 只决定顺序。"""
@@ -162,14 +182,15 @@ class HybridSearcher:
             emb_future = pool.submit(
                 HuggingFaceEmbeddings,
                 model_name=EMBED_MODEL,
-                model_kwargs={"device": "cpu"},
-                encode_kwargs={"normalize_embeddings": True},
+                model_kwargs={"device": "mps"},
+                encode_kwargs={"normalize_embeddings": True, "batch_size": 64},
             )
 
             chunks_future = pool.submit(self._load_chunks)
 
-            self._embeddings = emb_future.result()
-            print(f"[HybridSearcher] Embedding 模型就绪")
+            raw_embeddings = emb_future.result()
+            print(f"[HybridSearcher] Embedding 模型就绪 (mps)")
+            self._embeddings = ThreadSafeEmbeddings(raw_embeddings)
             self._section_index, bm25_docs, self._chunk_id_map = chunks_future.result()
             print(f"[HybridSearcher] BM25 数据就绪 ({len(bm25_docs)} docs)")
 
@@ -262,11 +283,13 @@ class HybridSearcher:
 
     def _rrf_ce_fusion(self, query: str, rrf_scores: dict, doc_store: dict,
                         candidate_keys: list[str], top_k: int, alpha: float,
-                        lambda_length: float = 0.1) -> list[dict]:
-        """CE 精排 + RRF-CE alpha 融合，返回 top_k 结果。
+                        lambda_length: float = 0.1,
+                        prior_is_normalized: bool = False) -> list[dict]:
+        """CE 精排 + Prior-CE alpha 融合，返回 top_k 结果。
 
         lambda_length: 长度归一化系数。CE 原始分减去 λ·log(len(content))，
                        抵消 CrossEncoder 天然偏长文本的 bias（长 chunk 有更多关键词）。
+        prior_is_normalized: True 时 rrf_scores 已在 [0,1] 范围，跳过 min-max 归一化。
         """
         candidates = []
         for key in candidate_keys:
@@ -298,17 +321,23 @@ class HybridSearcher:
                       for raw, c in zip(raw_ce, candidates)]
 
         if alpha > 0.0:
-            rrf_vals = [rrf_scores[k] for k in candidate_keys]
-            rrf_min, rrf_max = min(rrf_vals), max(rrf_vals)
             ce_min, ce_max = min(ce_scores), max(ce_scores)
-            rrf_range = rrf_max - rrf_min or 1e-8
             ce_range = ce_max - ce_min or 1e-8
             final_scores = []
-            for i, key in enumerate(candidate_keys):
-                rrf_norm = (rrf_scores[key] - rrf_min) / rrf_range
-                ce_norm = (ce_scores[i] - ce_min) / ce_range
-                final = alpha * rrf_norm + (1 - alpha) * ce_norm
-                final_scores.append((final, i))
+            if prior_is_normalized:
+                for i, key in enumerate(candidate_keys):
+                    ce_norm = (ce_scores[i] - ce_min) / ce_range
+                    final = alpha * rrf_scores[key] + (1 - alpha) * ce_norm
+                    final_scores.append((final, i))
+            else:
+                rrf_vals = [rrf_scores[k] for k in candidate_keys]
+                rrf_min, rrf_max = min(rrf_vals), max(rrf_vals)
+                rrf_range = rrf_max - rrf_min or 1e-8
+                for i, key in enumerate(candidate_keys):
+                    rrf_norm = (rrf_scores[key] - rrf_min) / rrf_range
+                    ce_norm = (ce_scores[i] - ce_min) / ce_range
+                    final = alpha * rrf_norm + (1 - alpha) * ce_norm
+                    final_scores.append((final, i))
             final_scores.sort(key=lambda x: -x[0])
             results = []
             for final, idx in final_scores[:top_k]:
@@ -388,85 +417,283 @@ class HybridSearcher:
 
     def search_multi_query(
         self, query: str, top_k: int = 5, expand_context: bool = True,
-        extra_queries=None, keyword_queries=None,
-        w_dense: float = 0.7, w_bm25: float = 0.3,
+        rewrite_queries=None, sub_queries=None, keyword_queries=None,
+        extra_queries=None,
         alpha: float = 0.2, lambda_length: float = 0.1,
         orig_dense_k: int = 30, orig_bm25_k: int = 20,
         subq_dense_k: int = 20, subq_bm25_k: int = 10,
     ):
-        """Parallel Evidence Merge 架构。
+        """Union + RRF + Evidence Voting → CE Rerank 架构。
 
-        Original + SubQueries 并行 Dense+BM25→RRF →
-        Evidence Merge（去重 + Hit Boost + Dense Protect）→ Global Pool →
-        CE Rerank（使用 Original Query）→ Top K。
+        ① Original: Dense30 + BM25(keyword enhanced)20 → dict自然去重
+        ② Rewrite: 每个 Dense20 + BM2510 → dict自然去重
+        ③ SubQuery: 每个 Dense20 + BM2510 → dict自然去重
+        → Global Merge(chunk_id去重, 无截断)
+        → Retrieval Prior(0.7×RRF_norm + 0.3×Evidence_norm) 排序
+        → Dynamic Coverage: Orig=20(50×40%), Rewrite=10(50×20%), SubQ均分20(50×40%)
+        → Global Fill 补齐50 → CE Rerank → Top K
+
+        Keywords 作为独立 BM25 通道检索（术语精确召回），不与 Original 拼合。
 
         Returns:
             (judge_results, merged): judge_results 为原始查询独立 CE 结果（供 OOD Judge），
-            merged 为 Evidence Merge 合并结果（供生成/评估）。
+            merged 为合并结果（供生成/评估）。
         """
         # 原始查询独立 CE 结果（供 OOD Judge 判定检索质量）
         judge_results = self.search(query, top_k=top_k, expand_context=expand_context,
                                     lambda_length=lambda_length)
 
-        if not extra_queries:
+        rw_list = list(rewrite_queries or [])
+        sq_list = list(sub_queries or [])
+        kw_list = list(keyword_queries or [])
+        # backward compat: old callers pass merged list as extra_queries → treat as SubQ
+        if not rw_list and not sq_list and extra_queries:
+            sq_list = list(extra_queries)
+        kw_query = " ".join(kw_list) if kw_list else ""
+        if not rw_list and not sq_list and not kw_list:
             return judge_results, judge_results
 
-        # ── Phase 1: 并行 RRF 检索 ──
-        global_rrf: dict[str, float] = {}
-        global_store: dict[str, tuple] = {}
-        global_sources: dict[str, list[str]] = {}  # key → ["Original", "SubQ", ...]
-        dense_protect_pool: set[str] = set()
+        # ── Phase 1: 每路 Dense+BM25→RRF → dict-based dedup ──
+        RRF_K = 60
+        W_DENSE = 0.7
+        W_BM25_ORIG = 0.15    # 原始 BM25：弱辅助，保用户真实表达
+        W_BM25_KW = 0.3       # Keyword BM25：术语精准召回
+        candidates: dict[str, dict] = {}
 
-        def _collect(q: str, dense_k: int, bm25_k: int, label: str):
-            rrf, store, chroma_raw = self._rrf_retrieve(q, dense_k, bm25_k)
-            for key, score in rrf.items():
-                if key in global_rrf:
-                    global_rrf[key] = max(global_rrf[key], score)
-                    global_store[key] = store[key]  # 用最新 store（cosine 不变）
-                    global_sources[key].append(label)
+        def _collect(q: str, dense_k: int, bm25_k: int, qid: int, qtype: str,
+                     bm25_keyword_q: str = ""):
+            """qtype: 'Original' | 'Rewrite' | 'SubQ'
+            bm25_keyword_q: 仅 Original 使用，独立 BM25 通道做术语召回"""
+            local_rrf: dict[str, float] = {}
+            dense_keys: set[str] = set()
+            bm25_orig_keys: set[str] = set()
+            bm25_kw_keys: set[str] = set()
+
+            # Dense
+            chroma_raw = self._vectorstore.similarity_search_with_score(q, k=dense_k)
+            for rank, (doc, l2_dist) in enumerate(chroma_raw):
+                cid = self._chunk_key(doc)
+                dense_keys.add(cid)
+                rrf = W_DENSE / (RRF_K + rank)
+                local_rrf[cid] = local_rrf.get(cid, 0) + rrf
+                sim = round(1.0 - l2_dist, 4)
+
+                if cid not in candidates:
+                    candidates[cid] = {
+                        "chunk_id": cid, "text": doc.page_content,
+                        "metadata": doc.metadata,
+                        "sources": [], "query_hits": set(),
+                        "dense_rank": rank, "bm25_rank": 999, "bm25_kw_rank": 999,
+                        "best_channel": "Dense", "best_rank": rank,
+                        "rrf_prior": 0.0, "cosine_sim": sim,
+                    }
                 else:
-                    global_rrf[key] = score
-                    global_store[key] = store[key]
-                    global_sources[key] = [label]
-            # 当前查询 Dense top-2 保送
-            for doc, _ in chroma_raw[:2]:
-                key = self._chunk_key(doc)
-                if key in store:
-                    dense_protect_pool.add(key)
+                    if rank < candidates[cid]["dense_rank"]:
+                        candidates[cid]["dense_rank"] = rank
+                    candidates[cid]["cosine_sim"] = max(candidates[cid]["cosine_sim"], sim)
+                candidates[cid]["sources"].append(f"{qtype}-Dense")
+                candidates[cid]["query_hits"].add(qid)
 
-        _collect(query, orig_dense_k, orig_bm25_k, "Original")
-        for rq in extra_queries:
-            _collect(rq, subq_dense_k, subq_bm25_k, "SubQ")
-        if keyword_queries:
-            for kw in keyword_queries:
-                _collect(kw, dense_k=0, bm25_k=subq_bm25_k, label="Keyword")
+            # BM25 Route 1: Original query — 保留用户真实表达，弱辅助
+            bm25_orig_docs = self._bm25_retriever.invoke(q)[:bm25_k]
+            for rank, doc in enumerate(bm25_orig_docs):
+                cid = self._chunk_key(doc)
+                bm25_orig_keys.add(cid)
+                rrf = W_BM25_ORIG / (RRF_K + rank)
+                local_rrf[cid] = local_rrf.get(cid, 0) + rrf
 
-        # ── Phase 2: Hit Boost ──
-        for key in global_rrf:
-            hit_count = len(global_sources[key])
-            global_rrf[key] += 0.002 * hit_count
+                if cid not in candidates:
+                    candidates[cid] = {
+                        "chunk_id": cid, "text": doc.page_content,
+                        "metadata": doc.metadata,
+                        "sources": [], "query_hits": set(),
+                        "dense_rank": 999, "bm25_rank": rank, "bm25_kw_rank": 999,
+                        "best_channel": "BM25", "best_rank": rank,
+                        "rrf_prior": 0.0, "cosine_sim": 0.0,
+                    }
+                else:
+                    if rank < candidates[cid]["bm25_rank"]:
+                        candidates[cid]["bm25_rank"] = rank
+                candidates[cid]["sources"].append(f"{qtype}-BM25o")
+                candidates[cid]["query_hits"].add(qid)
 
-        # ── Phase 3: Global Candidate Pool ──
-        sorted_keys = sorted(global_rrf, key=lambda k: -global_rrf[k])
-        pool = sorted_keys[:40]  # RRF top-40
+            # BM25 Route 2: Keyword query — 术语精准召回，仅 Original 使用
+            if bm25_keyword_q:
+                bm25_kw_docs = self._bm25_retriever.invoke(bm25_keyword_q)[:bm25_k]
+                for rank, doc in enumerate(bm25_kw_docs):
+                    cid = self._chunk_key(doc)
+                    bm25_kw_keys.add(cid)
+                    rrf = W_BM25_KW / (RRF_K + rank)
+                    local_rrf[cid] = local_rrf.get(cid, 0) + rrf
 
-        # Dense Protect: 逐查询 top-2 保送，保证跨文档 diversity
-        for key in dense_protect_pool:
-            if key in global_store and key not in pool:
-                pool.append(key)
-        pool = pool[:50]
+                    if cid not in candidates:
+                        candidates[cid] = {
+                            "chunk_id": cid, "text": doc.page_content,
+                            "metadata": doc.metadata,
+                            "sources": [], "query_hits": set(),
+                            "dense_rank": 999, "bm25_rank": 999, "bm25_kw_rank": rank,
+                            "best_channel": "BM25-KW", "best_rank": rank,
+                            "rrf_prior": 0.0, "cosine_sim": 0.0,
+                        }
+                    else:
+                        if rank < candidates[cid].get("bm25_kw_rank", 999):
+                            candidates[cid]["bm25_kw_rank"] = rank
+                    candidates[cid]["sources"].append(f"{qtype}-BM25kw")
+                    candidates[cid]["query_hits"].add(qid)
 
-        # ── Phase 4: CE Rerank（使用 Original Query）──
+            # Single-channel boost: 多通道归一化，避免多通道命中天然占优
+            for cid in local_rrf:
+                total_w = 0.0
+                if cid in dense_keys:   total_w += W_DENSE
+                if cid in bm25_orig_keys: total_w += W_BM25_ORIG
+                if cid in bm25_kw_keys:   total_w += W_BM25_KW
+                if total_w > 0:
+                    local_rrf[cid] /= total_w
+
+            # 更新 rrf_prior（取多路中最大值供检索排序用）
+            for cid, score in local_rrf.items():
+                if score > candidates[cid]["rrf_prior"]:
+                    candidates[cid]["rrf_prior"] = round(score, 6)
+
+        # 收集各路查询
+        # ① Original: Dense30 + BM25(original)20 + BM25(keyword)20
+        _collect(query, orig_dense_k, orig_bm25_k, 0, "Original", bm25_keyword_q=kw_query)
+        qid = 1
+        # ② Rewrite: Dense20 + BM2510 每个
+        for rq in rw_list:
+            _collect(rq, subq_dense_k, subq_bm25_k, qid, "Rewrite")
+            qid += 1
+        # ③ SubQuery: Dense20 + BM2510 每个
+        for sq in sq_list:
+            _collect(sq, subq_dense_k, subq_bm25_k, qid, "SubQ")
+            qid += 1
+
+        # 补算 best_channel / best_rank（跨多路后取最优，KW > Dense > BM25）
+        for c in candidates.values():
+            kw_r = c.get("bm25_kw_rank", 999)
+            if kw_r < c["dense_rank"] and kw_r < c["bm25_rank"]:
+                c["best_channel"] = "BM25-KW"
+                c["best_rank"] = kw_r
+            elif c["dense_rank"] < c["bm25_rank"]:
+                c["best_channel"] = "Dense"
+                c["best_rank"] = c["dense_rank"]
+            else:
+                c["best_channel"] = "BM25"
+                c["best_rank"] = c["bm25_rank"]
+
+        # 补算 BM25-only 候选的余弦相似度
+        bm25_only = [(cid, c) for cid, c in candidates.items() if c["cosine_sim"] == 0.0
+                      and c["dense_rank"] == 999]
+        if bm25_only:
+            query_emb = np.array(self._embeddings.embed_query(query))
+            for cid, c in bm25_only:
+                doc_emb = np.array(self._embeddings.embed_documents([c["text"]])[0])
+                sim = float(np.dot(query_emb, doc_emb)
+                            / (np.linalg.norm(query_emb) * np.linalg.norm(doc_emb) + 1e-8))
+                candidates[cid]["cosine_sim"] = round(sim, 4)
+
+        # ── Phase 2: Evidence Score + Retrieval Prior ──
+        delta = 0.002  # evidence 基础单位
+        cand_list = list(candidates.values())
+        for c in cand_list:
+            n = len(c["query_hits"])
+            if n >= 3:      c["evidence_score"] = 2 * delta   # 0.004
+            elif n >= 2:    c["evidence_score"] = delta       # 0.002
+            else:           c["evidence_score"] = 0.0
+
+        # Retrieval Prior = 0.7×rrf_prior_norm + 0.3×evidence_norm
+        if len(cand_list) > 1:
+            rrf_vals = [c["rrf_prior"] for c in cand_list]
+            ev_vals = [c["evidence_score"] for c in cand_list]
+            rrf_min, rrf_max = min(rrf_vals), max(rrf_vals)
+            ev_min, ev_max = min(ev_vals), max(ev_vals)
+            rrf_range = rrf_max - rrf_min or 1e-8
+            ev_range = ev_max - ev_min or 1e-8
+            for c in cand_list:
+                c["retrieval_prior"] = round(
+                    0.7 * (c["rrf_prior"] - rrf_min) / rrf_range
+                    + 0.3 * (c["evidence_score"] - ev_min) / ev_range, 6)
+        else:
+            cand_list[0]["retrieval_prior"] = 0.0
+
+        cand_list.sort(key=lambda c: -c["retrieval_prior"])
+
+        # ── Phase 3: Dynamic Coverage Reservation (≤50) ──
+        MAX_POOL = 50
+        if len(cand_list) > MAX_POOL:
+            n_rw = len(rw_list)
+            n_sq = len(sq_list)
+            rw_qids = set(range(1, 1 + n_rw))
+            sq_start = 1 + n_rw     # first SubQ qid
+
+            # 动态配额: Original=20(40%), Rewrite=10(20%), SubQ合计=20(40%)
+            quota_orig = 20
+            quota_rw = 10 if n_rw > 0 else 0
+            sub_budget = 20 if n_sq > 0 else 0
+
+            # SubQ 均分
+            sq_quotas: dict[int, int] = {}
+            if n_sq > 0:
+                base = sub_budget // n_sq
+                remainder = sub_budget % n_sq
+                for i in range(n_sq):
+                    sq_quotas[sq_start + i] = base + (1 if i < remainder else 0)
+
+            reserved: list[dict] = []
+            rest: list[dict] = []
+            taken: dict[int, int] = {}
+            rw_taken = 0
+
+            for c in cand_list:
+                placed = False
+                # 1) Original: 20
+                if 0 in c["query_hits"] and taken.get(0, 0) < quota_orig:
+                    reserved.append(c)
+                    taken[0] = taken.get(0, 0) + 1
+                    placed = True
+                # 2) 各 SubQ 按均分配额
+                elif not placed:
+                    for sq_qid, sq_quota in sq_quotas.items():
+                        if sq_qid in c["query_hits"] and taken.get(sq_qid, 0) < sq_quota:
+                            reserved.append(c)
+                            taken[sq_qid] = taken.get(sq_qid, 0) + 1
+                            placed = True
+                            break
+                # 3) Rewrite 组: 10 共享
+                if not placed and rw_qids and rw_taken < quota_rw and (rw_qids & c["query_hits"]):
+                    reserved.append(c)
+                    rw_taken += 1
+                    placed = True
+
+                if not placed:
+                    rest.append(c)
+
+            # Global Fill: 补齐到 MAX_POOL
+            cand_list = reserved + rest
+            cand_list = cand_list[:MAX_POOL]
+
+        # ── Phase 4: CE Rerank + Retrieval Prior 融合 ──
+        # Final = 0.8×CE_norm + 0.2×retrieval_prior_norm
+        candidate_keys = [c["chunk_id"] for c in cand_list]
+        doc_store = {c["chunk_id"]: (c["text"], c["metadata"], c["cosine_sim"])
+                     for c in cand_list}
+        prior_scores = {c["chunk_id"]: c["retrieval_prior"] for c in cand_list}
+
         if self._reranker:
-            results = self._rrf_ce_fusion(query, global_rrf, global_store,
-                                           pool, top_k, alpha, lambda_length)
+            results = self._rrf_ce_fusion(query, prior_scores, doc_store,
+                                           candidate_keys, top_k, alpha, lambda_length,
+                                           prior_is_normalized=True)
         else:
             results = []
-            for key in pool[:top_k]:
-                content, metadata, sim = global_store[key]
+            scored = []
+            for c in cand_list:
+                s = 0.8 * c["cosine_sim"] + 0.2 * c["retrieval_prior"]
+                scored.append((s, c["text"], c["metadata"], c["cosine_sim"]))
+            scored.sort(key=lambda x: -x[0])
+            for s, text, meta, sim in scored[:top_k]:
                 results.append({
-                    "content": content, "metadata": metadata,
-                    "similarity": sim or 0.0, "dense_similarity": sim or 0.0,
+                    "content": text, "metadata": meta,
+                    "similarity": round(s, 4), "dense_similarity": sim,
                 })
 
         if expand_context:
