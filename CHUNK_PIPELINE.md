@@ -2,7 +2,7 @@
 
 > 完整记录从原始文档到检索结果的全链路 chunk 处理逻辑
 >
-> **最后更新**: 2026-07-29 (v2.0 Union + Dynamic Coverage 架构)
+> **最后更新**: 2026-08-13 (v2.4 CK-guided Query Understanding)
 
 ---
 
@@ -10,6 +10,7 @@
 
 | 日期 | 版本 | 变更 |
 |------|------|------|
+| 2026-08-13 | v2.4 | **CK-guided Query Understanding**：新增 ck_matcher.py，CK 只服务 Query→Rewrite 环节（不参与检索）。Dense 检索 CK 匹配文本（user_expressions + core_concept + semantic_summary），Top-3 精炼为 Knowledge Context（概念/术语/方法/摘要，~150-300 token）注入 Rewrite Prompt，指导 keywords/rewrite_queries 生成。检索管线（Dense/BM25/RRF/CE）零改动。expand_query 新增 use_ck 开关（默认开，A/B 可关）。757/791 CK 参与匹配（34 条匹配文本为空跳过） |
 | 2026-07-29 | v2.0 | **Union + Dynamic Coverage 架构**：① Keywords 不再独立检索，拼入 Original BM25 增强关键词召回；② 检索管线从 Parallel Evidence Merge + Dense Protect 改为 Union + RRF + Evidence Voting(3档) + Dynamic Coverage Reservation(40%/20%/40%) + Global Fill → CE Rerank；③ 候选结构增加 best_channel/best_rank；④ Rewrite 上限 ≤2(hard 2)；⑤ eval 侧 Rewrite/SubQ 分路传递，各自独立配额 |
 | 2026-07-29 | v1.19 | **Query Rewrite 三池分离**：expand_query 从 Keyword/SubQuery 二池改为 Keyword/RewriteQuery/SubQuery 三池分离合并；LLM Prompt 新增 `rewrite_queries` 字段（完整句子改写）；各池加硬限制：Keyword≤6, RewriteQuery≤2, SubQuery≤4 |
 | 2026-07-27 | v1.18 | **Parallel Evidence Merge 架构**：多子查询从 Append 改为并行召回+Evidence Merge（去重+Hit Boost+Global Pool），Rewrite 不再被截断丢弃；Dense Protect 从全局 top-5 改为逐查询 top-2；OOD Judge 简化为 direct≥0.70 / llm 两层；移除 Context Expansion |
@@ -21,6 +22,8 @@
 | 2026-07-20 | v1.12 | step2 H3 子标题回退切分（>3000 字），498→753 chunks；BM25/Chroma 同源切分 |
 | 2026-06-29 | v1.11 | Section Quality Filter (三层过滤) + PDF Layout 解析 Phase 1 (fitz dict 模式、布局标题检测、页眉页脚去重) + metadata.type / layout_mode |
 | 2026-06-26 | v1.8 | compact header 修复，MRR 恢复到 0.8333 |
+
+---
 
 ---
 
@@ -128,6 +131,12 @@ data/chunks_split.json  (787 条, avg 374 字)  +  vectordb/  (787 vectors)
 ╠═════════════════════════════════════════════════════════════════════════╣
 ║                                                                         ║
 ║  Query: "新疆冬小麦和河南冬小麦品种有什么不同？"                         ║
+║    │                                                                     ║
+║    ├── [Query Understanding] CK Matcher（v2.4，CK 不参与检索）           ║
+║    │   Dense 检索 CK 匹配文本 (user_expressions + core_concept          ║
+║    │     + semantic_summary) → Top-3 CK (sim≥0.40)                      ║
+║    │   → 精炼 Knowledge Context (~150-300 token)                        ║
+║    │   → 注入 Rewrite Prompt，指导 keywords/rewrite 生成                ║
 ║    │                                                                     ║
 ║    ├── [改写] expand_query → 三池产出                                    ║
 ║    │   ┌─ Keyword 池 (词/短语, ≤6, hard 6) ───────────────────┐          ║
@@ -947,13 +956,66 @@ v2.0 Union + Dynamic Coverage (当前):
 | lambda_length | **0.1** | CE 长度归一化 |
 | CE Query | **Original Query** | 最终要回答的是原始问题 |
 
+### CK Matcher — Knowledge-guided Query Understanding（新增 v2.4）
+
+**定位**：CK 不参与检索，只服务 Query → Rewrite 环节。解决的是"Query 不知道 Chunk 在说什么"——把 CK（Chunk 对自己的解释）提供给 Rewrite，而非让 CK 变成新的检索分支。
+
+**流程**：
+
+```
+Query
+  │
+  ▼
+CK Matcher: Dense 检索 CK（不是检索 Chunk）
+  │  匹配文本 = user_expressions + core_concept + semantic_summary
+  │  （这三类字段最接近用户提问分布；technical_terms 等表格化字段不参与 embedding）
+  │
+  ▼
+Top-3 CK 候选（sim ≥ 0.40 过滤，低于阈值视为不相关不注入）
+  │
+  ▼
+精炼 Knowledge Context（每 CK ~130 字，总 ~400 字 ≈ 200-270 token）
+  │  只取: core_concept(≤3) / technical_terms(≤4) / evaluation_method(≤3)
+  │        / semantic_summary(截断 80 字)
+  │
+  ▼
+注入 Rewrite Prompt → 生成 keywords / rewrite_queries / sub_queries
+  │  Prompt 规则: 优先使用 Context 中的概念与术语；不得创造 Context 之外的专业术语
+  │
+  ▼
+Hybrid Retrieval（Dense/BM25/RRF/CE 完全不变）
+```
+
+**实现**（`ck_matcher.py`，~180 行）：
+
+- CK 匹配文本用 BGE-small-zh（与检索同模型）嵌入，757×512 numpy 矩阵缓存于 `data/ck_matcher/`（34 条匹配文本为空的 CK 跳过）
+- 相似度 = 余弦（embedding 已归一化）；查询嵌入 + 逐元素乘求和（避开 macOS Accelerate gemm 误报警告）
+- `MIN_SIM=0.40`：低于此的 CK 不注入（OOD/无关 query 保持原改写行为）
+- 加载耗时 ~6s（首次嵌入 757 条），查询匹配 <0.1s
+
+**Rewrite 集成**（`query_rewriter.py`）：
+
+- `REWRITE_PROMPT` 新增 `{knowledge_context}` 占位符（为空则忽略本节）
+- `expand_query(..., use_ck=True)`：use_ck 开关供 A/B 评测（False = 纯 baseline）
+- 缓存 key 带 `|ck`/`|base` 后缀，两路缓存互不污染
+- 仅 LLM 改写路径注入；gate 跳过 LLM 时（确定性术语映射已覆盖）不需要 context
+
+**冒烟验证**（"大兴安岭东南麓气温怎么分析？"）：
+
+| 配置 | keywords | rewrite_queries |
+|------|----------|-----------------|
+| BASE | 温度、平均气温、气温条件、大兴安岭东南麓、气温、分析 | 大兴安岭东南麓的气温特征如何分析？ |
+| CK | 大兴安岭东南麓、年平均气温、变化趋势、线性拟合倾向率 | 大兴安岭东南麓1961-2020年年平均气温变化趋势分析方法是什么？ |
+
+CK 版 keywords 精确命中 gold chunk 的概念（变化趋势 + 线性拟合倾向率），BASE 版只有泛化词。术语映射表已覆盖的场景（如"积温"）两版一致——CK 弥补的是映射表盲区。
+
 ### 改写触发逻辑
 
 ```
 query → search(top_k=2) → top1_sim, top2_sim
   → expand_query(mode="all", top1_sim, top2_sim)
     → 内置 gate: length≤6 或 (top1_sim≥0.72 且 margin≥0.03 且无口语词) → 跳过 LLM
-    → 否则 → LLM 改写 → 三池产出
+    → 否则 → CK Matcher → Knowledge Context 注入 LLM 改写 → 三池产出
 ```
 
 ### expand_query 三池输出
@@ -1061,4 +1123,4 @@ top1_sim < 0.70 → LLM 判定 → Answer / Reject
 
 ---
 
-> **关联文件**: step1_parse.py, step2_embed.py, hybrid_search.py, evaluate.py, rag_pipeline.py
+> **关联文件**: step1_parse.py, step2_embed.py, hybrid_search.py, query_rewriter.py, ck_matcher.py, evaluate.py, rag_pipeline.py

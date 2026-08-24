@@ -147,16 +147,24 @@ def split_documents(docs: list[Document]) -> list[Document]:
     # Phase 1: H3 fallback for large sections
     phase1 = []
     h3_split_count = 0
+    h3_empty_count = 0
     for d in docs:
         if len(d.page_content) > 3000:
             sub_docs = _split_by_h3(d)
             if len(sub_docs) > 1:
                 h3_split_count += len(sub_docs) - 1
+                # TODO: 过滤 H3 切分产生的空 body chunk（暂时关闭，待 CK 重建同步）
+                # compact = _compact_header(d.metadata)
+                # before = len(sub_docs)
+                # sub_docs = [sd for sd in sub_docs
+                #             if len(sd.page_content) - len(compact) >= 20]
+                # h3_empty_count += before - len(sub_docs)
             phase1.extend(sub_docs)
         else:
             phase1.append(d)
     if h3_split_count:
-        print(f"         H3 回退切分: +{h3_split_count} 个子章节")
+        print(f"         H3 回退切分: +{h3_split_count} 个子章节"
+              + (f", 过滤空body {h3_empty_count}" if h3_empty_count else ""))
 
     # Phase 2: RecursiveCharacterTextSplitter（所有 doc 统一走）
     to_split = []
@@ -262,12 +270,16 @@ def main():
     split_data = []
     for d in split_docs:
         chunk_id = d.metadata.get("chunk_id", d.metadata.get("section_id", ""))
+        cc = d.metadata.get("chunk_count", 1)
+        ci = d.metadata.get("chunk_index", 0)
+        unique_id = f"{chunk_id}_p{ci}" if cc > 1 else chunk_id
+        d.metadata["chunk_id"] = unique_id  # 回写 metadata 保持一致
         split_data.append({
-            "id": chunk_id,
+            "id": unique_id,
             "content": d.page_content,
             "source_id": d.metadata.get("source_id", d.metadata.get("section_id", "")),
             "chunk_version": d.metadata.get("chunk_version", 1),
-            "metadata": d.metadata,  # 保留完整 metadata 含 chunk_id
+            "metadata": d.metadata,
         })
     with open(CHUNKS_SPLIT_PATH, "w", encoding="utf-8") as f:
         json.dump(split_data, f, ensure_ascii=False, indent=2)

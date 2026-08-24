@@ -191,7 +191,7 @@ print(f"  {'+Rewrite + Reranker':<38s} {mrr:>6.4f}  {recall_5:>6.4f}  {recall_10
 
 # ── 漏召回多环节诊断 ──
 if zero_recall:
-    analyzer = DiagnosticAnalyzer(searcher, chunks, rewrite_map)
+    analyzer = DiagnosticAnalyzer(searcher, chunks, rewrite_map, {})
     zero_ids = {r["id"] for r in zero_recall}
     zero_qs = [q for q in indomain_qs if q["id"] in zero_ids]
     print(f"\n[eval] 运行多环节诊断...", flush=True)

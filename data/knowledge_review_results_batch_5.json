@@ -1,0 +1,596 @@
+[
+  {
+    "chunk_id": "气科院-农业气候区划指标算法说明文档-王旗_s5",
+    "score": 5,
+    "good": "核心概念准确，技术术语完整且与原文一致，摘要精准概括了算法原理和指标定义，区域识别正确，受影响对象合理，评估方法正确识别了原文提到的算法。",
+    "bad": "无"
+  },
+  {
+    "chunk_id": "气科院-农业气候区划指标算法说明文档-王旗_t1",
+    "score": 4,
+    "good": "核心概念准确，技术术语完整，摘要准确概括了表格内容，区域识别正确，受影响对象合理。",
+    "bad": "evaluation_method 为空，但原文表格中列出了关键指标，未提取为评估方法，略有遗漏。"
+  },
+  {
+    "chunk_id": "气科院-农业气候区划指标算法说明文档-王旗_t3",
+    "score": 5,
+    "good": "核心概念准确，技术术语完整，摘要精准概括了分级阈值，区域识别正确。",
+    "bad": "无"
+  },
+  {
+    "chunk_id": "气科院-农业气候区划指标算法说明文档-王旗_t2",
+    "score": 5,
+    "good": "核心概念准确，技术术语完整，摘要精准概括了模型参数调优内容，区域识别正确。",
+    "bad": "无"
+  },
+  {
+    "chunk_id": "辽宁省生态气象和卫星遥感中心-算法说明文档_t1",
+    "score": 5,
+    "good": "核心概念准确，技术术语完整，摘要准确概括了表格内容，区域识别正确，受影响对象合理，评估方法正确识别了区划类型。",
+    "bad": "无"
+  },
+  {
+    "chunk_id": "辽宁省生态气象和卫星遥感中心-算法说明文档_t2",
+    "score": 5,
+    "good": "核心概念准确，技术术语完整，摘要精准概括了分级阈值，区域识别正确。",
+    "bad": "无"
+  },
+  {
+    "chunk_id": "辽宁省生态气象和卫星遥感中心-算法说明文档_t5",
+    "score": 5,
+    "good": "核心概念准确，技术术语完整，摘要精准概括了等级和色值编码，区域识别正确。",
+    "bad": "无"
+  },
+  {
+    "chunk_id": "辽宁省生态气象和卫星遥感中心-算法说明文档_t11",
+    "score": 5,
+    "good": "核心概念准确，技术术语完整，摘要精准概括了产量等级和色值编码，区域识别正确。",
+    "bad": "无"
+  },
+  {
+    "chunk_id": "辽宁省生态气象和卫星遥感中心-算法说明文档_t12",
+    "score": 5,
+    "good": "核心概念准确，技术术语完整，摘要精准概括了分级阈值，区域识别正确。",
+    "bad": "无"
+  },
+  {
+    "chunk_id": "辽宁省生态气象和卫星遥感中心-算法说明文档_t16",
+    "score": 5,
+    "good": "核心概念准确，技术术语完整，摘要精准概括了等级和色值编码，区域识别正确。",
+    "bad": "无"
+  },
+  {
+    "chunk_id": "辽宁省生态气象和卫星遥感中心-算法说明文档_t17",
+    "score": 4,
+    "good": "core_concept准确反映风险等级划分主题，technical_terms与原文一致，semantic_summary准确概括了四个等级及分值，region识别正确。",
+    "bad": "affected_objects为空，但原文未明确提及具体对象，可接受；evaluation_method为空，但原文仅为表格，未涉及方法，可接受。"
+  },
+  {
+    "chunk_id": "辽宁省生态气象和卫星遥感中心-算法说明文档_t22",
+    "score": 5,
+    "good": "core_concept准确，technical_terms包含原文中的区域名称，semantic_summary准确概括了5个区域4-9月的指标数值，region识别正确。",
+    "bad": "无显著问题。"
+  },
+  {
+    "chunk_id": "辽宁省生态气象和卫星遥感中心-算法说明文档_t23",
+    "score": 5,
+    "good": "core_concept准确反映农业干旱等级划分和KCWDI指数，technical_terms与原文高度一致，semantic_summary准确概括了5个等级和5个生育阶段，region识别正确，affected_objects合理识别为玉米。",
+    "bad": "无显著问题。"
+  },
+  {
+    "chunk_id": "辽宁省生态气象和卫星遥感中心-算法说明文档_t25",
+    "score": 5,
+    "good": "core_concept准确反映权重分配主题，technical_terms与原文一致，semantic_summary准确概括了各生育阶段的权重值，region识别正确，affected_objects合理识别为玉米。",
+    "bad": "无显著问题。"
+  },
+  {
+    "chunk_id": "辽宁省生态气象和卫星遥感中心-算法说明文档_t24",
+    "score": 5,
+    "good": "core_concept准确反映玉米生育期划分和区域差异，technical_terms与原文一致，semantic_summary准确概括了5个区域和4个生育期的日期范围，region识别正确，affected_objects合理识别为玉米。",
+    "bad": "无显著问题。"
+  },
+  {
+    "chunk_id": "辽宁省生态气象和卫星遥感中心-算法说明文档_t26",
+    "score": 4,
+    "good": "core_concept准确反映风险等级和色值编码，technical_terms与原文一致，semantic_summary准确概括了等级、分值和RGB色值，region识别正确。",
+    "bad": "affected_objects为空，但原文未明确提及具体对象，可接受；evaluation_method为空，但原文仅为表格，未涉及方法，可接受。"
+  },
+  {
+    "chunk_id": "辽宁省生态气象和卫星遥感中心-算法说明文档_t37",
+    "score": 5,
+    "good": "core_concept准确反映霜冻等级划分和区划指标体系，technical_terms与原文一致，semantic_summary准确概括了春霜冻和秋霜冻的三级阈值，region识别正确。",
+    "bad": "无显著问题。"
+  },
+  {
+    "chunk_id": "D_P_R_150000_001-内蒙古区划报告_s2_p1",
+    "score": 5,
+    "good": "core_concept准确反映年平均气温变化趋势和气候变暖，technical_terms与原文一致，semantic_summary准确概括了线性拟合倾向率和R2值，region识别正确，evaluation_method正确识别了线性拟合和显著性检验。",
+    "bad": "无显著问题。"
+  },
+  {
+    "chunk_id": "D_P_R_150000_001-内蒙古区划报告_s3_p0",
+    "score": 5,
+    "good": "core_concept准确反映≥10℃活动积温和热量资源评价，technical_terms与原文一致，semantic_summary准确概括了积温变化趋势和年代际差异，region识别正确，affected_objects合理识别为大豆等，evaluation_method正确识别了热量资源评价和趋势分析。",
+    "bad": "无显著问题。"
+  },
+  {
+    "chunk_id": "D_P_R_150000_001-内蒙古区划报告_s3_p1",
+    "score": 5,
+    "good": "core_concept准确反映≥10℃活动积温变化和热量资源变化特征，technical_terms与原文一致，semantic_summary准确概括了初终日变化、积温增加和2000年以来热量增加趋势，region识别正确，affected_objects合理识别为大豆。",
+    "bad": "无显著问题。"
+  },
+  {
+    "chunk_id": "D_P_R_150000_001-内蒙古区划报告_s2_p0",
+    "score": 4,
+    "good": "core_concept准确反映原文主题，technical_terms如≥10℃活动积温、初日、终日、立体气候均与原文一致，region识别正确，affected_objects合理。",
+    "bad": "semantic_summary提到年平均气温上升趋势，但原文未提及该内容，属于额外信息；evaluation_method未识别出原文隐含的统计方法（如趋势分析），但原文未明确说明方法，可接受。"
+  },
+  {
+    "chunk_id": "D_P_R_150000_001-内蒙古区划报告_s4_p1",
+    "score": 5,
+    "good": "core_concept准确，technical_terms如平均降水量、多雨时期、气候自然波动均与原文一致，semantic_summary精准概括原文要点，region识别正确，affected_objects为空合理（原文未涉及具体作物）。",
+    "bad": "无。"
+  },
+  {
+    "chunk_id": "D_P_R_150000_001-内蒙古区划报告_s14_p0",
+    "score": 5,
+    "good": "core_concept准确，technical_terms如农业气候区划指数、Py、平均单产、一致性检验均与原文一致，semantic_summary精准概括验证过程，region识别正确，affected_objects合理，evaluation_method正确识别。",
+    "bad": "无。"
+  },
+  {
+    "chunk_id": "D_P_R_150000_001-内蒙古区划报告_s4_p0",
+    "score": 4,
+    "good": "core_concept准确，technical_terms如无霜期、变化率、显著性水平、初日日序、终日日序均与原文一致，semantic_summary概括准确，region识别正确。",
+    "bad": "technical_terms中的多项式拟合和相关系数在原文中未明确出现，属于推断；evaluation_method中的t检验在原文中未明确提及，属于过度推断。"
+  },
+  {
+    "chunk_id": "D_P_R_150000_001-内蒙古区划报告_s14_p1",
+    "score": 4,
+    "good": "core_concept准确，technical_terms如区划指数、Py、社会产量、平均单产均与原文一致，semantic_summary准确概括表格内容，region识别正确。",
+    "bad": "affected_objects为空，但原文涉及大豆产量，应识别为大豆；evaluation_method为空，但原文隐含一致性检验方法，可补充。"
+  },
+  {
+    "chunk_id": "D_P_R_150000_001-内蒙古区划报告_s39_p0",
+    "score": 5,
+    "good": "core_concept准确，technical_terms如粗蛋白气候区划、特优等级、优质等级、良等级、一般等级、占耕地面积比例均与原文一致，semantic_summary精准概括，region识别正确，affected_objects合理。",
+    "bad": "无。"
+  },
+  {
+    "chunk_id": "D_P_R_150000_001-内蒙古区划报告_s39_p1",
+    "score": 4,
+    "good": "core_concept准确，technical_terms如大豆脂肪、花期平均最低气温、成熟期平均最高气温、脂肪形成和积累、特优质区、优质区、良质区均与原文一致，semantic_summary准确概括，region识别正确。",
+    "bad": "affected_objects包含花期和成熟期，但原文中这些是气候条件而非受影响对象，应仅保留大豆；evaluation_method中的大豆脂肪气候区划不是评估方法，而是区划类型，识别有误。"
+  },
+  {
+    "chunk_id": "内蒙古大豆农业气候资源普查与区划算法统计_t2_p0",
+    "score": 4,
+    "good": "core_concept准确，technical_terms如Ångström-Prescott模型、Penman-Monteith公式、参考作物蒸散量、气候生产潜力、≥10℃活动积温、三基点温度、作物系数均与原文一致，semantic_summary准确概括，evaluation_method识别正确。",
+    "bad": "region识别为county级别，但原文明确为内蒙古自治区，应为province级别；affected_objects中的大豆发育期和大豆生长期不是受影响对象，而是计算要素，应仅保留大豆。"
+  },
+  {
+    "chunk_id": "内蒙古大豆农业气候资源普查与区划算法统计_t2_p1",
+    "score": 5,
+    "good": "core_concept准确，technical_terms如粗脂肪指数、作物水分亏缺指数、致灾因子危险性、孕灾环境敏感性、承灾体脆弱性、防灾减灾能力、干旱灾害风险评估模型、彭曼公式均与原文一致，semantic_summary精准概括，region识别正确，affected_objects合理，evaluation_method识别正确。",
+    "bad": "无。"
+  },
+  {
+    "chunk_id": "D_P_R_230000_001-农业气候区划报告_s1_p0",
+    "score": 4,
+    "good": "core_concept准确，technical_terms如生长季平均降水、生长季平均日照时数、变化范围、松嫩平原、三江平原均与原文一致，semantic_summary准确概括，region识别正确，affected_objects合理。",
+    "bad": "technical_terms中的生长季平均风速在原文中未提及，属于额外信息；evaluation_method为空，但原文未明确提到评估方法，可接受。"
+  },
+  {
+    "chunk_id": "D_P_R_230000_001-农业气候区划报告_s33_p1",
+    "score": 4,
+    "good": "core_concept准确反映原文主题（松花江干流暴雨过程），technical_terms均出现在原文中，semantic_summary准确概括了表格内容，region识别正确且详细列出了涉及的市县。",
+    "bad": "region的level标注为county，但原文中既包含市级（哈尔滨、佳木斯、鹤岗）也包含县级（巴彦、阿城等），level应为mixed或city；affected_objects为空，但原文涉及降水范围（市县），可考虑将市县作为受影响对象，不过影响不大。"
+  },
+  {
+    "chunk_id": "D_P_R_230000_001-农业气候区划报告_s40_p1",
+    "score": 5,
+    "good": "core_concept准确反映原文主题（低温冷害、霜冻异常、大豆生育期延迟），technical_terms均与原文语义一致，semantic_summary精准概括了原文要点，region识别正确，affected_objects合理（大豆、大田作物、生育期）。",
+    "bad": "无显著问题。"
+  },
+  {
+    "chunk_id": "D_P_R_230000_001-农业气候区划报告_s40_p0",
+    "score": 4,
+    "good": "core_concept准确反映原文主题（低温冷害判定、冷害指标检验、空报原因分析），technical_terms基本准确，semantic_summary概括了表格数据和空报原因分析，region识别正确。",
+    "bad": "affected_objects中\"大豆\"在原文中未明确提及（原文提到\"农作物\"），\"霜冻\"作为affected_objects不够准确（应为灾害类型而非对象）；evaluation_method为空，但原文明确提到了\"ΔT5-9指标检验\"，应识别为评估方法。"
+  },
+  {
+    "chunk_id": "黑龙江农业气候资源普查技术规范2025_s0_p1",
+    "score": 5,
+    "good": "core_concept准确反映原文主题（农业气候资源普查、公里级精细化普查），technical_terms均出现在原文中，semantic_summary精准概括了原文内容，region识别正确，evaluation_method合理（公里级精细化普查、分级普查）。",
+    "bad": "无显著问题。"
+  },
+  {
+    "chunk_id": "黑龙江农业气候资源普查技术规范2025_s0_p0",
+    "score": 4,
+    "good": "core_concept准确反映原文主题（农业气候资源普查），technical_terms基本准确，semantic_summary概括了原文要点，region识别正确，affected_objects合理（农业生产）。",
+    "bad": "evaluation_method中\"公里级精细化普查\"和\"农业气候区划\"在原文中提及但并非作为评估方法，而是作为背景或任务内容，识别不够准确；semantic_summary提到\"分级开展方式\"，但原文主要强调总体目标与任务，分级开展在后续段落才详细说明，略有偏差。"
+  },
+  {
+    "chunk_id": "黑龙江农业气候资源普查技术规范2025_s2_p0",
+    "score": 4,
+    "good": "core_concept准确反映原文主题（农业气候资源普查、基础地理信息），technical_terms基本准确，semantic_summary概括了普查内容，region识别正确。",
+    "bad": "technical_terms中\"水分资源\"在原文中未明确出现（原文提到\"热量资源\"，但未明确列出\"水分资源\"），\"活动积温\"和\"潜在蒸散量\"在原文中未直接出现（原文提到\"积温\"和\"蒸散\"相关概念但未明确这些术语）；evaluation_method为空，但原文主要描述普查内容而非评估方法，可接受。"
+  },
+  {
+    "chunk_id": "黑龙江农业气候资源普查技术规范2025_s12_p0",
+    "score": 5,
+    "good": "core_concept准确反映原文主题（参考作物蒸散量估算、FAO-PM模型），technical_terms均与原文高度一致，semantic_summary精准概括了原文内容，region识别正确，affected_objects合理（作物），evaluation_method正确识别了FAO-PM模型。",
+    "bad": "无显著问题。"
+  },
+  {
+    "chunk_id": "黑龙江农业气候资源普查技术规范2025_s12_p1",
+    "score": 5,
+    "good": "core_concept准确反映原文主题（净辐射计算、风速换算），technical_terms均与原文高度一致，semantic_summary精准概括了原文内容，region识别正确，evaluation_method合理（净辐射计算、风速换算）。",
+    "bad": "无显著问题。"
+  },
+  {
+    "chunk_id": "黑龙江农业气候资源普查技术规范2025_s2_p1",
+    "score": 4,
+    "good": "core_concept准确反映原文主题（农业气候资源普查、农业气候指标分类），technical_terms基本准确，semantic_summary概括了原文要点，region识别正确。",
+    "bad": "affected_objects中\"水稻\"在原文中未明确提及（原文提到\"农作物\"，但未具体到水稻），属于过度推断；evaluation_method为空，但原文主要描述指标分类而非评估方法，可接受。"
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s2_p0",
+    "score": 5,
+    "good": "core_concept准确反映原文主题（土地利用状况普查、耕地分类），technical_terms均与原文一致，semantic_summary精准概括了原文内容，region识别正确，affected_objects合理（耕地、园地等），evaluation_method合理（土地利用状况普查、基准年数据收集）。",
+    "bad": "无显著问题。"
+  },
+  {
+    "chunk_id": "D_P_R_230000_001-农业气候区划报告_s1_p1",
+    "score": 4,
+    "good": "core_concept准确反映原文主题（生长季平均风速、气候区划）；technical_terms与原文一致；semantic_summary准确概括了两个时段风速分布；region识别正确，包含所有提及的地名，level为province合理。",
+    "bad": "affected_objects为空，但原文未明确提及具体作物，可接受；evaluation_method为空，原文未涉及方法，可接受。整体质量高，仅因未提取风速分级的具体数值（如3.5、3、2 m/s）而扣1分。"
+  },
+  {
+    "chunk_id": "内蒙古大豆农业气候资源普查与区划算法统计_t2_p2",
+    "score": 2,
+    "good": "core_concept中'霜冻灾害风险区划'和'灾害风险指数'准确；technical_terms中霜冻相关指数（致灾因子危险性、承灾体暴露度等）与原文一致；affected_objects包含大豆、出苗期、成熟期，合理。",
+    "bad": "core_concept中'菌核病气候区划'在原文中未出现（原文仅涉及霜冻风险区划），属于错误添加；technical_terms中'菌核病'、'层次分析法'、'百分位法'在原文中未提及，属于虚构；semantic_summary错误地概括为包含菌核病区划，偏离原文；region识别为city，但原文明确为'内蒙古自治区'，应为province；evaluation_method中列出的方法（层次分析法、小网格推算回归模型等）在原文中均未出现，严重错误。"
+  },
+  {
+    "chunk_id": "内蒙古大豆农业气候资源普查与区划算法统计_t2_p3",
+    "score": 5,
+    "good": "core_concept准确反映原文主题（菌核病和食心虫气候区划）；technical_terms与原文高度一致（菌核病、食心虫、气象适宜等级赋值、相关分析法、百分位法、反距离加权法、日平均气温、相对湿度）；semantic_summary精准概括了气象指标、风险等级阈值、统计时段和评价方法；region识别正确（呼伦贝尔市，city）；affected_objects合理（大豆、菌核病、食心虫）；evaluation_method完整且准确。",
+    "bad": "无显著问题。"
+  },
+  {
+    "chunk_id": "D_P_R_230000_001-农业气候区划报告_s8_p0",
+    "score": 4,
+    "good": "core_concept准确（大豆种植气候区划、区划结果验证）；technical_terms与原文一致（大豆平均单产、单产变异系数、验证指标等）；semantic_summary准确概括了验证方法和结果；affected_objects合理（大豆）；evaluation_method正确识别了验证和等级划分方法。",
+    "bad": "region识别为county，但原文主要涉及黑龙江省（province），且黑河、嫩江仅为示例县市，level应为province；semantic_summary提到'四级'，但原文仅列出不适宜、次适宜、适宜三级，细节不准确。"
+  },
+  {
+    "chunk_id": "D_P_R_230000_001-农业气候区划报告_s14_p1",
+    "score": 3,
+    "good": "core_concept准确（一致性评价、产量稳产性评价）；technical_terms与原文一致（高产高稳产、中产高稳产等）；semantic_summary准确概括了各县对比内容；region识别正确（county，包含所有县名）；evaluation_method正确识别了产量稳产性评价和一致性评价。",
+    "bad": "affected_objects错误地识别为'冬小麦'，但原文明确为大豆（从上下文和单产数据推断），属于明显错误；semantic_summary未提及作物类型，导致受影响对象提取错误。"
+  },
+  {
+    "chunk_id": "D_P_R_230000_001-农业气候区划报告_s14_p0",
+    "score": 4,
+    "good": "core_concept准确（大豆产量区划指标验证、一致性评价）；technical_terms与原文一致（大豆单产、变异系数、单产分区、气候生产潜力分区、一致性）；semantic_summary准确概括了验证表内容；region识别正确（county，包含所有市县）；affected_objects合理（大豆）。",
+    "bad": "evaluation_method为空，但原文主要呈现验证数据表，未明确提及具体方法，可接受；semantic_summary未提及'1991-2020年'时段，细节略欠缺。"
+  },
+  {
+    "chunk_id": "D_P_R_230000_001-农业气候区划报告_s8_p1",
+    "score": 4,
+    "good": "core_concept准确（大豆单产稳定性、农业气候区划）；technical_terms与原文一致（单产、变异系数、适宜区、次适宜区、不适宜区）；semantic_summary准确概括了各地区大豆单产和等级划分；region识别正确（county，包含所有地区）；affected_objects合理（大豆）。",
+    "bad": "evaluation_method为空，但原文为数据表格，未涉及方法，可接受；semantic_summary未提及两个年代（1961-1990和1991-2020），细节略欠缺。"
+  },
+  {
+    "chunk_id": "D_P_R_230000_001-农业气候区划报告_s25_p1",
+    "score": 5,
+    "good": "core_concept准确（霜冻灾害、低温冻害灾情记录）；technical_terms与原文高度一致（霜冻、冻害、受灾面积、成灾面积、绝收面积、低温冷冻）；semantic_summary精准概括了1992-2018年霜冻灾害案例；region识别正确（county，包含所有提及地点）；affected_objects合理（大豆、玉米、大田作物）。",
+    "bad": "无显著问题。"
+  },
+  {
+    "chunk_id": "D_P_R_230000_001-农业气候区划报告_s25_p0",
+    "score": 5,
+    "good": "core_concept准确（霜冻灾害、农业气象灾害灾情记录）；technical_terms与原文一致（早霜、霜冻灾害、受灾面积、成灾面积、减产）；semantic_summary准确概括了1980-2000年霜冻灾情；region识别正确（county，包含所有提及地点）；affected_objects合理（玉米、大豆、谷子、高粱、水稻）。",
+    "bad": "无显著问题。"
+  },
+  {
+    "chunk_id": "D_P_R_230000_001-农业气候区划报告_s33_p0",
+    "score": 4,
+    "good": "core_concept准确（大豆渍涝气候风险区划、暴雨洪涝灾害）；technical_terms与原文一致（渍涝气候风险区划、受灾面积、成灾面积、绝产、过程雨量、特大暴雨、特大洪水）；semantic_summary准确概括了1998年洪水案例和风险区划分；affected_objects合理（大豆）；evaluation_method正确识别了渍涝气候风险区划。",
+    "bad": "region识别为province，但原文主要涉及齐齐哈尔市、绥化市、大庆市、哈尔滨市、佳木斯市等具体市县，且提到松嫩平原和三江平原，level应为county或更细粒度；semantic_summary未提及具体受灾市县，导致region级别判断偏差。"
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s2_p1",
+    "score": 5,
+    "good": "核心概念准确概括了土地利用分类中的耕地、园地、林地、草地等定义；技术术语全部来自原文，包括水浇地、旱地、园地、林地、草地、天然牧草地、沼泽草地、郁闭度等；语义摘要精准概括了原文内容；地区识别正确（黑龙江，省级）；affected_objects为空合理，因为原文是定义性内容；evaluation_method为空合理，因为原文未涉及评估方法。",
+    "bad": "无显著问题。"
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s2_p2",
+    "score": 5,
+    "good": "核心概念准确反映原文主题（土地利用分类、地类定义、农业普查技术规范）；技术术语如水库水面、坑塘水面、沿海滩涂、内陆滩涂、沟渠、沼泽地、水工建筑用地、设施农用地均出现在原文；语义摘要准确概括了各类土地定义和阈值；地区识别正确；affected_objects为空合理，因为原文是定义性内容；evaluation_method为空合理。",
+    "bad": "无显著问题。"
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s3_p0",
+    "score": 5,
+    "good": "核心概念准确（土壤质地类型分类、土壤理化特性普查）；技术术语如土壤质地类型、粘粒含量、砂粒含量、粉砂粒含量、重粘土、粘壤土、壤质粘土、粉砂质粘土均来自原文；语义摘要准确概括了土壤质地分类标准；地区识别正确；affected_objects包含土壤，合理；evaluation_method为空合理，因为原文未涉及评估方法。",
+    "bad": "无显著问题。"
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s4_p0",
+    "score": 5,
+    "good": "核心概念准确（种植制度、作物熟制、种植方式）；技术术语如种植制度、作物熟制、一熟种植、多熟种植、种植方式、单作、混作、间作、套作、轮作、连作、休闲均来自原文；语义摘要准确概括了填报说明和指标解释；地区识别正确；affected_objects包含作物，合理；evaluation_method为空合理。",
+    "bad": "无显著问题。"
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s4_p1",
+    "score": 5,
+    "good": "核心概念准确（轮作、连作、休闲）；技术术语如轮作、连作、休闲、复种组合、套作、间作均来自原文；语义摘要准确概括了定义和符号说明；地区识别正确；affected_objects为空合理，因为原文是定义性内容；evaluation_method为空合理。",
+    "bad": "无显著问题。"
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s3_p2",
+    "score": 4,
+    "good": "核心概念准确（土壤理化性质指标定义、土壤水分参数计算）；技术术语如土壤深度、土壤PH、饱和含水量、田间持水量、凋萎湿度、砂粒含量、粘粒含量均来自原文；语义摘要准确概括了指标定义和计算公式；地区识别正确；affected_objects包含土壤、植物、植被，合理；evaluation_method正确识别了计算公式。",
+    "bad": "语义摘要中提到'有机质、全氮全钾全磷'，但原文预览中未明确出现这些术语（可能在后文），导致摘要细节不够精确，但整体不影响理解。"
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s3_p1",
+    "score": 5,
+    "good": "核心概念准确（土壤质地分类、土壤粒径分级、土壤属性指标定义）；技术术语如土壤质地分类、粘粒含量、粉砂粒含量、砂粒含量、颗粒直径、肥力等级、饱和含水量、土壤PH均来自原文；语义摘要准确概括了11种土壤质地阈值和粒径分级；地区识别正确；affected_objects包含土壤，合理；evaluation_method为空合理。",
+    "bad": "无显著问题。"
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s6_p0",
+    "score": 5,
+    "good": "核心概念准确（作物品质指标、农业普查指标解释）；技术术语如粗蛋白质、湿面筋、湿面筋含量、面团稳定时间、出糙率、整精米、不完善粒、水稻垩白均来自原文；语义摘要准确概括了品质指标定义；地区识别正确；affected_objects包含小麦、稻谷、水稻，合理；evaluation_method为空合理。",
+    "bad": "无显著问题。"
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s6_p3",
+    "score": 5,
+    "good": "核心概念准确（大豆品质指标、农产品品质检测指标、植物化学成分定义）；技术术语如大豆皂苷、三萜类齐墩果酸型皂甙、芥酸、omega-9脂肪酸、硫苷、芥子油甙、可溶性固形物、可滴定酸均来自原文；语义摘要准确概括了各指标定义；地区识别正确；affected_objects包含大豆、油菜籽、果树作物、果实，合理；evaluation_method为空合理。",
+    "bad": "无显著问题。"
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s6_p2",
+    "score": 5,
+    "good": "核心概念准确（棉花品质评价指标、大豆品质评价指标、农产品品质指标定义）；技术术语如断裂比强度、马克隆值、游离棉酚、损伤粒、水溶性蛋白质、粗纤维、大豆异黄酮、大豆寡糖、大豆皂苷、芥酸均来自原文；语义摘要准确概括了各指标定义和分级；地区识别正确；affected_objects包含棉花、大豆、油菜籽，合理；evaluation_method为空合理。",
+    "bad": "无显著问题。"
+  },
+  {
+    "chunk_id": "黑龙江省大豆干旱气候风险区划技术规范（初稿）_s1_p0",
+    "score": 4,
+    "good": "核心概念准确，技术术语基本正确，区域识别正确，受影响对象合理。",
+    "bad": "semantic_summary 中提及的“基于DEM坡度的种植适宜性分级标准”在原文摘要中未明确出现，属于过度推断；technical_terms 中“DEM坡度”在原文中未直接提及。"
+  },
+  {
+    "chunk_id": "黑龙江省大豆干旱气候风险区划技术规范（初稿）_s2_p1",
+    "score": 5,
+    "good": "核心概念、技术术语、摘要、区域、受影响对象和评价方法均与原文高度一致，准确反映了致灾因子危险性指数的计算细节。",
+    "bad": "无。"
+  },
+  {
+    "chunk_id": "黑龙江省大豆干旱气候风险区划技术规范（初稿）_s2_p3",
+    "score": 4,
+    "good": "核心概念准确，技术术语和评价方法基本正确，区域识别正确。",
+    "bad": "semantic_summary 中提及“防灾减灾能力指数”，但原文摘要主要描述暴露度和脆弱性，防灾减灾能力指数在原文中未明确提及，属于轻微过度概括。"
+  },
+  {
+    "chunk_id": "黑龙江省大豆干旱气候风险区划技术规范（初稿）_s2_p2",
+    "score": 5,
+    "good": "核心概念、技术术语、摘要、区域、受影响对象和评价方法均准确，完整概括了干旱等级判定和暴露度指数计算流程。",
+    "bad": "无。"
+  },
+  {
+    "chunk_id": "黑龙江省大豆干旱气候风险区划技术规范（初稿）_s2_p4",
+    "score": 5,
+    "good": "核心概念、技术术语、摘要、区域、受影响对象和评价方法均准确，清晰概括了综合风险区划方法和等级划分。",
+    "bad": "无。"
+  },
+  {
+    "chunk_id": "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_s4_p0",
+    "score": 4,
+    "good": "核心概念准确，技术术语基本正确，区域识别正确，受影响对象合理。",
+    "bad": "semantic_summary 中提及“层次分析法”，但原文摘要中未明确提及该方法，属于轻微过度推断；technical_terms 中“层次分析法”在原文中未出现。"
+  },
+  {
+    "chunk_id": "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_s4_p1",
+    "score": 5,
+    "good": "核心概念、技术术语、摘要、区域、受影响对象和评价方法均准确，完整概括了归一化方法和致灾因子危险性指数公式。",
+    "bad": "无。"
+  },
+  {
+    "chunk_id": "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_s4_p3",
+    "score": 5,
+    "good": "核心概念、技术术语、摘要、区域、受影响对象和评价方法均准确，清晰概括了权重确定和风险等级划分。",
+    "bad": "无。"
+  },
+  {
+    "chunk_id": "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_s4_p2",
+    "score": 5,
+    "good": "核心概念、技术术语、摘要、区域、受影响对象和评价方法均准确，完整概括了暴露度和脆弱性指数的计算方法。",
+    "bad": "无。"
+  },
+  {
+    "chunk_id": "黑龙江省大豆种植气候区划技术规范(初稿）1120_s2_p0",
+    "score": 4,
+    "good": "核心概念准确，技术术语基本正确，区域识别正确，受影响对象合理。",
+    "bad": "semantic_summary 中提及“地形（坡度）”，但原文摘要中未明确提及坡度，属于轻微过度推断；technical_terms 中“坡度”和“DEM”在原文中未直接出现。"
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_t0_p0",
+    "score": 4,
+    "good": "core_concept 准确识别了数据表结构和土地利用分类；technical_terms 与原文字段高度一致；semantic_summary 准确概括了表格字段结构；region 识别正确。",
+    "bad": "technical_terms 中缺少原文中出现的'区/县名'、'年'等基础字段；affected_objects 为空，但原文主要是表头字段，影响不大。"
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_t4_p0",
+    "score": 4,
+    "good": "core_concept 准确；affected_objects 完整列出了原文中的作物；semantic_summary 准确概括了表格内容；region 正确。",
+    "bad": "technical_terms 过于泛化，未包含原文中具体的作物名称（如稻类、麦类等），且'4项指标'在原文中未明确说明具体是什么指标。"
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_t0_p1",
+    "score": 4,
+    "good": "core_concept 准确；semantic_summary 准确概括了表格模板内容；region 正确。",
+    "bad": "technical_terms 中'耕地、园地、林地、草地、水域'是上位概念，原文中具体为'水田、水浇地、旱地、果园、茶园'等，不够精确；affected_objects 为空。"
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_t4_p1",
+    "score": 5,
+    "good": "core_concept 准确；technical_terms 中的发育期术语与原文一致；semantic_summary 准确概括了作物发育期观测内容；affected_objects 完整列出了所有作物；region 正确。",
+    "bad": "无。"
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_t10_p0",
+    "score": 4,
+    "good": "core_concept 准确；technical_terms 中的成本指标与原文一致；semantic_summary 准确概括了表格结构；region 正确。",
+    "bad": "technical_terms 中'直接费用、间接费用'在原文中未明确出现，属于推断；affected_objects 为空。"
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_t6_p1",
+    "score": 5,
+    "good": "core_concept 准确；technical_terms 中的品质指标与原文高度一致；semantic_summary 准确概括了三种作物的品质检测指标；affected_objects 正确；region 正确。",
+    "bad": "无。"
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_t6_p0",
+    "score": 5,
+    "good": "core_concept 准确；technical_terms 中的品质指标与原文高度一致；semantic_summary 准确概括了各作物的品质指标清单；affected_objects 完整；region 正确。",
+    "bad": "无。"
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_t10_p1",
+    "score": 4,
+    "good": "core_concept 准确；technical_terms 中的投入成本字段与原文一致；semantic_summary 准确概括了表格内容；region 正确。",
+    "bad": "technical_terms 中缺少原文中的'种子、化肥、农药'等具体投入项；affected_objects 为空。"
+  },
+  {
+    "chunk_id": "黑龙江省大豆干旱气候风险区划技术规范（初稿）_s2_p0",
+    "score": 5,
+    "good": "core_concept 准确；technical_terms 与原文高度一致；semantic_summary 准确概括了模型构建方法；affected_objects 正确；evaluation_method 完整识别了原文提到的方法。",
+    "bad": "无。"
+  },
+  {
+    "chunk_id": "黑龙江省大豆干旱气候风险区划技术规范（初稿）_s1_p1",
+    "score": 5,
+    "good": "core_concept 准确；technical_terms 与原文一致；semantic_summary 准确概括了地形和土地利用指标；affected_objects 正确；region 正确。",
+    "bad": "无。"
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s6_p1",
+    "score": 3,
+    "good": "核心概念基本准确，识别出稻米品质指标；technical_terms 中大部分术语（整精米、不完善粒、垩白粒率、垩白度、直链淀粉、胶稠度）与原文一致；region 识别正确；affected_objects 中水稻、稻谷、稻米、糙米合理。",
+    "bad": "core_concept 中混入了无关的“棉花品质指标”；technical_terms 中“脂肪酸值”和“断裂比强度”未在原文出现；semantic_summary 错误地包含了“脂肪酸值”和“棉花断裂比强度指标及其分级”，与原文内容不符；evaluation_method 中“脂肪酸值中和滴定法”在原文中未提及。"
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s6_p4",
+    "score": 4,
+    "good": "core_concept 准确反映原文主题（果实品质指标、可滴定酸、苹果品质指标）；technical_terms 均出现在原文中；semantic_summary 概括准确；region 识别正确；affected_objects 合理。",
+    "bad": "semantic_summary 提到“及其分级标准”，但原文仅对苹果红度和果形指数有分级描述，对其他指标未提及分级，表述略有夸大；evaluation_method 为空，但原文确实未明确提及特定评价方法，可接受。"
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s7_p2",
+    "score": 5,
+    "good": "core_concept 准确；technical_terms 全部来自原文；semantic_summary 精准概括了四种喷施方式的定义；region 正确；affected_objects 合理。",
+    "bad": "无。"
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s7_p0",
+    "score": 1,
+    "good": "无。",
+    "bad": "所有字段均为空或 null，未提取任何有效知识，无法评估。"
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s7_p1",
+    "score": 3,
+    "good": "core_concept 部分准确（灌水方法、施肥种类）；technical_terms 中淹灌、漫灌、有机肥、生物肥、化肥、堆肥、沤肥均出现在原文；region 正确；affected_objects 合理。",
+    "bad": "core_concept 中“农药喷施方式”在原文中未出现（原文仅涉及灌水和施肥）；technical_terms 中“喷雾法”未在原文出现；semantic_summary 错误地包含了“喷雾法、喷粉法等农药喷施方式”，与原文内容不符。"
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s8_p0",
+    "score": 4,
+    "good": "core_concept 准确；technical_terms 均与原文相关；semantic_summary 概括准确；region 正确；affected_objects 合理。",
+    "bad": "semantic_summary 提到“指标解释”，但原文仅展示了填报说明，指标解释部分未完整展示，略有超前；evaluation_method 中“受害起止日期判定”和“灾害指标界定”在原文中未明确作为方法提出，但语义相关。"
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s8_p2",
+    "score": 5,
+    "good": "core_concept 准确；technical_terms 均来自原文；semantic_summary 精准概括了受害程度、灾前灾后措施、成灾面积和减产程度的调查方法；region 正确；affected_objects 合理；evaluation_method 正确识别了目测估计和减产百分率计算。",
+    "bad": "无。"
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s9_p0",
+    "score": 4,
+    "good": "core_concept 准确；technical_terms 大部分来自原文；semantic_summary 概括准确；region 正确；affected_objects 合理；evaluation_method 正确识别了受害期划分和减产百分率计算。",
+    "bad": "technical_terms 中“防治措施”在原文中未明确提及；semantic_summary 提到“成灾面积和减产程度计算”，但原文仅展示了填报说明和部分指标解释，成灾面积和减产程度计算在后续部分才出现，略有超前。"
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s8_p1",
+    "score": 4,
+    "good": "core_concept 准确；technical_terms 大部分来自原文；semantic_summary 概括准确；region 正确；affected_objects 合理；evaluation_method 正确识别了灾害起止日期界定。",
+    "bad": "technical_terms 中“器官受害百分率”在原文中未出现（原文仅提及受害征状和天气气候记载）；semantic_summary 提到“受害征状及受害程度调查”，但原文主要聚焦于天气气候记载，受害程度调查未详细展开，略有偏差。"
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s9_p1",
+    "score": 5,
+    "good": "core_concept 准确；technical_terms 均来自原文；semantic_summary 精准概括了成灾面积、减产程度计算和备注要求；region 正确；affected_objects 合理；evaluation_method 正确识别了减产百分率计算和成灾面积调查。",
+    "bad": "无。"
+  },
+  {
+    "chunk_id": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_s4_p1",
+    "score": 4,
+    "good": "正确识别了chunk为参考文献列表，并准确概括了文献主题。技术术语提取自文献标题，语义一致。",
+    "bad": "core_concept为空，未能提炼出核心概念。affected_objects中提取了'玉米'，但该chunk是参考文献列表，玉米只是其中一篇文献的研究对象，并非该chunk的主要影响对象，存在一定偏差。"
+  },
+  {
+    "chunk_id": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_s4_p0",
+    "score": 5,
+    "good": "core_concept准确反映原文主题。technical_terms提取全面且准确，包括层次分析法、承载体暴露度等。semantic_summary精准概括了原文内容。region识别正确。affected_objects正确。evaluation_method识别准确。",
+    "bad": "无"
+  },
+  {
+    "chunk_id": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_s4_p1",
+    "score": 4,
+    "good": "正确识别了chunk为参考文献列表，并准确概括了文献主题。技术术语提取自文献标题，语义一致。",
+    "bad": "core_concept为空，未能提炼出核心概念。affected_objects中提取了'玉米'，但该chunk是参考文献列表，玉米只是其中一篇文献的研究对象，并非该chunk的主要影响对象，存在一定偏差。"
+  },
+  {
+    "chunk_id": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_s4_p2",
+    "score": 4,
+    "good": "正确识别了chunk为参考文献列表，并准确概括了文献主题。技术术语提取自文献标题，语义一致。",
+    "bad": "core_concept为空，未能提炼出核心概念。affected_objects中提取了'大豆'，但该chunk是参考文献列表，大豆只是其中一篇文献的研究对象，并非该chunk的主要影响对象，存在一定偏差。"
+  },
+  {
+    "chunk_id": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_s4_p3",
+    "score": 4,
+    "good": "正确识别了chunk为参考文献列表，并准确概括了文献主题。技术术语提取自文献标题，语义一致。",
+    "bad": "core_concept为空，未能提炼出核心概念。affected_objects中提取了'大豆'和'生育期'，但该chunk是参考文献列表，这些只是其中一篇文献的研究对象，并非该chunk的主要影响对象，存在一定偏差。"
+  },
+  {
+    "chunk_id": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_s4_p5",
+    "score": 4,
+    "good": "正确识别了chunk为参考文献列表，并准确概括了文献主题。技术术语提取自文献标题，语义一致。",
+    "bad": "core_concept为空，未能提炼出核心概念。affected_objects中提取了'大豆'，但该chunk是参考文献列表，大豆只是其中一篇文献的研究对象，并非该chunk的主要影响对象，存在一定偏差。"
+  },
+  {
+    "chunk_id": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_s4_p4",
+    "score": 3,
+    "good": "正确识别了chunk为参考文献列表，并准确概括了文献主题。",
+    "bad": "core_concept为空，未能提炼出核心概念。technical_terms为空，未能提取出文献标题中的关键术语。region为null，未能识别出文献中提到的'山南市'、'黑龙江省'等地区。affected_objects为空，未能提取出文献中提到的'水稻'等对象。"
+  },
+  {
+    "chunk_id": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_s4_p6",
+    "score": 4,
+    "good": "正确识别了chunk为参考文献列表，并准确概括了文献主题。技术术语提取自文献标题，语义一致。",
+    "bad": "core_concept为空，未能提炼出核心概念。affected_objects中提取了'大豆'和'玉米'，但该chunk是参考文献列表，这些只是其中一篇文献的研究对象，并非该chunk的主要影响对象，存在一定偏差。"
+  },
+  {
+    "chunk_id": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_s4_p7",
+    "score": 4,
+    "good": "正确识别了chunk为参考文献列表，并准确概括了文献主题。技术术语提取自文献标题，语义一致。",
+    "bad": "core_concept为空，未能提炼出核心概念。affected_objects中提取了'大豆'和'水稻'，但该chunk是参考文献列表，这些只是其中一篇文献的研究对象，并非该chunk的主要影响对象，存在一定偏差。"
+  }
+]

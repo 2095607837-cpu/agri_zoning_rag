@@ -1,25 +1,30 @@
 # V2 Golden Set 全配置检索评测报告
 
-生成时间：2026-07-06 | 最后更新：2026-07-29 | 评测集：`golden_set_v2.json` | 199 题（in-domain 179 + OOD 20）
+生成时间：2026-07-06 | 最后更新：2026-08-24 | 评测集：`golden_set_v2.json` | 199 题（in-domain 179 + OOD 20）
 
 ## 变更日志
 
 | 日期 | 变更 |
 |------|------|
+| 2026-08-24 | **RRF 权重分层扫描**（eval_rrf_weight_scan.py → data/rrf_weight_scan_report.json）：生产候选池（dense_k=30, bm25_k=20）解析式重算 0.1~0.95 权重网格。全局曲面为平台（0.4~0.8 只差 1.1pp），0.7/0.3 仍在最优区；唯一强敏感类型 query_rewrite（w_dense=0.1 时 +3 题）；按类完美权重 in-sample 上界仅 +5 题（+2.8pp）。判定：不调动态权重，优先修 single-channel boost 归一化机制。详见"二十四、RRF 权重分层扫描（2026-08-24）" |
+| 2026-08-24 | **RRF 损失诊断 P0**（eval_rrf_loss.py → data/rrf_loss_report.json）：复用 Oracle Rank 逐题列补 bm25_top30，180 题原始 query。A类（Dense top10 命中但 RRF top10 丢）6 题、B类（Dense top30 命中但 RRF top10 丢）18 题、C类（Dense top30 未命中）14 题。RRF 损失 24 题 > Dense 无法解决 14 题——检索层内 RRF 是第一瓶颈。详见"二十三、RRF 损失诊断 P0（2026-08-24）" |
+| 2026-08-24 | **Oracle Rank 可分性实验**（eval_oracle_rank.py → data/eval_oracle_rank_results.json）：180 原始 query × 791 chunk（生产索引）全量余弦诊断。median oracle rank=2.0（92.2% ≤30），仅 1 题 >100（Q_D29=106），>300 为 0。still-fail 24 题中 15 题表示空间可分但端到端失败（RRF 稀释+top-10 截断）。改写救回 5 题（Q_SR03 39→4）。结论：不训 Adapter，瓶颈在管线。详见"二十二、Oracle Rank 可分性实验（2026-08-24）" |
+| 2026-08-13 | **CK A/B 评测**（eval_v2_ck_ab.py → eval_ck_ab_results.json）：BASE（use_ck=off）vs CK（use_ck=on）全量 180 题对比。CK 注入 Knowledge Context 到 Rewrite 后 MRR 0.5490→0.5481、R@10 86.7%→85.6%、R@10=0 24→26、Rescue Rate 0/24。CK 无正向收益，保留开关但不作为主攻方向。详见"二十一、CK A/B 评测（2026-08-13）" |
+| 2026-08-02 | **CK 三增强 +Rewrite+Reranker**：Dense Dual Repr (v2.1) + BM25 索引增强 (v2.2) + CE 轻量增强 (v2.3)，基于新索引 (~1548 vectors) 的 +Rewrite+Reranker 评测。MRR=0.5298, R@10=76.1%, R@10=0=43。OOD 55.0%。耗时 2945s。query_rewrite 仍是最短板 (MRR=0.216, R@10=41.7%)。详见"二十、CK 三增强 +Rewrite+Reranker（2026-08-02）" |
 | 2026-07-29 | **三池分离 Query Rewrite + Hit Boost 0.002**：rewrite 从 2 池（Keyword+SubQuery）重构为 3 池（Keyword≤6/BM25-only + RewriteQuery≤2/Dense+BM25 + SubQuery≤3/Dense+BM25），新增 `rewrite_queries` 字段（完整句子改写）。Hit Boost 从 0.10/0.15 降至 0.002。+Rewrite+Reranker: MRR=0.5172, R@10=87.2%, R@10=0=23。详见"十九、三池分离 Query Rewrite（2026-07-29）" |
 | 2026-07-28 | **Parallel Evidence Merge 架构**：search_multi_query 改为并行 RRF→Evidence Merge（Hit Boost + Dense Protect）→ Global Pool → CE Rerank。search_multi_query 返回值修正为 (judge_results, merged)。评估改为 chunk 级直接对比 + section 级辅助。+Rewrite+Reranker: MRR=0.5469, R@10=86.6%, R@10=0=24。详见"十八、Parallel Evidence Merge（2026-07-28）" |
-| 2026-07-04 | Baseline / +Rewrite / +Reranker 三配置完成，+Rewrite+Reranker 因嵌套线程池死锁挂起 |
-| 2026-07-05 | 修复：`search()` 新增 `skip_reranker` 参数，子查询跳过 CrossEncoder，CrossEncoder 调用从 1268 次降至 180 次 |
-| 2026-07-06 | +Rewrite+Reranker 配置完成，全四配置汇总 |
-| 2026-07-10 | 验证第八节两条 rewrite 建议：①"按需触发改写"（top1 cosine 低才改写）实验**证伪**，硬题上改写 +0/-0；②新增中文 BM25 关键词检索（字+bigram 分词，修复默认空格分词对中文失效），BM25 通道 intrinsic 已可用但端到端 top-10 零变化，RRF 权重扫描证明 0.7/0.3 已最优。详见"九、BM25 关键词检索修复与融合权重扫描（2026-07-10）" |
-| 2026-07-12 | Reranker 默认开启；`pool_size` 从 `max(top_k*4,20)` 增大到 `max(top_k*10,100)`（top_k=10 时 pool=40→100），配合 `rerank_input=min(40, top_k*4)`；R@10 80.0%、R@10=0 从 39 降至 36。CrossEncoder 推理加锁避免多线程 CPU 争抢。详见"十、Reranker 开启与候选池放大（2026-07-12）" |
-| 2026-07-12 | **Union 实验（已否定）**：Dense top-30 + BM25 top-10 → Union → CE。R@10 从 80.0% 跌至 76.1%，R@10=0 从 36 升至 43。BM25 只放 10 个候选丢掉太多好结果，RRF 的互补效应不可替代。**已回退 RRF。** 详见"十一、Union 融合实验（2026-07-12，已否定）" |
-| 2026-07-13 | **CE 逐题增益分析**：对比 RRF-only vs RRF+CE 每道题，CE 救回 14 道、搅黄 12 道，净增益 +2。CE 对 cross_section 最有效（+4），但对 query_rewrite 和 cross_document 几乎对等。详见"十二、CE 逐题增益分析（2026-07-13）" |
-| 2026-07-13 | **RRF+CE 分数融合 Alpha 扫描**：实现 `final = alpha * RRF_norm + (1-alpha) * CE_norm` 加权融合（min-max 归一化），扫描 alpha=[0, 0.2, 0.3, 0.4, 0.5]。alpha=0.2 最优：R@10=82.2%（vs 78.3% baseline，vs 78.9% pure CE），R@10=0 从 39 降至 32（-7 题）。alpha=0.2 已设为生产默认值。详见"十三、RRF+CE 分数融合与 Alpha 扫描（2026-07-13）" |
+| 2026-07-24 | **chunks_split 迁移 + 三相管线 + 诊断分桶**：chunks 从 chunks.json→chunks_split.json（787 entries, 499 unique section IDs），search_multi_query 改为三相管线（Dense Protected→RRF+CE→Rewrite RRF-only），新增诊断分桶（B/C-RRF/D-CE/E-改写/G-已修复）定位零召回失败环节。+Rewrite+Reranker: MRR=0.5638, R@10=72.1%, R@10=0=50/179。OOD 召回 80.0%。详见"十七、chunks_split + 三相管线 + 诊断分桶（2026-07-24）" |
+| 2026-07-15 | **Hybrid Fusion 实验（已否定）**：Original 独立 CE + Rewrite RRF 投票加分（β=0.01）。R@10=82.7%（第二），但 MRR=0.5568 为所有 reranker 配置最差，甚至低于 Baseline。**已回退 Append。** 详见"十六、Hybrid Fusion 实验（2026-07-15，已否定）" |
 | 2026-07-14 | **新 Rewrite Prompt + Gate 触发逻辑**：重写 `REWRITE_PROMPT`（none/normalize/expand 三类型）、`_needs_rewrite` 门控（length>12 + top1<0.70）、修复 Q_L09/Q_L12 gold 标注、移除 Q_L05。+Rewrite+Reranker：MRR=0.6169、R@10=83.8%、R@10=0=29（-9 vs 旧 rewrite）。详见"十四、新 Rewrite Prompt 与 Gate 触发（2026-07-14）" |
 | 2026-07-14 | **Late Fusion 架构**：全部 query（原始 + 改写）共享一轮 RRF 池→单次 CE 精排，替代旧 Append 架构（per-query RRF+CE→merge）。结果：MRR 和 Top1 下降（vs Append），R@5 略升。详见"十五、Late Fusion 架构评测（2026-07-14）" |
-| 2026-07-15 | **Hybrid Fusion 实验（已否定）**：Original 独立 CE + Rewrite RRF 投票加分（β=0.01）。R@10=82.7%（第二），但 MRR=0.5568 为所有 reranker 配置最差，甚至低于 Baseline。**已回退 Append。** 详见"十六、Hybrid Fusion 实验（2026-07-15，已否定）" |
-| 2026-07-24 | **chunks_split 迁移 + 三相管线 + 诊断分桶**：chunks 从 chunks.json→chunks_split.json（787 entries, 499 unique section IDs），search_multi_query 改为三相管线（Dense Protected→RRF+CE→Rewrite RRF-only），新增诊断分桶（B/C-RRF/D-CE/E-改写/G-已修复）定位零召回失败环节。+Rewrite+Reranker: MRR=0.5638, R@10=72.1%, R@10=0=50/179。OOD 召回 80.0%。详见"十七、chunks_split + 三相管线 + 诊断分桶（2026-07-24）" |
+| 2026-07-13 | **CE 逐题增益分析**：对比 RRF-only vs RRF+CE 每道题，CE 救回 14 道、搅黄 12 道，净增益 +2。CE 对 cross_section 最有效（+4），但对 query_rewrite 和 cross_document 几乎对等。详见"十二、CE 逐题增益分析（2026-07-13）" |
+| 2026-07-13 | **RRF+CE 分数融合 Alpha 扫描**：实现 `final = alpha * RRF_norm + (1-alpha) * CE_norm` 加权融合（min-max 归一化），扫描 alpha=[0, 0.2, 0.3, 0.4, 0.5]。alpha=0.2 最优：R@10=82.2%（vs 78.3% baseline，vs 78.9% pure CE），R@10=0 从 39 降至 32（-7 题）。alpha=0.2 已设为生产默认值。详见"十三、RRF+CE 分数融合与 Alpha 扫描（2026-07-13）" |
+| 2026-07-12 | Reranker 默认开启；`pool_size` 从 `max(top_k*4,20)` 增大到 `max(top_k*10,100)`（top_k=10 时 pool=40→100），配合 `rerank_input=min(40, top_k*4)`；R@10 80.0%、R@10=0 从 39 降至 36。CrossEncoder 推理加锁避免多线程 CPU 争抢。详见"十、Reranker 开启与候选池放大（2026-07-12）" |
+| 2026-07-12 | **Union 实验（已否定）**：Dense top-30 + BM25 top-10 → Union → CE。R@10 从 80.0% 跌至 76.1%，R@10=0 从 36 升至 43。BM25 只放 10 个候选丢掉太多好结果，RRF 的互补效应不可替代。**已回退 RRF。** 详见"十一、Union 融合实验（2026-07-12，已否定）" |
+| 2026-07-10 | 验证第八节两条 rewrite 建议：①"按需触发改写"（top1 cosine 低才改写）实验**证伪**，硬题上改写 +0/-0；②新增中文 BM25 关键词检索（字+bigram 分词，修复默认空格分词对中文失效），BM25 通道 intrinsic 已可用但端到端 top-10 零变化，RRF 权重扫描证明 0.7/0.3 已最优。详见"九、BM25 关键词检索修复与融合权重扫描（2026-07-10）" |
+| 2026-07-06 | +Rewrite+Reranker 配置完成，全四配置汇总 |
+| 2026-07-05 | 修复：`search()` 新增 `skip_reranker` 参数，子查询跳过 CrossEncoder，CrossEncoder 调用从 1268 次降至 180 次 |
+| 2026-07-04 | Baseline / +Rewrite / +Reranker 三配置完成，+Rewrite+Reranker 因嵌套线程池死锁挂起 |
 
 ---
 
@@ -43,6 +48,9 @@
 | 10 | 2026-07-24 chunks_split + 三相管线 | **chunks_split** | **三相** | 179 | 0.5638 | 66.5% | 72.1% | 48.0% | 50 | **80.0%** | 1556s |
 | **11** | **2026-07-28 Parallel Evidence Merge** | chunks_split | **Evidence Merge** | **179** | **0.5469** | **74.3%** | **86.6%** | **39.7%** | **24** | 55.0% | **3533s** |
 | **12** | **2026-07-29 三池分离 Rewrite** | chunks_split | **Evidence Merge** | **179** | **0.5172** | **72.1%** | **87.2%** | **34.6%** | **23** | 55.0% | **3710s** |
+| 13 | 2026-08-02 CK 三增强 +RW+Reranker | chunks_split | Evidence Merge | 180 | 0.5298 | 68.9% | 76.1% | 40.6% | 43 | 55.0% | 2945s |
+| 14 | 2026-08-13 CK A/B BASE (use_ck=off) | chunks_split | Evidence Merge | 180 | 0.5490 | 73.3% | 86.7% | 40.6% | 24 | — | — |
+| 14 | 2026-08-13 CK A/B CK (use_ck=on) | chunks_split | Evidence Merge | 180 | 0.5481 | 72.8% | 85.6% | 40.6% | 26 | — | — |
 
 **关键对比：**
 
@@ -1404,3 +1412,277 @@ Query + SubQueries (并行)
 3. **OOD direct 阈值**：7/9 漏判因 similarity≥0.70 直接放行，考虑提高到 0.78 或引入 LLM 二次确认
 4. **Rewrite Query 利用率**：LLM 仅 43.7% 生成 rewrite_queries，且最多 1 个（prompt 允许 2），考虑强化 prompt 引导
 5. **keyword 超限控制**：74/199 超 prompt ≤4 约定，本次已放宽到 ≤6 并 hard cap=6，后续观察 LM 行为
+
+---
+
+## 二十一、CK A/B 评测（2026-08-13）
+
+> 评测脚本 `eval_v2_ck_ab.py` → `eval_ck_ab_results.json`，全量 180 题（golden_set_v2 in-domain）
+>
+> BASE = expand_query 关 CK（use_ck=off）；CK = expand_query 开 CK（use_ck=on，默认），CK 匹配文本经 Dense Top-3 精炼为 Knowledge Context 注入 Rewrite Prompt。检索管线（Dense/BM25/RRF/CE）零改动，两者差异全部来自改写质量变化。
+
+### 21.1 整体指标（n=180）
+
+| 指标 | BASE | CK | Δ |
+|------|------|-----|---|
+| MRR | 0.5490 | 0.5481 | -0.0009 |
+| R@5 | 73.3% | 72.8% | -0.6pp |
+| R@10 | 86.7% | 85.6% | -1.1pp |
+| Top-1 命中率 | 40.6% | 40.6% | 持平 |
+| Rewrite 命中率 | 87.8% | 87.8% | 持平 |
+| R@10=0 | 24 | 26 | **+2** |
+
+### 21.2 阶段召回（原始 query，无改写）
+
+| 通道 | Recall |
+|------|--------|
+| BM25 | 74.4% |
+| Dense | 81.7% |
+| RRF 融合 | 79.4% |
+
+### 21.3 CK 诊断指标
+
+| 指标 | 值 | 说明 |
+|------|-----|------|
+| ck_hit_rate | 100% | 每题均匹配到 CK（含 fallback） |
+| ck_gold_top1_rate | 46.7% | CK Top-1 即 gold chunk 的题占比 |
+| ck_rw_gold_cosine_avg | 0.7629 | 改写后 query 与 gold chunk 的平均余弦 |
+| Rescue Rate | 0/24 | BASE 失败的 24 题，CK 无一救回 |
+
+### 21.4 失败题
+
+BASE R@10=0 的 24 题全部仍失败（CK 另新增 2 题）：
+
+`Q_C08, Q_C25, Q_D04, Q_D10, Q_D20, Q_D26, Q_D29, Q_L02, Q_L07, Q_L08, Q_L11, Q_N07, Q_N11, Q_N20, Q_S03, Q_S05, Q_S07, Q_S14, Q_S23, Q_SR03, Q_SR04, Q_SR06, Q_SR08, Q_SR11`
+
+### 21.5 结论
+
+- CK 注入改写环节后 MRR/R@5/R@10 全面**略降**（-0.1% ~ -1.1pp），Top-1 与 Rewrite 命中率持平，R@10=0 反增 2 题，Rescue Rate 0/24 —— **CK-guided Query Understanding 在当前版本无正向收益**
+- ck_gold_top1_rate 仅 46.7%：过半题的 CK Top-1 不是 gold chunk，Knowledge Context 的引导方向本身有偏差；cosine 平均 0.7629 说明改写与 gold 相关度处于中等水平，未能突破口语↔技术语言的语义鸿沟（如 Q_SR03「低温累积效应」 vs chunk「5-9月月平均温度之和的距平」）
+- 决定：CK 机制保留 use_ck 开关（默认开、A/B 可关），不作为当前主攻方向；失败题根因仍集中在 embedding 语义鸿沟与长尾定义类文本召回
+  > ⚠ 2026-08-24 Oracle Rank 实验（第二十二节）修订了本条判断：语义鸿沟是窄尾（1 题 >100），端到端失败大头在管线（RRF 稀释+截断），详见 22.6
+
+---
+
+## 二十二、Oracle Rank 可分性实验（2026-08-24）
+
+> 脚本 `eval_oracle_rank.py` → `data/eval_oracle_rank_results.json`（47s 可重跑，不改任何线上代码）
+>
+> 目的：把"语义鸿沟"从猜测变成可量化问题——直接测试 BGE 表示空间能否把 Query 和 Gold Chunk 排在一起
+>
+> 方法：180 in-domain 原始 query × 791 chunk（生产索引 vectordb/agri_zoning，与 chunks_split.json 同源）全量余弦。逐题计算 oracle rank（gold 在全量余弦排序下的排名）/ percentile / margin（同 section 兄弟 chunk + 全局最强非 gold），并与线上 Dense top-30 / BM25 top-20 / RRF 排名对照；另用 rewrite_cache.json 计算改写 query 的 oracle rank
+
+### 22.1 结果验证
+
+| 验证项 | 结果 |
+|--------|------|
+| float64 重算 oracle rank vs 保存结果 | 0/180 不一致 |
+| Dense/BM25/RRF @10 命中率 vs CK A/B stage_recall | 0.817 / 0.744 / 0.794 **完全一致** |
+| gold 与生产索引匹配 | 180/180 全部在索引内（0 缺失） |
+| 矩阵 NaN/inf | 0（运行期 matmul 警告为 MPS BLAS 噪声，双精度复核无影响） |
+
+### 22.2 Oracle Rank 分布（180 题，N=791）
+
+| 指标 | 值 |
+|------|-----|
+| median / mean / P75 / P90 / max | **2.0** / 8.1 / 6.2 / 22.4 / 106 |
+| rank ≤10 | 147 (81.7%) |
+| rank 11-30 | 19 (10.6%) |
+| rank 31-50 | 9 |
+| rank 51-100 | 4 |
+| rank 101-300 | 1（Q_D29=106） |
+| rank >300 | **0** |
+| gold cosine median / mean / min / max | 0.7714 / 0.7554 / 0.4944 / 0.9205 |
+
+**表示空间整体健康：92.2% 的题 gold 在 top-30，不存在两极分化（easy 1-20 / hard 200-700）情景。**
+
+### 22.3 Margin 分布
+
+| Margin | n | median | mean | <0.02 | <0.05 |
+|--------|-----|--------|------|-------|-------|
+| 同 section 兄弟 chunk | 25 | +0.0100 | 0.0180 | 13 | 18 |
+| 全局最强非 gold | 180 | **-0.0060** | -0.0061 | 114 | 151 |
+
+> 全局 margin 中位数为负的解读：oracle rank 中位数=2，rank-1 常是同 section 的准重复 chunk（切分重叠产物），并非"错误答案"。同 section 兄弟 margin 仅 +0.01 佐证：模型连同一 section 内真正相关内容都难以拉开——但这对检索无害（兄弟 chunk 多为可接受答案）。
+
+### 22.4 still-fail 24 题归因
+
+| 分组 | 题数 | 明细 |
+|------|:--:|------|
+| oracle>100（表示不可分） | 1 | Q_D29=106（跨两文档比较题） |
+| oracle 31-100（中间带） | 8 | Q_S03=98, Q_SR11=79, Q_D10=73, Q_S05=61, Q_L02=48, Q_S14=43, Q_SR03=39, Q_D04=38 |
+| **oracle≤30 但端到端 R@10 失败（管线问题）** | **15** | 表示空间可分，gold 在前 30 仍丢 |
+
+15 题管线失败中 RRF 系统性劣于 Dense 的案例（BM25 噪声稀释实锤）：
+
+| 题 | Dense rank | RRF rank |
+|----|-----------|----------|
+| Q_N11 | 15 | 27 |
+| Q_S23 | 17 | 30 |
+| Q_L07 | 22 | 40 |
+| Q_L11 | 28 | 40 |
+| Q_D20 | 28 | 33 |
+| Q_SR08 | 27 | 28 |
+
+### 22.5 改写救回（关键发现）
+
+- 改写 oracle 优于原始 31/59，劣于 9/59
+- **5 题改写把表示空间救回（raw oracle>30 → rw oracle≤30）**：
+
+| 题 | raw ork | rw ork | 改写文本 |
+|----|--------|--------|----------|
+| Q_SR03 | 39 | 4 | 低温冷害对大豆产量的影响机制是什么？ |
+| Q_D04 | 38 | 7 | 内蒙古大豆区划指标体系构建方法 |
+| Q_D10 | 73 | 9 | 全国大豆品质区划的方法论 |
+| Q_D12 | 32 | 5 | 黑龙江农业气候资源普查热量资源分析框架 |
+| Q_SR01 | 32 | 12 | 大豆气候区划中高温热害的评估指标和方法是什么？ |
+
+> 语义鸿沟是**语域翻译问题**（口语 query ↔ 技术文本），不是 embedding 模型能力问题：同一模型下改写 query 即可跨域（Q_SR03 从"分不开"39 到"完全可分"4）。
+
+### 22.6 结论
+
+1. **不训 Retriever Adapter**：92.2% 的题表示空间已可分，训 adapter 的风险是破坏存量；窄尾（1 题 >100 + 8 题中间带）的正确修法是改写，已证明 5 题可救回
+2. **当前最大瓶颈在管线**：15/24 still-fail 题 gold 表示空间在前 30 但端到端失败——RRF 排名系统性劣于 Dense（BM25 噪声稀释）+ top-10 截断（d=15~28 的题被截断挤出）
+3. **下一步优先级**：提高 Dense 在 RRF 的权重 / 修 top-10 截断 / 扩大 CE 候选池 > 改写质量优化 > （最低）Adapter
+4. **局限**：改写分析仅覆盖 59 题（缓存命中）；同 section 兄弟 margin 仅 25 题有样本
+5. **修订 21.5 结论**：CK A/B 时期"失败根因集中在 embedding 语义鸿沟"的判断被本实验证伪——语义鸿沟是窄尾，端到端失败大头在管线
+
+---
+
+## 二十三、RRF 损失诊断 P0（2026-08-24）
+
+> 脚本 `eval_rrf_loss.py` → `data/rrf_loss_report.json`（复用第二十二节 Oracle Rank 逐题 dense/bm25/rrf 排名，仅补采 BM25 top-30 一列，9s 完成，不改任何线上代码）
+>
+> 目的：证明多少题是 Dense 已找到、但 RRF 把 gold 推出 top10
+>
+> 口径：180 in-domain 题，原始 query 无改写；Dense top-30 / BM25 top-20（诊断另采 top-30）/ RRF 融合池
+
+### 23.1 三分类统计
+
+| 类别 | 定义 | 题数 | 占比 |
+|------|------|:--:|:--:|
+| A | Dense Top10 命中，RRF Top10 不命中 | 6 | 3.3% |
+| B | Dense Top30 命中（11-30），RRF Top10 不命中 | 18 | 10.0% |
+| C | Dense Top30 未命中 | 14 | 7.8% |
+| **A+B** | **RRF 损失** | **24** | **13.3%** |
+| — | Dense 已解决（dense≤30 且 rrf≤10） | 142 | 78.9% |
+| — | RRF 增益（BM25 救回：dense>30 但 rrf≤10） | 1 | 0.6% |
+
+### 23.2 A 类明细（6 题）
+
+| 题 | dense | bm25 | rrf | 备注 |
+|----|:--:|:--:|:--:|------|
+| Q_C08 | 7 | 10 | 11 | |
+| Q_L10 | 10 | **1** | 11 | BM25 第 1 名仍被推出 top10 |
+| Q_T09 | 8 | — | 12 | |
+| Q_N20 | 10 | — | 12 | |
+| Q_L09 | 7 | 6 | 12 | |
+| Q_SR06 | 10 | 19 | 13 | |
+
+> 机制：RRF single-channel boost 只除单通道权重（score = Σ w_channel/(60+rank_channel)），**任何双通道命中的 chunk 分数天然高于单通道 gold**——这就是稀释的数学机制。Q_L10（BM25 rank 1）也推不进 top10 即为实证。
+
+### 23.3 B 类明细（18 题）
+
+| 题 | dense | rrf | 题 | dense | rrf |
+|----|:--:|:--:|----|:--:|:--:|
+| Q_T24 | 11 | 11 | Q_S26 | 21 | 25 |
+| Q_T29 | 14 | 12 | Q_N11 | 15 | 27 |
+| Q_SR05 | 16 | 13 | Q_SR08 | 27 | 28 |
+| Q_C25 | 13 | 14 | Q_SR07 | 26 | 29 |
+| Q_S07 | 15 | 15 | Q_S23 | 17 | 30 |
+| Q_D11 | 12 | 15 | Q_L12 | 18 | 32 |
+| Q_D19 | 12 | 16 | Q_C26 | 21 | 32 |
+| Q_D05 | 12 | 17 | Q_D20 | 28 | 33 |
+| | | | Q_L07 | 22 | 40 |
+| | | | Q_L11 | 28 | 40 |
+
+> B 类 gold 本就在 11-30 名——问题不是表示，而是 RRF 排名/权重与 top-10 截断。
+
+### 23.4 C 类明细（14 题）
+
+| 题 | oracle rank | bm25 | rrf | 备注 |
+|----|:--:|:--:|:--:|------|
+| Q_E24 | 32 | 1 | 1 | BM25 直接救回（RRF 增益唯一题） |
+| Q_D12 | 32 | 13 | 22 | |
+| Q_SR01 | 32 | — | — | 改写可救（rw ork=12） |
+| Q_SR02 | 33 | — | — | |
+| Q_D04 | 38 | — | — | 改写可救（rw ork=7） |
+| Q_SR03 | 39 | — | — | 改写可救（rw ork=4） |
+| Q_S14 | 43 | — | — | |
+| Q_T28 | 43 | — | — | |
+| Q_L02 | 48 | — | — | |
+| Q_S05 | 61 | 15 | 29 | |
+| Q_D10 | 73 | — | — | 改写可救（rw ork=9） |
+| Q_SR11 | 79 | — | — | |
+| Q_S03 | 98 | — | — | |
+| Q_D29 | 106 | — | — | 唯一表示不可分 |
+
+> C 类中 oracle rank≤50 的 9 题只是 Dense top-30 截断问题（扩到 top-50 即进池），其中 5 题改写可救（见 22.5）；真正表示空间不可分的仅 Q_D29 一题（oracle=106）。
+
+### 23.5 判定
+
+1. **A+B=13.3% 不算很高**（vs Dense 已解决 78.9%），但 **RRF 损失 24 题 > Dense 本身无法解决 14 题**——检索层内部 RRF 是第一瓶颈。与 19.7 旧诊断（零召回 69.6% 在融合层）方向一致，本次为全量 180 题口径的干净证据
+2. **B 类 18 题是主修对象**：gold 本在 Dense 11-30 名——修法是提高 Dense 权重（0.7→0.85）或 Dense top-k 保序，不是修表示。⚠ 修订（2026-08-24，见 24.4）：全局提高 Dense 权重经模拟验证**无净收益**（w_dense=0.85/0.95 时 rrf@10 78.9%，低于 0.7 的 79.4%）——B 类正解是 23.5-3 的 boost 归一化机制修复，而非调权重
+3. **A 类 6 题是纯稀释**（single-channel boost 数学机制所致），修法是改 boost 归一化（如取 max 通道分或按通道数归一）
+4. **RRF 增益仅 1 题**（Q_E24，BM25 rank 1 救回）——BM25 通道在原始 query 上的增量贡献极小，验证 0.7/0.3 权重下 BM25 是弱辅助的定位
+5. 口径提醒：本诊断是原始 query 无改写的检索层；端到端还有改写层（可救 C 类 5 题，见 22.5）与 CE 层（可修 rrf 排名 11-15 的题）
+
+---
+
+## 二十四、RRF 权重分层扫描（2026-08-24）
+
+> 脚本 `eval_rrf_weight_scan.py` → `data/rrf_weight_scan_report.json`（7s，不改任何线上代码）
+>
+> 口径：180 in-domain 原始 query；候选池 = 生产配置（Dense top-30 + BM25 top-20，RRF_K=60）；采集一次候选池后按 `_rrf_retrieve` 融合语义（含 single-channel boost）解析式重算 0.1~0.95 权重网格下 rrf@10
+>
+> 目的：回答"0.7/0.3 是否适合所有 Query、是否需要动态权重"
+
+### 24.1 全局权重曲面：平台，0.7/0.3 仍在最优区
+
+| w_dense | 0.95 | 0.90 | 0.80 | **0.70** | 0.60 | 0.50 | 0.40 | 0.30 | 0.20 | 0.10 |
+|---|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|
+| rrf@10 | 78.9% | 78.9% | 78.9% | **79.4%** | 79.4% | 80.0% | 79.4% | 77.8% | 77.8% | 78.9% |
+
+> 0.4~0.8 区间 rrf@10 只差 1.1pp，全局曲面是平台；0.7/0.3（79.4%）处于平台内。与 9.4（2026-07-10，chunks.json 口径）的全量扫描结论互相印证：**0.7/0.3 仍是全局最优区**。
+
+### 24.2 0.7/0.3 下按 Capability 分布
+
+| capability | n | d@10 | d@30 | b@10 | b@30 | rrf@10 | A | B | C |
+|---|---|--:|--:|--:|--:|--:|--:|--:|--:|
+| exact_retrieval | 35 | 97.1% | 97.1% | 94.3% | 100.0% | **100.0%** | 0 | 0 | 1 |
+| numeric_retrieval | 20 | 95.0% | 100.0% | 90.0% | 90.0% | 90.0% | 1 | 1 | 0 |
+| context_expansion | 26 | 92.3% | 100.0% | 92.3% | 100.0% | 88.5% | 1 | 2 | 0 |
+| table_retrieval | 20 | 85.0% | 95.0% | 80.0% | 85.0% | 80.0% | 1 | 2 | 1 |
+| cross_section | 25 | 76.0% | 88.0% | 48.0% | 80.0% | 76.0% | 0 | 3 | 3 |
+| cross_document | 30 | 70.0% | 86.7% | 66.7% | 86.7% | 73.3% | 0 | 4 | 4 |
+| **query_rewrite** | 24 | **54.2%** | 79.2% | 45.8% | 66.7% | **41.7%** | **3** | **6** | 5 |
+
+> 分布极不均匀：query_rewrite 一类独吞 9/24（37.5%）的 RRF 损失（A+B），且 d@10 仅 54.2%；其余 6 类 d@10 均 ≥70%，损失分散。cross_section 的 b@10 仅 48.0%——BM25 对跨节语义匹配天然弱。
+>
+> BM25 独占命中（b@10=1 且 d@10=0）共 7 题：Q_C26、Q_D16、Q_D20、Q_E24、Q_SR05、Q_SR07、Q_T29；RRF 只转化了 1 题（Q_E24，BM25 rank 1），其余 6 题在 0.7/0.3 下仍丢。
+
+### 24.3 分类型权重扫描（* = 该类最优）
+
+| capability | 0.95 | 0.90 | 0.80 | 0.70 | 0.60 | 0.50 | 0.40 | 0.30 | 0.20 | 0.10 | 最优 | n | 最优-0.7 |
+|---|---|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|
+| context_expansion | 88.5% | 88.5% | 92.3%* | 88.5% | 88.5% | 88.5% | 88.5% | 88.5% | 88.5% | 88.5% | 0.80 | 26 | +1 题 |
+| cross_document | 73.3%* | 73.3% | 73.3% | 73.3% | 70.0% | 66.7% | 66.7% | 66.7% | 66.7% | 70.0% | 0.95 | 30 | +0 题 |
+| cross_section | 76.0%* | 76.0% | 76.0% | 76.0% | 76.0% | 76.0% | 76.0% | 68.0% | 68.0% | 68.0% | 0.95 | 25 | +0 题 |
+| exact_retrieval | 100.0%* | 100.0% | 100.0% | 100.0% | 100.0% | 100.0% | 100.0% | 97.1% | 97.1% | 97.1% | 0.95 | 35 | +0 题 |
+| numeric_retrieval | 90.0%* | 90.0% | 90.0% | 90.0% | 90.0% | 90.0% | 90.0% | 90.0% | 90.0% | 90.0% | 0.95 | 20 | +0 题 |
+| query_rewrite | 41.7% | 41.7% | 37.5% | 41.7% | 45.8% | 50.0% | 45.8% | 45.8% | 50.0% | 54.2%* | 0.10 | 24 | +3 题 |
+| table_retrieval | 75.0% | 75.0% | 75.0% | 80.0% | 80.0% | 85.0%* | 85.0% | 85.0% | 80.0% | 80.0% | 0.50 | 20 | +1 题 |
+| **TOTAL** | 78.9% | 78.9% | 78.9% | 79.4% | 79.4% | 80.0% | 79.4% | 77.8% | 77.8% | 78.9% | 0.50 | 180 | +1 题 |
+
+> 唯一强敏感类型是 query_rewrite：w_dense 0.7→0.1 时 rrf@10 41.7%→54.2%（+3 题），方向与 24.2 中该类 BM25 高排名命中（b=1/2）一致；其余 6 类对权重不敏感（最优与 0.7 差 0~1 题）。
+>
+> 若给每类都配"完美权重"，全量 in-sample 上界 = +5 题（79.4%→82.2%）。注意这是同一批 180 题上选优的乐观上界，出样本必然缩水。
+
+### 24.4 判定：不调动态权重，维持 0.7/0.3
+
+1. **收益上限太小**：全局权重在 0.3~0.95 全区间只造成 ≤1.1pp 波动（平台）；按类完美权重 in-sample 上界仅 +2.8pp
+2. **capability 是黄金集标签，线上 query 没有此字段**——"按类型权重"须先建 query 分类器，用 180 题训练 7 分类器必然过拟合，系统复杂度远超收益
+3. **query_rewrite 的缺口在检索信号层**（d@10 54.2%），正解是改写增强（现行方向），不是融合权重——与 22.6（不训 Adapter）同向
+4. **生产管线 RRF 后还有 CE 精排**（alpha=0.2），会进一步抹平融合权重差异——本扫描为 pre-CE 口径，端到端权重敏感性只会更低
+5. 由此**修订 23.5-2**：全局提高 Dense 权重无净收益，B 类正解是 23.5-3 的 single-channel boost 归一化机制修复（静态、全局、无过拟合风险）
+6. 若将来仍要做 query 级自适应：起点是廉价运行时特征（BM25 top 分强度、query 长度）的两档切换 + 留出集验证，不是 7 类分类器

@@ -1,0 +1,2715 @@
+[
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s10_p18",
+    "source_preview": "[黑龙江 技术规范] ",
+    "source_len": 11,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "该chunk仅包含标题信息，无实质内容，无法提取农业知识。",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s10_p19",
+    "source_preview": "[黑龙江 技术规范] ",
+    "source_len": 11,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "该chunk仅包含标题信息，无实质农业内容，无法提取有效知识。",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s10_p21",
+    "source_preview": "[黑龙江 技术规范] ",
+    "source_len": 11,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "该chunk仅包含标题信息，无实质农业内容，无法提取有效知识。",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s10_p20",
+    "source_preview": "[黑龙江 技术规范] 土地流转率是指一个地区农地流转地占全部农地面积的比例。",
+    "source_len": 38,
+    "core_concept": [
+      "土地流转率"
+    ],
+    "technical_terms": [
+      "土地流转率",
+      "农地流转地",
+      "全部农地面积"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk定义土地流转率，即农地流转地占全部农地面积的比例，属于概念定义类知识。",
+    "user_expressions_count": 3,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "农地"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s10_p22",
+    "source_preview": "[黑龙江 技术规范] 指直接生产过程中为生产该产品而投入的各项资金（包括实物和现金）和劳动力的成本，反映了为生产该产品而发生的除土地外各种资源的耗费。其计算公式为：\n\n生产成本=物质与服务费用+人工成本",
+    "source_len": 101,
+    "core_concept": [
+      "农业生产成本核算",
+      "生产成本构成"
+    ],
+    "technical_terms": [
+      "生产成本",
+      "物质与服务费用",
+      "人工成本"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk定义农业生产成本为直接生产过程中投入的资金和劳动力成本，并给出生产成本等于物质与服务费用加人工成本的计算公式。",
+    "user_expressions_count": 6,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s10_p24",
+    "source_preview": "[黑龙江 技术规范] 指产品产值减去生产过程中投入的现金、实物、劳动力和土地等全部生产要素成本后的余额，反映了生产中消耗的全部资源的净回报。其计算公式为：\n\n净利润=产值合计-总成本",
+    "source_len": 91,
+    "core_concept": [
+      "农业净利润核算",
+      "农业生产成本收益分析"
+    ],
+    "technical_terms": [
+      "净利润",
+      "产值合计",
+      "总成本",
+      "生产要素成本",
+      "净回报"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk定义农业净利润概念，给出净利润=产值合计-总成本的计算公式，反映生产资源消耗的净回报。",
+    "user_expressions_count": 6,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s10_p23",
+    "source_preview": "[黑龙江 技术规范] 指生产过程中耗费的现金、实物、劳动力和土地等所有资源的成本。其计算公式为：\n\n总成本=生产成本+土地成本=物质与服务费用+人工成本+土地成本",
+    "source_len": 81,
+    "core_concept": [
+      "农业生产成本核算",
+      "总成本构成"
+    ],
+    "technical_terms": [
+      "总成本",
+      "生产成本",
+      "土地成本",
+      "物质与服务费用",
+      "人工成本"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk定义农业生产总成本的概念，给出总成本=生产成本+土地成本的计算公式，并说明生产成本由物质与服务费用和人工成本构成。",
+    "user_expressions_count": 8,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s10_p25",
+    "source_preview": "[黑龙江 技术规范] 指生产过程中为生产该产品而发生的全部现金和实物支出，包括直接现金支出和所消耗的实物折算为现金的支出（如自产种子可以按照市场价格折算为一定数额的现金）以及过去的现金支出应分摊到当期的部分（如折旧）。其计算公式为：\n\n现金成本=物质与服务费用+雇工费用+流转地租金",
+    "source_len": 141,
+    "core_concept": [
+      "农业生产成本核算",
+      "现金成本"
+    ],
+    "technical_terms": [
+      "现金成本",
+      "物质与服务费用",
+      "雇工费用",
+      "流转地租金",
+      "实物折算",
+      "折旧"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk定义农业生产现金成本，明确其包含物质与服务费用、雇工费用和流转地租金，并给出计算公式。",
+    "user_expressions_count": 7,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s10_p26",
+    "source_preview": "[黑龙江 技术规范] 指产品产值减去为生产该产品而发生的全部现金和实物支出后的余额，反映了生产者实际得到的收入（包括现金收入和实物折算为现金的收入）。其计算公式为：\n\n现金收益=产值合计-现金成本",
+    "source_len": 98,
+    "core_concept": [
+      "现金收益核算",
+      "农业生产效益评价"
+    ],
+    "technical_terms": [
+      "现金收益",
+      "产值合计",
+      "现金成本",
+      "实物折算"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk定义现金收益概念，给出其计算公式为产值合计减去现金成本，反映生产者实际收入。",
+    "user_expressions_count": 6,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s10_p27",
+    "source_preview": "[黑龙江 技术规范] 反映生产中所消耗全部资源的净回报率。其计算公式为：\n\n成本利润率=净利润÷总成本×100%",
+    "source_len": 56,
+    "core_concept": [
+      "成本利润率",
+      "农业经济效益评价"
+    ],
+    "technical_terms": [
+      "成本利润率",
+      "净利润",
+      "总成本",
+      "净回报率"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk定义成本利润率指标，给出其计算公式为净利润除以总成本乘以100%，用于评价农业生产的净回报率。",
+    "user_expressions_count": 5,
+    "metric_count": 1,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "['成本利润率计算']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_s4_p9",
+    "source_preview": "[黑龙江 大豆 霜冻风险区划] 大豆种植区域与地形地貌密切相关，本方案选取100米分辨率高程数据（DEM）的坡度作为大豆种植的控制因子。建议，坡度≥ 25度以上区域，不适宜种植大豆，坡度在15-25度之间的区域，基本适宜种植大豆；坡度≤15度区域，适宜种植大豆。",
+    "source_len": 131,
+    "core_concept": [
+      "大豆种植适宜性评价",
+      "地形坡度区划"
+    ],
+    "technical_terms": [
+      "坡度",
+      "DEM",
+      "高程数据",
+      "控制因子",
+      "种植适宜性"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk以100米DEM坡度作为控制因子，给出黑龙江大豆种植适宜性分级阈值：≥25°不适宜、15-25°基本适宜、≤15°适宜。",
+    "user_expressions_count": 6,
+    "metric_count": 2,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_s4_p10",
+    "source_preview": "[黑龙江 大豆 霜冻风险区划] 根据最新土地利用分类标准，建议旱地、水浇地为大豆适宜种植区域，其他林地（疏林地、未成林地、迹地）、其他草地（树木郁闭度<0.1，表层为土质，不用于放牧的草地）为大豆基本适宜种植区，水田或其他用地类型为大豆不适宜种植区。",
+    "source_len": 125,
+    "core_concept": [
+      "大豆种植适宜性区划",
+      "土地利用类型划分"
+    ],
+    "technical_terms": [
+      "土地利用分类标准",
+      "适宜种植区域",
+      "基本适宜种植区",
+      "不适宜种植区",
+      "树木郁闭度"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk依据土地利用分类标准，将黑龙江大豆种植区域划分为适宜、基本适宜和不适宜三类，并列出各地类归属。",
+    "user_expressions_count": 8,
+    "metric_count": 1,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 3
+  },
+  {
+    "chunk_id": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_s4_p12",
+    "source_preview": "[黑龙江 大豆 霜冻风险区划] 承灾体暴露性是指可能受到气象害威胁的社会、经济和自然环境系统，具体包括农业、牧业、工业、城市、人类和生态环境等。一个地区暴露于干旱灾害危险因素的价值密度越高，可能遭受潜在损失就大风险也越高。\n\n暴露度主要考虑大豆收获面积和土地利用类型，大豆收获密度越高，暴露度越高。\n\n地形因子的计算方法同孕灾环境脆弱性计算中的地形因子计算方法。",
+    "source_len": 181,
+    "core_concept": [
+      "承灾体暴露性",
+      "霜冻风险区划"
+    ],
+    "technical_terms": [
+      "承灾体暴露性",
+      "暴露度",
+      "大豆收获面积",
+      "土地利用类型",
+      "收获密度",
+      "孕灾环境脆弱性"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk定义霜冻风险区划中的承灾体暴露性概念，说明暴露度由大豆收获面积和土地利用类型决定，收获密度越高暴露度越高。",
+    "user_expressions_count": 8,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "['暴露度计算', '地形因子计算']",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_s4_p11",
+    "source_preview": "[黑龙江 大豆 霜冻风险区划] 霜冻灾害主要考虑东北地区的大豆，一般发生在乳熟到成熟阶段，结合各农业气象观测站的多年的大豆平均发育期资料，确定各站点多年的大豆成熟末期的80%保证率日期作为发生霜冻灾害的临界日期。初霜日如果出现在临界日期之前，即可认为该地大豆遭遇霜冻灾害。统计各个站点临界日期之前的霜冻害情况，霜冻害指标一般为：轻霜冻害，日最低气温2℃至0℃；中霜冻害，0℃至-2℃；重霜冻害, -2℃至-4℃。然后统计出每个站点近30年轻、中、重霜冻害的平均天数，通过下式构建每个站点的霜冻害的致灾因子危险性(R)。\n\n其中，为30年轻度霜冻害的平均天数，为30年中度霜冻害的平均天数，为30年重度霜冻害的平均天数。\n\n动态计算大豆成熟日期前10天、前5天出现霜冻害风险概率、大豆播种后5天、后10天、后15天出现霜冻害风险概率。\n\n致灾因子归一化方法\n\n如果 R 值=MinValue，则 VR = 0\n\n如果 R 值=MaxValue，则 VR =1\n\n如果 R 值 MinValue <R< MaxValue，\n\n则 VR=(Value-MinValue)/(MaxValue-MinValu",
+    "source_len": 544,
+    "core_concept": [
+      "大豆霜冻灾害",
+      "霜冻灾害危险性评价",
+      "致灾因子危险性"
+    ],
+    "technical_terms": [
+      "霜冻灾害",
+      "临界日期",
+      "80%保证率",
+      "致灾因子危险性",
+      "归一化",
+      "风险概率",
+      "成熟末期"
+    ],
+    "concept_evidence_count": 2,
+    "semantic_summary": "该chunk描述黑龙江大豆霜冻灾害等级划分（轻中重）及危险性评价方法，包括临界日期确定、30年统计和致灾因子归一化。",
+    "user_expressions_count": 10,
+    "metric_count": 6,
+    "region": {
+      "names": [
+        "黑龙江",
+        "东北地区"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆",
+      "乳熟期",
+      "成熟期"
+    ],
+    "evaluation_method": "['危险性评价', '致灾因子归一化', '风险概率计算', '80%保证率日期确定']",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_s4_p13",
+    "source_preview": "[黑龙江 大豆 霜冻风险区划] 孕灾环境脆弱性是指因各种自然因素或者社会经济因素制约而造成的易于遭受气象灾害损失和影响的性质，主要体现在地形、植被、气候、水文条件等方面。在相同的致灾强度下，孕灾环境脆弱性的高低具有放大或缩小灾情的作用。因此，孕灾环境脆弱性越低，灾害风险也越低。采用多年地表覆盖度和地形表示孕灾环境的脆弱性。\n\n地表覆盖度计算大豆收获面积为60%,土地利用40%，以和的形式表现。\n\n地表覆盖度为研究去裸土和垂直密度指标的值。其中植被覆盖越高的地方，其孕灾环境脆弱性越低。对地表覆盖进行重分类如下：\n\n地表覆盖度归一化方法：\n\n如果重分类后的值=1，则VR=0；\n\n如果重分类后的值=5，则VR=1；\n\n其他，则VR=（5-FCVR）/(5-1)\n\n地形因子主要考虑海拔，海拔越高，脆弱性越高，海拔重分类如下：\n\n地形因子归一化方法：\n\n如果重分类后的值=1，则VR=0；\n\n如果重分类后的值=5，则VR=1；\n\n其他，则VR=（5-DEMR）/(5-1)\n\n综合地表覆盖度和海拔，孕灾环境脆弱性各个指标评估如下：\n\n孕灾环境评价公式如下：",
+    "source_len": 478,
+    "core_concept": [
+      "孕灾环境脆弱性评价",
+      "霜冻灾害风险评估"
+    ],
+    "technical_terms": [
+      "孕灾环境脆弱性",
+      "地表覆盖度",
+      "地形因子",
+      "归一化",
+      "重分类",
+      "VR"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述黑龙江大豆霜冻风险区划中孕灾环境脆弱性评价方法，采用地表覆盖度和海拔两因子，通过重分类和归一化公式计算脆弱性。",
+    "user_expressions_count": 10,
+    "metric_count": 4,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "['重分类', '归一化', '孕灾环境脆弱性评价']",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_s4_p14",
+    "source_preview": "[黑龙江 大豆 霜冻风险区划] 防灾减灾能力主要是体现一些当地经济能力反应的抵御灾害的能力，主要可以包括一些工程性和非工程性两类。例如对干旱的抵御能力包括：灌溉投入、水库容量、机井数等财政投入等。根据数据收集的规范性和难易程度，选择人均GDP体现防灾减灾能力。人均GDP越高，说明经济越发达，可供投入的防灾减灾能力越强。防灾减灾能力越强，则风险越低。\n\n人均GDP归一化方法这里不赘述，与其它变量方法基本一致。",
+    "source_len": 205,
+    "core_concept": [
+      "防灾减灾能力",
+      "农业气象灾害风险区划"
+    ],
+    "technical_terms": [
+      "防灾减灾能力",
+      "人均GDP",
+      "归一化",
+      "风险区划",
+      "工程性措施",
+      "非工程性措施"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk定义大豆霜冻风险区划中的防灾减灾能力，以人均GDP体现经济抗灾能力，能力越强风险越低。",
+    "user_expressions_count": 7,
+    "metric_count": 1,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "['归一化', '防灾减灾能力评价']",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s1_p2",
+    "source_preview": "[新疆 冬小麦 气候区划] 农牧业结构的自然分布或科学规划和布局首先取决于气候资源、水资源和土壤三大自然条件。而这三大自然条件的形成又取决于当地独特的地理位置和地形地貌。了解新疆的自然地理特点对于进一步认识新疆独特的农业气候资源、有针对性的开展特色农业气候区划具有重要意义。",
+    "source_len": 137,
+    "core_concept": [
+      "农业气候区划",
+      "自然地理条件"
+    ],
+    "technical_terms": [
+      "气候资源",
+      "水资源",
+      "土壤",
+      "自然地理特点",
+      "农业气候区划"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk阐述新疆农业气候区划的自然地理基础，指出气候、水资源和土壤三大条件及其形成因素。",
+    "user_expressions_count": 4,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "D_P_R_610000_001-陕西苹果气候区划报告_s1_p6",
+    "source_preview": "[陕西 苹果 气候区划] 陕西苹果气候区划，苹果产业带和渭北南部苹果产业带，共包括48 个苹果基地县。，表1-1 2022 年末陕西省苹果主产市面积、产量较上年变化中，苹果主产市、苹果面积（亩）、增减情况（亩）、苹果产量（吨）、增减情况（吨）：该表格列出延安市、咸阳市、渭南市、榆林市等4项指标的具体数值。",
+    "source_len": 153,
+    "core_concept": [
+      "苹果产业带区划",
+      "苹果主产市生产统计"
+    ],
+    "technical_terms": [
+      "苹果产业带",
+      "苹果基地县",
+      "苹果面积",
+      "苹果产量",
+      "增减情况"
+    ],
+    "concept_evidence_count": 2,
+    "semantic_summary": "该chunk描述陕西苹果气候区划的产业带划分，并列出延安、咸阳、渭南、榆林等主产市的苹果面积、产量及增减情况。",
+    "user_expressions_count": 6,
+    "metric_count": 3,
+    "region": {
+      "names": [
+        "陕西",
+        "渭北南部"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "苹果"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s1_p3",
+    "source_preview": "[新疆 冬小麦 气候区划] 新疆位于我国西北边陲、欧亚大陆的腹地。介于东经96º23′～73º40′，北纬49º10′～34º25'N，东西长2200 km，南北宽1500km，总面积166.49×104km2，占全国土地总面积的六分之一，是我国面积最大的省区。新疆与俄罗斯、哈萨克斯坦、吉尔吉斯斯坦、塔吉克斯坦、巴基斯坦、蒙古、印度、阿富汗等八国接壤，陆地边境线5600 km，在历史上是沟通东西方闻名于世的“丝绸之路”的要冲，现在又成为“一带一路”丝绸之路经济带的核心区以及第二座“亚欧大陆桥”的必经之地，战略位置十分重要。新疆是以农业为基础、工业为主导的国民经济体系。优势产业为棉花、粮食、林果和畜牧等，特色农产品有啤酒花、番茄、枸杞、甜瓜、葡萄、香梨、苹果、杏、石榴、核桃、红枣等。",
+    "source_len": 345,
+    "core_concept": [
+      "新疆农业地理概况",
+      "新疆区位与产业特征"
+    ],
+    "technical_terms": [
+      "优势产业",
+      "特色农产品",
+      "丝绸之路经济带",
+      "亚欧大陆桥"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk介绍新疆的地理位置、面积、边境线及农业优势产业和特色农产品，为冬小麦气候区划提供背景。",
+    "user_expressions_count": 3,
+    "metric_count": 4,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "棉花",
+      "粮食",
+      "林果",
+      "畜牧"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s1_p4",
+    "source_preview": "[新疆 冬小麦 气候区划] 新疆地形地貌可概括为：“三山两盆”。在两大盆地的四周分布着大小不等的点片绿洲。天山把新疆分为南北两大部分，天山以南为南疆，天山以北为北疆。全疆山地63.71×104 km2，高原8.31×104 km2,山间盆地10.73×104 km2，丘陵8.58×104 km2，平原（内含沙漠、戈壁）74.68×104 km2。\n\n根据大的地貌轮廓、构造及沉积物的特征，新疆自北向南可分为阿尔泰山、准噶尔盆地及其西部山地、天山、塔里木盆地以及由帕米尔高原、喀喇昆仑山、昆仑山及阿尔金山组成的昆仑山系等五大地貌单元（图1.1）。高山环抱的地形结构对干旱环境的形成产生深刻影响。自山麓至盆地中心，规律地分布着倾斜洪积—冲积扇及洪积—冲积平原，盆地中心为广阔平坦的冲积平原和湖积平原，其上的疏松沉积物经风蚀而成大片沙漠。\n\n图1.1  新疆地形地貌",
+    "source_len": 381,
+    "core_concept": [
+      "新疆地形地貌",
+      "地貌单元划分"
+    ],
+    "technical_terms": [
+      "三山两盆",
+      "地貌单元",
+      "洪积—冲积扇",
+      "冲积平原",
+      "湖积平原",
+      "绿洲"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述新疆三山两盆地形地貌结构，天山划分南北疆，并给出五大地貌单元及各类型土地面积。",
+    "user_expressions_count": 6,
+    "metric_count": 5,
+    "region": {
+      "names": [
+        "新疆",
+        "南疆",
+        "北疆",
+        "天山",
+        "准噶尔盆地",
+        "塔里木盆地"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s1_p5",
+    "source_preview": "[新疆 冬小麦 气候区划] 北部和东部阿尔泰山脉，是一条西北—东南走向的山脉，平均山脊线海拔不到3000 m，最高的友谊峰海拔4373 m。这块山地受断裂作用的影响，形成清晰的断崖并有地堑性的山间盆地镶嵌于低山区内，如春古尔、可可托海、青河以及东南部其他盆地。这些盆地规模不大，面积都不足500 km2。山地海拔多为2000～3000 m，4000 m以上的高峰不多，在高山带有小型的现代冰川。",
+    "source_len": 197,
+    "core_concept": [
+      "阿尔泰山脉地貌特征",
+      "山间盆地分布"
+    ],
+    "technical_terms": [
+      "山脊线海拔",
+      "断崖",
+      "地堑性山间盆地",
+      "现代冰川"
+    ],
+    "concept_evidence_count": 2,
+    "semantic_summary": "该chunk描述新疆阿尔泰山脉的走向、海拔、断崖地貌及山间盆地分布，属于气候区划报告的地理背景部分。",
+    "user_expressions_count": 3,
+    "metric_count": 4,
+    "region": {
+      "names": [
+        "新疆",
+        "阿尔泰山脉"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s1_p7",
+    "source_preview": "[新疆 冬小麦 气候区划] 天山山脉东西横贯新疆中部，在新疆境内绵延1700多公里，把新疆分成自然条件差别明显的南疆、北疆两部分。习惯上又将吐鲁番、哈密一带称东疆。山脊线海拔高度一般在4000～5000 m，最高峰托木尔峰海拔7455 m。雪线高度，北坡为3500～3800 m，南坡为4000～4200 m。北坡较陡，有许多河流穿过，形成很深的峡谷。著名的风景胜地天池，位于博格达峰下的西北坡，为一狭长的堰塞湖，湖面海拔为1940 m。新疆的天山山系，可分为数十个山段，夹有许多山间盆地和谷地。如昭苏—特克斯盆地、素称“新疆粮仓”的伊犁谷地、尤尔都斯盆地、乌什盆地、拜城盆地、焉耆盆地、吐鲁番盆地、哈密盆地等等。其中，吐鲁番盆地中有低于海平面154m的世界第二低地艾丁湖。",
+    "source_len": 337,
+    "core_concept": [
+      "新疆地形地貌特征",
+      "天山山脉地理分区"
+    ],
+    "technical_terms": [
+      "山脊线",
+      "雪线",
+      "堰塞湖",
+      "山间盆地",
+      "谷地"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述天山山脉将新疆分为南疆、北疆、东疆的地理格局，并给出山脊线、雪线海拔及山间盆地谷地分布。",
+    "user_expressions_count": 4,
+    "metric_count": 7,
+    "region": {
+      "names": [
+        "新疆",
+        "南疆",
+        "北疆",
+        "东疆",
+        "吐鲁番",
+        "哈密",
+        "伊犁谷地"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s1_p6",
+    "source_preview": "[新疆 冬小麦 气候区划] 北疆的准噶尔盆地西宽东窄，在天山、阿勒泰山之间，总面积约38.0×104 km2。其中盆地面积约18.0×104 km2（其中含戈壁约7.2×104 km2），呈不等边三角形形状，由东向西倾斜，盆地底部平均海拔高度为500 m左右，盆地边缘为绿洲和戈壁；中央为固定和半固定的古尔班通古特沙漠，面积约5.0×104 km2，是我国第二大沙漠；盆地西部山地，山体不高，且有阿拉山口、塔城盆地、伊犁河谷、老风口和额尔齐斯河谷等向西开口的缺口，冷空气和水汽多由此进入新疆；盆地南缘的天山脚下，广大冲积扇平原上有辽阔的农业区。",
+    "source_len": 272,
+    "core_concept": [
+      "准噶尔盆地地理特征",
+      "新疆农业区分布"
+    ],
+    "technical_terms": [
+      "准噶尔盆地",
+      "古尔班通古特沙漠",
+      "冲积扇平原",
+      "绿洲",
+      "戈壁"
+    ],
+    "concept_evidence_count": 2,
+    "semantic_summary": "该chunk描述北疆准噶尔盆地的地理位置、面积、海拔、沙漠及西部缺口等地理特征，并指出天山脚下冲积扇平原为辽阔农业区。",
+    "user_expressions_count": 4,
+    "metric_count": 5,
+    "region": {
+      "names": [
+        "新疆",
+        "北疆",
+        "准噶尔盆地"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s1_p8",
+    "source_preview": "[新疆 冬小麦 气候区划] 位于天山与昆仑山系之间，面积53×104 km2，是我国最大的内陆盆地。盆地中部是我国面积最大、世界第二大沙漠—塔克拉玛干大沙漠，面积33×104 km2，沙漠形态大多为新月形流动沙丘。盆地平均海拔约1000 m左右，西高东低。我国最长的内陆河—塔里木河流经盆地。盆地的北、西、南三面环山，只是东部形成一个“喇叭口”，冷空气经常会“东灌”进入南疆。",
+    "source_len": 188,
+    "core_concept": [
+      "塔里木盆地地理特征",
+      "南疆气候背景"
+    ],
+    "technical_terms": [
+      "塔里木盆地",
+      "塔克拉玛干大沙漠",
+      "新月形流动沙丘",
+      "内陆盆地",
+      "内陆河"
+    ],
+    "concept_evidence_count": 2,
+    "semantic_summary": "该chunk描述塔里木盆地的地理位置、面积、沙漠、海拔和地形特征，并解释冷空气东灌进入南疆的地形原因。",
+    "user_expressions_count": 5,
+    "metric_count": 3,
+    "region": {
+      "names": [
+        "新疆",
+        "塔里木盆地",
+        "南疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s1_p11",
+    "source_preview": "[新疆 冬小麦 气候区划] ",
+    "source_len": 14,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": null,
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s1_p9",
+    "source_preview": "[新疆 冬小麦 气候区划] 南部昆仑山脉是青藏高原的一部分，它环绕塔里木盆地的南缘，形成一条向东突出的弧形山，其范围从帕米尔高原一直绵延到柴达木盆地的边缘及藏北高原的广大地区。在新疆境内，昆仑山脉长1800 km以上，宽150 km多，平均山脊线海拔为5000～6000 m，新疆与克什米尔之间，耸立着海拔8611 m的世界第二高峰乔戈里峰。整个山地可分为低山带、中山带和高山带，在高山带的起伏面上，耸立着皑皑雪山，雪线高度在4000 m以上。",
+    "source_len": 222,
+    "core_concept": [
+      "昆仑山脉地形特征",
+      "新疆山地垂直带"
+    ],
+    "technical_terms": [
+      "昆仑山脉",
+      "山脊线海拔",
+      "低山带",
+      "中山带",
+      "高山带",
+      "雪线高度"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述新疆境内昆仑山脉的长度、宽度、海拔、雪线高度及山地垂直带划分等基本地形特征。",
+    "user_expressions_count": 3,
+    "metric_count": 5,
+    "region": {
+      "names": [
+        "新疆",
+        "昆仑山脉",
+        "塔里木盆地",
+        "帕米尔高原",
+        "柴达木盆地",
+        "藏北高原",
+        "克什米尔"
+      ],
+      "level": "region"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s1_p12",
+    "source_preview": "[新疆 冬小麦 气候区划] ",
+    "source_len": 14,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "该chunk仅包含标题信息，无实质内容，无法提取有效农业知识。",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s1_p14",
+    "source_preview": "[新疆 冬小麦 气候区划] ",
+    "source_len": 14,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": null,
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s1_p10",
+    "source_preview": "[新疆 冬小麦 气候区划] 新疆独特的自然地貌环境造就了新疆独特的气候，由于离海洋遥远，东距太平洋2500～4000 km，西至大西洋6000～7500 km，北距北冰洋2800～4500 km，南到印度洋1700～3400 km。又有高山阻挡，源自于海洋的水汽输送到大陆上空时已是强弩之末，所以，新疆属大陆性很强的温带干旱气候区。主要表现为：具有晴天多，日照长，少雨，干燥，风沙多，冬寒夏热，昼夜温差大，光热资源丰富、山区水资源稳定等气候特点。",
+    "source_len": 223,
+    "core_concept": [
+      "新疆气候特征",
+      "温带干旱气候"
+    ],
+    "technical_terms": [
+      "大陆性气候",
+      "温带干旱气候",
+      "光热资源",
+      "昼夜温差"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述新疆因远离海洋和高山阻挡形成大陆性很强的温带干旱气候，并列举日照长、少雨、干燥、昼夜温差大等气候特点。",
+    "user_expressions_count": 7,
+    "metric_count": 4,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s1_p13",
+    "source_preview": "[新疆 冬小麦 气候区划] ",
+    "source_len": 14,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "该chunk仅包含标题信息，无实质内容，无法支撑任何农业问题回答。",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s1_p15",
+    "source_preview": "[新疆 冬小麦 气候区划] ",
+    "source_len": 14,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": null,
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s1_p16",
+    "source_preview": "[新疆 冬小麦 气候区划] ",
+    "source_len": 14,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "该chunk仅包含标题信息，无实质内容。",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s1_p17",
+    "source_preview": "[新疆 冬小麦 气候区划] ",
+    "source_len": 14,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "该chunk仅包含标题信息，无实质内容，无法提取农业知识。",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s1_p21",
+    "source_preview": "[新疆 冬小麦 气候区划] ",
+    "source_len": 14,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": null,
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s1_p18",
+    "source_preview": "[新疆 冬小麦 气候区划] 新疆的气象灾害有：干旱、大风、冰雹、干热风、低温冷害、霜冻、冻害暴雨、洪水、暴雪等，以及由其引发的次生灾害和衍生灾害，如：洪水灾害、雪崩、泥石流、山体滑坡、塌方、沙害、病虫害、森林草原火灾等等。",
+    "source_len": 111,
+    "core_concept": [
+      "气象灾害类型",
+      "农业气象灾害"
+    ],
+    "technical_terms": [
+      "气象灾害",
+      "次生灾害",
+      "衍生灾害",
+      "低温冷害",
+      "干热风"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk列举新疆的主要气象灾害（干旱、大风、冰雹、干热风、低温冷害等）及其引发的次生灾害和衍生灾害类型。",
+    "user_expressions_count": 5,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "冬小麦"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s1_p22",
+    "source_preview": "[新疆 冬小麦 气候区划] ",
+    "source_len": 14,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "该chunk仅包含标题信息，未提供实质性农业气候区划内容。",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s1_p19",
+    "source_preview": "[新疆 冬小麦 气候区划] 新疆地域辽阔，地形复杂，形成气候差异明显、水热分布极不均匀、自然条件多种多样的不同地域。新疆境内的山地（包括丘陵和高原）、平原（包括塔里木盆地、准噶尔盆地和山间盆地）面积约各占50%，其中沙漠面积为43.04×104 km2，约占新疆面积的25%。因受山地海拔高、气温低、坡变大，以及盆地中部极端干旱缺水的限制，形成新疆主要的经济活动区分布在山麓与盆地中部之间的倾斜洪积–冲积平原上的格局；在水资源空间分布的制约下，又呈现绿洲沿盆地边缘镶嵌分布的特征。除塔里木盆地、准噶尔盆地外，在山地开阔处尚有许多山间盆地和谷地，这些谷地和盆地中，海拔较低的是重要的农业区。\n\n新疆小麦种植区域分布纬度跨度大、垂直分布变化明显，生态类型复杂，种植结构也有一定的区别，使得不同地区间对小麦品种要求的差异较大，需按不同生态区域进行品种布局。新疆小麦产业技术体系专家指导组根据小麦常年种植品种、现有品种情况及2023年田间测评结果，结合各地生态特征和种植结构，将区域内常年种植、生态适应性好、产量表现突出，既具有创高产基础，又具备推广价值的品种，作为推荐品种；将近年丰产性或品质表现突出，具备",
+    "source_len": 532,
+    "core_concept": [
+      "新疆小麦生态区划",
+      "小麦品种布局"
+    ],
+    "technical_terms": [
+      "生态类型",
+      "生态区域",
+      "种植结构",
+      "品种布局",
+      "推荐品种",
+      "示范品种",
+      "生态适应性"
+    ],
+    "concept_evidence_count": 2,
+    "semantic_summary": "该chunk描述新疆地形气候差异导致小麦生态类型复杂，需按生态区域进行品种布局，并说明推荐品种与示范品种的划分依据。",
+    "user_expressions_count": 6,
+    "metric_count": 3,
+    "region": {
+      "names": [
+        "新疆",
+        "塔里木盆地",
+        "准噶尔盆地"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "小麦",
+      "冬小麦"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s1_p20",
+    "source_preview": "[新疆 冬小麦 气候区划] 南疆冬小麦区位于天山以南、昆仑山以北的塔里木盆地各个绿洲，以早熟和中早熟冬小麦品种为主，可分为“一年两熟”和“一年一熟”两个亚区。",
+    "source_len": 79,
+    "core_concept": [
+      "冬小麦种植区划",
+      "南疆冬小麦亚区划分"
+    ],
+    "technical_terms": [
+      "冬小麦区",
+      "早熟品种",
+      "中早熟品种",
+      "一年两熟",
+      "一年一熟",
+      "亚区"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述南疆冬小麦区的地理位置（塔里木盆地绿洲）、品种类型（早熟和中早熟）及亚区划分（一年两熟和一年一熟）。",
+    "user_expressions_count": 5,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "南疆",
+        "塔里木盆地",
+        "天山以南",
+        "昆仑山以北"
+      ],
+      "level": "region"
+    },
+    "affected_objects": [
+      "冬小麦",
+      "早熟品种",
+      "中早熟品种"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s1_p23",
+    "source_preview": "[新疆 冬小麦 气候区划] 该区域位于天山以北、阿尔泰山以南，为新疆优质小麦产区，亦是新疆小麦高产区。小麦区域分布主要在准噶尔盆地边缘、塔额盆地的塔城地区、昌吉州、博州等3个地州的16个县（市），以中强筋冬小麦品种为主，兼顾中筋超高产品种。主要品种类型有：新冬18号、新冬22号、新冬53号、新冬52号、九圣D1508；目前示范品种有：金石农1号、石冬0358、新粮169、石冬01162。",
+    "source_len": 195,
+    "core_concept": [
+      "冬小麦品种资源",
+      "冬小麦种植区划"
+    ],
+    "technical_terms": [
+      "中强筋冬小麦",
+      "中筋超高产品种",
+      "主栽品种",
+      "示范品种",
+      "优质小麦产区"
+    ],
+    "concept_evidence_count": 2,
+    "semantic_summary": "该chunk描述新疆天山以北冬小麦种植区划，列举主栽品种和示范品种，并指出该区域为优质小麦高产区。",
+    "user_expressions_count": 6,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆",
+        "天山以北",
+        "准噶尔盆地",
+        "塔额盆地",
+        "塔城地区",
+        "昌吉州",
+        "博州"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "冬小麦",
+      "中强筋冬小麦",
+      "中筋超高产品种",
+      "新冬18号",
+      "新冬22号"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 3
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s1_p25",
+    "source_preview": "[新疆 冬小麦 气候区划] 小麦是新疆主要粮食作物，在保证新疆粮食安全以及促进社会经济持续稳定发展中具有举足轻重的地位，因此，长期以来，自治区党委、政府对以小麦为主的粮食作物的生产高度重视，粮食生产坚持“区内平衡、略有节余”的发展方针，按照国家粮食安全后备基地建设要求，加快调整粮食布局结构和品种结构，加大优质小麦生产比重，加速优质粮、专用粮的生产发展，努力提高粮食综合生产能力和加工转化能力，促进粮食生产能力稳定增长。2023年新疆以小麦创高产促全区均衡增产为目标，以全方位夯实粮食安全根基为主线，以推广先进技术集成应用为抓手，充分利用新疆光、热、水、土资源，集成适宜品种、规范化播种、水肥一体化、化学调控、病虫草害防治、机收减损等关键技术，推进良种良法良机良田融合，将科技潜力转化为现实产量、典型产量转化为大田产量，辐射带动全区小麦大面积均衡增产。",
+    "source_len": 376,
+    "core_concept": [
+      "新疆小麦生产",
+      "粮食安全",
+      "小麦增产技术"
+    ],
+    "technical_terms": [
+      "粮食安全",
+      "均衡增产",
+      "水肥一体化",
+      "化学调控",
+      "机收减损"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk介绍新疆小麦在粮食安全中的重要地位，以及2023年以创高产促均衡增产为目标、集成多项关键技术推进小麦大面积增产。",
+    "user_expressions_count": 5,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "小麦"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s1_p24",
+    "source_preview": "[新疆 冬小麦 气候区划] 该区域位于伊犁河河谷及其上游巩乃斯河、喀什河河谷绿洲以及部分洪积平原绿洲，品种须具备一定的抗病能力。小麦区域分布主要包括伊犁州直的7个冬小麦主产县市，是病害发生较重区域，以抗病的中强筋、中筋小麦品种为主。品种类型主要有：新冬52号、石冬0358、新冬41号、新冬53号、新冬42号；目前示范品种有：新粮169、金石农1号、伊农22。",
+    "source_len": 180,
+    "core_concept": [
+      "冬小麦品种布局",
+      "抗病品种选择"
+    ],
+    "technical_terms": [
+      "主栽品种",
+      "示范品种",
+      "中强筋小麦",
+      "中筋小麦",
+      "抗病能力"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述伊犁河谷绿洲冬小麦品种布局，以抗病中强筋、中筋品种为主，列出主栽和示范品种名称。",
+    "user_expressions_count": 5,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "伊犁河河谷",
+        "巩乃斯河河谷",
+        "喀什河河谷",
+        "伊犁州直"
+      ],
+      "level": "region"
+    },
+    "affected_objects": [
+      "冬小麦",
+      "新冬52号",
+      "石冬0358",
+      "新冬41号",
+      "新冬53号"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 3
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s1_p26",
+    "source_preview": "[新疆 冬小麦 气候区划] 将近五年小麦种植面积在30万亩以上的县市明确为产量大县。其中，北疆（17个）：额敏县、奇台县、塔城市、察布查尔县、伊宁县、巩留县、新源县、木垒县、昭苏县、温泉县、福海县、霍城县、吉木萨尔县、尼勒克县、托里县、沙湾市、裕民县；南疆（18个）：莎车县、叶城县、拜城县、伽师县、库车县、疏勒县、墨玉县、疏附县、温宿县、乌什县、阿瓦提县、泽普县、阿克陶县、巴楚县、阿克苏市、洛浦县、英吉沙县、沙雅县。",
+    "source_len": 210,
+    "core_concept": [
+      "冬小麦产量大县",
+      "冬小麦种植区划"
+    ],
+    "technical_terms": [
+      "产量大县",
+      "种植面积",
+      "冬小麦"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk明确新疆冬小麦产量大县标准为近五年种植面积30万亩以上，并列出北疆17个、南疆18个县市名单。",
+    "user_expressions_count": 5,
+    "metric_count": 1,
+    "region": {
+      "names": [
+        "新疆",
+        "北疆",
+        "南疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "冬小麦"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p6",
+    "source_preview": "[新疆 冬小麦 气候区划] ",
+    "source_len": 14,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": null,
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p5",
+    "source_preview": "[新疆 冬小麦 气候区划] 地理信息数据包括矢量数据和数字高程。具体信息如下：",
+    "source_len": 39,
+    "core_concept": [
+      "地理信息数据",
+      "数字高程数据"
+    ],
+    "technical_terms": [
+      "矢量数据",
+      "数字高程"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk说明新疆冬小麦气候区划使用的地理信息数据包括矢量数据和数字高程两类。",
+    "user_expressions_count": 2,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p4",
+    "source_preview": "[新疆 冬小麦 气候区划] 气象资料由新疆气象信息中心提供，包括新疆102个国家气象站1991 – 2020年的日平均气温、日最高气温、日最低气温、降水量、相对湿度、日照时数、平均风速等观测数据。进一步统计冬小麦气候区划所需指标，具体见表2.1。\n\n表2.1  冬小麦气候区划所需气象指标",
+    "source_len": 144,
+    "core_concept": [
+      "冬小麦气候区划气象指标",
+      "气象数据来源"
+    ],
+    "technical_terms": [
+      "气象指标",
+      "日平均气温",
+      "日最高气温",
+      "日最低气温",
+      "降水量",
+      "相对湿度",
+      "日照时数",
+      "平均风速"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk说明新疆冬小麦气候区划所需气象指标，数据来自102个国家气象站1991-2020年观测，包括气温、降水、日照等要素。",
+    "user_expressions_count": 3,
+    "metric_count": 2,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "冬小麦"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p7",
+    "source_preview": "[新疆 冬小麦 气候区划] ",
+    "source_len": 14,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "该chunk内容为空，仅包含标题信息，无实质农业知识内容。",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p9",
+    "source_preview": "[新疆 冬小麦 气候区划] ",
+    "source_len": 14,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": null,
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s1_p27",
+    "source_preview": "[新疆 冬小麦 气候区划] 新疆实行小麦标准化生产和管理，打造小麦百亩攻关、千亩创建、万亩示范田，大力提高小麦生产水平。北疆小麦高产目标为：百亩攻关田小麦单产力争达到 700～750公斤/亩，千亩创建田力争 达到600～650公斤/亩，万亩示范田力争达到550～600公斤/亩；南疆小麦高产目标为：百亩攻关田小麦单产力争达到600～650公斤/亩，千亩创建田力争达到550～600公斤/亩，万亩示范田力 争达到500～550 斤/亩。\n\n近年来，新疆围绕国家新一轮千亿斤粮食产能提升行动，深入开展“百亩攻关、千亩创建、万亩示范”工作，制定小麦高产栽培技术方案、全力推进粮食大面积单产提升。2023年新疆夏粮（主要是小麦）实现面积、单产、总产“三增”，夏粮单产创历史新高，面积和总产居全国第一。2024年新疆冬小麦百亩、千亩、万亩连片，分别以795.8公斤/亩、756.2公斤/亩、720.4公斤/亩的成绩创全国大面积冬小麦单产最高记录。预计2024年新疆亩产500公斤以上高产田占比将超过50%。",
+    "source_len": 448,
+    "core_concept": [
+      "小麦高产目标",
+      "小麦单产提升",
+      "标准化生产"
+    ],
+    "technical_terms": [
+      "百亩攻关田",
+      "千亩创建田",
+      "万亩示范田",
+      "单产",
+      "高产目标",
+      "标准化生产"
+    ],
+    "concept_evidence_count": 2,
+    "semantic_summary": "该chunk给出新疆北疆和南疆小麦百亩攻关、千亩创建、万亩示范田的单产目标，并记录2024年冬小麦单产创全国最高记录。",
+    "user_expressions_count": 7,
+    "metric_count": 10,
+    "region": {
+      "names": [
+        "新疆",
+        "北疆",
+        "南疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "小麦",
+      "冬小麦",
+      "夏粮"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p8",
+    "source_preview": "[新疆 冬小麦 气候区划] 农业统计数据主要包括冬小麦生产数据、农业生产数据和灾害数据。具体信息如下：",
+    "source_len": 51,
+    "core_concept": [
+      "农业统计数据构成"
+    ],
+    "technical_terms": [
+      "冬小麦生产数据",
+      "农业生产数据",
+      "灾害数据",
+      "农业统计数据"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk说明新疆冬小麦气候区划所用农业统计数据的构成，包括冬小麦生产数据、农业生产数据和灾害数据三类。",
+    "user_expressions_count": 2,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "冬小麦"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p10",
+    "source_preview": "[新疆 冬小麦 气候区划] ",
+    "source_len": 14,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "该chunk内容为空，仅含标题占位符，无实质农业知识信息。",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p11",
+    "source_preview": "[新疆 冬小麦 气候区划] ",
+    "source_len": 14,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": null,
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p12",
+    "source_preview": "[新疆 冬小麦 气候区划] ",
+    "source_len": 14,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "该chunk内容为空，仅包含标题信息，无实质农业知识内容。",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p14",
+    "source_preview": "[新疆 冬小麦 气候区划] ",
+    "source_len": 14,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "该chunk内容为空，仅包含标题信息，无实质农业知识内容。",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p15",
+    "source_preview": "[新疆 冬小麦 气候区划] ",
+    "source_len": 14,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": null,
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p16",
+    "source_preview": "[新疆 冬小麦 气候区划] ",
+    "source_len": 14,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": null,
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p17",
+    "source_preview": "[新疆 冬小麦 气候区划] ",
+    "source_len": 14,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": null,
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p13",
+    "source_preview": "[新疆 冬小麦 气候区划] 冬小麦种植信息调查数据：通过实地调查的形式，在伊犁州开展冬小麦种植信息调查，调查内容包括种植品种、经度、纬度、海拔高度等。",
+    "source_len": 75,
+    "core_concept": [
+      "冬小麦种植信息调查",
+      "实地调查数据采集"
+    ],
+    "technical_terms": [
+      "实地调查",
+      "种植品种",
+      "经度",
+      "纬度",
+      "海拔高度"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述在伊犁州通过实地调查方式采集冬小麦种植信息，调查内容包括种植品种、经纬度、海拔高度等。",
+    "user_expressions_count": 5,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆",
+        "伊犁州"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "冬小麦"
+    ],
+    "evaluation_method": "['实地调查']",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p19",
+    "source_preview": "[新疆 冬小麦 气候区划] ",
+    "source_len": 14,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "该chunk为新疆冬小麦气候区划的表格，但内容为空，未提供具体数据或信息。",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p18",
+    "source_preview": "[新疆 冬小麦 气候区划] ",
+    "source_len": 14,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "该chunk为新疆冬小麦气候区划报告中的表格，但内容为空，未提供任何具体数据或信息。",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p21",
+    "source_preview": "[新疆 冬小麦 气候区划] ",
+    "source_len": 14,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "该chunk为新疆冬小麦气候区划报告的表格，但内容为空，未提供具体数据或信息。",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p22",
+    "source_preview": "[新疆 冬小麦 气候区划] ",
+    "source_len": 14,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": null,
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p23",
+    "source_preview": "[新疆 冬小麦 气候区划] ",
+    "source_len": 14,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": null,
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p20",
+    "source_preview": "[新疆 冬小麦 气候区划] 针对区划对象、区划因子和区划指标的特点，选择合适的区划方法。采用专家打分法、权重法、模糊综合评判法、聚类分析法以及决策树法开展农业气候区划，提高农业气候区划的客观化、定量化。",
+    "source_len": 101,
+    "core_concept": [
+      "农业气候区划方法",
+      "区划方法选择"
+    ],
+    "technical_terms": [
+      "专家打分法",
+      "权重法",
+      "模糊综合评判法",
+      "聚类分析法",
+      "决策树法",
+      "农业气候区划"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk介绍新疆冬小麦农业气候区划的方法选择，列举专家打分法、权重法、模糊综合评判法、聚类分析法和决策树法等5种区划方法。",
+    "user_expressions_count": 5,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "冬小麦"
+    ],
+    "evaluation_method": "['专家打分法', '权重法', '模糊综合评判法', '聚类分析法', '决策树法']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p24",
+    "source_preview": "[新疆 冬小麦 气候区划] ",
+    "source_len": 14,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": null,
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p25",
+    "source_preview": "[新疆 冬小麦 气候区划] ",
+    "source_len": 14,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "该chunk仅包含标题信息，无实质内容，无法提取农业知识。",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p26",
+    "source_preview": "[新疆 冬小麦 气候区划] ",
+    "source_len": 14,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "该chunk仅包含标题信息，无实质内容，无法提取具体农业知识。",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p28",
+    "source_preview": "[新疆 冬小麦 气候区划] ",
+    "source_len": 14,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "该chunk为新疆冬小麦气候区划报告中的表格，但内容为空，未提供具体数据或信息。",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p27",
+    "source_preview": "[新疆 冬小麦 气候区划] 在冬小麦气候生产潜力区划中采用ArcGIS栅格计算器功能，输入冬小麦气候生产潜力的多元回归方程，得到基于站点的网格化图层。",
+    "source_len": 75,
+    "core_concept": [
+      "冬小麦气候生产潜力区划",
+      "栅格计算"
+    ],
+    "technical_terms": [
+      "ArcGIS栅格计算器",
+      "多元回归方程",
+      "网格化图层",
+      "气候生产潜力"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述新疆冬小麦气候生产潜力区划的方法，采用ArcGIS栅格计算器输入多元回归方程生成网格化图层。",
+    "user_expressions_count": 3,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "冬小麦"
+    ],
+    "evaluation_method": "['栅格计算', '多元回归', '网格化']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p29",
+    "source_preview": "[新疆 冬小麦 气候区划] 达到日最高气温、最小相对湿度、平均风速的阈值，并同时满足三个指标条件，记为1个干热风日，分别统计各站每年出现轻度、中度和重度干热风的日数，再计算干热风强度指数R，计算公式如下：",
+    "source_len": 102,
+    "core_concept": [
+      "干热风日判定",
+      "干热风强度指数"
+    ],
+    "technical_terms": [
+      "日最高气温",
+      "最小相对湿度",
+      "平均风速",
+      "干热风日",
+      "干热风强度指数R"
+    ],
+    "concept_evidence_count": 2,
+    "semantic_summary": "该chunk描述新疆冬小麦干热风日的判定方法（日最高气温、最小相对湿度、平均风速同时达阈值）及干热风强度指数R的计算方法。",
+    "user_expressions_count": 7,
+    "metric_count": 3,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "冬小麦"
+    ],
+    "evaluation_method": "['干热风日判定', '干热风强度指数R计算', '干热风等级统计']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p32",
+    "source_preview": "[新疆 冬小麦 气候区划] 在冬小麦品质气候区划中采用ArcGIS栅格计算器功能，输入冬小麦干热风指数R的多元回归方程，得到基于站点的网格化图层。",
+    "source_len": 73,
+    "core_concept": [
+      "冬小麦品质气候区划",
+      "干热风指数"
+    ],
+    "technical_terms": [
+      "ArcGIS栅格计算器",
+      "干热风指数R",
+      "多元回归方程",
+      "网格化图层",
+      "品质气候区划"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述新疆冬小麦品质气候区划方法，通过ArcGIS栅格计算器输入干热风指数R的多元回归方程生成网格化图层。",
+    "user_expressions_count": 3,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "冬小麦"
+    ],
+    "evaluation_method": "['ArcGIS栅格计算', '多元回归方程', '网格化插值']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p30",
+    "source_preview": "[新疆 冬小麦 气候区划] 式中：i表示干热风级别；Wi为轻度、中度、重度对应等级所占权重，其值分别为0.2、0.3、0.5；Di为标记值，即轻度、中度、重度对应等级，其值分别为1、2、3；Ni为轻度、中度、重度对应等级干热风日数。\n\n根据干热风强度指数R，进行等级划分（表2.3），判定干热风灾害风险等级。\n\n表2.3  新疆小麦干热风灾害等级划分",
+    "source_len": 175,
+    "core_concept": [
+      "干热风灾害等级划分",
+      "干热风强度指数"
+    ],
+    "technical_terms": [
+      "干热风强度指数",
+      "干热风级别",
+      "权重",
+      "标记值",
+      "干热风日数",
+      "灾害风险等级"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述新疆小麦干热风强度指数R的计算方法，给出轻度、中度、重度各级权重和标记值，并据此划分灾害风险等级。",
+    "user_expressions_count": 6,
+    "metric_count": 6,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "小麦"
+    ],
+    "evaluation_method": "['干热风强度指数计算', '干热风灾害等级划分']",
+    "field_value_pairs_count": 3
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p31",
+    "source_preview": "[新疆 冬小麦 气候区划] 在冬小麦干热风风险区划中以纬度、经度和DEM为自变量，以冬小麦干热风指数R为因变量，通过SPSS中的多元线性回归得到冬小麦干热风指数R的多元回归方程，用于后续得到冬小麦干热风指数R的网格化图层。推算公式见表2.4，每个方程表达式均通过α=0.01的F检验，方程回归效果较好。\n\n表2.4  冬小麦干热风指数R空间推算模型",
+    "source_len": 174,
+    "core_concept": [
+      "干热风风险区划",
+      "干热风指数空间推算"
+    ],
+    "technical_terms": [
+      "干热风指数R",
+      "多元线性回归",
+      "多元回归方程",
+      "F检验",
+      "网格化图层",
+      "DEM"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述新疆冬小麦干热风风险区划方法，以纬度、经度、DEM为自变量，通过多元线性回归建立干热风指数R的空间推算模型。",
+    "user_expressions_count": 6,
+    "metric_count": 1,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "冬小麦"
+    ],
+    "evaluation_method": "['多元线性回归', 'F检验', '空间推算模型']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p33",
+    "source_preview": "[新疆 冬小麦 气候区划] ",
+    "source_len": 14,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "该chunk仅包含标题信息，无实质内容，无法提取农业气候区划相关知识。",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p34",
+    "source_preview": "[新疆 冬小麦 气候区划] 随机森林是指利用多棵决策树对样本进行训练并预测的一种算法。首先利用bootstrap方法有放回的从原始训练集中随机抽取n个样本，并构建n个决策树；然后假设在训练样本数据中由m个特征，那么每次分裂时选择最好的特征进行分裂，每棵树都一直这样分裂下去，直到该节点的所有训练样例都属于同一类；接着让每颗决策树在不做任何修剪的前提下最大限度的生长；最后将生成的多棵分类树组成随机森林，用随机森林分类器对新的数据进行回归，最终由多棵树预测值的均值决定最终预测结果。",
+    "source_len": 240,
+    "core_concept": [
+      "随机森林算法",
+      "机器学习分类回归"
+    ],
+    "technical_terms": [
+      "随机森林",
+      "决策树",
+      "bootstrap方法",
+      "分类器",
+      "回归"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk定义随机森林算法，描述其基于多棵决策树通过bootstrap抽样训练并取均值预测的流程。",
+    "user_expressions_count": 4,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "['随机森林算法']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p35",
+    "source_preview": "[新疆 冬小麦 气候区划] Pearson相关性分析是分析两变量间线性相关的方法。Pearson相关系数，是表达两变量线性相关程度及方向的统计指标。样本的相关系数用符号r表示：",
+    "source_len": 88,
+    "core_concept": [
+      "Pearson相关性分析",
+      "相关系数"
+    ],
+    "technical_terms": [
+      "Pearson相关性分析",
+      "Pearson相关系数",
+      "线性相关",
+      "统计指标",
+      "相关系数r"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk定义Pearson相关性分析及相关系数r，用于分析两变量间线性相关程度和方向。",
+    "user_expressions_count": 5,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "['Pearson相关性分析']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p36",
+    "source_preview": "[新疆 冬小麦 气候区划] 相关系数的取值范围为-1≤r≤1，相关系数小于0为负相关，大于0为正相关，等于0表示不存在相关。相关系数的绝对值越大，表示两变量间的相关程度越密切。在冬小麦品质气候区划中，通过SPSS计算Pearson相关系数筛选关键气象要素。",
+    "source_len": 128,
+    "core_concept": [
+      "冬小麦品质气候区划",
+      "气象要素筛选"
+    ],
+    "technical_terms": [
+      "Pearson相关系数",
+      "SPSS",
+      "相关系数",
+      "正相关",
+      "负相关"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk介绍冬小麦品质气候区划中通过SPSS计算Pearson相关系数筛选关键气象要素的方法，并说明相关系数的取值范围与含义。",
+    "user_expressions_count": 8,
+    "metric_count": 4,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "冬小麦"
+    ],
+    "evaluation_method": "['Pearson相关系数分析', 'SPSS统计分析', '关键气象要素筛选']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p37",
+    "source_preview": "[新疆 冬小麦 气候区划] 在冬小麦品质气候区划中以纬度、经度和DEM为自变量，以冬小麦品质性状指标为因变量，通过SPSS中的多元线性回归得到冬小麦品质性状指标的多元回归方程，用于后续得到冬小麦品质性状指标的网格化图层。推算公式见表2.5，每个方程表达式均通过α=0.01的F检验，方程回归效果较好。\n\n表2.5  冬小麦品质性状因子指标空间推算模型",
+    "source_len": 175,
+    "core_concept": [
+      "冬小麦品质气候区划",
+      "品质性状指标空间推算模型"
+    ],
+    "technical_terms": [
+      "多元线性回归",
+      "多元回归方程",
+      "F检验",
+      "网格化图层",
+      "品质性状指标",
+      "空间推算模型"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述新疆冬小麦品质气候区划中，以经纬度和DEM为自变量、品质性状为因变量建立多元回归空间推算模型的方法。",
+    "user_expressions_count": 6,
+    "metric_count": 1,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "冬小麦"
+    ],
+    "evaluation_method": "['多元线性回归', '空间推算模型', 'F检验']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p38",
+    "source_preview": "[新疆 冬小麦 气候区划] 在冬小麦品质气候区划中采用ArcGIS栅格计算器功能，输入冬小麦品质性状因子指标的多元回归方程，得到基于站点的网格化图层。",
+    "source_len": 75,
+    "core_concept": [
+      "冬小麦品质气候区划",
+      "空间网格化"
+    ],
+    "technical_terms": [
+      "ArcGIS栅格计算器",
+      "多元回归方程",
+      "网格化图层",
+      "品质性状因子"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述新疆冬小麦品质气候区划的空间化方法，即用ArcGIS栅格计算器输入多元回归方程生成网格化图层。",
+    "user_expressions_count": 3,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "冬小麦"
+    ],
+    "evaluation_method": "['ArcGIS栅格计算器', '多元回归方程', '网格化']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p39",
+    "source_preview": "[新疆 冬小麦 气候区划] 区划思路是利用病虫害发病敏感期及关键期与气象条件适宜病害的发生时间的吻合度，来分析评估小麦病虫害发生的气象风险等级，从而确定小麦病虫害的关键时期的重点发生区域危害程度。\n\n技术方法是根据条锈病、蚜虫发生发展气候适宜条件，计算关键时段内气候适宜日数，依据累积日数构建气候适宜指数为：",
+    "source_len": 154,
+    "core_concept": [
+      "小麦病虫害气象风险评价",
+      "病虫害气候适宜性分析"
+    ],
+    "technical_terms": [
+      "发病敏感期",
+      "关键期",
+      "气候适宜日数",
+      "气候适宜指数",
+      "气象风险等级"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述新疆冬小麦病虫害气象风险评价方法，通过计算关键期气候适宜日数构建气候适宜指数来评估风险等级。",
+    "user_expressions_count": 5,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "小麦",
+      "条锈病",
+      "蚜虫"
+    ],
+    "evaluation_method": "['气候适宜日数计算', '气候适宜指数构建', '气象风险等级评估']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p40",
+    "source_preview": "[新疆 冬小麦 气候区划] 依据30年平均适宜指数序列，采用模糊聚类法，分别绘制条锈病、蚜虫指数风险区划图，分4个等级（低风险、中风险、高风险、极高风险）。",
+    "source_len": 78,
+    "core_concept": [
+      "病虫害风险区划",
+      "气候适宜性评价"
+    ],
+    "technical_terms": [
+      "30年平均适宜指数序列",
+      "模糊聚类法",
+      "条锈病",
+      "蚜虫指数",
+      "风险区划图",
+      "风险等级"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述新疆冬小麦条锈病和蚜虫指数风险区划方法，采用模糊聚类法依据30年平均适宜指数序列划分4个风险等级。",
+    "user_expressions_count": 6,
+    "metric_count": 1,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "冬小麦",
+      "条锈病",
+      "蚜虫"
+    ],
+    "evaluation_method": "['模糊聚类法', '风险区划']",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p42",
+    "source_preview": "[新疆 冬小麦 气候区划] 按照气候生产潜力模型拟合得到的新疆各站点光温生产潜力值，按照分级标准进行划分，具体划分标准见表2.10。\n\n表2.10  新疆冬小麦产量划分标准",
+    "source_len": 86,
+    "core_concept": [
+      "冬小麦气候生产潜力",
+      "产量等级划分"
+    ],
+    "technical_terms": [
+      "气候生产潜力模型",
+      "光温生产潜力",
+      "产量划分标准",
+      "分级标准"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述新疆冬小麦气候生产潜力的评价方法，通过模型拟合光温生产潜力并按分级标准划分产量等级。",
+    "user_expressions_count": 4,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "冬小麦"
+    ],
+    "evaluation_method": "['气候生产潜力模型拟合', '分级标准划分']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p43",
+    "source_preview": "[新疆 冬小麦 气候区划] 干热风的危害是多种因素综合作用的结果，主要与干热风出现的时间、强度、持续时间的长短密切相关，而且还与小麦品种的抗性、气候条件、土壤性质、小麦所处发育期、前期生长状况及农业栽培措施有关。\n\n由于高温低湿型和旱风型两类干热风天气，都是在一定的温度、湿度和风速条件下对小麦产量和品质造成影响，结合小麦的生物特性以及干热风对其生长发育和产量形成的影响机理，参考《中华人民共和国气象行业标准——小麦干热风灾害等级》（QX/T 82 – 2019），确定小麦干热风气象指标（表2.11）。\n\n表2.11  新疆小麦干热风气象指标（高温低湿型）",
+    "source_len": 279,
+    "core_concept": [
+      "小麦干热风灾害",
+      "干热风气象指标"
+    ],
+    "technical_terms": [
+      "干热风",
+      "高温低湿型",
+      "旱风型",
+      "气象指标",
+      "小麦干热风灾害等级"
+    ],
+    "concept_evidence_count": 2,
+    "semantic_summary": "该chunk说明新疆小麦干热风危害受多因素综合影响，并依据行业标准确定高温低湿型和旱风型干热风气象指标。",
+    "user_expressions_count": 6,
+    "metric_count": 1,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "小麦",
+      "冬小麦"
+    ],
+    "evaluation_method": "['干热风气象指标确定']",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p41",
+    "source_preview": "[新疆 冬小麦 气候区划] 根据新疆小麦生产实际，并参考前人（徐德源，1989）有关新疆小麦种植气候区划的部分成果，本区划共分三级：\n\n① 新疆光照和降水对小麦种植影响较小，热量条件能否满足小麦正常生长发育和产量形成的需求，是决定小麦能否种植的先决条件，因此，将其作为第一级区划，并以早熟冬小麦或中早熟春小麦全生育期所需热量条件的下限≥0℃积温2100℃•d作为划分小麦能否种植区的界限指标（表2.6）；\n\n② 冬小麦与春小麦相比，具有能充分利用秋、冬季水热资源，缓解春季劳动力紧张的矛盾，可提前成熟，中后期受高温、干热风危害较轻，利于提高单产等很多优势，但越冬安全性是决定某地能否种植冬小麦或确定冬、春小麦种植比例的主要因素。因此，将冬、春小麦种植区及其兼种区的划分作为本区划的第二级区划。除冬季温度和越冬期（日平均气温稳定≤0℃期间）的长短外，积雪情况对冬小麦安全越冬也有重要影响，因此，根据冬季有、无稳定积雪区，判别指标（表2.7），分别给出第二级区划指标（表2.8）；\n\n③ 抽穗至黄熟期的高温是影响新疆许多地区小麦产量的主要气象灾害，因此根据小麦抽穗至黄熟期的5-6月最高气温≥35℃的日数",
+    "source_len": 630,
+    "core_concept": [
+      "小麦种植气候区划",
+      "热量条件区划",
+      "越冬安全性区划"
+    ],
+    "technical_terms": [
+      "≥0℃积温",
+      "第一级区划",
+      "第二级区划",
+      "第三级区划",
+      "越冬安全性",
+      "稳定积雪区",
+      "干热风",
+      "高温日数"
+    ],
+    "concept_evidence_count": 2,
+    "semantic_summary": "该chunk描述新疆小麦种植三级气候区划方法，以≥0℃积温2100℃·d划分可种植区，按越冬安全性和高温日数进一步分级。",
+    "user_expressions_count": 14,
+    "metric_count": 2,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "小麦",
+      "冬小麦",
+      "春小麦",
+      "抽穗至黄熟期"
+    ],
+    "evaluation_method": "['三级区划', '热量条件区划', '越冬安全性区划', '高温灾害区划']",
+    "field_value_pairs_count": 3
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s13_p5",
+    "source_preview": "[新疆 冬小麦 气候区划] 图 7.1  1961—1990年和1991—2020年新疆冬小麦条锈病气候风险区划图",
+    "source_len": 57,
+    "core_concept": [
+      "冬小麦条锈病气候风险区划"
+    ],
+    "technical_terms": [
+      "条锈病",
+      "气候风险区划"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk为新疆冬小麦条锈病气候风险区划图，对比1961—1990年和1991—2020年两个时段的风险分布。",
+    "user_expressions_count": 3,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "冬小麦",
+      "条锈病"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s5_p44",
+    "source_preview": "[新疆 冬小麦 气候区划] 基于已有的冬小麦籽粒容重、粗蛋白含量、沉淀值、面筋指数、最大拉伸阻力、面团稳定时间等品质因子实测资料和冬小麦开花期至成熟期气象资料，初选出关键气象要素和影响时段，采用随机森林预测方法、Person相关分析、多元回归分析等方法，分别构建各品质性状因子模型（表2.12）。\n\n表2.12  冬小麦品质性状因子模型\n\n其中：Tave为平均气温，Tmax为最高气温，Tmin为最低气温，Tmax30为最高气温≥30℃的日数，T10为≥10℃的积温，SH为日照时数，Pre为降水量，PreD为降水日数。",
+    "source_len": 260,
+    "core_concept": [
+      "冬小麦品质性状因子模型",
+      "气象要素对品质的影响"
+    ],
+    "technical_terms": [
+      "籽粒容重",
+      "粗蛋白含量",
+      "沉淀值",
+      "面筋指数",
+      "最大拉伸阻力",
+      "面团稳定时间",
+      "随机森林预测方法",
+      "Person相关分析"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述基于品质实测和气象资料，采用随机森林、相关分析和回归分析等方法构建冬小麦品质性状因子模型。",
+    "user_expressions_count": 6,
+    "metric_count": 8,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "冬小麦",
+      "开花期",
+      "成熟期"
+    ],
+    "evaluation_method": "['随机森林预测方法', 'Person相关分析', '多元回归分析']",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s13_p7",
+    "source_preview": "[新疆 冬小麦 气候区划] 图7.2  1961—1990年和1991—2020年新疆冬小麦蚜虫气候风险区划图",
+    "source_len": 55,
+    "core_concept": [
+      "冬小麦蚜虫气候风险区划"
+    ],
+    "technical_terms": [
+      "蚜虫",
+      "气候风险区划",
+      "区划图"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk为新疆冬小麦蚜虫气候风险区划图，对比1961—1990年和1991—2020年两个时段的风险区划。",
+    "user_expressions_count": 3,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "冬小麦",
+      "蚜虫"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s13_p6",
+    "source_preview": "[新疆 冬小麦 气候区划] 依据冬小麦条锈病气候区划指标，从图7.1可以看出，1991年前后全疆冬小麦条锈病气候风险等级的变化，伊犁河谷冬麦区是条锈病重发区。极高风险区主要集中在伊犁河谷包括伊犁州直的7个冬小麦主产县市，是条锈病发生较重区域，主要包括伊宁县、察布查尔县、巩留县、昭苏县、新源县部分乡镇。1991年后较之前上述区域发生范围明显扩大；高风险区主要分布在伊犁河谷西部的霍尔果斯县、霍城县西部区域。1991年后较之前范围明显扩大至察布查尔县大部区域、塔城南部区域、博州南部区域；中风险区主要分布在阿克苏地区北部区域的拜城、新和、库车、乌什、阿合奇和克州的乌恰县。1991年后较之前上述区域范围明显扩大。包括巴州北部和静、昌吉东部木垒、哈密北部伊吾一带区域明显扩大。低风险区主要分布在在塔城盆地、博州、北疆沿天山一带、哈密大部、南疆喀什地区、阿克苏地区、克州、和田地区4个地州的26个县（市），1991年后较之前上述低风险区域范围明显缩小。",
+    "source_len": 423,
+    "core_concept": [
+      "冬小麦条锈病气候风险区划",
+      "条锈病气候风险等级"
+    ],
+    "technical_terms": [
+      "条锈病",
+      "气候风险等级",
+      "极高风险区",
+      "高风险区",
+      "中风险区",
+      "低风险区",
+      "气候区划指标"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述新疆冬小麦条锈病气候风险区划，按极高、高、中、低风险区划分并对比1991年前后各区域范围变化。",
+    "user_expressions_count": 7,
+    "metric_count": 1,
+    "region": {
+      "names": [
+        "新疆",
+        "伊犁河谷",
+        "伊宁县",
+        "察布查尔县",
+        "巩留县",
+        "昭苏县",
+        "新源县",
+        "霍尔果斯县",
+        "霍城县",
+        "塔城",
+        "博州",
+        "阿克苏",
+        "拜城",
+        "新和",
+        "库车",
+        "乌什",
+        "阿合奇",
+        "克州",
+        "乌恰县",
+        "巴州",
+        "和静",
+        "昌吉",
+        "木垒",
+        "哈密",
+        "伊吾",
+        "喀什",
+        "和田"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "冬小麦",
+      "条锈病"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s13_p8",
+    "source_preview": "[新疆 冬小麦 气候区划] 依据冬小麦麦蚜虫气候区划指标，从图7.2可以看出，1991年前后全疆冬小麦麦蚜虫气候风险等级区域变化范围，南疆阿克苏冬麦区是麦蚜虫重发多发区，而且范围扩大。极高风险区主要集中在南疆阿克苏地区、喀什地区、和田地区3个地州部分县市，1991年后较之前上述区域明显西扩北抬，范围有所扩大；高风险区主要分布在南疆西部克州、喀什、和田、阿克苏、巴州地区大部区域，1991年后较之前范围明显扩大至伊犁河谷西部和中大部区域；中风险区主要分布在巴州大部、克州北部、伊犁河谷西南部部分区域。1991年后较之前上述区域范围明显西扩北抬至塔城中部部分和哈密北部小部分区域。低风险区主要分布在准噶尔盆地边缘、塔额盆地的昌吉州、博州、塔城地区3个地州的16个县（市）、伊犁河谷西部、中部、东疆北部区域，1991年后较之前上述低风险区域范围明显缩小。",
+    "source_len": 375,
+    "core_concept": [
+      "麦蚜虫气候风险区划",
+      "麦蚜虫风险等级区域变化"
+    ],
+    "technical_terms": [
+      "麦蚜虫",
+      "气候风险等级",
+      "极高风险区",
+      "高风险区",
+      "中风险区",
+      "低风险区",
+      "麦蚜虫气候区划指标"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述新疆冬小麦麦蚜虫气候风险区划，给出1991年前后极高、高、中、低风险区的分布区域及范围变化。",
+    "user_expressions_count": 7,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "新疆",
+        "南疆",
+        "北疆",
+        "阿克苏",
+        "喀什",
+        "和田",
+        "克州",
+        "巴州",
+        "伊犁河谷",
+        "塔城",
+        "哈密",
+        "昌吉州",
+        "博州",
+        "准噶尔盆地",
+        "塔额盆地"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "冬小麦",
+      "麦蚜虫"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "辽宁省生态气象和卫星遥感中心-算法说明文档_s4_p5",
+    "source_preview": "[辽宁 算法说明] ",
+    "source_len": 10,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "该chunk内容为空，仅包含来源标识，无实质农业知识信息。",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "辽宁"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "新疆冬小麦气候区划报告_s13_p9",
+    "source_preview": "[新疆 冬小麦 气候区划] 坚持“发现一点，控治一片”的防治策略，防止扩散蔓延。在发病初期，可选用25%丙环唑20 ml/亩或11.7%丙环·嘧菌脂30 ml/亩或19%啶氧菌酯·丙环唑70~80 ml/亩，兑水25~30公斤喷雾防治。视发病情况喷施2~3次，每次间隔7~10天，轮换交替使用药剂。尤其预防位于伊犁河河谷及其上游巩乃斯河、喀什河河谷绿洲以及部分洪积平原绿洲，品种必须具备一定的抗病能力，以抗病的中强筋、中筋小麦品种为主。同时在小麦抽穗-乳熟关键期应及时关注农业技术部门和气象部门联合发布的病虫害预警信息，根据田间条锈病发生动态进行科学防控。",
+    "source_len": 278,
+    "core_concept": [
+      "小麦条锈病防治",
+      "抗病品种选择"
+    ],
+    "technical_terms": [
+      "条锈病",
+      "丙环唑",
+      "丙环·嘧菌脂",
+      "啶氧菌酯·丙环唑",
+      "中强筋小麦",
+      "中筋小麦",
+      "病虫害预警"
+    ],
+    "concept_evidence_count": 2,
+    "semantic_summary": "该chunk给出新疆冬小麦条锈病的药剂防治方法（用量、次数、轮换用药）及伊犁河谷等区域选用抗病中强筋、中筋品种的预防策略。",
+    "user_expressions_count": 10,
+    "metric_count": 6,
+    "region": {
+      "names": [
+        "新疆",
+        "伊犁河河谷",
+        "巩乃斯河",
+        "喀什河河谷",
+        "洪积平原绿洲"
+      ],
+      "level": "region"
+    },
+    "affected_objects": [
+      "冬小麦",
+      "小麦条锈病",
+      "抽穗-乳熟期"
+    ],
+    "evaluation_method": "['喷雾防治', '轮换交替用药', '病虫害预警防控']",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "辽宁省生态气象和卫星遥感中心-算法说明文档_s4_p8",
+    "source_preview": "[辽宁 算法说明] 气象灾害数据空间插值方法",
+    "source_len": 22,
+    "core_concept": [
+      "气象灾害数据空间插值"
+    ],
+    "technical_terms": [
+      "空间插值",
+      "气象灾害数据"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk说明气象灾害数据的空间插值方法，属于算法说明文档。",
+    "user_expressions_count": 2,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "辽宁"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "['空间插值']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "辽宁省生态气象和卫星遥感中心-算法说明文档_s4_p6",
+    "source_preview": "[辽宁 算法说明] 该算法适用于辽宁省春玉米干旱灾害区划。基于1961-1990年、1991-2020年逐日气象数据，构建基于水分亏缺指数的春玉米生育期干旱灾害气候区划指标。适用于辽宁省春玉米种植区，空间分辨率30米，时间分辨率逐日。技术路线：先计算逐年各生育阶段（出苗-拔节，拔节-抽雄，抽雄-乳熟，乳熟-成熟）的水分亏缺指数值，划分干旱等级，统计每30年各发育期不同干旱等级的发生频率，构建干旱灾害累计指标，计算并利用反距离加权插值法完成空间插值；统计生育期（出苗-成熟期）年均水分亏缺指数值，利用小网格插值法完成空间插值；将干旱灾害累计指标空间插值数据与生育期年均水分亏缺指数值空间插值的分级数据相乘，生成春玉米干旱灾害气候区划产品。",
+    "source_len": 320,
+    "core_concept": [
+      "春玉米干旱灾害区划",
+      "水分亏缺指数"
+    ],
+    "technical_terms": [
+      "水分亏缺指数",
+      "干旱灾害累计指标",
+      "反距离加权插值法",
+      "小网格插值法",
+      "干旱等级",
+      "空间分辨率"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述辽宁春玉米干旱灾害区划算法，基于水分亏缺指数和干旱灾害累计指标，通过空间插值生成区划产品。",
+    "user_expressions_count": 7,
+    "metric_count": 3,
+    "region": {
+      "names": [
+        "辽宁"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "春玉米",
+      "出苗-拔节",
+      "拔节-抽雄",
+      "抽雄-乳熟",
+      "乳熟-成熟"
+    ],
+    "evaluation_method": "['水分亏缺指数计算', '干旱等级划分', '干旱灾害累计指标构建', '反距离加权插值', '小网格插值']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "辽宁省生态气象和卫星遥感中心-算法说明文档_s4_p7",
+    "source_preview": "[辽宁 算法说明] 产品名称：春玉米干旱灾害气候区划\n\n产品类型：灾害区划产品\n\n输出数据格式： GeoTIFF\n\n空间分辨率：30m\n\n时间分辨率：日\n\n产品周期：30年多年平均（1961-1990年和1991-2020 年）\n\n分级方法：自然断点法\n\n分级阈值或区间说明：如表5.1所示。\n\n表5.1 主要气象灾害气候区划等级划分",
+    "source_len": 167,
+    "core_concept": [
+      "春玉米干旱灾害气候区划",
+      "灾害区划产品"
+    ],
+    "technical_terms": [
+      "春玉米干旱灾害气候区划",
+      "灾害区划产品",
+      "自然断点法",
+      "空间分辨率",
+      "时间分辨率",
+      "多年平均"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述辽宁春玉米干旱灾害气候区划产品的规格，包括30m分辨率、日尺度、30年多年平均周期及自然断点法分级方法。",
+    "user_expressions_count": 5,
+    "metric_count": 4,
+    "region": {
+      "names": [
+        "辽宁"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "春玉米"
+    ],
+    "evaluation_method": "['自然断点法', '气候区划等级划分']",
+    "field_value_pairs_count": 3
+  },
+  {
+    "chunk_id": "辽宁省生态气象和卫星遥感中心-算法说明文档_s4_p9",
+    "source_preview": "[辽宁 算法说明] 站点计算的干旱灾害累计指标采用反距离加权插值法进行空间插值。反距离加权插值法是将插值点与实测点之间的距离作为权重因子，当插值点与实测点的距离越近时，其权重越大，反之则越小，权重值由距离的反比给出。表达式为：\n\n式（5-1）中：Zi为插值点（Xi，Yi）的估计值，Zj为实测点（Xj，Yj）的真实值，n为已知的实测点个数，即用于差值的站点数。Fj为权值系数。",
+    "source_len": 188,
+    "core_concept": [
+      "干旱灾害累计指标",
+      "空间插值方法"
+    ],
+    "technical_terms": [
+      "干旱灾害累计指标",
+      "反距离加权插值法",
+      "空间插值",
+      "权重因子",
+      "插值点",
+      "实测点"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述干旱灾害累计指标的空间插值方法，采用反距离加权插值法，以距离反比作为权重因子。",
+    "user_expressions_count": 5,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "辽宁"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "['反距离加权插值法', '空间插值']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "辽宁省生态气象和卫星遥感中心-算法说明文档_s4_p10",
+    "source_preview": "[辽宁 算法说明] 根据春玉米生长发育特征，将春玉米划分为播种-出苗、出苗-拔节，拔节-抽雄，抽雄-乳熟，乳熟-成熟五个阶段，根据春玉米各发育期受干旱影响减产的程度，重点关注出苗后的发育期。选取干旱灾害累计指标和生育期年均水分亏缺指数，构建春玉米干旱灾害气候区划指标。首先计算各发育阶段干旱强度与频率构建的干旱灾害累计指标，和生育期年均水分亏缺指数，分级相乘获得春玉米干旱灾害气候区划指标。",
+    "source_len": 195,
+    "core_concept": [
+      "春玉米干旱灾害气候区划",
+      "干旱灾害累计指标",
+      "水分亏缺指数"
+    ],
+    "technical_terms": [
+      "干旱灾害累计指标",
+      "生育期年均水分亏缺指数",
+      "干旱灾害气候区划指标",
+      "发育期"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述辽宁春玉米干旱灾害气候区划指标的构建方法，通过干旱灾害累计指标与生育期年均水分亏缺指数分级相乘实现。",
+    "user_expressions_count": 5,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "辽宁"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "春玉米",
+      "播种-出苗",
+      "出苗-拔节",
+      "拔节-抽雄",
+      "抽雄-乳熟"
+    ],
+    "evaluation_method": "['干旱灾害累计指标计算', '生育期年均水分亏缺指数计算', '分级相乘', '气候区划指标构建']",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "辽宁省生态气象和卫星遥感中心-算法说明文档_s4_p11",
+    "source_preview": "[辽宁 算法说明] 气象数据\n\n覆盖辽宁省的国家气象站逐日气象数据集（1961-2020），气象要素包括：平均气温、最低气温、最高气温、相对湿度、降雨量、气压、水汽压、平均风速、日照时数。\n\n农业气象观测数据\n\n玉米生育期观测资料包括播种期、拔节期、抽雄期、乳熟期和成熟期等关键生育期。\n\n3）基础地理信息数据\n\n基础地理信息资料包括省级、县级行政边界，30米空间分辨率的DEM包括经度、纬度、海拔高度等要素，地理坐标系均为 WGS_1984。",
+    "source_len": 222,
+    "core_concept": [
+      "农业气象观测数据",
+      "基础地理信息数据"
+    ],
+    "technical_terms": [
+      "逐日气象数据集",
+      "气象要素",
+      "生育期观测资料",
+      "关键生育期",
+      "DEM",
+      "空间分辨率",
+      "WGS_1984"
+    ],
+    "concept_evidence_count": 2,
+    "semantic_summary": "该chunk描述辽宁省农业气象观测数据（逐日气象要素、玉米关键生育期）和基础地理信息数据（行政边界、30米DEM）的数据构成。",
+    "user_expressions_count": 3,
+    "metric_count": 2,
+    "region": {
+      "names": [
+        "辽宁"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "玉米",
+      "播种期",
+      "拔节期",
+      "抽雄期",
+      "乳熟期"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "辽宁省生态气象和卫星遥感中心-算法说明文档_s4_p12",
+    "source_preview": "[辽宁 算法说明] 1）1961-1990年玉米干旱灾害气候区划\n\n2）1991-2020年玉米干旱灾害气候区划\n\n表5.6 主要气象灾害气候区划等级划分",
+    "source_len": 77,
+    "core_concept": [
+      "玉米干旱灾害气候区划",
+      "气象灾害区划等级划分"
+    ],
+    "technical_terms": [
+      "玉米干旱灾害",
+      "气候区划",
+      "等级划分"
+    ],
+    "concept_evidence_count": 2,
+    "semantic_summary": "该chunk给出辽宁1961-1990年和1991-2020年两个时段的玉米干旱灾害气候区划，并指向表5.6的等级划分。",
+    "user_expressions_count": 4,
+    "metric_count": 2,
+    "region": {
+      "names": [
+        "辽宁"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "玉米"
+    ],
+    "evaluation_method": "['气候区划', '等级划分']",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "辽宁省生态气象和卫星遥感中心-算法说明文档_s4_p13",
+    "source_preview": "[辽宁 算法说明] 根据构建的玉米干旱灾害气候区划指标，在ArcGIS中将各关键因子的等级栅格图进行计算，最终得到1961-1990年和1991-2020年辽宁省玉米干旱灾害气候区划图（图5.2、图5.3）。\n\n图5.1 1961-1990年辽宁省玉米干旱灾害气候区划图\n\n图5.2 1991-2020年辽宁省玉米干旱灾害气候区划图",
+    "source_len": 166,
+    "core_concept": [
+      "玉米干旱灾害气候区划",
+      "区划图制作"
+    ],
+    "technical_terms": [
+      "干旱灾害气候区划指标",
+      "关键因子",
+      "等级栅格图",
+      "气候区划图",
+      "ArcGIS"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述基于区划指标在ArcGIS中计算关键因子等级栅格图，生成1961-1990年和1991-2020年辽宁省玉米干旱灾害气候区划图。",
+    "user_expressions_count": 5,
+    "metric_count": 2,
+    "region": {
+      "names": [
+        "辽宁"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "玉米"
+    ],
+    "evaluation_method": "['栅格计算', '气候区划']",
+    "field_value_pairs_count": 0
+  }
+]

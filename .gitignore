@@ -7,3 +7,5 @@ __pycache__/
 *.old-v3
 diagnose_*.json
 data/rewrite_cache.json
+*.bak-*
+data/*backup*

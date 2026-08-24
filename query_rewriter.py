@@ -13,6 +13,7 @@ import json
 import os
 from collections import OrderedDict
 from pathlib import Path
+from typing import Optional
 from langchain_core.prompts import ChatPromptTemplate
 from llm_client import call_llm
 
@@ -23,6 +24,9 @@ SYNONYM_FILE = BASE_DIR / "data" / "synonym_dictionary.json"
 
 _cache = OrderedDict()
 CACHE_MAX = 500
+
+# 评测并行阶段置 False，避免多线程同时写 rewrite_cache.json；主线程结束后统一 _save_cache()
+_AUTO_SAVE = True
 
 # ── 同义词词典（规范术语 → 同义词列表）──
 _synonym_dict: dict[str, list[str]] = {}
@@ -179,6 +183,14 @@ REWRITE_PROMPT = ChatPromptTemplate.from_messages([
 
 {term_map_snippet}
 
+### Knowledge Context（知识库概念桥接，若下方为空则忽略本节）
+以下是从知识库中检索到的与用户问题最相关的概念片段（Chunk Knowledge）。
+改写时**优先使用**其中出现的概念与术语来生成 keywords 和 rewrite_queries。
+**不得凭空创造**与 Context 无关的专业概念；原始 Query 中的实体、时间、数值、地域等关键信息**必须保留**。
+Context 没有覆盖的部分，允许用映射表或保守推断补充。
+
+{knowledge_context}
+
 如果问题中出现了上表**没有**的口语/模糊表达，参考上表的风格自行映射为知识库术语。
 不确定时保持原表达，不要臆造术语。
 
@@ -292,11 +304,12 @@ def _needs_rewrite(query: str, top1_sim: float = 0.0, top2_sim: float = 0.0) -> 
     return False
 
 
-def _llm_rewrite(query: str) -> dict:
-    """一次 LLM 调用完成改写。"""
+def _llm_rewrite(query: str, knowledge_context: str = "") -> dict:
+    """一次 LLM 调用完成改写。knowledge_context 为 CK Matcher 输出的概念桥接片段。"""
     prompt = REWRITE_PROMPT.format(
         query=query,
         term_map_snippet=_build_term_map_prompt_snippet(),
+        knowledge_context=knowledge_context,
     )
     prompt_str = prompt.to_string() if hasattr(prompt, 'to_string') else str(prompt)
     try:
@@ -387,29 +400,38 @@ def precompute_rewrites(queries: list[str], mode: str = "all"):
     print(f"[rewriter] 已缓存 {len(_cache)} 条改写结果 → {CACHE_FILE}")
 
 
-def expand_query(query: str, mode: str = "all", top1_sim: float = 0.0, top2_sim: float = 0.0) -> list[str]:
+def expand_query(query: str, mode: str = "all", top1_sim: float = 0.0, top2_sim: float = 0.0,
+                 use_ck: bool = True, knowledge_context: Optional[str] = None) -> list[str]:
     """
     扩展查询，返回扩展后的查询列表供多路检索使用。
     mode: "keywords" | "multi_view" | "all"
     top1_sim: 原始 query 检索 top-1 相似度
     top2_sim: 原始 query 检索 top-2 相似度（用于 margin 门控）
+    use_ck: 是否注入 CK Matcher 的 Knowledge Context 指导改写（False 跑 A/B baseline）
+    knowledge_context: 显式传入 Knowledge Context（并行评测时主线程预计算，避免多线程调用 embedding 模型）
     """
-    cache_key = query.strip()
+    q = query.strip()
+    cache_key = q + ("|ck" if use_ck else "|base")
     if cache_key in _cache:
         _cache.move_to_end(cache_key)
         entry = _cache[cache_key]
-    elif not _needs_rewrite(cache_key, top1_sim, top2_sim):
+    elif not _needs_rewrite(q, top1_sim, top2_sim):
         # gate 不触发 LLM 改写时，确定性术语映射仍可能有产出
-        mapped = _apply_terminology_map(cache_key)
+        mapped = _apply_terminology_map(q)
         entry = {"rewrite_type": "none", "keywords": mapped, "rewrite_queries": [], "sub_queries": [], "confidence": 1.0}
         _cache[cache_key] = entry
         _cache.move_to_end(cache_key)
-        _save_cache()
+        if _AUTO_SAVE:
+            _save_cache()
     else:
-        entry = _llm_rewrite(cache_key)
+        if use_ck and knowledge_context is None:
+            from ck_matcher import build_knowledge_context
+            knowledge_context = build_knowledge_context(q)
+        entry = _llm_rewrite(q, knowledge_context=knowledge_context or "")
         _cache[cache_key] = entry
         _cache.move_to_end(cache_key)
-        _save_cache()
+        if _AUTO_SAVE:
+            _save_cache()
         while len(_cache) > CACHE_MAX:
             _cache.popitem(last=False)
 
@@ -418,7 +440,7 @@ def expand_query(query: str, mode: str = "all", top1_sim: float = 0.0, top2_sim:
     # ── Keyword 池：术语映射 + 同义词 + LLM keywords（词/短语，≤6，hard 6）──
     kw_pool = []
     if mode in ("keywords", "all"):
-        mapped_terms = _apply_terminology_map(query)
+        mapped_terms = _apply_terminology_map(q)
         for term in mapped_terms:
             if term and term not in kw_pool:
                 kw_pool.append(term)
@@ -457,9 +479,9 @@ def expand_query(query: str, mode: str = "all", top1_sim: float = 0.0, top2_sim:
     sq_pool = sq_pool[:MAX_SUBQUERY]
 
     # ── 注册各类型查询供 eval 分路传递 ──
-    _kw_registry[cache_key] = list(kw_pool)
-    _rw_registry[cache_key] = list(rw_pool)
-    _sq_registry[cache_key] = list(sq_pool)
+    _kw_registry[q] = list(kw_pool)
+    _rw_registry[q] = list(rw_pool)
+    _sq_registry[q] = list(sq_pool)
 
     # ── 合并输出：Rewrite Query → SubQuery（Keyword 不在此处，走 BM25-only）──
     extra = list(rw_pool)
@@ -491,3 +513,7 @@ def get_rewrite_queries(query: str) -> list[str]:
 def get_sub_queries(query: str) -> list[str]:
     """返回最近一次 expand_query 为该 query 生成的 sub queries（子问题拆分）。"""
     return _sq_registry.get(query.strip(), [])
+
+
+# 模块加载时恢复磁盘缓存（与文档承诺一致：评测问题集改写结果下次直接加载）
+_load_cache()

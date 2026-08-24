@@ -20,7 +20,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from llm_client import call_llm
 
 BASE_DIR = Path(__file__).resolve().parent
-CHUNKS_PATH = BASE_DIR / "data" / "chunks.json"
+CHUNKS_PATH = BASE_DIR / "data" / "chunks_split.json"
 PROMPT_PATH = BASE_DIR / "prompts" / "chunk_knowledge_extraction.md"
 OUTPUT_PATH = BASE_DIR / "data" / "chunk_knowledge.json"
 

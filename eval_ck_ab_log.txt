@@ -1,0 +1,78 @@
+[eval] 加载数据...
+[eval] In-domain: 180 | OOD: 20
+/Users/han/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+[HybridSearcher] 初始化 (model=BAAI/bge-small-zh-v1.5)...
+[HybridSearcher] Embedding 模型就绪 (mps)
+[HybridSearcher] BM25 数据就绪 (791 docs)
+[HybridSearcher] 就绪 (docs=791, sections=502, reranker=on)
+[eval] 阶段 1a: 初始检索 + CK 匹配预计算...
+[Reranker] 加载 BAAI/bge-reranker-v2-m3 (mps)...
+[eval] 初始检索 + CK 匹配完成 (2345s)
+[eval] 阶段 1b: 改写预计算 (BASE + CK, 8 workers)...
+  进度: 50/200
+  进度: 100/200
+  进度: 150/200
+  进度: 200/200
+[eval] 改写完成 (112s)
+[eval] 阶段 2: 阶段召回 + 最终检索...
+  进度: 20/180
+  进度: 40/180
+  进度: 60/180
+  进度: 80/180
+  进度: 100/180
+  进度: 120/180
+  进度: 140/180
+  进度: 160/180
+  进度: 180/180
+[eval] 检索完成 (29000s)
+
+======================================================================
+  CK-guided Query Understanding A/B 评测 (in-domain 180 题)
+======================================================================
+
+  -- 最终指标对比 --
+  Config       MRR     R@5    R@10    Top1   R@10=0    RW命中
+  ----------------------------------------------------------
+  BASE      0.5490  0.7333  0.8667  0.4056       24  0.8778
+  CK        0.5481  0.7278  0.8556  0.4056       26  0.8778
+  Δ         -0.0010 -0.0056 -0.0111 +0.0000       +2
+
+  -- 阶段 Recall@10（原始 query，无改写）--
+  BM25  : 0.7444
+  DENSE : 0.8167
+  RRF   : 0.7944
+
+  -- CK Matcher 统计 --
+  CK 命中率 (≥1条):     1.0000 (180/180)
+  CK top1 命中 Gold:    0.4667 (84/180)
+  top1 sim: 均值 0.7799  min 0.4991  max 0.8887
+  top2 sim: 均值 0.7493
+  top3 sim: 均值 0.7302
+  margin(top1-top2): 均值 0.0306  min 0.0001
+  CK rewrite→gold cosine 均值: 0.7629 (n=54)
+
+  -- CK Rescue Rate --
+  BASE 失败题: 24
+  CK 救回:     0
+  Rescue Rate: 0.0000 (0.0%)
+  仍未救回: ['Q_C08', 'Q_C25', 'Q_D04', 'Q_D10', 'Q_D20', 'Q_D26', 'Q_D29', 'Q_L02', 'Q_L07', 'Q_L08', 'Q_L11', 'Q_N07', 'Q_N11', 'Q_N20', 'Q_S03', 'Q_S05', 'Q_S07', 'Q_S14', 'Q_S23', 'Q_SR03', 'Q_SR04', 'Q_SR06', 'Q_SR08', 'Q_SR11']
+
+  -- 按 Capability (MRR / R@10) --
+  context_expansion      n= 26  BASE 0.624/0.923  CK 0.618/0.923  Δ -0.006/+0.000
+  cross_document         n= 30  BASE 0.330/0.833  CK 0.330/0.833  Δ -0.000/+0.000
+  cross_section          n= 25  BASE 0.475/0.800  CK 0.477/0.760  Δ +0.002/-0.040
+  exact_retrieval        n= 35  BASE 0.852/1.000  CK 0.852/1.000  Δ +0.000/+0.000
+  numeric_retrieval      n= 20  BASE 0.702/0.850  CK 0.702/0.850  Δ +0.000/+0.000
+  query_rewrite          n= 24  BASE 0.250/0.625  CK 0.248/0.583  Δ -0.002/-0.042
+  table_retrieval        n= 20  BASE 0.547/1.000  CK 0.547/1.000  Δ +0.000/+0.000
+
+  saved: eval_ck_ab_results.json
+
+======================================================================
+  OOD 检测 A/B (20 题)
+======================================================================
+  BASE: 11/20 (55.0%)
+  CK: 11/20 (55.0%)
+
+  评测完成

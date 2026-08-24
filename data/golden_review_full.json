@@ -1,0 +1,3721 @@
+[
+  {
+    "qid": "Q_E01",
+    "question": "什么是农业气候资源？主要包括哪些方面？",
+    "status": "FAIL",
+    "avg_score": 0.0,
+    "min_score": 0,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江农业气候资源普查技术规范2025_s0_p0",
+        "score": 0,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江农业气候资源普查技术规范2025_s0_p1",
+        "score": 0,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E02",
+    "question": "什么是界限温度？农业气候资源普查中常用的界限温度有哪些？",
+    "status": "FAIL",
+    "avg_score": 0.0,
+    "min_score": 0,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江农业气候资源普查技术规范2025_s3",
+        "score": 0,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E03",
+    "question": "什么是无霜期？通常用什么温度指标来计算？",
+    "status": "FAIL",
+    "avg_score": 0.0,
+    "min_score": 0,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江农业气候资源普查技术规范2025_s4",
+        "score": 0,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E04",
+    "question": "什么是日照百分率？它反映了什么信息？",
+    "status": "FAIL",
+    "avg_score": 0.0,
+    "min_score": 0,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江农业气候资源普查技术规范2025_s5",
+        "score": 0,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E05",
+    "question": "什么是保证率？计算保证率有哪些方法？",
+    "status": "FAIL",
+    "avg_score": 0.0,
+    "min_score": 0,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江农业气候资源普查技术规范2025_s6",
+        "score": 0,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E06",
+    "question": "气候倾向率的单位是什么？如何计算？",
+    "status": "FAIL",
+    "avg_score": 0.0,
+    "min_score": 0,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江农业气候资源普查技术规范2025_s13",
+        "score": 0,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E07",
+    "question": "黑龙江省农业气候资源普查报告由哪些级别的单位分工撰写？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江农业气候资源普查技术规范2025_s17",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E08",
+    "question": "黑龙江省农业气候资源普查的空间范围和时间范围是什么？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江农业气候资源普查技术规范2025_s1",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E09",
+    "question": "农业生产普查应遵循哪些基本原则？每个原则的核心要点是什么？",
+    "status": "FAIL",
+    "avg_score": 0.0,
+    "min_score": 0,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江农业生产普查技术规范2025_s0",
+        "score": 0,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E10",
+    "question": "黑龙江省农业生产普查中，省级气象部门的职责是什么？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江农业生产普查技术规范2025_s1",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E11",
+    "question": "黑龙江省农业生产普查中，土地利用状况普查表需要填写哪些基本信息？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江农业生产普查技术规范2025_s2_p0",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江农业生产普查技术规范2025_s2_p1",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江农业生产普查技术规范2025_s2_p2",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E12",
+    "question": "内蒙古地区发生频次最高、影响范围最大的农业气象灾害是什么？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s1",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E13",
+    "question": "内蒙古自治区大豆主产区分布在哪些盟市？种植面积占全区的比例是多少？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s2_p0",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s7",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E14",
+    "question": "内蒙古大豆种植在全国的地位如何？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s7",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E15",
+    "question": "内蒙古大豆区划中，为什么热量条件是能否种植大豆的限制性因子？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s10",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E16",
+    "question": "陕西省2022年苹果种植面积和产量是多少？占全省果园总面积的比例是多少？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s1_p6",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E17",
+    "question": "陕西苹果日灼病的症状是什么？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s7",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E18",
+    "question": "陕西苹果种植适宜性区划中，坡度≥25度的区域如何对待？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s10",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E19",
+    "question": "陕西苹果区划中，区划结果验证采用了什么方法？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s30",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E20",
+    "question": "河南省冬小麦生育期内可能遭遇哪些农业气象灾害？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s0",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E21",
+    "question": "河南省冬小麦晚霜冻害是如何定义的？",
+    "status": "PASS",
+    "avg_score": 60.0,
+    "min_score": 60,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s37",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E22",
+    "question": "河南轻干热风的空间分布特征是什么？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s3",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E23",
+    "question": "新疆的地理位置有什么特点？东西和南北跨度有多大？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "新疆冬小麦气候区划报告_s1_p1",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "新疆冬小麦气候区划报告_s1_p2",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "新疆冬小麦气候区划报告_s1_p3",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "新疆冬小麦气候区划报告_s1_p4",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "新疆冬小麦气候区划报告_s1_p5",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "新疆冬小麦气候区划报告_s1_p6",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "新疆冬小麦气候区划报告_s1_p7",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "新疆冬小麦气候区划报告_s1_p8",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "新疆冬小麦气候区划报告_s1_p10",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "新疆冬小麦气候区划报告_s1_p20",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "新疆冬小麦气候区划报告_s1_p27",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E24",
+    "question": "新疆冬小麦区划报告中列举了哪些主栽品种和示范品种？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "新疆冬小麦气候区划报告_s1_p23",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "新疆冬小麦气候区划报告_s1_p24",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E25",
+    "question": "新疆冬小麦干热风灾害有什么特点？",
+    "status": "REVIEW",
+    "avg_score": 53.333333333333336,
+    "min_score": 40,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "新疆冬小麦气候区划报告_s2_p0",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "新疆冬小麦气候区划报告_s2_p1",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "新疆冬小麦气候区划报告_s2_p2",
+        "score": 40,
+        "reason": "NO_token_overlap; disaster_mismatch: q=['干热风'] c=['高温']"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E26",
+    "question": "江西柑橘产区在全球气候变暖背景下经历了哪些极端天气事件？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_360000_001-江西柑橘气候区划报告_s0",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E27",
+    "question": "江西柑橘种植气候适宜性区划中，甜橙类≥10℃积温的最适宜区阈值是多少？",
+    "status": "PASS",
+    "avg_score": 66.0,
+    "min_score": 66,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_360000_001-江西柑橘气候区划报告_s5",
+        "score": 66,
+        "reason": "token_overlap=1/3: 甜橙类"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E28",
+    "question": "气科院的全国大豆种植区划算法采用了什么模型？输入变量有哪些？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "气科院-农业气候区划指标算法说明文档-王旗_s1_p0",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "气科院-农业气候区划指标算法说明文档-王旗_s1_p1",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "气科院-农业气候区划指标算法说明文档-王旗_s1_p2",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E29",
+    "question": "气科院的全国大豆产量区划算法采用了什么核心指标？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "气科院-农业气候区划指标算法说明文档-王旗_s2",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E30",
+    "question": "辽宁省春玉米干旱灾害区划基于什么核心指标？",
+    "status": "PASS",
+    "avg_score": 60.0,
+    "min_score": 60,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s4_p1",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s4_p3",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s4_p6",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s4_p7",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s4_p10",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s4_p12",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s4_p13",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E31",
+    "question": "黑龙江省大豆渍涝灾害是如何定义的？",
+    "status": "PASS",
+    "avg_score": 60.0,
+    "min_score": 60,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_s1",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E32",
+    "question": "黑龙江省大豆品质气候区划依据什么标准？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆品质气候区划技术规范(初稿)_s3",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E33",
+    "question": "新疆冬小麦产量划分标准分为几个等级？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "新疆冬小麦气候区划报告_s5_p42",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E34",
+    "question": "黑龙江省大豆病虫害（食心虫）风险等级如何划分？",
+    "status": "PASS",
+    "avg_score": 60.0,
+    "min_score": 60,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆病虫害（食心虫）气候风险区划技术规范(初稿) _t0",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_E35",
+    "question": "黑龙江省1981-2023年大豆播种至成熟期平均气温的空间分布有什么特征？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "exact_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_230000_001-农业气候区划报告_s2",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_C01",
+    "question": "黑龙江省气候资源普查中，温度和无霜期天数等热量指标的空间推算采用什么方法？具体步骤是什么？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "context_expansion",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江农业气候资源普查技术规范2025_s15",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江农业气候资源普查技术规范2025_s16",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_C02",
+    "question": "黑龙江省气候资源普查中，积温如何计算？界限温度的起止日期和持续天数如何确定？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "context_expansion",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江农业气候资源普查技术规范2025_s7",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江农业气候资源普查技术规范2025_s8",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_C03",
+    "question": "黑龙江省气候资源普查中，太阳总辐射和作物蒸散量分别如何计算？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "context_expansion",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江农业气候资源普查技术规范2025_s11",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江农业气候资源普查技术规范2025_s12_p0",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江农业气候资源普查技术规范2025_s12_p1",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_C04",
+    "question": "黑龙江省气候资源普查中，气候倾向率和保证率分别是什么？它们的计算方法和适用条件有什么不同？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "context_expansion",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江农业气候资源普查技术规范2025_s13",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江农业气候资源普查技术规范2025_s14",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_C05",
+    "question": "黑龙江大豆低温冷害风险区划模型是如何构建的？考虑了哪些评价因子？",
+    "status": "PASS",
+    "avg_score": 60.0,
+    "min_score": 60,
+    "capability": "context_expansion",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s1",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s2",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_C06",
+    "question": "河南省冬小麦干旱是如何定义的？其空间分布有什么特征？",
+    "status": "PASS",
+    "avg_score": 60.0,
+    "min_score": 60,
+    "capability": "context_expansion",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s1",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s2",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_C07",
+    "question": "黑龙江大豆霜冻的致灾机理是什么？作物受害的具体过程是怎样的？",
+    "status": "PASS",
+    "avg_score": 60.0,
+    "min_score": 60,
+    "capability": "context_expansion",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_s1",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_s2",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_C08",
+    "question": "黑龙江大豆种植气候区划中，空间分析模型如何构建？区划最终如何实现？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "context_expansion",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆种植气候区划技术规范(初稿）1120_s2_p0",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江省大豆种植气候区划技术规范(初稿）1120_s2_p1",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江省大豆种植气候区划技术规范(初稿）1120_s3",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_C09",
+    "question": "内蒙古大豆干旱风险区划中，孕灾环境敏感性是如何评估的？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 40,
+    "capability": "context_expansion",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s21",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s22",
+        "score": 40,
+        "reason": "NO_token_overlap; crop_mismatch: q=['大豆'] c=[]"
+      }
+    ]
+  },
+  {
+    "qid": "Q_C10",
+    "question": "陕西苹果区划中，气象灾害风险评价是如何进行的？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "context_expansion",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s23",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s24_p0",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s24_p1",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_C11",
+    "question": "内蒙古大豆食心虫的关键生育期有哪些？每个时期对应的气象影响因子是什么？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "context_expansion",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s45",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s46",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_C12",
+    "question": "河南省冬小麦光合生产潜力和光温生产潜力有什么区别？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "context_expansion",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s29",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s31",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_C13",
+    "question": "河南省冬小麦全生育期日照时数在两个年代际有什么变化？",
+    "status": "FAIL",
+    "avg_score": 25.0,
+    "min_score": 25,
+    "capability": "context_expansion",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s14",
+        "score": 25,
+        "reason": "NO_token_overlap; crop_mismatch: q=['冬小麦'] c=[]"
+      },
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s15_p0",
+        "score": 25,
+        "reason": "NO_token_overlap; crop_mismatch: q=['冬小麦'] c=[]"
+      },
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s15_p1",
+        "score": 25,
+        "reason": "NO_token_overlap; crop_mismatch: q=['冬小麦'] c=[]"
+      }
+    ]
+  },
+  {
+    "qid": "Q_C14",
+    "question": "河南省冬小麦麦收期连阴雨指数是如何构建的？",
+    "status": "FAIL",
+    "avg_score": 37.5,
+    "min_score": 25,
+    "capability": "context_expansion",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s4",
+        "score": 25,
+        "reason": "NO_token_overlap; crop_mismatch: q=['冬小麦'] c=[]"
+      },
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s39",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_C15",
+    "question": "黑龙江大豆冷害区划中，层次分析法（AHP）如何确定各因子权重？",
+    "status": "PASS",
+    "avg_score": 60.0,
+    "min_score": 60,
+    "capability": "context_expansion",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s4",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s5",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_C16",
+    "question": "河南省冬小麦全生育期降水日数的时空分布特征是什么？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "context_expansion",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s18",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s19",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_C17",
+    "question": "内蒙古大豆霜冻灾害的强度频率是如何计算的？",
+    "status": "PASS",
+    "avg_score": 60.0,
+    "min_score": 60,
+    "capability": "context_expansion",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s30",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_C18",
+    "question": "新疆冬小麦品质性状与气候因子之间的关系模型是如何建立的？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "context_expansion",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "新疆冬小麦气候区划报告_s5_p37",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "新疆冬小麦气候区划报告_s5_p44",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_C19",
+    "question": "陕西苹果区划中，GIS技术在区划中的应用经历了怎样的发展？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "context_expansion",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s18",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s20",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_C20",
+    "question": "辽宁春玉米低温冷害区划基于什么指标？如何计算？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 40,
+    "capability": "context_expansion",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s5_p0",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s5_p1",
+        "score": 40,
+        "reason": "NO_token_overlap; crop_mismatch: q=['玉米'] c=[]"
+      },
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s5_p2",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s5_p3",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s6_p0",
+        "score": 40,
+        "reason": "NO_token_overlap; disaster_mismatch: q=['冷害', '低温'] c=['干旱', '霜冻']"
+      },
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s6_p1",
+        "score": 40,
+        "reason": "NO_token_overlap; disaster_mismatch: q=['冷害', '低温'] c=['霜冻', '冻害']"
+      },
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s6_p2",
+        "score": 40,
+        "reason": "NO_token_overlap; disaster_mismatch: q=['冷害', '低温'] c=['霜冻']"
+      },
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s6_p3",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_C21",
+    "question": "黑龙江大豆渍涝灾害区划中，选取了哪些要素指标？",
+    "status": "PASS",
+    "avg_score": 60.0,
+    "min_score": 60,
+    "capability": "context_expansion",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_s4_p0",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_s4_p2",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_C22",
+    "question": "黑龙江省各时段生长季平均降水和气温有什么特征？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "context_expansion",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_230000_001-农业气候区划报告_s1_p0",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_230000_001-农业气候区划报告_s1_p1",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_230000_001-农业气候区划报告_s0",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_C23",
+    "question": "陕西苹果产区三大生态区带是怎么划分的？各自有什么特点？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "context_expansion",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s37",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s38",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_C24",
+    "question": "黑龙江大豆产量气候区划中，高稳系数是如何定义的？如何区分高产高稳产区和低产低稳产区？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "context_expansion",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆产量气候区划技术规范(初稿)_s0",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江省大豆产量气候区划技术规范(初稿)_t0",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_C25",
+    "question": "陕西省苹果品质气候区划采用什么方法进行综合评价？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "context_expansion",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s22",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s15",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_S01",
+    "question": "内蒙古大豆种植气候区划中选用了哪些区划指标？各指标的分级阈值是多少？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "cross_section",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s11",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s20",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_S02",
+    "question": "黑龙江大豆低温冷害区划的完整技术流程是什么？",
+    "status": "PASS",
+    "avg_score": 60.0,
+    "min_score": 60,
+    "capability": "cross_section",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s0",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s3",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_t9",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_S03",
+    "question": "黑龙江省农业气候资源普查技术规范中涵盖了哪些气候要素的计算方法？每种方法的核心思路是什么？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "cross_section",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江农业气候资源普查技术规范2025_s7",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江农业气候资源普查技术规范2025_s12_p0",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江农业气候资源普查技术规范2025_s12_p1",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_S04",
+    "question": "陕西苹果气候区划报告中种植适宜性、产量和品质区划分别从哪些维度进行？各自的核心指标是什么？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "cross_section",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s10",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s15",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s17",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_S05",
+    "question": "新疆冬小麦气候区划从哪几个维度进行？产量提升建议与区划结果有什么关联？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "cross_section",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "新疆冬小麦气候区划报告_s7_p1",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "新疆冬小麦气候区划报告_s9",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_S06",
+    "question": "河南省冬小麦干旱风险和晚霜冻风险的空间分布各有什么特征？两者之间有什么关联？",
+    "status": "REVIEW",
+    "avg_score": 53.333333333333336,
+    "min_score": 40,
+    "capability": "cross_section",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s2",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s37",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s43",
+        "score": 40,
+        "reason": "NO_token_overlap; crop_mismatch: q=['冬小麦'] c=[]"
+      }
+    ]
+  },
+  {
+    "qid": "Q_S07",
+    "question": "内蒙古大豆多种灾害（干旱、霜冻、食心虫）风险区划在指标体系和方法上有什么共性和差异？",
+    "status": "PASS",
+    "avg_score": 60.0,
+    "min_score": 60,
+    "capability": "cross_section",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s21",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s30",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s45",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_S08",
+    "question": "陕西苹果区划从数据收集到最终区划图输出的完整工作流程是什么？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "cross_section",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s10",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s20",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s30",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_S09",
+    "question": "河南省优质专用小麦气候区划是如何划分强筋、中筋、弱筋适宜区的？各区的指标阈值是什么？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "cross_section",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s23",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s24",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_S10",
+    "question": "黑龙江大豆种植区划中综合考虑了哪些区划类型？各类型的权重如何分配？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "cross_section",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆种植气候区划技术规范(初稿）1120_s2_p0",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江省大豆种植气候区划技术规范(初稿）1120_s2_p1",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江省大豆种植气候区划技术规范(初稿）1120_t1",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江省大豆种植气候区划技术规范(初稿）1120_t2",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_S11",
+    "question": "内蒙古大豆品质区划中蛋白和脂肪含量的空间分布有什么特征？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "cross_section",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s38",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s39_p0",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s39_p1",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_S13",
+    "question": "辽宁省春玉米区划同时涵盖了哪些区划类型？各类型的算法核心是什么？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "cross_section",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s2_p0",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s5_p0",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_S14",
+    "question": "河南省冬小麦区划中各气象要素（积温、降水、日照、蒸散）年代际变化的总体规律是什么？",
+    "status": "FAIL",
+    "avg_score": 37.5,
+    "min_score": 25,
+    "capability": "cross_section",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s14",
+        "score": 25,
+        "reason": "NO_token_overlap; crop_mismatch: q=['冬小麦'] c=[]"
+      },
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s18",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_S15",
+    "question": "新疆冬小麦区划中南疆和北疆的冬小麦种植适宜性有什么差异？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "cross_section",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "新疆冬小麦气候区划报告_s5_p2",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "新疆冬小麦气候区划报告_t5",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_S16",
+    "question": "黑龙江大豆冷害风险区划中，致灾因子危险性、承灾体暴露度、脆弱性和防灾减灾能力分别如何量化评估？四者如何综合为风险指数？",
+    "status": "PASS",
+    "avg_score": 60.0,
+    "min_score": 60,
+    "capability": "cross_section",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s7",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s8",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s9",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_S17",
+    "question": "河南省冬小麦光合生产潜力、光温生产潜力和气候生产潜力三者之间是什么关系？各自反映了什么限制因素？",
+    "status": "FAIL",
+    "avg_score": 41.666666666666664,
+    "min_score": 25,
+    "capability": "cross_section",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s29",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s30",
+        "score": 25,
+        "reason": "NO_token_overlap; crop_mismatch: q=['冬小麦'] c=[]"
+      },
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s31",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_S18",
+    "question": "内蒙古大豆区划报告中，种植气候区划、产量区划和品质区划分别采用什么指标体系？三者最终如何综合？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "cross_section",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s11",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s12",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s35",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_S19",
+    "question": "黑龙江省大豆种植气候区划从指标体系构建到最终区划图输出的完整技术流程是什么？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "cross_section",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆种植气候区划技术规范(初稿）1120_s2_p0",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江省大豆种植气候区划技术规范(初稿）1120_s2_p1",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_S20",
+    "question": "江西柑橘区划中，宽皮桔类和甜橙类在气候适宜性指标上有何异同？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "cross_section",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_360000_001-江西柑橘气候区划报告_s4",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_360000_001-江西柑橘气候区划报告_s5",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_S21",
+    "question": "黑龙江大豆渍涝灾害风险区划中，从数据筛选到最终风险分级的完整流程是什么？",
+    "status": "PASS",
+    "avg_score": 60.0,
+    "min_score": 60,
+    "capability": "cross_section",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_s3",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_s4_p0",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_s4_p1",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_s4_p2",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_s4_p3",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_S22",
+    "question": "陕西苹果品质气候区划中，各品质指标的隶属度函数如何构建？综合评价指数Pc如何计算？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "cross_section",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s17",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s21",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s22",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_S23",
+    "question": "河南省冬小麦不同生育阶段（播种至越冬前、越冬期、返青至成熟）各阶段的气候条件要求和主要农业气象灾害分别是什么？",
+    "status": "FAIL",
+    "avg_score": 33.333333333333336,
+    "min_score": 25,
+    "capability": "cross_section",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s4",
+        "score": 25,
+        "reason": "NO_token_overlap; crop_mismatch: q=['冬小麦'] c=[]"
+      },
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s5",
+        "score": 25,
+        "reason": "NO_token_overlap; crop_mismatch: q=['冬小麦'] c=[]"
+      },
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s37",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_S24",
+    "question": "内蒙古大豆食心虫气候风险区划中，各关键生育期的气象影响因子和综合风险指数如何确定？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "cross_section",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s45",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s46",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s47",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_S25",
+    "question": "黑龙江省生长季（5-9月）各气候要素在1961-1990年和1991-2020年两个时段有什么变化特征？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "cross_section",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_230000_001-农业气候区划报告_s1_p0",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_230000_001-农业气候区划报告_s1_p1",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_D01",
+    "question": "黑龙江省农业气候资源普查技术规范和农业生产普查技术规范分别覆盖什么范围？它们共同构成了什么样的普查体系？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "cross_document",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "黑龙江农业气候资源普查技术规范2025_s0_p0",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江农业气候资源普查技术规范2025_s0_p1",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江农业生产普查技术规范2025_s0",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_D02",
+    "question": "黑龙江大豆的低温冷害和霜冻在定义、致灾机理和区划指标上有什么不同？",
+    "status": "PASS",
+    "avg_score": 60.0,
+    "min_score": 60,
+    "capability": "cross_document",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s0",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_s1",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_D03",
+    "question": "气科院的全国农业气候区划指标算法与陕西省的本地化算法是什么关系？各省可以在全国统一框架下做哪些本地化调整？",
+    "status": "FAIL",
+    "avg_score": 16.5,
+    "min_score": 0,
+    "capability": "cross_document",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "农业气候区划指标算法说明文档（陕西-算法说明文档-梁轶）20250926_s0",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "气科院-农业气候区划指标算法说明文档-王旗_s1_p0",
+        "score": 0,
+        "reason": "NO_token_overlap; province_mismatch: q=['陕西'] c=[]"
+      }
+    ]
+  },
+  {
+    "qid": "Q_D04",
+    "question": "内蒙古大豆区划和陕西苹果区划在指标体系构建和空间分析方法上有什么共性和差异？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "cross_document",
+    "difficulty": "hard",
+    "chunks": [
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s11",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s10",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_D05",
+    "question": "黑龙江省区划报告中大豆不同生育期的活动积温空间分布有什么特征？与内蒙古的积温分布有什么异同？",
+    "status": "FAIL",
+    "avg_score": 37.5,
+    "min_score": 25,
+    "capability": "cross_document",
+    "difficulty": "hard",
+    "chunks": [
+      {
+        "cid": "D_P_R_230000_001-农业气候区划报告_s3",
+        "score": 25,
+        "reason": "NO_token_overlap; province_mismatch: q=['内蒙古', '黑龙江'] c=[]"
+      },
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s11",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_D06",
+    "question": "河南省冬小麦和新疆冬小麦在气象灾害类型上有什么差异？各自最主要的灾害是什么？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "cross_document",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s0",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "新疆冬小麦气候区划报告_s2_p0",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_D07",
+    "question": "黑龙江的农业气候资源普查和新疆的农业气候资源普查在框架设计上有什么异同？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "cross_document",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "黑龙江农业气候资源普查技术规范2025_s0_p0",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江农业气候资源普查技术规范2025_s0_p1",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "新疆农业气候资源普查技术规范_s0",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_D09",
+    "question": "气科院的大豆区划算法中同时涵盖了种植、产量和品质三个维度，各省的算法说明文档在各维度的权重和方法上做了哪些调整？",
+    "status": "FAIL",
+    "avg_score": 13.2,
+    "min_score": 0,
+    "capability": "cross_document",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "气科院-农业气候区划指标算法说明文档-王旗_s1_p0",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "气科院-农业气候区划指标算法说明文档-王旗_s1_p1",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "气科院-农业气候区划指标算法说明文档-王旗_s1_p2",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "农业气候区划指标算法说明文档（陕西-算法说明文档-梁轶）20250926_s0",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "农业气候区划指标算法说明文档（新疆农业气象台-算法说明文档-郑新倩）_s1_p0",
+        "score": 0,
+        "reason": "NO_token_overlap; crop_mismatch: q=['大豆'] c=['冬小麦']"
+      },
+      {
+        "cid": "农业气候区划指标算法说明文档（新疆农业气象台-算法说明文档-郑新倩）_s1_p1",
+        "score": 0,
+        "reason": "NO_token_overlap; crop_mismatch: q=['大豆'] c=['冬小麦']"
+      },
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s1_p0",
+        "score": 0,
+        "reason": "NO_token_overlap; crop_mismatch: q=['大豆'] c=['玉米']"
+      },
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s1_p1",
+        "score": 0,
+        "reason": "NO_token_overlap; crop_mismatch: q=['大豆'] c=['玉米']"
+      },
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s1_p2",
+        "score": 0,
+        "reason": "NO_token_overlap; crop_mismatch: q=['大豆'] c=['玉米']"
+      },
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s1_p3",
+        "score": 0,
+        "reason": "NO_token_overlap; crop_mismatch: q=['大豆'] c=['玉米']"
+      }
+    ]
+  },
+  {
+    "qid": "Q_D10",
+    "question": "河南省冬小麦品质区划中筋和弱筋适宜区的划分标准与气科院的全国大豆品质区划在方法论上有什么共通之处？",
+    "status": "FAIL",
+    "avg_score": 25.0,
+    "min_score": 25,
+    "capability": "cross_document",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s23",
+        "score": 25,
+        "reason": "NO_token_overlap; crop_mismatch: q=['大豆', '冬小麦'] c=[]"
+      },
+      {
+        "cid": "气科院-农业气候区划指标算法说明文档-王旗_s3",
+        "score": 25,
+        "reason": "NO_token_overlap; province_mismatch: q=['河南'] c=[]"
+      }
+    ]
+  },
+  {
+    "qid": "Q_D11",
+    "question": "黑龙江省农业气候资源普查技术规范的指标体系和内蒙古大豆种植区划的指标体系有哪些异同？各自的核心关注点是什么？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "cross_document",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "黑龙江农业气候资源普查技术规范2025_s7",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s11",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_D12",
+    "question": "黑龙江省农业气候区划报告和内蒙古区划报告中，无霜期的变化趋势有什么异同？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "cross_document",
+    "difficulty": "hard",
+    "chunks": [
+      {
+        "cid": "D_P_R_230000_001-农业气候区划报告_s1_p0",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s4_p0",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s4_p1",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_D13",
+    "question": "黑龙江大豆低温冷害区划和辽宁春玉米低温冷害区划在指标选择和方法上有什么异同？",
+    "status": "REVIEW",
+    "avg_score": 56.0,
+    "min_score": 40,
+    "capability": "cross_document",
+    "difficulty": "hard",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s3",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s5_p0",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s5_p1",
+        "score": 40,
+        "reason": "NO_token_overlap; crop_mismatch: q=['大豆', '玉米'] c=[]"
+      },
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s5_p2",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s5_p3",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_D14",
+    "question": "黑龙江大豆干旱风险区划和内蒙古大豆干旱风险区划在指标体系上有什么异同？",
+    "status": "PASS",
+    "avg_score": 60.0,
+    "min_score": 60,
+    "capability": "cross_document",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆干旱气候风险区划技术规范（初稿）_s2_p0",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江省大豆干旱气候风险区划技术规范（初稿）_s2_p1",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江省大豆干旱气候风险区划技术规范（初稿）_s2_p2",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江省大豆干旱气候风险区划技术规范（初稿）_s2_p3",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江省大豆干旱气候风险区划技术规范（初稿）_s2_p4",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s21",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_D15",
+    "question": "陕西苹果和江西柑橘在种植气候适宜性指标的选择上有什么差异？各自最敏感的因子是什么？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "cross_document",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s10",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_360000_001-江西柑橘气候区划报告_s5",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_D16",
+    "question": "黑龙江大豆霜冻区划和内蒙古大豆霜冻区划在指标体系和研究方法上有什么异同？",
+    "status": "PASS",
+    "avg_score": 60.0,
+    "min_score": 60,
+    "capability": "cross_document",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_s1",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s30",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_D17",
+    "question": "河南省冬小麦干热风灾害和新疆冬小麦干热风灾害在发生特点和对策上有什么异同？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 40,
+    "capability": "cross_document",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "新疆冬小麦气候区划报告_s2_p0",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "新疆冬小麦气候区划报告_s2_p2",
+        "score": 40,
+        "reason": "NO_token_overlap; disaster_mismatch: q=['干热风'] c=['高温']"
+      }
+    ]
+  },
+  {
+    "qid": "Q_D18",
+    "question": "黑龙江省农业气候资源普查清单和新疆农业气候资源普查清单在内容覆盖和组织方式上有什么差异？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "cross_document",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "黑龙江农业气候资源普查技术规范2025_s1",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "新疆农业气候资源普查清单_t4",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_D19",
+    "question": "内蒙古大豆灾害风险区划和陕西苹果气象灾害风险区划在方法论上有什么共性和差异？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "cross_document",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s21",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s23",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_D20",
+    "question": "新疆农业气象台的算法说明文档和陕西省的算法说明文档在本地化策略上有何不同？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "cross_document",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "农业气候区划指标算法说明文档（新疆农业气象台-算法说明文档-郑新倩）_s1_p0",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "农业气候区划指标算法说明文档（新疆农业气象台-算法说明文档-郑新倩）_s1_p1",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "农业气候区划指标算法说明文档（陕西-算法说明文档-梁轶）20250926_s0",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_D21",
+    "question": "黑龙江省大豆产量气候区划和新疆冬小麦产量气候区划在分级标准和方法上有什么异同？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "cross_document",
+    "difficulty": "hard",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆产量气候区划技术规范(初稿)_s0",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "新疆冬小麦气候区划报告_s7_p0",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "新疆冬小麦气候区划报告_s7_p1",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_D22",
+    "question": "内蒙古大豆品质区划和黑龙江大豆品质区划在指标选择和分区标准上有什么异同？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "cross_document",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s35",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江省大豆品质气候区划技术规范(初稿)_s3",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_D23",
+    "question": "黑龙江大豆渍涝风险区划和河南冬小麦连阴雨风险区划在指标体系上有什么异同？",
+    "status": "PASS",
+    "avg_score": 60.0,
+    "min_score": 60,
+    "capability": "cross_document",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_s4_p0",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_s4_p1",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_s4_p2",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_s4_p3",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_D24",
+    "question": "黑龙江省区划报告和内蒙古区划报告中关于大豆种植面积和产量变化趋势的分析有何异同？",
+    "status": "FAIL",
+    "avg_score": 37.5,
+    "min_score": 25,
+    "capability": "cross_document",
+    "difficulty": "hard",
+    "chunks": [
+      {
+        "cid": "D_P_R_230000_001-农业气候区划报告_s0",
+        "score": 25,
+        "reason": "NO_token_overlap; crop_mismatch: q=['大豆'] c=[]"
+      },
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s8",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_D25",
+    "question": "河南省和新疆冬小麦的生育期长度和关键发育阶段的气候条件有什么差异？",
+    "status": "FAIL",
+    "avg_score": 37.5,
+    "min_score": 25,
+    "capability": "cross_document",
+    "difficulty": "hard",
+    "chunks": [
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s30",
+        "score": 25,
+        "reason": "NO_token_overlap; crop_mismatch: q=['冬小麦'] c=[]"
+      },
+      {
+        "cid": "新疆冬小麦气候区划报告_s5_p2",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_D26",
+    "question": "黑龙江大豆低温冷害和霜冻在风险区划指标体系上有什么关联？两个区划能否直接比较？",
+    "status": "PASS",
+    "avg_score": 60.0,
+    "min_score": 60,
+    "capability": "cross_document",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s2",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_s2",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_D27",
+    "question": "内蒙古大豆种植综合区划和黑龙江大豆种植综合区划在权重分配和灾害因子考虑上有什么差异？",
+    "status": "FAIL",
+    "avg_score": 37.5,
+    "min_score": 25,
+    "capability": "cross_document",
+    "difficulty": "hard",
+    "chunks": [
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s29",
+        "score": 25,
+        "reason": "NO_token_overlap; crop_mismatch: q=['大豆'] c=[]"
+      },
+      {
+        "cid": "黑龙江省大豆种植气候区划技术规范(初稿）1120_t1",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_D28",
+    "question": "气科院的全国产量区划算法和新疆的冬小麦产量区划方法在理论基础上有什么异同？",
+    "status": "FAIL",
+    "avg_score": 37.5,
+    "min_score": 0,
+    "capability": "cross_document",
+    "difficulty": "hard",
+    "chunks": [
+      {
+        "cid": "气科院-农业气候区划指标算法说明文档-王旗_s2",
+        "score": 0,
+        "reason": "NO_token_overlap; province_mismatch: q=['新疆'] c=[]; crop_mismatch: q=['冬小麦'] c=['大豆', '玉米']"
+      },
+      {
+        "cid": "农业气候区划指标算法说明文档（新疆农业气象台-算法说明文档-郑新倩）_s4_p0",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "农业气候区划指标算法说明文档（新疆农业气象台-算法说明文档-郑新倩）_s4_p1",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "农业气候区划指标算法说明文档（新疆农业气象台-算法说明文档-郑新倩）_s4_p2",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_D29",
+    "question": "陕西苹果品质区划和新疆冬小麦品质区划在气候因子选择和评价方法上有什么异同？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "cross_document",
+    "difficulty": "hard",
+    "chunks": [
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s17",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "新疆冬小麦气候区划报告_t11",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_D30",
+    "question": "辽宁春玉米干旱区划和内蒙古大豆干旱区划在核心指标和研究方法上有什么异同？",
+    "status": "PASS",
+    "avg_score": 60.0,
+    "min_score": 60,
+    "capability": "cross_document",
+    "difficulty": "hard",
+    "chunks": [
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s4_p1",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s4_p2",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s4_p3",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s4_p6",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s4_p7",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s4_p10",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_s4_p13",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s21",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_T03",
+    "question": "冷害风险等级划分与风险指数范围？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "table_retrieval",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_t9",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_T04",
+    "question": "黑龙江大豆种植气候区划指标等级表（生长季活动积温）？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "table_retrieval",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆种植气候区划技术规范(初稿）1120_t0",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_T08",
+    "question": "大豆食心虫综合气象风险指数等级？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "table_retrieval",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆病虫害（食心虫）气候风险区划技术规范(初稿) _t0",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_T09",
+    "question": "黑龙江大豆产量气候区划九级分类？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "table_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆产量气候区划技术规范(初稿)_t0",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_T11",
+    "question": "黑龙江大豆种植综合区划权重分配？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "table_retrieval",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆种植气候区划技术规范(初稿）1120_t1",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_T12",
+    "question": "气科院大豆区划指标总览表？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "table_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "气科院-农业气候区划指标算法说明文档-王旗_t1",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_T16",
+    "question": "黑龙江渍涝灾害风险区划土地覆盖度和DEM分级？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "table_retrieval",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_t1",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_T20",
+    "question": "黑龙江大豆品质气候区划四分区？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "table_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆品质气候区划技术规范(初稿)_t0",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_N01",
+    "question": "内蒙古≥10℃活动积温最适宜区阈值？",
+    "status": "PASS",
+    "avg_score": 66.0,
+    "min_score": 66,
+    "capability": "numeric_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s11",
+        "score": 66,
+        "reason": "token_overlap=1/2: 内蒙古"
+      }
+    ]
+  },
+  {
+    "qid": "Q_N02",
+    "question": "内蒙古1961-2020年无霜期变化率？",
+    "status": "PASS",
+    "avg_score": 66.0,
+    "min_score": 66,
+    "capability": "numeric_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s4_p0",
+        "score": 66,
+        "reason": "token_overlap=1/2: 内蒙古"
+      },
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s4_p1",
+        "score": 66,
+        "reason": "token_overlap=1/2: 内蒙古"
+      }
+    ]
+  },
+  {
+    "qid": "Q_N03",
+    "question": "河南省冬小麦全生育期日照时数范围（1961-1990）？",
+    "status": "FAIL",
+    "avg_score": 25.0,
+    "min_score": 25,
+    "capability": "numeric_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s14",
+        "score": 25,
+        "reason": "NO_token_overlap; crop_mismatch: q=['冬小麦'] c=[]"
+      }
+    ]
+  },
+  {
+    "qid": "Q_N04",
+    "question": "河南省冬小麦1991-2020年日照时数范围？",
+    "status": "FAIL",
+    "avg_score": 25.0,
+    "min_score": 25,
+    "capability": "numeric_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s15_p0",
+        "score": 25,
+        "reason": "NO_token_overlap; crop_mismatch: q=['冬小麦'] c=[]"
+      },
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s15_p1",
+        "score": 25,
+        "reason": "NO_token_overlap; crop_mismatch: q=['冬小麦'] c=[]"
+      }
+    ]
+  },
+  {
+    "qid": "Q_N05",
+    "question": "内蒙古大豆最低单产出现的年份和数值？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "numeric_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s8",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_N06",
+    "question": "内蒙古大豆最高单产出现的年份和数值？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "numeric_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s8",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_N07",
+    "question": "内蒙古1961-1990年间最大和最小年降水量及出现年份？",
+    "status": "PASS",
+    "avg_score": 66.0,
+    "min_score": 66,
+    "capability": "numeric_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s5",
+        "score": 66,
+        "reason": "token_overlap=1/2: 内蒙古"
+      }
+    ]
+  },
+  {
+    "qid": "Q_N08",
+    "question": "黑龙江省生长季平均降水量（1961-1990）？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "numeric_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_230000_001-农业气候区划报告_s1_p0",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "D_P_R_230000_001-农业气候区划报告_s1_p1",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_N09",
+    "question": "河南省冬小麦降水日数变化的气候倾向率范围？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "numeric_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s19",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_N10",
+    "question": "陕西苹果适宜区年平均气温阈值范围？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "numeric_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s10",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_N11",
+    "question": "陕西苹果适宜区年降水量最适范围？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "numeric_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s11",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_N12",
+    "question": "江西柑橘甜橙类≥10℃积温最适宜阈值？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "numeric_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_360000_001-江西柑橘气候区划报告_s5",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_N13",
+    "question": "新疆冬小麦越冬期长度？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "numeric_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "新疆冬小麦气候区划报告_s5_p2",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "新疆冬小麦气候区划报告_s5_p3",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_N14",
+    "question": "黑龙江省大豆播种至成熟期活动积温低于140℃·d的区域？",
+    "status": "FAIL",
+    "avg_score": 25.0,
+    "min_score": 25,
+    "capability": "numeric_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_230000_001-农业气候区划报告_s3",
+        "score": 25,
+        "reason": "NO_token_overlap; province_mismatch: q=['黑龙江'] c=[]"
+      }
+    ]
+  },
+  {
+    "qid": "Q_N15",
+    "question": "河南省冬小麦全生育期蒸散量范围（1991-2020）？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "numeric_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s21",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_N16",
+    "question": "内蒙古干旱孕灾环境敏感性权重？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "numeric_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s21",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_N17",
+    "question": "河南省冬小麦1961-1990光合有效辐射范围？",
+    "status": "FAIL",
+    "avg_score": 25.0,
+    "min_score": 25,
+    "capability": "numeric_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s16",
+        "score": 25,
+        "reason": "NO_token_overlap; crop_mismatch: q=['冬小麦'] c=[]"
+      }
+    ]
+  },
+  {
+    "qid": "Q_N18",
+    "question": "黑龙江大豆食心虫极高风险指数范围？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "numeric_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆病虫害（食心虫）气候风险区划技术规范(初稿) _t0",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_N19",
+    "question": "冷害风险指数低风险区范围？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "numeric_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_t9",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_N20",
+    "question": "陕西省2022年苹果产量？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "numeric_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s1_p6",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_L01",
+    "question": "种大豆需要多少积温才够？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "query_rewrite",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s11",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_L02",
+    "question": "农业上说的光照好不好用什么指标衡量？",
+    "status": "FAIL",
+    "avg_score": 0.0,
+    "min_score": 0,
+    "capability": "query_rewrite",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江农业气候资源普查技术规范2025_s5",
+        "score": 0,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_L03",
+    "question": "大豆怕不怕冷？怎么判断一个地方会不会太冷？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "query_rewrite",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s0",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_L04",
+    "question": "什么叫风刮得庄稼受不了？",
+    "status": "FAIL",
+    "avg_score": 0.0,
+    "min_score": 0,
+    "capability": "query_rewrite",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "新疆冬小麦气候区划报告_s2_p0",
+        "score": 0,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "新疆冬小麦气候区划报告_s2_p1",
+        "score": 0,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "新疆冬小麦气候区划报告_s2_p2",
+        "score": 0,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_L06",
+    "question": "田里水太多对大豆有什么影响？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "query_rewrite",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_s1",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_L07",
+    "question": "为什么有的地方适合种苹果有的地方不行？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "query_rewrite",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s10",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_L08",
+    "question": "大豆怎么知道该不该打药防虫？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "query_rewrite",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆病虫害（食心虫）气候风险区划技术规范(初稿) _t0",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_L09",
+    "question": "冬天麦子冻不坏的条件是什么？",
+    "status": "FAIL",
+    "avg_score": 0.0,
+    "min_score": 0,
+    "capability": "query_rewrite",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "新疆冬小麦气候区划报告_s5_p2",
+        "score": 0,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "新疆冬小麦气候区划报告_s5_p3",
+        "score": 0,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "新疆冬小麦气候区划报告_s5_p41",
+        "score": 0,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_L10",
+    "question": "橘子怕什么天气？",
+    "status": "FAIL",
+    "avg_score": 0.0,
+    "min_score": 0,
+    "capability": "query_rewrite",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_360000_001-江西柑橘气候区划报告_s0",
+        "score": 0,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_L11",
+    "question": "种大豆选什么地方最好？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "query_rewrite",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s11",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_L12",
+    "question": "陕西苹果为啥好吃？和天气有关系吗？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "query_rewrite",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s16",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_SR01",
+    "question": "高温伤害在大豆区划中如何评估？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "query_rewrite",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "气科院-农业气候区划指标算法说明文档-王旗_s5",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_SR02",
+    "question": "水分不足对大豆种植的影响用什么指标衡量？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "query_rewrite",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆干旱气候风险区划技术规范（初稿）_s2_p1",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_SR03",
+    "question": "低温累积效应如何影响大豆产量？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "query_rewrite",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s3",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_SR04",
+    "question": "光合有效辐射在作物产量估算中起什么作用？",
+    "status": "FAIL",
+    "avg_score": 0.0,
+    "min_score": 0,
+    "capability": "query_rewrite",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s7",
+        "score": 0,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_SR05",
+    "question": "什么是参考作物蒸散量ET₀和实际蒸散量ETc？它们有什么区别？",
+    "status": "FAIL",
+    "avg_score": 0.0,
+    "min_score": 0,
+    "capability": "query_rewrite",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s8",
+        "score": 0,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_SR06",
+    "question": "气候生产潜力考虑了哪些因素？和光温生产潜力、光合生产潜力的层次关系是什么？",
+    "status": "FAIL",
+    "avg_score": 0.0,
+    "min_score": 0,
+    "capability": "query_rewrite",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s29",
+        "score": 0,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_SR07",
+    "question": "温度适宜性隶属度在气候区划中怎么用？",
+    "status": "FAIL",
+    "avg_score": 0.0,
+    "min_score": 0,
+    "capability": "query_rewrite",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s21",
+        "score": 0,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_SR08",
+    "question": "干旱致灾因子危险性和孕灾环境敏感性有什么区别？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "query_rewrite",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_150000_001-内蒙古区划报告_s21",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_SR09",
+    "question": "承灾体暴露度和脆弱性在大豆风险区划中分别指什么？",
+    "status": "REVIEW",
+    "avg_score": 33.0,
+    "min_score": 33,
+    "capability": "query_rewrite",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s9",
+        "score": 33,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_SR10",
+    "question": "地表净辐射Rn在蒸散计算中如何求得？",
+    "status": "FAIL",
+    "avg_score": 0.0,
+    "min_score": 0,
+    "capability": "query_rewrite",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s11",
+        "score": 0,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_SR11",
+    "question": "标准化降水蒸散指数SPEI与水分亏缺指数CWDI有什么不同？",
+    "status": "FAIL",
+    "avg_score": 0.0,
+    "min_score": 0,
+    "capability": "query_rewrite",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_410000_001-农业气候区划报告-河南省_s36",
+        "score": 0,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_SR12",
+    "question": "GIS空间叠加分析在农业气候综合区划中如何实现？",
+    "status": "FAIL",
+    "avg_score": 0.0,
+    "min_score": 0,
+    "capability": "query_rewrite",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "D_P_R_610000_001-陕西苹果气候区划报告_s20",
+        "score": 0,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_SR13",
+    "question": "层次分析法中的一致性检验有什么用？CR>0.1意味着什么？",
+    "status": "FAIL",
+    "avg_score": 0.0,
+    "min_score": 0,
+    "capability": "query_rewrite",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s6",
+        "score": 0,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_T21",
+    "question": "河南省冬小麦品质评分中，蛋白质、湿面筋、容重和稳定时间各品质指标的等级如何划分？",
+    "status": "PASS",
+    "avg_score": 75.0,
+    "min_score": 75,
+    "capability": "table_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "2025河南小麦品质_病害区划算法_t1",
+        "score": 75,
+        "reason": "token_overlap=2/4: 湿面筋,蛋白质"
+      }
+    ]
+  },
+  {
+    "qid": "Q_T22",
+    "question": "河南省冬小麦赤霉病和条锈病的风险等级指数范围如何划分？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "table_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "2025河南小麦品质_病害区划算法_t4",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_T23",
+    "question": "辽宁省春玉米种植气候适宜性等级中，≥10℃积温和生长季降水的各等级阈值是多少？",
+    "status": "FAIL",
+    "avg_score": 25.0,
+    "min_score": 25,
+    "capability": "table_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_t2",
+        "score": 25,
+        "reason": "NO_token_overlap; crop_mismatch: q=['玉米'] c=[]"
+      }
+    ]
+  },
+  {
+    "qid": "Q_T24",
+    "question": "辽宁省春玉米品质气候区划中，容重、积温、降水和海拔四个因子的各品质等级阈值如何划分？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "table_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_t12",
+        "score": 50,
+        "reason": "token_overlap=2/4: 容重,积温; crop_mismatch: q=['玉米'] c=[]"
+      }
+    ]
+  },
+  {
+    "qid": "Q_T25",
+    "question": "辽宁省春玉米春霜冻和秋霜冻的轻、中、重度等级按温度如何划分？",
+    "status": "REVIEW",
+    "avg_score": 40.0,
+    "min_score": 40,
+    "capability": "table_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_t37",
+        "score": 40,
+        "reason": "NO_token_overlap; crop_mismatch: q=['玉米'] c=[]"
+      }
+    ]
+  },
+  {
+    "qid": "Q_T26",
+    "question": "黑龙江省大豆低温冷害风险区划中，致灾因子危险性、承灾体暴露度、承灾体脆弱性和防灾减灾能力四个指数的权重系数分别是多少？",
+    "status": "PASS",
+    "avg_score": 60.0,
+    "min_score": 60,
+    "capability": "table_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_t8",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_T27",
+    "question": "黑龙江省大豆霜冻风险区划中，致灾因子危险性、承灾体暴露度、孕灾环境脆弱性和防灾减灾能力四个因子的权重分别是多少？",
+    "status": "PASS",
+    "avg_score": 80.0,
+    "min_score": 80,
+    "capability": "table_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_t4",
+        "score": 80,
+        "reason": "token_overlap=2/4: 承灾体暴露度,致灾因子危险性"
+      }
+    ]
+  },
+  {
+    "qid": "Q_T28",
+    "question": "黑龙江省大豆各发育阶段的最低温度、最适温度、最高温度和作物系数分别是多少？",
+    "status": "REVIEW",
+    "avg_score": 40.0,
+    "min_score": 40,
+    "capability": "table_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆产量气候区划技术规范(初稿)_t2",
+        "score": 40,
+        "reason": "NO_token_overlap; disaster_mismatch: q=['低温', '高温'] c=[]"
+      }
+    ]
+  },
+  {
+    "qid": "Q_T29",
+    "question": "新疆冬小麦干热风灾害的轻度、中度、重度等级按最高气温、最小相对湿度和平均风速如何划分？",
+    "status": "REVIEW",
+    "avg_score": 30.0,
+    "min_score": 30,
+    "capability": "table_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "农业气候区划指标算法说明文档（新疆农业气象台-算法说明文档-郑新倩）_t18",
+        "score": 30,
+        "reason": "token_overlap=1/4: 中度; crop_mismatch: q=['冬小麦'] c=[]; disaster_mismatch: q=['干热风'] c=[]"
+      }
+    ]
+  },
+  {
+    "qid": "Q_T30",
+    "question": "新疆冬小麦条锈病和蚜虫适宜发生的气象指标分别是什么？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "table_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "新疆冬小麦气候区划报告_t12",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_T31",
+    "question": "新疆冬小麦光温生产潜力按产量如何分为五个等级？",
+    "status": "REVIEW",
+    "avg_score": 50.0,
+    "min_score": 50,
+    "capability": "table_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "新疆冬小麦气候区划报告_t9",
+        "score": 50,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_T32",
+    "question": "黑龙江省大豆渍涝灾害风险区划中，风险指数与等级分区如何对应？",
+    "status": "PASS",
+    "avg_score": 60.0,
+    "min_score": 60,
+    "capability": "table_retrieval",
+    "difficulty": "easy",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_t5",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  },
+  {
+    "qid": "Q_S26",
+    "question": "辽宁省春玉米区划中，种植气候适宜性等级和霜冻灾害等级分别是如何划分的？两者的等级体系有什么不同？",
+    "status": "FAIL",
+    "avg_score": 30.0,
+    "min_score": 20,
+    "capability": "cross_section",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_t2",
+        "score": 20,
+        "reason": "NO_token_overlap; crop_mismatch: q=['玉米'] c=[]; disaster_mismatch: q=['霜冻'] c=[]"
+      },
+      {
+        "cid": "辽宁省生态气象和卫星遥感中心-算法说明文档_t37",
+        "score": 40,
+        "reason": "NO_token_overlap; crop_mismatch: q=['玉米'] c=[]"
+      }
+    ]
+  },
+  {
+    "qid": "Q_D31",
+    "question": "黑龙江省大豆冷害风险区划和霜冻风险区划在四因子权重分配上有什么异同？",
+    "status": "PASS",
+    "avg_score": 60.0,
+    "min_score": 60,
+    "capability": "cross_document",
+    "difficulty": "medium",
+    "chunks": [
+      {
+        "cid": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_t8",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      },
+      {
+        "cid": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_t4",
+        "score": 60,
+        "reason": "NO_token_overlap"
+      }
+    ]
+  }
+]

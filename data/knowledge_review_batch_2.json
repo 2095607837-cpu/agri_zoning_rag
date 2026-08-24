@@ -1,0 +1,3101 @@
+[
+  {
+    "chunk_id": "黑龙江农业气候资源普查技术规范2025_s15",
+    "source_preview": "[黑龙江 技术规范] 反距离权重法（IDW）是空间数据插值领域应用较广的一种算法。属于距离权重系数方法的一种，是以相近相似原理为理论基础，通过控制权重的大小来决定已知点的值对未知点的值的影响大小，该算法假设未知点的值受近距离已知点的影响比远距离已知点的影响更大，即未知点的值是根据未知点周围的已知点属性值随着其到已知点距离的变化而发生相关变化。\n\n（27）\n\n其中，X0为未知点，Z*( X0)为模拟值，Xi为区域内已知样本点，ωi为该点对应的权重系数，ZXi为Xi点的实测值。",
+    "source_len": 239,
+    "core_concept": [
+      "空间数据插值",
+      "反距离权重法"
+    ],
+    "technical_terms": [
+      "反距离权重法",
+      "IDW",
+      "空间数据插值",
+      "权重系数",
+      "模拟值",
+      "实测值"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk介绍反距离权重法（IDW）的原理和计算公式，用于农业气候资源普查中的空间数据插值。",
+    "user_expressions_count": 6,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "['反距离权重法', '空间数据插值']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江农业气候资源普查技术规范2025_s16",
+    "source_preview": "[黑龙江 技术规范] 温度、无霜期天数等热量指标的空间推算采用的是趋势面模拟和残差内插相结合的混合插值法。首先，以气象站点数据为基础，采用多元回归分析方法，分别建立热量指标与经度、纬度、海拔高度等地理因子的趋势模型。具体方程如下：\n\n（28）\n\n其次，利用上述预测模型和各气象站点的地理地形数据计算出该站点的热量指标模拟值,将各站点实际值与模型预测值的差值作为残差值，具体如下，\n\n（29）\n\n对残差值进行空间内插, 即可得到值的栅格图层。内插方法均采用反距离权重法。",
+    "source_len": 234,
+    "core_concept": [
+      "热量指标空间推算",
+      "气候资源空间插值"
+    ],
+    "technical_terms": [
+      "热量指标",
+      "趋势面模拟",
+      "残差内插",
+      "混合插值法",
+      "多元回归分析",
+      "反距离权重法",
+      "栅格图层"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述黑龙江热量指标（温度、无霜期天数）的空间推算方法，采用趋势面模拟与残差内插结合的混合插值法。",
+    "user_expressions_count": 3,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "['趋势面模拟', '残差内插', '混合插值法', '多元回归分析', '反距离权重法']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江农业气候资源普查技术规范2025_s18",
+    "source_preview": "[黑龙江 技术规范] 省级气象管理部门对普查数据的准确性、报告的科学性进行验收。按照全省统一的数据结构，分市建立农业气候资源普查数据集，分区域、分时段存储公里级的农业气候资源（光、温、水、风等）普查结果。",
+    "source_len": 102,
+    "core_concept": [
+      "农业气候资源普查",
+      "普查数据管理"
+    ],
+    "technical_terms": [
+      "农业气候资源普查",
+      "普查数据集",
+      "公里级",
+      "数据结构"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述黑龙江农业气候资源普查数据的验收流程和存储管理方式，按统一结构分市建立数据集，分区域分时段存储公里级光温水风等普查结果。",
+    "user_expressions_count": 5,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "农业气候资源"
+    ],
+    "evaluation_method": "['数据验收', '数据集建立', '分区域分时段存储']",
+    "field_value_pairs_count": 3
+  },
+  {
+    "chunk_id": "黑龙江农业气候资源普查技术规范2025_s17",
+    "source_preview": "[黑龙江 技术规范] 省、市、县（区）分级撰写农业气候资源普查报告。普查报告内容包括工作总体情况、普查数据与处理方法、农业气候资源要素时空特征分析和农业气候资源综合评述。省级单位负责省级数据收集与分析及报告撰写，市、县级负责本区域统计与分析及报告撰写，最终市级汇总县级资料和报告上报省级单位。\n\n### 7.1.1工作总体情况\n\n包括任务来源、普查区域气候概况、普查时间、普查人员、工作进度、任务完成情况等方面。\n\n### 7.1.2普查数据与处理方法\n\n包括农业气候资源普查站点信息、气象数据序列长度、农业气候资源普查清单、农业气候资源要素处理方法等。\n\n### 7.1.3普查结果分析\n\n主要包括普查区域基础地理信息、农业气候指标、全年农业气候资源（热量、光照、水分、风）的空间分布和时间变化趋势。对农业气候资源进行分析，针对不同要素的空间分布情况进行评估。结合当地气候资源实际情况，分级对结果进行检验核查。\n\n### 7.1.4综合评述\n\n结合普查地区的农业生产实际情况和作物生长发育所需的气象指标进行农业气候资源综合评述，包括农业气候资源分布现状、目前农业气候资源利用中存在问题及对策建议。在",
+    "source_len": 559,
+    "core_concept": [
+      "农业气候资源普查",
+      "普查报告编制",
+      "农业气候资源综合评述"
+    ],
+    "technical_terms": [
+      "农业气候资源普查",
+      "普查报告",
+      "农业气候资源要素",
+      "时空特征分析",
+      "综合评述",
+      "区划指标",
+      "风险等级划分"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk规定黑龙江农业气候资源普查报告的分级撰写要求，明确报告内容包含工作总体情况、数据与处理方法、要素时空特征分析和综合评述。",
+    "user_expressions_count": 8,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "农业气候资源"
+    ],
+    "evaluation_method": "['农业气候资源普查', '时空特征分析', '分级检验核查', '综合评述', '风险等级划分']",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "黑龙江农业气候资源普查技术规范2025_t0",
+    "source_preview": "[黑龙江 技术规范] | 活动积温： |  | （1） |\n|---|---|---|---|---|\n| 有效积温： |  | （2） |",
+    "source_len": 70,
+    "core_concept": [
+      "活动积温",
+      "有效积温"
+    ],
+    "technical_terms": [
+      "活动积温",
+      "有效积温"
+    ],
+    "concept_evidence_count": 2,
+    "semantic_summary": "该chunk为黑龙江农业气候资源普查技术规范表格，列出活动积温和有效积温两项普查指标。",
+    "user_expressions_count": 4,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "黑龙江农业气候资源普查技术规范2025_t5",
+    "source_preview": "[黑龙江 技术规范] |  |  | （9） |\n|---|---|---|---|---|\n|  |  | （10） |\n|  |  | （11） |",
+    "source_len": 76,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "该chunk为表格结构，仅包含序号占位符，无实质农业内容。",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": null,
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江农业气候资源普查技术规范2025_t9",
+    "source_preview": "[黑龙江 技术规范] |  |  | （15） |\n|---|---|---|---|---|\n|  |  | （16） |\n|  |  | （17） |",
+    "source_len": 77,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "该chunk为表格片段，仅含序号占位符，无实质农业内容。",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": null,
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江农业气候资源普查技术规范2025_t13",
+    "source_preview": "[黑龙江 技术规范] |  |  | （21） |\n|---|---|---|---|---|\n|  |  | （22） |\n|  |  | （23） |",
+    "source_len": 77,
+    "core_concept": [],
+    "technical_terms": [],
+    "concept_evidence_count": 0,
+    "semantic_summary": "该chunk为表格结构，仅包含序号占位符，无实质农业内容。",
+    "user_expressions_count": 0,
+    "metric_count": 0,
+    "region": null,
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s0",
+    "source_preview": "[黑龙江 技术规范] ### 5.1.1综合性\n\n综合考虑农业生产的各方面，以县行政区域为基本单元，对农业生产资料进行全面普查。\n\n### 5.1.2可靠性\n\n应按照普查内容要求和技术方法规范开展普查工作，对区域内农业生产资料来源、时间等有明确的描述，对数据代表性、客观性、准确性、逻辑性等方面进行逐级质量核查，以确保普查数据的可靠。\n\n### 5.1.3因地制宜\n\n应注重相关部门数据信息收集和实地调查相结合，对数据有效性、一致性进行核查，应采取措施加以甄别。",
+    "source_len": 231,
+    "core_concept": [
+      "农业生产普查原则",
+      "普查数据质量控制"
+    ],
+    "technical_terms": [
+      "综合性",
+      "可靠性",
+      "因地制宜",
+      "质量核查",
+      "数据代表性",
+      "数据准确性"
+    ],
+    "concept_evidence_count": 2,
+    "semantic_summary": "该chunk规定黑龙江农业生产普查的综合性、可靠性、因地制宜三项原则，并强调对数据代表性、客观性、准确性、逻辑性进行逐级质量核查。",
+    "user_expressions_count": 7,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "农业生产资料"
+    ],
+    "evaluation_method": "['逐级质量核查', '数据有效性核查', '数据一致性核查']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s1",
+    "source_preview": "[黑龙江 技术规范] 技术组和相关单位负责技术规范编制，组织开展对省级农业生产普查的培训指导，形成省级农业生产普查数据库。\n\n省级气象部门负责制定本省实施细则，组织开展本省农业生产普查的相关培训工作，与县级共同调研普查资料的渠道，指导与督促市县做好普查工作，并开展本省农业生产普查数据的共享和汇交。\n\n市级气象部门组织所辖区、县（市）开展农业生产普查工作，对县级农业生产资料进行项目内容核查及质量检查，对本市普查数据进行汇集及上报。\n\n县级负责县域内各项农业生产资料的普查，对资料获取中的困难及时反馈。\n\n表格内容本地没有用横杠（-）表示，缺测用斜杠（/）表示。",
+    "source_len": 281,
+    "core_concept": [
+      "农业生产普查组织分工",
+      "普查数据管理规范"
+    ],
+    "technical_terms": [
+      "农业生产普查",
+      "技术规范",
+      "实施细则",
+      "数据汇交",
+      "数据共享",
+      "质量检查"
+    ],
+    "concept_evidence_count": 2,
+    "semantic_summary": "该chunk规定黑龙江农业生产普查中省、市、县各级职责分工、数据汇交共享流程及缺测数据标记规范。",
+    "user_expressions_count": 9,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "农业生产资料"
+    ],
+    "evaluation_method": "['质量检查', '项目内容核查']",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_s5",
+    "source_preview": "[黑龙江 技术规范] 表4 作物发育期普查表（逐年）\n\n填表人：____________   复核人：______________ 审查人：___________ 联系电话：___________ 填写单位：_____________________\n\n填表日期：_______年_____月____日\n\n6.4.1填报说明\n\n本次普查作物发育期主要为当地主要粮食、经济、果树作物不同的作物品种逐年观测到的发育期。\n\n作物发育期按规定收集基准年份，如1980年。如无法收集基准年份数据，应以收集与基准年份接近的最新数据代替。\n\n6.4.2指标解释\n\n6.4.2.1作物发育期\n\n当发育期观测调查点植株出现某一发育期特征时，即为该调查点进入了某一发育期。此时应观测调查植株进入该发育期的百分率。百分率第一次≥10%为发育始期，≥50%为发育普遍期，≥80%为末期。\n\n一般地，某发育期百分率≥50%即停止该发育期观测，但抽穗（雄）期应观测至百分率≥80%，以确定齐穗期。不同作物的发育期按表4-1至表4-2填报。\n\n表4-1 主要大田作物观测的发育期",
+    "source_len": 474,
+    "core_concept": [
+      "作物发育期观测",
+      "农业普查技术规范"
+    ],
+    "technical_terms": [
+      "作物发育期",
+      "发育始期",
+      "发育普遍期",
+      "末期",
+      "齐穗期",
+      "发育期百分率",
+      "基准年份"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk定义作物发育期普查的观测方法，以发育期百分率≥10%、≥50%、≥80%划分始期、普遍期和末期，并规定抽穗期观测至80%确定齐穗期。",
+    "user_expressions_count": 9,
+    "metric_count": 4,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "粮食作物",
+      "经济作物",
+      "果树作物"
+    ],
+    "evaluation_method": "['发育期百分率观测法', '发育期等级划分']",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_t1",
+    "source_preview": "[黑龙江 技术规范] | 区/县名 | 区县编号 | 经度（×××.××E） | 纬度（××.××N） | 土壤类型 | 肥力等级 | 土壤 深度（cm） | 土壤PH | 土壤有机质含量（%） | 饱和含水量（%） | 田间持水量（%） | 凋萎湿度（%） | 土壤养分（全氮）含量（%） | 土壤养分（钾）含量（%） | 土壤养分（磷）含量（%） | 备注 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n|  |  |  |  |  |  | 10 |  |  |  |  |  |  |  |  |  |\n|  |  |  |  |  |  | 20 |  |  |  |  |  |  |  |  |  |\n|  |  |  |  |  |  | 30 |  |  |  |  |  |  |  |  |  |\n|  |  |  |  |  |  | 40 |  |  |  |  |  |  |  |  |  |\n|  |  |  |  |  |  | 50 |  |  |  |  ",
+    "source_len": 618,
+    "core_concept": [
+      "土壤属性调查",
+      "农业普查数据采集"
+    ],
+    "technical_terms": [
+      "土壤类型",
+      "肥力等级",
+      "土壤有机质含量",
+      "饱和含水量",
+      "田间持水量",
+      "凋萎湿度",
+      "土壤养分"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk为黑龙江农业生产普查的土壤属性数据采集表，列出土壤类型、肥力、深度、PH、有机质、含水量和养分等字段。",
+    "user_expressions_count": 3,
+    "metric_count": 1,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_t2",
+    "source_preview": "[黑龙江 技术规范] | 区/县名 | 区县编号 | 经度（×××.××E） | 纬度（×××.××N） | 年（yyyy） | 作物熟制 | 种植方式 | 作物1 | 作物2 | 作物3 | 作物4 | 林果1 | 林果2 | 蔬菜1 | 蔬菜2 | 备注 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |\n|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |",
+    "source_len": 305,
+    "core_concept": [
+      "农业生产普查数据表结构",
+      "农业种植信息登记"
+    ],
+    "technical_terms": [
+      "作物熟制",
+      "种植方式",
+      "区县编号",
+      "作物",
+      "林果",
+      "蔬菜"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk定义黑龙江农业生产普查数据表的字段结构，涵盖区县、经纬度、作物熟制、种植方式及作物、林果、蔬菜等登记项。",
+    "user_expressions_count": 3,
+    "metric_count": 3,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "作物",
+      "林果",
+      "蔬菜"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 4
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_t3",
+    "source_preview": "[黑龙江 技术规范] | 区/县名 | 区县编号 | 经度（×××.××E） | 纬度（××.××N） | 年（yyyy） | 作物类型 | 作物品种 | 发育期1名称 | 发育期1日期（yyyy-mm-dd） | 发育期2名称 | 发育期2日期（yyyy-mm-dd） | 发育期3名称 | 发育期3日期（yyyy-mm-dd） | 发育期4名称 | 发育期4日期（yyyy-mm-dd） | …… | 备注 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |\n|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |\n|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |",
+    "source_len": 444,
+    "core_concept": [
+      "农业气象观测数据记录规范",
+      "作物发育期观测"
+    ],
+    "technical_terms": [
+      "发育期",
+      "作物类型",
+      "作物品种",
+      "区县编号",
+      "经度",
+      "纬度"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk定义黑龙江农业生产普查中作物发育期观测记录表的字段结构，包括区县、经纬度、作物类型品种及多个发育期名称和日期。",
+    "user_expressions_count": 3,
+    "metric_count": 4,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "作物"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 4
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_t5",
+    "source_preview": "[黑龙江 技术规范] | 区/县名 | 区县编号 | 经度（×××.××E） | 纬度（××.××N） | 年（yyyy） | 作物类型 | 作物品种 | 播种日期mm-dd | 收获日期mm-dd | 种植面积(hm2) | 产量（kg/hm2） | 品质指标1 | 品质指标2 | 品质指标3 | …… |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |\n|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |\n|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |",
+    "source_len": 366,
+    "core_concept": [
+      "农业生产普查数据表结构",
+      "作物种植信息记录规范"
+    ],
+    "technical_terms": [
+      "区县编号",
+      "作物类型",
+      "作物品种",
+      "种植面积",
+      "产量",
+      "品质指标"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk定义黑龙江农业生产普查表的数据结构，包含区县、经纬度、作物类型品种、播种收获日期、种植面积、产量和品质指标等字段。",
+    "user_expressions_count": 4,
+    "metric_count": 7,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "作物"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 3
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_t7",
+    "source_preview": "[黑龙江 技术规范] | 区/县名 | 区县编号 | 经度（×××.××E） | 纬度（××.××N） | 年 （YYYY） | 作物类型 | 播种日期（yyyy-mm-dd） | 收获日期(yyyy-mm-dd) | 农事管理时间（yyyy-mm-dd） | 灌溉方式 | 灌溉量(mm) | 施肥种类 | 施肥量（kg/hm2） | 农药喷施方式 | 喷药量 （kg/hm2） | 备注 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |\n|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |\n|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |\n|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |",
+    "source_len": 471,
+    "core_concept": [
+      "农业生产普查数据采集",
+      "农事管理记录规范"
+    ],
+    "technical_terms": [
+      "区县编号",
+      "作物类型",
+      "播种日期",
+      "收获日期",
+      "灌溉方式",
+      "灌溉量",
+      "施肥种类",
+      "施肥量"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk定义黑龙江农业生产普查表格的字段结构，包括区县、作物、播种收获日期、灌溉施肥喷药等农事管理记录项。",
+    "user_expressions_count": 3,
+    "metric_count": 9,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "作物"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 4
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_t9",
+    "source_preview": "[黑龙江 技术规范] | 区/县名 | 区县编号 | 经度（×××.××E） | 纬度（××.××N） | 年（yyyy） | 作物类型 | 受害的发育期和病虫害名称 | 受害期 | 受害征状 | 防治措施 | 成灾面积（hm2）和比例（%） | 造成的减产程度（%） | 备注 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n|  |  |  |  |  |  |  |  |  |  |  |  |  |\n|  |  |  |  |  |  |  |  |  |  |  |  |  |\n|  |  |  |  |  |  |  |  |  |  |  |  |  |",
+    "source_len": 326,
+    "core_concept": [
+      "农业灾害普查",
+      "病虫害调查记录"
+    ],
+    "technical_terms": [
+      "受害的发育期",
+      "病虫害名称",
+      "受害期",
+      "受害征状",
+      "防治措施",
+      "成灾面积",
+      "减产程度"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk为黑龙江农业生产普查技术规范中的表格模板，定义了农业灾害普查需记录的字段，包括地理位置、作物类型、受害发育期、病虫害名称、受害期、征状、防治措施、成灾面积和减产程度。",
+    "user_expressions_count": 3,
+    "metric_count": 4,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "作物"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 4
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_t8",
+    "source_preview": "[黑龙江 技术规范] | 区/县名 | 区县编号 | 经度（×××.××E） | 纬度（××.××N） | 年（yyyy） | 作物类型 | 受害名称 | 灾害起止日期 | 受害时的天气或气候情况 | 受害征状 | 受害程度（轻中重） | 灾前、灾后采取的主要措施 | 成灾面积（hm2）和比例（%） | 造成的减产程度（%） | 备注 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |\n|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |\n|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |",
+    "source_len": 381,
+    "core_concept": [
+      "农业灾害普查",
+      "灾害信息记录"
+    ],
+    "technical_terms": [
+      "受害名称",
+      "受害程度",
+      "成灾面积",
+      "减产程度",
+      "灾害起止日期"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk为黑龙江农业灾害普查表格模板，定义了区县、作物、灾害信息、受害程度、成灾面积和减产程度等记录字段。",
+    "user_expressions_count": 3,
+    "metric_count": 4,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "作物"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 3
+  },
+  {
+    "chunk_id": "黑龙江农业生产普查技术规范2025_t11",
+    "source_preview": "[黑龙江 技术规范] | 区/县名 | 区县编号 | 经度（×××.××E） | 纬度（××.××N） | 年（yyyy） | 作物类型 | 作物每公斤价格（元/kg） | 副产品产量（如秸秆）（kg/hm2） | 副产品（如秸秆）每公斤价格（元/kg） | 备注 |\n|---|---|---|---|---|---|---|---|---|---|---|---|\n|  |  |  |  |  |  |  |  |  |  |\n|  |  |  |  |  |  |  |  |  |  |\n|  |  |  |  |  |  |  |  |  |  |",
+    "source_len": 280,
+    "core_concept": [
+      "农业生产普查数据采集",
+      "作物经济数据记录"
+    ],
+    "technical_terms": [
+      "副产品产量",
+      "作物每公斤价格",
+      "区县编号",
+      "经度",
+      "纬度"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk定义黑龙江农业生产普查表格的字段结构，包括地理位置、作物类型、价格和副产品产量等数据记录规范。",
+    "user_expressions_count": 3,
+    "metric_count": 6,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "作物"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "黑龙江省大豆产量气候区划技术规范(初稿)_s0",
+    "source_preview": "[黑龙江 大豆 产量区划] 收集区划范围内及周边区域30年及以上连续观测的站点（格点）逐日气象要素资料，至少包括日平均气温、降水量、日照、风速、相对湿度等。",
+    "source_len": 78,
+    "core_concept": [
+      "农业气候区划数据基础",
+      "气象资料收集"
+    ],
+    "technical_terms": [
+      "逐日气象要素",
+      "日平均气温",
+      "降水量",
+      "日照",
+      "风速",
+      "相对湿度",
+      "站点",
+      "格点"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk规定大豆产量气候区划需收集30年及以上连续观测的逐日气象要素资料，包括气温、降水、日照、风速、相对湿度等。",
+    "user_expressions_count": 5,
+    "metric_count": 2,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "['气象资料收集']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江省大豆产量气候区划技术规范(初稿)_t0",
+    "source_preview": "[黑龙江 大豆 产量区划] | 产区 | 高产 高稳产区 | 高产 中稳产区 | 高产 低稳产区 | 中产 高稳产区 | 中产 中稳产区 | 中产 低稳产区 | 低产 高稳产区 | 低产 中稳产区 | 低产 低稳产区 |\n|---|---|---|---|---|---|---|---|---|---|---|---|\n|  | ≤C50 | (C50,C80] | > C80 | ≤C50 | (C50,C80] | > C80 | ≤C50 | (C50,C80] | > C80 |\n|  | ≥Y50 | ≥Y50 | ≥Y50 | [Y10, Y50) | [Y10, Y50) | [Y10, Y50) | < Y10 | < Y10 | < Y10 |",
+    "source_len": 335,
+    "core_concept": [
+      "大豆产量气候区划",
+      "产量稳定性区划"
+    ],
+    "technical_terms": [
+      "C50",
+      "Y50",
+      "Y10",
+      "产量气候区划",
+      "稳产等级"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出黑龙江大豆产量气候区划的9类产区划分标准，以C50和Y50、Y10为阈值组合产量等级与稳产等级。",
+    "user_expressions_count": 7,
+    "metric_count": 2,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 3
+  },
+  {
+    "chunk_id": "黑龙江省大豆产量气候区划技术规范(初稿)_t1",
+    "source_preview": "[黑龙江 大豆 产量区划] 黑龙江大豆产量区划中，该表格为权重分配，列出S、ε、φ、α等4个维度的权重系数。S：意义 作物光合固定CO2能力的比例，取值 0.6，参数 ω，意义 呼吸消耗占光合产物的比例，取值 0.35；ε：意义 光合有效辐射占总辐射的比例，取值 0.49，参数 FL，意义 作物叶面积动态变化订正值，取值 0.50；φ：意义 光合作用量子效率，取值 0.224，参数 E，意义 作物经济系数，取值 0.35；α：意义 植物群体反射率，取值 0.10，参数 q，意义 单位干物质含热量 MJ· kg-1，取值 23.1；β：意义 植物繁茂群体透射率，取值 0.10，参数 η，意义 成熟谷物含水量，取值 0.15；ρ：意义 非光合器官截获辐射比例，取值 0.10，参数 ξ，意义 植物无机灰分含量比例，取值 0.08；γ：意义 超过光饱和点光的比例，取值 0.10",
+    "source_len": 390,
+    "core_concept": [
+      "大豆产量气候区划",
+      "光能利用率模型参数"
+    ],
+    "technical_terms": [
+      "权重系数",
+      "光合有效辐射",
+      "量子效率",
+      "经济系数",
+      "反射率",
+      "透射率",
+      "呼吸消耗",
+      "干物质含热量"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出黑龙江大豆产量气候区划模型中S、ε、φ、α等维度及ω、FL、E等参数的权重系数取值。",
+    "user_expressions_count": 4,
+    "metric_count": 13,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s0",
+    "source_preview": "[黑龙江 大豆 冷害风险区划] 低温冷害是指在作物生长发育期间，尽管日最低气温在0℃以上、天气比较温暖，但出现较长时间的持续性低温天气，或者在作物生殖生长期间出现短期的强低温天气过程，日平均气温低于作物生长发育适宜温度的下限指标，从而影响农作物的生长发育或结实而引起减产的农业气象灾害。",
+    "source_len": 143,
+    "core_concept": [
+      "低温冷害",
+      "农业气象灾害"
+    ],
+    "technical_terms": [
+      "低温冷害",
+      "持续性低温",
+      "强低温天气",
+      "日平均气温",
+      "适宜温度下限",
+      "农业气象灾害"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk定义低温冷害为作物生育期间持续低温或短期强低温导致日平均气温低于适宜下限而减产的农业气象灾害。",
+    "user_expressions_count": 7,
+    "metric_count": 2,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "作物",
+      "生长发育期",
+      "生殖生长期间"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s1",
+    "source_preview": "[黑龙江 大豆 冷害风险区划] 低温冷害对农业生产危害较大，当出现冷害时，作物产量性状发生改变，大豆在生育期内遇低温冷害，因热量不足，发育期延迟，进而造成籽粒灌浆的时间缩短，那么在霜冻到来时，籽粒可能不能正常成熟，如果早霜冻提前到来则遭受低温减产更为严重。",
+    "source_len": 128,
+    "core_concept": [
+      "低温冷害",
+      "大豆冷害减产机制"
+    ],
+    "technical_terms": [
+      "低温冷害",
+      "热量不足",
+      "发育期延迟",
+      "籽粒灌浆",
+      "早霜冻"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk解释低温冷害导致大豆减产的作用机制，即热量不足引起发育期延迟和灌浆时间缩短，早霜冻提前时减产更重。",
+    "user_expressions_count": 5,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆",
+      "籽粒灌浆期",
+      "发育期"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江省大豆产量气候区划技术规范(初稿)_t2",
+    "source_preview": "[黑龙江 大豆 产量区划] | 时段 | 潜在发育阶段 | Tmin/℃ | To/℃ | Tmax/ ℃ | Kc |\n|---|---|---|---|---|---|---|---|\n| 4月下旬—5月中旬 | 播种-出苗 | 7.5 | 16 | 26 | 0.45 |\n| 5月下旬—6月上旬 | 出苗-三真叶 | 10 | 18.5 | 30 | 0.6 |\n| 6月中旬—7月上旬 | 三真叶-开花 | 13 | 22 | 32 | 0.9 |\n| 7月中旬—8月上旬 | 开花-结荚 | 16 | 24.5 | 32 | 1.32 |\n| 8月中旬—8月下旬 | 结荚-鼓粒 | 14 | 23 | 30 | 1.2 |\n| 9月上旬—10月上旬 | 鼓粒-成熟 | 10 | 18 | 30 | 0.7 |",
+    "source_len": 362,
+    "core_concept": [
+      "大豆生育期温度指标",
+      "大豆作物系数"
+    ],
+    "technical_terms": [
+      "Tmin",
+      "To",
+      "Tmax",
+      "Kc",
+      "潜在发育阶段",
+      "生育期"
+    ],
+    "concept_evidence_count": 2,
+    "semantic_summary": "该chunk给出黑龙江省大豆各生育阶段的最低、最适、最高温度及作物系数Kc的阈值表。",
+    "user_expressions_count": 7,
+    "metric_count": 24,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆",
+      "播种-出苗",
+      "出苗-三真叶",
+      "三真叶-开花",
+      "开花-结荚"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s2",
+    "source_preview": "[黑龙江 大豆 冷害风险区划] 资料处理及插补方法：\n\n以1961-2023年黑龙江省低温冷害风险区划数据为例，计算方法如下：\n\n利用黑龙江省83个气象观测站1961-2023年日平均气温资料，计算黑龙江省83个气象观测站5-9月月平均气温之和（），部分站点资料年限不全，采用了多要素回归方法，使用邻近站点资料进行插补。将全省83个气象站5-9月月平均气温之和（）资料补全，资料年限是1961-2023年。资料插补情况见表1。\n\n表1 1961-2023年5-9月月平均气温之和（）插补情况列表\n\n计算黑龙江省83个气象观测站5-9月各月月平均温度之和的距平值（），计算式为",
+    "source_len": 287,
+    "core_concept": [
+      "低温冷害风险区划",
+      "气象资料插补方法"
+    ],
+    "technical_terms": [
+      "5-9月月平均气温之和",
+      "距平值",
+      "多要素回归方法",
+      "插补",
+      "低温冷害风险区划"
+    ],
+    "concept_evidence_count": 2,
+    "semantic_summary": "该chunk描述黑龙江省大豆低温冷害风险区划的气象资料处理方法，包括83个站点5-9月月平均气温之和计算及缺失资料的多要素回归插补方法。",
+    "user_expressions_count": 7,
+    "metric_count": 3,
+    "region": {
+      "names": [
+        "黑龙江省"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "['多要素回归方法', '插补', '距平值计算']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s4",
+    "source_preview": "[黑龙江 大豆 冷害风险区划] 式中，H1为致灾因子危险性指数，Xi为第i种致灾因子归一化值，𝑎为第i种致灾因子权重系数，建议权重系数由层次分析法获得，1961-2023年致灾因子权重见表3（可以根据实际情况修改权重方法，如可以选择信息熵赋权法等方法）。\n\n表3  致灾因子危险性各因子权重\n\n归一化计算方法如下：",
+    "source_len": 157,
+    "core_concept": [
+      "致灾因子危险性评价",
+      "权重系数确定"
+    ],
+    "technical_terms": [
+      "致灾因子危险性指数",
+      "归一化值",
+      "权重系数",
+      "层次分析法",
+      "信息熵赋权法"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述大豆冷害致灾因子危险性指数的计算方法，包括归一化处理和权重系数确定方法（层次分析法、信息熵赋权法）。",
+    "user_expressions_count": 7,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "['层次分析法', '信息熵赋权法', '归一化计算']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s5",
+    "source_preview": "[黑龙江 大豆 冷害风险区划] 式中：\n\n——该项所对应的指标比指标的重要程度。取值1，表示指标与指标一样重要；取值3，表示指标比指标重要一点；取值5，表示指标比指标重要；取值7，表示指标比指标重要得多；取值9，表示指标比指标极端重要；取值2、4、6、8介于上述邻近两项之间；相应倒数表示不重要程度。\n\n计算权重\n\n求出判断矩阵T的最大特征根和特征向量W，对W进行归一化后即为各指标相对权重。\n\n一致性检验\n\n按式（9）计算一致性指标。",
+    "source_len": 218,
+    "core_concept": [
+      "指标权重计算",
+      "层次分析法"
+    ],
+    "technical_terms": [
+      "判断矩阵",
+      "最大特征根",
+      "特征向量",
+      "归一化",
+      "相对权重",
+      "一致性检验",
+      "一致性指标"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述大豆冷害风险区划中指标权重的计算方法，采用判断矩阵特征向量归一化求权重并进行一致性检验。",
+    "user_expressions_count": 6,
+    "metric_count": 1,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "['层次分析法', '权重计算', '一致性检验']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s3",
+    "source_preview": "[黑龙江 大豆 冷害风险区划] 式中，∑Ti为5-9月各月月平均温度之和（℃），Ti为i月月平均温度（℃），i取值为5-9；为5-9月各月月平均温度之和的30a平均值。考虑1961-2023年气候变暖的年代变化，采取30a滑动平均方式计算，即1961-1991年是每年与（1961-1990年平均值）的差值，自1992年滚动计算30a平均值，如1992年是（1992年）与（1962-1991年平均值）的差值，1993年是（1993年）与（1963-1992年平均值）的差值，依此类推，2020年是（2020年）与（1990-2019年平均值）的差值。采用此方式计算，可减少气候变暖影响，确保数据结果科学性，使计算结果准确性更高。\n\n低温冷害指标：\n\n低温冷害依据中国农业气象发表的文章黑龙江省大豆延迟型冷害指标（闫平等2024年6月）判识，见表2。\n\n表2  黑龙江大豆5个种植区延迟型冷害5-9月各月月平均温度之和距平指标(℃)\n\n致灾因子危险性：\n\n致灾因子危险性根据大豆低温冷害5-9月月平均气温之和距平指标，得出各站点对应区划年份的低温冷害年，以低温冷害年5-9月月平均气温和距平差值作为低",
+    "source_len": 550,
+    "core_concept": [
+      "低温冷害",
+      "致灾因子危险性评估",
+      "延迟型冷害指标"
+    ],
+    "technical_terms": [
+      "5-9月各月月平均温度之和",
+      "30a滑动平均",
+      "距平指标",
+      "低温冷害强度",
+      "低温冷害频率",
+      "致灾因子危险性",
+      "延迟型冷害"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述黑龙江大豆低温冷害致灾因子危险性评估方法，采用30a滑动平均计算5-9月温度距平，以距平指标判识冷害年并计算强度与频率。",
+    "user_expressions_count": 10,
+    "metric_count": 4,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆",
+      "延迟型冷害"
+    ],
+    "evaluation_method": "['30a滑动平均', '距平指标判识', '致灾因子危险性评估']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s7",
+    "source_preview": "[黑龙江 大豆 冷害风险区划] 式中，H2为孕灾环境危险性指数，Xj为第j种孕灾环境归一化值，b为第j种孕灾环境权重系数。\n\n表5 孕灾环境危险性各因子权重\n\n孕灾环境危险性指数分辨率大小为100m×100m网格，孕灾环境危险性划分4个等级。",
+    "source_len": 121,
+    "core_concept": [
+      "孕灾环境危险性评价",
+      "冷害气候风险区划"
+    ],
+    "technical_terms": [
+      "孕灾环境危险性指数",
+      "归一化值",
+      "权重系数",
+      "网格分辨率"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述大豆冷害孕灾环境危险性指数的计算方法，采用因子归一化值与权重系数加权求和，以100m×100m网格划分4个等级。",
+    "user_expressions_count": 6,
+    "metric_count": 2,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "['孕灾环境危险性评价', '加权求和', '等级划分']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s6",
+    "source_preview": "[黑龙江 大豆 冷害风险区划] 根据矩阵阶数，按表4查找平均随机一致性指标。\n\n表4  1～9阶判断矩阵的平均随机一致性指标\n\n按式（10）计算一致性比例。当＜0.1时，一般认为判断矩阵的一致性是可以接受的,否则应对判断矩阵作适当修正。",
+    "source_len": 118,
+    "core_concept": [
+      "层次分析法",
+      "判断矩阵一致性检验"
+    ],
+    "technical_terms": [
+      "判断矩阵",
+      "平均随机一致性指标",
+      "一致性比例",
+      "矩阵阶数"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述层次分析法中判断矩阵一致性检验方法，通过查表获取平均随机一致性指标并计算一致性比例，阈值小于0.1为可接受。",
+    "user_expressions_count": 5,
+    "metric_count": 1,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "['层次分析法', '判断矩阵一致性检验']",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s9",
+    "source_preview": "[黑龙江 大豆 冷害风险区划] 式中d和e为权重系数，权重系数由信息熵赋权法获得，1961-2023年承灾体暴露度各因子权重见表8（可以根据实际情况修改权重方法）。\n\n表8 大豆承灾体暴露度权重系数\n\n承灾体暴露度指数分辨率大小为100m×100m网格，低温冷害承灾体暴露度划分4个等级。",
+    "source_len": 144,
+    "core_concept": [
+      "大豆低温冷害风险区划",
+      "承灾体暴露度评价"
+    ],
+    "technical_terms": [
+      "权重系数",
+      "信息熵赋权法",
+      "承灾体暴露度",
+      "暴露度指数",
+      "网格分辨率"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述大豆低温冷害风险区划中承灾体暴露度的评价方法，采用信息熵赋权法确定权重并以100m×100m网格划分4个等级。",
+    "user_expressions_count": 6,
+    "metric_count": 3,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "['信息熵赋权法', '承灾体暴露度等级划分']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s8",
+    "source_preview": "[黑龙江 大豆 冷害风险区划] 承灾体暴露度是指可能受到气象灾害威胁的社会、经济和自然环境系统，具体包括农业、牧业、工业、城市、人类和生态环境等。一个地区暴露于低温冷害危险因素的价值密度越高，可能遭受潜在损失就大，风险也越高。\n\n暴露度主要考虑大豆收获面积和土地利用类型。大豆收获面积越大，暴露度越高，通过归一化计算，可得到收获面积指数（Em），按照IDW法进行格点化处理进行分区形成大豆收获面积指数图层。对土地类型进行重分类值（Et）。\n\n表7 土地利用类型的赋值\n\nEt通过归一化计算，可得到土地类型指数（Etg），按照IDW法进行格点化处理进行分区形成土地类型指数图层。\n\n大豆种植面积指数和土地利用类型指数权重各占50%，将大豆种植面积指数和土地利用类型指数按下式叠加，得到承灾体暴露度指数（）。",
+    "source_len": 352,
+    "core_concept": [
+      "承灾体暴露度",
+      "低温冷害风险评估"
+    ],
+    "technical_terms": [
+      "承灾体暴露度",
+      "大豆收获面积",
+      "土地利用类型",
+      "收获面积指数",
+      "土地类型指数",
+      "IDW法",
+      "归一化计算"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述大豆低温冷害承灾体暴露度的评价方法，通过大豆收获面积和土地利用类型归一化、IDW格点化并按50%权重叠加得到暴露度指数。",
+    "user_expressions_count": 9,
+    "metric_count": 2,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "['归一化计算', 'IDW法格点化', '指数叠加', '承灾体暴露度评价']",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s11",
+    "source_preview": "[黑龙江 大豆 冷害风险区划] 防灾减灾能力主要是体现一些当地经济能力反应的抵御灾害的能力，主要可以包括一些工程性和非工程性两类。例如对干旱的抵御能力包括：灌溉投入、水库容量、机井数等财政投入等。根据数据收集的规范性和难易程度，选择人均GDP体现防灾减灾能力（R）。人均GDP越高，说明经济越发达，可供投入的防灾减灾能力越强。防灾减灾能力越强，则风险越低。\n\n将R通过归一化计算，可得到防灾减灾能力指数（），按照IDW法进行格点化处理进行分区形成防灾减灾能力指数图。防灾减灾能力划分4个等级。",
+    "source_len": 246,
+    "core_concept": [
+      "防灾减灾能力评价",
+      "农业气象灾害风险区划"
+    ],
+    "technical_terms": [
+      "防灾减灾能力",
+      "人均GDP",
+      "归一化计算",
+      "防灾减灾能力指数",
+      "IDW法",
+      "格点化处理"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述以人均GDP体现防灾减灾能力，通过归一化和IDW格点化处理划分4个等级，用于大豆冷害风险区划。",
+    "user_expressions_count": 8,
+    "metric_count": 1,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "['归一化计算', 'IDW法格点化处理', '等级划分']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s10",
+    "source_preview": "[黑龙江 大豆 冷害风险区划] 承灾体脆弱性指数（）是大豆单产变异系数（）的标准化值， 按式（14）计算。\n\n(14)\n\n式中：\n\n——某县（市、区）第  年大豆单产，单位为千克每公顷（kg/hm²）；\n\n——某县（市、区）大豆单产多年平均值，单位为千克每公顷（kg/hm²）；\n\n——总年数,建议取 30。\n\n承灾体脆弱性指数分辨率大小为100m×100m网格，低温冷害承灾体暴露度划分4个等级。",
+    "source_len": 199,
+    "core_concept": [
+      "承灾体脆弱性指数",
+      "低温冷害承灾体暴露度"
+    ],
+    "technical_terms": [
+      "承灾体脆弱性指数",
+      "大豆单产变异系数",
+      "标准化值",
+      "承灾体暴露度",
+      "分辨率"
+    ],
+    "concept_evidence_count": 2,
+    "semantic_summary": "该chunk定义大豆承灾体脆弱性指数的计算方法（由单产变异系数标准化），并说明低温冷害承灾体暴露度划分4个等级。",
+    "user_expressions_count": 6,
+    "metric_count": 3,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "['标准化计算', '式（14）', '等级划分']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s12",
+    "source_preview": "[黑龙江 大豆 冷害风险区划] 在低温冷害风险区划的四个因子中，利用AHP法赋予不同的权重值，1961-2023年低温冷害风险区划各因子权重见表9（可以根据实际情况修改权重方法）。\n\n表9 大豆低温冷害风险区划权重系数\n\n根据低温冷害风险指数评价模型计算综合风险指数，利用自然断点法将低温冷害综合风险指数分为四个等级（表10），在大豆灾害区划系统中生成100km×100km格点大小的适用于黑龙江省本地的大豆低温冷害风险区划图。\n\n表10 黑龙江省大豆低温冷害风险等级分区",
+    "source_len": 236,
+    "core_concept": [
+      "低温冷害风险区划",
+      "综合风险指数评价",
+      "风险等级划分"
+    ],
+    "technical_terms": [
+      "AHP法",
+      "权重值",
+      "低温冷害风险指数评价模型",
+      "综合风险指数",
+      "自然断点法",
+      "风险等级"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述黑龙江省大豆低温冷害风险区划方法，利用AHP法赋权重、风险指数模型计算综合风险指数，并用自然断点法划分四级风险等级。",
+    "user_expressions_count": 7,
+    "metric_count": 2,
+    "region": {
+      "names": [
+        "黑龙江省"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "['AHP法', '低温冷害风险指数评价模型', '自然断点法', '风险等级划分']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_t0",
+    "source_preview": "[黑龙江 大豆 冷害风险区划] 黑龙江大豆冷害风险区划中，该表格列出漠河、北极村、塔河、呼中等4项指标的具体数值。漠河：站名 丰林，站名 饶河；北极村：插补年份 1961-2001，站名 伊春，站名 肇州；塔河：站名 鹤岗，站名 哈尔滨；呼中：插补年份 1961-1973，站名 萝北，站名 肇源；新林：插补年份 1961-1971，站名 同江，插补年份 1961-1966，站名 双城；呼玛：站名 抚远，插补年份 1961-1967，站名 呼兰，插补年份 1995-1998；加格达奇：插补年份 1961-1966，站名 绥滨，插补年份 1995-1998，站名 阿城；爱辉：站名 富锦，站名 宾县；嫩江：站名 杜蒙，站名 木兰；孙吴：站名 泰来，站名 通河；逊克：站名 大庆，插补年份 1961-2007，站名 方正，插补年份 1961；讷河：站名 青冈，站名 延寿；五大连池：插补年份 1961-1965，站名 望奎，站名 尚志；北安：站名 北林，站名 七台河，插补年份 1961-2002；克山：站名 安达，站名 勃利；克东：插补年份 1995-1998，站名 肇东，站名 鸡西；嘉荫：站名 ",
+    "source_len": 773,
+    "core_concept": [
+      "气象站点数据插补",
+      "冷害风险区划数据来源"
+    ],
+    "technical_terms": [
+      "插补年份",
+      "站名",
+      "气象站点"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk列出黑龙江大豆冷害风险区划中各气象站点的插补年份及对应插补站名，反映数据来源与插补关系。",
+    "user_expressions_count": 7,
+    "metric_count": 5,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 3
+  },
+  {
+    "chunk_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_t2",
+    "source_preview": "[黑龙江 大豆 冷害风险区划] 黑龙江大豆冷害风险区划中，该表格为权重分配，列出权重等1个维度的权重系数。权重：大豆低温冷害强度 0.25，大豆低温冷害频率 0.75",
+    "source_len": 83,
+    "core_concept": [
+      "大豆低温冷害风险区划",
+      "权重分配"
+    ],
+    "technical_terms": [
+      "权重系数",
+      "大豆低温冷害强度",
+      "大豆低温冷害频率",
+      "风险区划"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出黑龙江大豆低温冷害风险区划中冷害强度和冷害频率两项指标的权重系数（0.25和0.75）。",
+    "user_expressions_count": 3,
+    "metric_count": 2,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_t1",
+    "source_preview": "[黑龙江 大豆 冷害风险区划] | 冷害等级 | Ⅰ | Ⅱ | Ⅲ | Ⅳ | Ⅴ |\n|---|---|---|---|---|---|---|---|\n| 冷害等级 | ≤80 | 80<≤85 | 85<≤90 | 90<≤95 | 95<≤100 |\n| 轻度 |  |  |  |  |  |\n| 中度 |  |  |  |  |  |\n| 严重 |  |  |  |  |  |",
+    "source_len": 196,
+    "core_concept": [
+      "大豆冷害等级划分",
+      "冷害风险区划"
+    ],
+    "technical_terms": [
+      "冷害等级",
+      "冷害风险区划"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出黑龙江省大豆冷害等级Ⅰ至Ⅴ的数值区间阈值，用于冷害风险区划。",
+    "user_expressions_count": 5,
+    "metric_count": 5,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_t3",
+    "source_preview": "[黑龙江 大豆 冷害风险区划] | 判断矩阵阶数 |  |\n|---|---|---|---|\n| 1 | 0 |\n| 2 | 0 |\n| 3 | 0.58 |\n| 4 | 0.90 |\n| 5 | 1.12 |\n| 6 | 1.24 |\n| 7 | 1.32 |\n| 8 | 1.41 |\n| 9 | 1.45 |",
+    "source_len": 158,
+    "core_concept": [
+      "层次分析法判断矩阵",
+      "随机一致性指标"
+    ],
+    "technical_terms": [
+      "判断矩阵阶数",
+      "随机一致性指标",
+      "RI值"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出层次分析法中1~9阶判断矩阵对应的随机一致性指标RI值，用于一致性检验。",
+    "user_expressions_count": 4,
+    "metric_count": 18,
+    "region": null,
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_t4",
+    "source_preview": "[黑龙江 大豆 冷害风险区划] 黑龙江大豆冷害风险区划中，该表格为权重分配，列出权重等1个维度的权重系数。权重：海拔高度 0.55，地势 0.27，坡向 0.18",
+    "source_len": 81,
+    "core_concept": [
+      "大豆冷害风险区划",
+      "权重分配"
+    ],
+    "technical_terms": [
+      "权重系数",
+      "海拔高度",
+      "地势",
+      "坡向",
+      "冷害风险区划"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出黑龙江大豆冷害风险区划中海拔高度、地势、坡向三个因子的权重分配方案。",
+    "user_expressions_count": 5,
+    "metric_count": 3,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "['权重分配', '冷害风险区划']",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_t5",
+    "source_preview": "[黑龙江 大豆 冷害风险区划] 黑龙江大豆冷害风险区划中，该表格为权重分配，列出权重等1个维度的权重系数。权重：致灾因子危险性 0.50，孕灾环境危险性 0.50",
+    "source_len": 81,
+    "core_concept": [
+      "大豆冷害风险区划",
+      "权重分配"
+    ],
+    "technical_terms": [
+      "权重系数",
+      "致灾因子危险性",
+      "孕灾环境危险性",
+      "风险区划"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出黑龙江大豆冷害风险区划中致灾因子危险性和孕灾环境危险性两个指标的权重分配，各为0.50。",
+    "user_expressions_count": 6,
+    "metric_count": 2,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "['权重分配', '风险区划']",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_t7",
+    "source_preview": "[黑龙江 大豆 冷害风险区划] 黑龙江大豆冷害风险区划中，该表格为权重分配，列出权重等1个维度的权重系数。权重：d 0.50，e 0.50",
+    "source_len": 69,
+    "core_concept": [
+      "大豆冷害风险区划",
+      "权重分配"
+    ],
+    "technical_terms": [
+      "权重系数",
+      "冷害风险区划"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出黑龙江大豆冷害风险区划中d和e两个因子的权重分配，权重系数均为0.50。",
+    "user_expressions_count": 4,
+    "metric_count": 2,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_t6",
+    "source_preview": "[黑龙江 大豆 冷害风险区划] | 土地类型 | 耕地 | 林地 | 草地 | 水域 | 城乡、工矿、居民用地 | 未利用土地 |\n|---|---|---|---|---|---|---|---|---|\n| 承灾体暴露度（Et） | 3 | 2 | 2 | 1 | 1 | 1 |",
+    "source_len": 142,
+    "core_concept": [
+      "承灾体暴露度",
+      "土地类型分类"
+    ],
+    "technical_terms": [
+      "承灾体暴露度",
+      "土地类型"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出黑龙江省大豆冷害风险区划中不同土地类型的承灾体暴露度赋值，耕地为3，林地和草地为2，其余为1。",
+    "user_expressions_count": 6,
+    "metric_count": 6,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_t8",
+    "source_preview": "[黑龙江 大豆 冷害风险区划] 黑龙江大豆冷害风险区划中，该表格为权重分配，列出致灾因子危险性指数权重系数 （）、承灾体暴露度指数权重系数 （）、承灾体脆弱性指数权重系数 （）、防灾减灾能力指数权重系数 （）等4个维度的权重系数。致灾因子危险性指数权重系数 （） 0.584，承灾体暴露度指数权重系数 （） 0.153，承灾体脆弱性指数权重系数 （） 0.153，防灾减灾能力指数权重系数 （） 0.11",
+    "source_len": 202,
+    "core_concept": [
+      "大豆冷害风险区划",
+      "风险评价权重分配"
+    ],
+    "technical_terms": [
+      "致灾因子危险性指数",
+      "承灾体暴露度指数",
+      "承灾体脆弱性指数",
+      "防灾减灾能力指数",
+      "权重系数"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出黑龙江大豆冷害风险区划中4个评价维度的权重系数，危险性指数权重最高为0.584。",
+    "user_expressions_count": 5,
+    "metric_count": 4,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_t9",
+    "source_preview": "[黑龙江 大豆 冷害风险区划] 黑龙江大豆冷害风险区划中，该表格为区划指标体系，列出低风险区、中风险区、高风险区、极高风险区等4项因子的风险指数范围分级阈值。低风险区：风险指数范围 0至0.27。中风险区：风险指数范围 0.27至0.44。高风险区：风险指数范围 0.44至0.65。极高风险区：风险指数范围 0.65至1",
+    "source_len": 161,
+    "core_concept": [
+      "大豆冷害风险区划",
+      "风险等级划分"
+    ],
+    "technical_terms": [
+      "风险指数",
+      "低风险区",
+      "中风险区",
+      "高风险区",
+      "极高风险区",
+      "冷害风险区划"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出黑龙江大豆冷害风险区划的风险指数分级阈值，划分低、中、高、极高4个风险等级。",
+    "user_expressions_count": 7,
+    "metric_count": 4,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "黑龙江省大豆品质气候区划技术规范(初稿)_s1",
+    "source_preview": "[黑龙江 大豆 品质区划] 收集区划范围内不少于最近5年的相关社会经济资料，包括作物类型、熟制、轮作方式、面积、发育期、品质等。",
+    "source_len": 64,
+    "core_concept": [
+      "大豆品质气候区划",
+      "基础资料收集"
+    ],
+    "technical_terms": [
+      "社会经济资料",
+      "熟制",
+      "轮作方式",
+      "发育期",
+      "品质"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述大豆品质气候区划需收集不少于5年的作物类型、熟制、轮作方式、面积、发育期、品质等社会经济资料。",
+    "user_expressions_count": 4,
+    "metric_count": 1,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "['资料收集', '区划']",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "黑龙江省大豆品质气候区划技术规范(初稿)_s2",
+    "source_preview": "[黑龙江 大豆 品质区划] 收集区划对象所在区域的行政区划、经度（必选）、纬度（必选）、高程（必选）、坡度（可选）、坡向（可选）、土地利用（可选）、土壤属性（可选）、遥感影像（可选）等地理信息资料。",
+    "source_len": 99,
+    "core_concept": [
+      "农业气候区划资料收集",
+      "地理信息数据采集"
+    ],
+    "technical_terms": [
+      "行政区划",
+      "经度",
+      "纬度",
+      "高程",
+      "坡度",
+      "坡向",
+      "土地利用",
+      "土壤属性",
+      "遥感影像"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk规定黑龙江省大豆品质气候区划需收集的地理信息资料，明确经纬度、高程为必选，坡度、土壤等为可选。",
+    "user_expressions_count": 7,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "['资料收集', '地理信息采集']",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "黑龙江省大豆品质气候区划技术规范(初稿)_s3",
+    "source_preview": "[黑龙江 大豆 品质区划] 根据国家标准《GB 1352-2023  大豆》中关于高蛋白、高油大豆的等级指标，针对气象条件所决定的大豆品质开展的农业气候区划，大豆品质气候区划空间范围覆盖全省，以县为最小行政区。",
+    "source_len": 105,
+    "core_concept": [
+      "大豆品质气候区划",
+      "高蛋白大豆",
+      "高油大豆"
+    ],
+    "technical_terms": [
+      "高蛋白大豆",
+      "高油大豆",
+      "等级指标",
+      "农业气候区划",
+      "GB 1352-2023"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk定义大豆品质气候区划，依据GB 1352-2023大豆等级指标，针对气象条件决定的大豆品质开展区划，覆盖全省以县为最小行政区。",
+    "user_expressions_count": 6,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "黑龙江省"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆",
+      "高蛋白大豆",
+      "高油大豆"
+    ],
+    "evaluation_method": "['农业气候区划']",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "黑龙江省大豆干旱气候风险区划技术规范（初稿）_s0",
+    "source_preview": "[黑龙江 大豆 干旱风险区划] 黑龙江大豆干旱区划技术规范\n\n黑龙江省气象科学研究所\n\n2024年6月\n\n本技术规范统一规定了大豆干旱区划工作中总体目标与任务要求，包括区划范围、定义、区划技术要求等内容。\n\n本技术规范适用于黑龙江省大豆种植区内干旱的风险区划。",
+    "source_len": 130,
+    "core_concept": [
+      "大豆干旱风险区划",
+      "区划技术规范"
+    ],
+    "technical_terms": [
+      "大豆干旱区划",
+      "风险区划",
+      "区划范围",
+      "区划技术要求"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk为黑龙江省大豆干旱气候风险区划技术规范的开篇，明确区划目标、任务、范围和技术要求，适用于黑龙江大豆种植区。",
+    "user_expressions_count": 5,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江省大豆品质气候区划技术规范(初稿)_s4",
+    "source_preview": "[黑龙江 大豆 品质区划] ### 3.2.1大豆蛋白水平区划\n\n参考国家标准《GB 1352-2023  大豆》中的高蛋白大豆质量指标（表1），将大豆粗蛋白含量划分为高蛋白气候区和低蛋白气候区。\n\n### 3.2.2各关键气象因子的空间化处理\n\n参考国家标准《GB 1352-2023  大豆》中的高油大豆质量指标（表1），将大豆粗脂肪含量划分为高脂肪气候区和低脂肪气候区。\n\n### 3.2.3大豆品质气候区划\n\n通过空间叠加分析，生成4个大豆品质气候区，即：高蛋白高脂肪气候区、高蛋白低脂肪气候区、低蛋白高脂肪气候区、低蛋白低脂肪气候区。\n\n表1 大豆品质气候区划指标\n\n首先，对大豆不同生育阶段光、温、水等气象因子与大豆各品质含量进行相关分析，剔除重叠和干扰信息，筛选出关键气象因子。利用多元回归方法得到大豆各品质指标与气象因子的数学回归模型。\n\n其次，基于GIS平台，通过建立气象因子与地理要素的关系模型及残差修正，对各关键气象因子进行空间化处理，\n\n第三步，基于GIS平台，利用格点化的气象数据和品质气象回归模型，通过栅格运算得大豆粗蛋白含量、粗脂肪含量分布图。\n\n最后，利用大豆品质气候",
+    "source_len": 540,
+    "core_concept": [
+      "大豆品质气候区划",
+      "大豆蛋白水平区划",
+      "大豆脂肪水平区划"
+    ],
+    "technical_terms": [
+      "高蛋白大豆质量指标",
+      "高油大豆质量指标",
+      "粗蛋白含量",
+      "粗脂肪含量",
+      "多元回归",
+      "空间化处理",
+      "栅格运算",
+      "叠加分析"
+    ],
+    "concept_evidence_count": 2,
+    "semantic_summary": "该chunk描述黑龙江省大豆品质气候区划方法，通过相关分析、多元回归和GIS空间化生成4类品质气候区。",
+    "user_expressions_count": 10,
+    "metric_count": 2,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆",
+      "粗蛋白含量",
+      "粗脂肪含量"
+    ],
+    "evaluation_method": "['相关分析', '多元回归', '空间化处理', '栅格运算', '叠加分析', '品质气候区划']",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "黑龙江省大豆品质气候区划技术规范(初稿)_t0",
+    "source_preview": "[黑龙江 大豆 品质区划] 黑龙江大豆品质区划中，该表格列出粗蛋白含量  %、粗脂肪含量  %等2项指标的具体数值。粗蛋白含量  %：高蛋白高脂肪气候区 ≥40，高蛋白低脂肪气候区 ≥40，低蛋白高脂肪气候区 <40，低蛋白低脂肪气候区 <40。粗脂肪含量  %：高蛋白高脂肪气候区 ≥20，高蛋白低脂肪气候区 ＜20，低蛋白高脂肪气候区 ≥20，低蛋白低脂肪气候区 ＜20",
+    "source_len": 187,
+    "core_concept": [
+      "大豆品质气候区划",
+      "品质区划指标体系"
+    ],
+    "technical_terms": [
+      "粗蛋白含量",
+      "粗脂肪含量",
+      "高蛋白高脂肪气候区",
+      "高蛋白低脂肪气候区",
+      "低蛋白高脂肪气候区",
+      "低蛋白低脂肪气候区"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出黑龙江大豆品质气候区划的2项指标（粗蛋白、粗脂肪）及4类品质气候区的分级阈值。",
+    "user_expressions_count": 7,
+    "metric_count": 2,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "黑龙江省大豆干旱气候风险区划技术规范（初稿）_t0",
+    "source_preview": "[黑龙江 大豆 干旱风险区划] | FCV | 0-0.2 | 0.2-0.4 | 0.4-0.6 | 0.6-0.8 | 0.8-1 |\n|---|---|---|---|---|---|---|---|\n| 重分类值（） | 5 | 4 | 3 | 2 | 1 |",
+    "source_len": 134,
+    "core_concept": [
+      "大豆干旱气候风险区划",
+      "FCV重分类"
+    ],
+    "technical_terms": [
+      "FCV",
+      "重分类值"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出黑龙江大豆干旱风险区划中FCV值到重分类值的映射表，将FCV分为5个区间并赋5至1的重分类值。",
+    "user_expressions_count": 4,
+    "metric_count": 10,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "黑龙江省大豆干旱气候风险区划技术规范（初稿）_t1",
+    "source_preview": "[黑龙江 大豆 干旱风险区划] | DEM | 0-500 | 500-1000 | 1000-2000 | 2000-4000 | >4000 |\n|---|---|---|---|---|---|---|---|\n| 重分类值（） | 1 | 2 | 3 | 4 | 5 |",
+    "source_len": 139,
+    "core_concept": [
+      "大豆干旱气候风险区划",
+      "DEM重分类"
+    ],
+    "technical_terms": [
+      "DEM",
+      "重分类值",
+      "海拔分级"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出黑龙江省大豆干旱气候风险区划中DEM海拔分级及其对应的重分类值（1-5）。",
+    "user_expressions_count": 4,
+    "metric_count": 10,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_s0",
+    "source_preview": "[黑龙江 大豆 渍涝风险区划] 黑龙江省大豆渍涝区划技术规范\n\n黑龙江省气象科学研究所\n\n2024年7月\n\n本技术规范适用于黑龙江省大豆种植区内渍涝的风险区划。",
+    "source_len": 80,
+    "core_concept": [
+      "大豆渍涝风险区划",
+      "技术规范适用范围"
+    ],
+    "technical_terms": [
+      "渍涝",
+      "风险区划",
+      "技术规范"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk为黑龙江省大豆渍涝气候风险区划技术规范的封面与适用范围说明，明确适用于黑龙江省大豆种植区。",
+    "user_expressions_count": 3,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "黑龙江省"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_s1",
+    "source_preview": "[黑龙江 大豆 渍涝风险区划] 农田土壤含水量处于过湿或饱和状态，土壤大孔隙充水，缺少空气，造成植株根部环境条件恶化，生长发育不良，导致作物减产或品质降低的一种农业气象灾害。",
+    "source_len": 87,
+    "core_concept": [
+      "渍涝灾害",
+      "农业气象灾害"
+    ],
+    "technical_terms": [
+      "渍涝灾害",
+      "土壤含水量",
+      "土壤大孔隙",
+      "农业气象灾害"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk定义渍涝灾害，指土壤过湿饱和、根系缺氧导致作物减产或品质降低的农业气象灾害。",
+    "user_expressions_count": 5,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆",
+      "作物"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_s3",
+    "source_preview": "[黑龙江 大豆 渍涝风险区划] 气象数据筛选与处理。剔除时间序列缺失超过5年的站点, 剔除数据连续缺失大于10d气象站点数据，得到最终参与计算的气象站点数据。对于数据缺失在10d以内的站台, 用前一日与后一日的各气象要素平均值替代。",
+    "source_len": 116,
+    "core_concept": [
+      "气象数据质量控制",
+      "气象站点数据筛选"
+    ],
+    "technical_terms": [
+      "气象数据筛选",
+      "时间序列缺失",
+      "数据插补",
+      "平均值替代"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述黑龙江省大豆渍涝气候风险区划中气象数据的筛选与处理方法，包括剔除缺失超限站点和用前后日均值插补短时缺失数据。",
+    "user_expressions_count": 3,
+    "metric_count": 3,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "['气象数据筛选', '数据插补']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_s2",
+    "source_preview": "[黑龙江 大豆 渍涝风险区划] 数据包括基础地理信息、大豆观测数据和气候资料。大豆作物数据资料为1990年以来的发育期数据、产量结构数据、地段产量数据。气候资料分为基本项和可选项，基本项包括1961年以来国家气象观测站的逐日光温水等气象数据和经纬度；可选项包括2000年以来的区域气象观测站光温水等气象监测数据、1980年以来的卫星遥感监测数据。\n\n### 3.1.1基础地理信息\n\n2000年以来，省、市、县（区）三级的基础地理信息数据（经纬度、海拔、地形和土地利用类型）。\n\n（1）数字高程资料为分辨率不低于1:25万的数字高程（DEM）栅格数据和行政边界、河流水系等矢量数据。\n\n（2）地形类型有平原、高原、丘陵、盆地和山地。\n\n（3）土地利用类型包括耕地、园地、林地、草地、城镇村及工矿用地、交通运输用地等。\n\n### 3.1.2大豆作物资料\n\n大豆作物1990年以来的农事站观测数据及各县大豆种植面积及产量资料。\n\n### 3.1.3气候资料\n\n1961年以来，黑龙江省国家气象观测站的省份、站号、站名、经纬度、海拔和逐日光、温、水等气象数据。\n\n（1）日最高气温(℃)、日最低气温(℃)、",
+    "source_len": 603,
+    "core_concept": [
+      "大豆渍涝气候风险区划",
+      "数据来源与资料要求"
+    ],
+    "technical_terms": [
+      "基础地理信息",
+      "数字高程模型",
+      "大豆观测数据",
+      "气候资料",
+      "气象观测站",
+      "卫星遥感监测数据",
+      "多源融合实况分析"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk定义黑龙江省大豆渍涝气候风险区划所需的数据来源，包括基础地理信息、大豆作物资料和气候资料的类型与时间范围。",
+    "user_expressions_count": 4,
+    "metric_count": 7,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 3
+  },
+  {
+    "chunk_id": "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_t1",
+    "source_preview": "[黑龙江 大豆 渍涝风险区划] | FCV | 0-0.2 | 0.2-0.4 | 0.4-0.6 | 0.6-0.8 | 0.8-1 |\n|---|---|---|---|---|---|---|---|\n| 重分类值（fg） | 5 | 4 | 3 | 2 | 1 |",
+    "source_len": 136,
+    "core_concept": [
+      "渍涝气候风险区划",
+      "渍涝风险等级划分"
+    ],
+    "technical_terms": [
+      "FCV",
+      "重分类值",
+      "渍涝风险"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出大豆渍涝风险区划中FCV值区间与重分类值的对应关系，用于渍涝风险等级划分。",
+    "user_expressions_count": 5,
+    "metric_count": 10,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_t3",
+    "source_preview": "[黑龙江 大豆 渍涝风险区划] 黑龙江大豆渍涝风险区划中，该表格为权重分配，列出权重等1个维度的权重系数。权重：地表覆盖度 0.66，DEM 0.34",
+    "source_len": 75,
+    "core_concept": [
+      "大豆渍涝风险区划",
+      "权重分配"
+    ],
+    "technical_terms": [
+      "权重系数",
+      "地表覆盖度",
+      "DEM"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出黑龙江大豆渍涝风险区划中地表覆盖度（0.66）和DEM（0.34）两项因子的权重分配。",
+    "user_expressions_count": 3,
+    "metric_count": 2,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_t2",
+    "source_preview": "[黑龙江 大豆 渍涝风险区划] | DEM | 0-500 | 500-1000 | 1000-2000 | 2000-4000 | >4000 |\n|---|---|---|---|---|---|---|---|\n| 重分类值（DEMg） | 1 | 2 | 3 | 4 | 5 |",
+    "source_len": 143,
+    "core_concept": [
+      "大豆渍涝气候风险区划",
+      "DEM重分类"
+    ],
+    "technical_terms": [
+      "DEM",
+      "重分类值",
+      "DEMg"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出大豆渍涝气候风险区划中DEM高程范围与重分类值DEMg的对应关系表。",
+    "user_expressions_count": 4,
+    "metric_count": 10,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "黑龙江省大豆种植气候区划技术规范(初稿）1120_s0",
+    "source_preview": "[黑龙江 大豆 种植区划] 黑龙江省大豆种植气候区划\n\n技术规范\n\n2024年7月\n\n本技术规范统一规定了新一轮农业气候资源普查与农业气候区划工作中大豆种植气候区划的目标与任务要求，范围与内容，包括区划流程、区划原则等内容。\n\n2023年，中央一号文件明确提出研究开展新一轮农业气候资源普查和农业气候区划工作。大豆种植气候区划是开展农业气候区划工作的重要组成部分，本技术规范旨在通过科学的气候区划方法，综合考虑气候、灾害、产量和土地利用情况，明确不同区域大豆种植的气候适宜性，为优化大豆种植布局、提高大豆产量和品质、促进农业可持续发展提供科学依据。",
+    "source_len": 274,
+    "core_concept": [
+      "大豆种植气候区划",
+      "农业气候区划技术规范"
+    ],
+    "technical_terms": [
+      "农业气候资源普查",
+      "农业气候区划",
+      "大豆种植气候区划",
+      "气候适宜性",
+      "区划流程",
+      "区划原则"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk定义黑龙江省大豆种植气候区划技术规范的目标、任务、范围、流程和原则，为优化大豆种植布局提供依据。",
+    "user_expressions_count": 7,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "黑龙江省"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "['气候区划']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_t4",
+    "source_preview": "[黑龙江 大豆 渍涝风险区划] 黑龙江大豆渍涝风险区划中，该表格为权重分配，列出致灾因子危险性指数权重系数 WH、承灾体暴露度指数权重系数 WE、承灾体脆弱性指数权重系数 WS、防灾减灾能力指数权重系数 WR等4个维度的权重系数。致灾因子危险性指数权重系数 （WH） 0.58，承灾体暴露度指数权重系数 （WE） 0.23，承灾体脆弱性指数权重系数 （WS） 0.12，防灾减灾能力指数权重系数 （WR） 0.07",
+    "source_len": 207,
+    "core_concept": [
+      "渍涝气候风险区划",
+      "风险权重分配"
+    ],
+    "technical_terms": [
+      "致灾因子危险性指数",
+      "承灾体暴露度指数",
+      "承灾体脆弱性指数",
+      "防灾减灾能力指数",
+      "权重系数"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出黑龙江大豆渍涝气候风险区划中4个维度的权重系数，致灾因子危险性指数权重最高为0.58。",
+    "user_expressions_count": 4,
+    "metric_count": 4,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "黑龙江省大豆渍涝气候风险区划技术规范（初稿）_t5",
+    "source_preview": "[黑龙江 大豆 渍涝风险区划] 黑龙江大豆渍涝风险区划中，该表格为区划指标体系，列出指数范围、等级分区等2项因子的等级分区分级阈值。0至0.2：等级分区 低风险区。0.2至0.4：等级分区 次低风险区。0.4至0.6：等级分区 中风险区。0.6至0 8：等级分区 次高风险区。0.8至1.1：等级分区 高风险区",
+    "source_len": 155,
+    "core_concept": [
+      "大豆渍涝气候风险区划",
+      "渍涝风险等级划分"
+    ],
+    "technical_terms": [
+      "指数范围",
+      "等级分区",
+      "渍涝风险区划",
+      "风险等级"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出黑龙江大豆渍涝气候风险区划的指数范围与等级分区指标体系，按指数0至1.1划分5个风险等级。",
+    "user_expressions_count": 7,
+    "metric_count": 5,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "黑龙江省大豆病虫害（食心虫）气候风险区划技术规范(初稿) _t0",
+    "source_preview": "[黑龙江 大豆 病虫害风险区划] 黑龙江大豆病虫害风险区划中，该表格为区划指标体系，列出极高、高、中、低等4项因子的分级标准。极高：大豆食心虫综合气象风险指数/F 0.69,1。高：大豆食心虫综合气象风险指数/F 0.59,0.68。中：大豆食心虫综合气象风险指数/F 0.48,0.58。低：大豆食心虫综合气象风险指数/F 0，0.47",
+    "source_len": 169,
+    "core_concept": [
+      "大豆食心虫气候风险区划",
+      "病虫害气象风险分级"
+    ],
+    "technical_terms": [
+      "大豆食心虫综合气象风险指数",
+      "气候风险区划",
+      "风险等级",
+      "分级标准"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出黑龙江大豆食心虫气候风险区划的4级分级标准，以综合气象风险指数划分极高、高、中、低风险等级。",
+    "user_expressions_count": 7,
+    "metric_count": 4,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆",
+      "大豆食心虫"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "黑龙江省大豆种植气候区划技术规范(初稿）1120_s1",
+    "source_preview": "[黑龙江 大豆 种植区划] 本技术规范适用于黑龙江省范围内的大豆种植区域，重点考虑齐齐哈尔市和黑河市大豆产区，以县为最小行政区。同时，根据气候变化趋势和大豆种植技术的不断发展，适时调整区划范围。",
+    "source_len": 97,
+    "core_concept": [
+      "大豆种植气候区划",
+      "区划适用范围"
+    ],
+    "technical_terms": [
+      "技术规范",
+      "大豆种植区域",
+      "区划范围",
+      "最小行政区"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk界定黑龙江省大豆种植气候区划技术规范的适用范围，重点覆盖齐齐哈尔市和黑河市，以县为最小行政区。",
+    "user_expressions_count": 3,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "黑龙江省",
+        "齐齐哈尔市",
+        "黑河市"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江省大豆种植气候区划技术规范(初稿）1120_s4",
+    "source_preview": "[黑龙江 大豆 种植区划] 本文件中初、终霜日的日序和无霜期的天数根据积温中界限温度的起止日期和持续日数的求算方法进行计算，其中界限温度采用日最低气温大于等于2℃。",
+    "source_len": 82,
+    "core_concept": [
+      "无霜期计算",
+      "界限温度确定"
+    ],
+    "technical_terms": [
+      "初霜日",
+      "终霜日",
+      "无霜期",
+      "界限温度",
+      "日序",
+      "持续日数"
+    ],
+    "concept_evidence_count": 2,
+    "semantic_summary": "该chunk说明黑龙江大豆气候区划中无霜期和初终霜日的计算方法，界限温度采用日最低气温≥2℃。",
+    "user_expressions_count": 6,
+    "metric_count": 1,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "['无霜期计算', '界限温度起止日期求算']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江省大豆种植气候区划技术规范(初稿）1120_s3",
+    "source_preview": "[黑龙江 大豆 种植区划] ### 1.1.1 界限温度起止日期\n\n本文件中某界限温度的起止日期均采用中国气象局规定的五日滑动平均法求算。在一年中第一次出现高于（低于）某界限温度之日起，向后推四天，按日序依次计算出每连续五日的日平均气温的平均值。并在一年中，任意连续大于等于（小于等于）界限温度持续的最长的一段时期内，在此时期内第一个五日的日平均气温中，挑取最先一个日平均气温大于等于（小于等于）该界限温度出现的日期，即为稳定通过该界限温度出现的初日（起始日期）。\n\n而在持续最长的一段时期的最后一个高于（低于）某界限温度的五日平均气温中，挑取最末一个日平均气温大于等于（小于等于）该界限温度的日期，即为稳定通过该界限温度的终日（终止日期）。\n\n### 1.1.2 大于等于界限温度的持续日数\n\n基于日序列（其中1月1日为1，以此类推到12月31日为365或366）查取起始日期和终止日期的日期序列值分别为a和b，则大于等于界限温度的持续日数N为：\n\nN=b-a+1                                            （1-1）\n\n### 1.1.3 积温\n\n活动",
+    "source_len": 604,
+    "core_concept": [
+      "界限温度起止日期计算",
+      "积温计算"
+    ],
+    "technical_terms": [
+      "界限温度",
+      "五日滑动平均法",
+      "稳定通过",
+      "初日",
+      "终日",
+      "持续日数",
+      "活动积温",
+      "有效积温"
+    ],
+    "concept_evidence_count": 2,
+    "semantic_summary": "该chunk规定大豆气候区划中界限温度起止日期的五日滑动平均求算法，以及持续日数、活动积温和有效积温的计算方法。",
+    "user_expressions_count": 6,
+    "metric_count": 3,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "['五日滑动平均法', '稳定通过日期求算', '持续日数计算', '活动积温计算', '有效积温计算']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江省大豆种植气候区划技术规范(初稿）1120_s5",
+    "source_preview": "[黑龙江 大豆 种植区划] 湿润系数是大豆在生长季（一般按照稳定通过10℃的初终日期来计算）的降水量与蒸发蒸腾量（实际需水量，ETC）的比值。湿润系数（Index of Humidity，HI）的表达式为：\n\nHI= P/ETc                                        （1-4）\n\nETc =Kc·ET0                                     （1-5）\n\n其中，HI为生长季湿润指数；ETc为大豆生长季的蒸散量(mm)；P为同期有效降水量(mm)；Kc为作物系数；ET0为参考作物蒸散量(mm)；按Penman-Monteith方法计算。",
+    "source_len": 307,
+    "core_concept": [
+      "湿润系数",
+      "大豆生长季水分条件评价"
+    ],
+    "technical_terms": [
+      "湿润系数",
+      "生长季",
+      "降水量",
+      "蒸散量",
+      "作物系数",
+      "参考作物蒸散量",
+      "Penman-Monteith方法"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk定义大豆生长季湿润系数，给出HI=P/ETc计算公式，并说明ETc=Kc·ET0及Penman-Monteith计算方法。",
+    "user_expressions_count": 6,
+    "metric_count": 3,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆",
+      "生长季"
+    ],
+    "evaluation_method": "['Penman-Monteith方法']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江省大豆种植气候区划技术规范(初稿）1120_s6",
+    "source_preview": "[黑龙江 大豆 种植区划] 生长季活动积温、无霜期天数等热量指标的空间推算采用的是趋势面模拟和残差内插相结合的混合插值法。首先，以黑龙江省78个气象站点数据为基础，采用多元回归分析方法，分别建立生长季活动积温、无霜期与经度、纬度、海拔高度等地理因子的趋势模型。具体方程如下：\n\n（2-1）\n\n（2-2）\n\n其次，利用上述预测模型和各气象站点的地理地形数据计算出该站点的生长季活动积温模拟值，将各站点实际活动积温与模型预测值的差值作为残差值，具体如下，\n\n（2-3）\n\n无霜期残差算法与此相同。对残差值进行空间内插, 即可得到ε值的栅格图层。内插方法均采用反距离权重法。湿润系数等指标因子模拟非常困难。直接采用反距离权重法内插生成栅格数据层。",
+    "source_len": 320,
+    "core_concept": [
+      "热量指标空间推算",
+      "气候要素空间插值"
+    ],
+    "technical_terms": [
+      "生长季活动积温",
+      "无霜期",
+      "趋势面模拟",
+      "残差内插",
+      "混合插值法",
+      "多元回归分析",
+      "反距离权重法",
+      "湿润系数"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述黑龙江省大豆种植区划中生长季活动积温、无霜期等热量指标的空间推算方法，采用趋势面模拟与残差内插结合的混合插值法。",
+    "user_expressions_count": 3,
+    "metric_count": 1,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "['趋势面模拟', '残差内插', '混合插值法', '多元回归分析', '反距离权重法']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江省大豆种植气候区划技术规范(初稿）1120_t0",
+    "source_preview": "[黑龙江 大豆 种植区划] 黑龙江大豆种植区划中，该表格为区划指标体系，列出气候区划等1项因子的无霜期、湿润系数、坡度、土地利用分级阈值。气候区划：生长季活动积温指标≥10℃ <1600或>3500，无霜期 <80，湿润系数 <0.4或>1.6，坡度 25度以上，土地利用 非耕地，区划等级 不适宜。气候区划：土地利用 其他林地或其他草地，区划等级 基本适宜。气候区划：生长季活动积温指标≥10℃ 1600-3500，无霜期 80-160，湿润系数 0.4-1.3或1.4-1.6，坡度 15-25度，土地利用 旱地，区划等级 适宜。气候区划：无霜期 >160，湿润系数 1.3-1.4，坡度 15度以下，土地利用 水浇地，区划等级 非常适宜",
+    "source_len": 321,
+    "core_concept": [
+      "大豆种植气候区划",
+      "区划指标体系"
+    ],
+    "technical_terms": [
+      "生长季活动积温",
+      "无霜期",
+      "湿润系数",
+      "坡度",
+      "土地利用",
+      "区划等级",
+      "农业气候区划指标"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出黑龙江大豆种植气候区划的5因子4等级指标体系及分级阈值，包括生长季活动积温、无霜期、湿润系数、坡度和土地利用。",
+    "user_expressions_count": 7,
+    "metric_count": 5,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "黑龙江省大豆种植气候区划技术规范(初稿）1120_s7",
+    "source_preview": "[黑龙江 大豆 种植区划] ### 2.2.1 区划指标栅格数据的建立\n\n利用空间分辨率DEM栅格数据，利用建立的活动积温、无霜期的多元回归模型，计算出各栅格生长季活动积温、无霜期的模拟值，活动积温、无霜期残差以选定内插法插值，将模拟值栅格数据和残差值栅格数据进行叠加，即可得到活动积温、无霜期栅格数据。\n\n湿润指数、气候适宜度则以反距离权重法插值形成1 km空间分辨率栅格数据。\n\n地形数据（坡度）、土地利用数据则直接重采样1 km空间分辨率栅格数据。\n\n### 2.2.2 区划指标栅格数据的归一化处理\n\n考虑到各个区划指标的复杂性，以及便于集成运算，首先将各个指标进行归一化处理。具体如下，\n\n（1）生长季活动积温（）的归一化处理\n\n如果生长季活动积温<1600，则VTa = 0；\n\n如果生长季活动积温>3500，则VTa =1.0；\n\n如果1600≤≤3500，则。\n\n（2）无霜期（FFP）的归一化处理\n\n如果无霜期FFP<80，则VFFP=0；\n\n如果无霜期FFP>160，则VFFP=1.0；\n\n如果80≤FFP≤160 则。\n\n（3）湿润系数（HI）的归一化处理\n\n如果HI<0.4",
+    "source_len": 752,
+    "core_concept": [
+      "大豆种植气候区划",
+      "区划指标栅格数据",
+      "指标归一化处理"
+    ],
+    "technical_terms": [
+      "DEM栅格数据",
+      "活动积温",
+      "无霜期",
+      "湿润指数",
+      "气候适宜度",
+      "反距离权重法",
+      "归一化处理",
+      "多元回归模型"
+    ],
+    "concept_evidence_count": 2,
+    "semantic_summary": "该chunk描述黑龙江大豆种植气候区划指标栅格数据的建立方法，以及活动积温、无霜期、湿润系数、坡度、土地利用5项指标的归一化处理阈值。",
+    "user_expressions_count": 10,
+    "metric_count": 5,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "['多元回归模型', '反距离权重法插值', '残差插值叠加', '归一化处理']",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "黑龙江省大豆种植气候区划技术规范(初稿）1120_t1",
+    "source_preview": "[黑龙江 大豆 种植区划] 黑龙江大豆种植区划中，该表格为权重分配，列出权重等1个维度的权重系数。权重：渍涝 0.25，干旱 0.25，霜冻 0.25，低温冷害 0.25",
+    "source_len": 85,
+    "core_concept": [
+      "大豆种植气候区划",
+      "灾害权重分配"
+    ],
+    "technical_terms": [
+      "权重系数",
+      "渍涝",
+      "干旱",
+      "霜冻",
+      "低温冷害"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出黑龙江大豆种植气候区划中渍涝、干旱、霜冻、低温冷害四项灾害的权重分配，权重系数均为0.25。",
+    "user_expressions_count": 4,
+    "metric_count": 4,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "黑龙江省大豆种植气候区划技术规范(初稿）1120_t2",
+    "source_preview": "[黑龙江 大豆 种植区划] 黑龙江大豆种植区划中，该表格为权重分配，列出权重等1个维度的权重系数。权重：气候区划 0.8，灾害区划 0.1，产量区划 0.1",
+    "source_len": 78,
+    "core_concept": [
+      "大豆种植气候区划",
+      "区划权重分配"
+    ],
+    "technical_terms": [
+      "权重",
+      "气候区划",
+      "灾害区划",
+      "产量区划"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出黑龙江大豆种植区划中气候区划、灾害区划、产量区划的权重分配，权重分别为0.8、0.1、0.1。",
+    "user_expressions_count": 5,
+    "metric_count": 3,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "['权重分配']",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_s0",
+    "source_preview": "[黑龙江 大豆 霜冻风险区划] 黑龙江省大豆低温冷害风险区划技术规范\n\n黑龙江省气象科学研究所\n\n2024年7月\n\n本技术规范适用于黑龙江省大豆种植区内霜冻的风险区划。",
+    "source_len": 84,
+    "core_concept": [
+      "大豆霜冻风险区划",
+      "技术规范"
+    ],
+    "technical_terms": [
+      "霜冻",
+      "风险区划",
+      "技术规范"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk为黑龙江省大豆霜冻气候风险区划技术规范的封面，说明其适用范围为黑龙江省大豆种植区。",
+    "user_expressions_count": 2,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "黑龙江省"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江省大豆种植气候区划技术规范(初稿）1120_t3",
+    "source_preview": "[黑龙江 大豆 种植区划] 黑龙江大豆种植区划中，该表格为区划指标体系，列出等级指标等1项因子的不适宜区、次适宜区、适宜区、最适宜区分级阈值。等级指标：不适宜区 0,0.2，次适宜区 0.2,0.4，适宜区 0.4,0.6，最适宜区 0.6,1",
+    "source_len": 122,
+    "core_concept": [
+      "大豆种植气候区划",
+      "区划指标体系"
+    ],
+    "technical_terms": [
+      "等级指标",
+      "区划指标体系",
+      "分级阈值"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出黑龙江大豆种植气候区划的等级指标体系，以等级指标划分不适宜区、次适宜区、适宜区、最适宜区4个等级。",
+    "user_expressions_count": 6,
+    "metric_count": 4,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_s1",
+    "source_preview": "[黑龙江 大豆 霜冻风险区划] 霜也称白霜，是指近地面空气中水汽直接凝华在温度低于0℃的地面上或近地面物体上的白色松脆冰晶。有时先凝成露，当温度降至0℃以下后又形成冰珠（冻露），也是霜的一种。霜通常出现在无云、静风或微风的夜间和清晨（有时傍晚和白天也出现）。有的时候地面温度降至0℃以下，但没有结霜，称为黑霜。白霜和黑霜都会造成农作物冻害，统称为霜冻。\n\n霜冻是指在每年的4-6月和8-10月作物生产季节里，土壤或植物体表面气温下降到0℃或以下时，使作物遭受伤害或死亡的短时间低温冻害现象。通常把每年由暖季节过渡时期出现的霜冻，称为终霜冻（即春霜冻）。",
+    "source_len": 276,
+    "core_concept": [
+      "霜冻定义",
+      "霜冻类型划分"
+    ],
+    "technical_terms": [
+      "霜冻",
+      "白霜",
+      "黑霜",
+      "冻露",
+      "终霜冻",
+      "春霜冻",
+      "低温冻害"
+    ],
+    "concept_evidence_count": 2,
+    "semantic_summary": "该chunk定义霜冻概念，区分白霜、冻露、黑霜及终霜冻、春霜冻等类型，并给出霜冻发生的温度和时间条件。",
+    "user_expressions_count": 9,
+    "metric_count": 2,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆",
+      "农作物"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_s2",
+    "source_preview": "[黑龙江 大豆 霜冻风险区划] 霜冻能使作物受害，主要是由于0℃以下的低温使作物细胞间隙的水形成了冰晶，并且冰晶不断地吸收细胞的自由水使冰晶逐渐增大，这就使细胞内水分减少而导致细胞质脱水，使细胞质胶体物质发生凝固和细胞枯萎。在冰晶形成和增大的过程中，对细胞也产生机械压力而导致机械损伤。如果霜冻较轻，农作物还没有死亡，霜冻过后温度逐渐上升，细胞慢慢解冻，还可以恢复生命活动。\n\n秋收作物在成熟前对霜冻非常敏感。如果在灌浆期遭受早霜冻，不仅影响品质，还会造成减产。当气温降至0℃时，发生轻度霜冻，叶片最先受害。灌浆的养料主要是叶片通过光合作用产生的，受冻后的叶片变得枯黄，影响植株的光合作用，产生的营养物质减少。由于养料减少，灌浆缓慢，粒重降低。如果气温降至零下3℃，就会发生严重霜冻，除了大量叶片受害外，穗颈也会受冻死亡。这样不仅严重影响植株的光合作用，而且还切断了茎秆向籽粒传输养料的通道，灌浆被迫停止，常常造成大幅减产。\n\n初霜冻出现时，如果作物已经成熟收获，即使再严重也不会造成损失，而我国北方地区常因初霜冻出现早，秋收作物还没有完全成熟就遭受霜冻危害，造成大面积减产。\n\n初霜冻发生在作物成熟",
+    "source_len": 626,
+    "core_concept": [
+      "霜冻危害机制",
+      "大豆灌浆期霜冻影响",
+      "初霜冻风险"
+    ],
+    "technical_terms": [
+      "霜冻",
+      "冰晶",
+      "细胞质脱水",
+      "灌浆期",
+      "早霜冻",
+      "初霜冻",
+      "光合作用",
+      "粒重"
+    ],
+    "concept_evidence_count": 2,
+    "semantic_summary": "该chunk解释霜冻危害机制及对大豆灌浆期的影响，给出轻度（0℃）和严重（-3℃）霜冻阈值及防御措施。",
+    "user_expressions_count": 13,
+    "metric_count": 2,
+    "region": {
+      "names": [
+        "东北地区",
+        "黑龙江"
+      ],
+      "level": "region"
+    },
+    "affected_objects": [
+      "大豆",
+      "秋收作物",
+      "灌浆期",
+      "叶片",
+      "穗颈"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_s3",
+    "source_preview": "[黑龙江 大豆 霜冻风险区划] 3.1.1资料收集\n\n基础气象数据为中国气象局全国基本气象站点连续30年(1990-2019年)地面气象要素的日值数据，包括各站点的经纬度、海拔高度(m)、日最高气温（℃）、日最低气温(℃)、日平均气温(℃)、日降水量(mm)、日平均风速(m s-1)、日平均相对湿度(%)和日照时数(h)等，国家气象中心统一准备。\n\n大豆作物观测1990年以来的发育期数据、产量结构数据、地段产量数据。大豆、玉米1990年以来分县产量及相关统计数据，用来分析土地的社会属性，如投入产出比等。\n\n3.1.2数据处理\n\n气象数据筛选与处理。剔除时间序列缺失超过5年的站点, 剔除数据连续缺失大于10d气象站点数据，得到最终参与计算的气象站点数据。对于数据缺失在10d以内的站台, 用前一日与后一日的各气象要素平均值替代。\n\n3.1.3数据计算\n\n各站点30年平均无霜期的计算，日最低气温≥2℃的天数\n\n各站点30年平均活动积温的计算，日平均气温≥10℃的累积温度\n\n各站点30年生长季平均湿润系数的计算\n\n湿润系数是大豆在生长季（大豆生长季各省实际情况确定，一般按照稳定通过10℃的初终",
+    "source_len": 688,
+    "core_concept": [
+      "大豆霜冻气候风险区划",
+      "气象数据处理",
+      "湿润系数计算"
+    ],
+    "technical_terms": [
+      "无霜期",
+      "活动积温",
+      "湿润系数",
+      "作物系数",
+      "参考作物蒸散量",
+      "Penman-Monteith方法",
+      "蒸散量"
+    ],
+    "concept_evidence_count": 2,
+    "semantic_summary": "该chunk描述黑龙江省大豆霜冻气候风险区划的数据收集、处理与计算方法，包括无霜期、活动积温和湿润系数的计算。",
+    "user_expressions_count": 6,
+    "metric_count": 6,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "['气象数据筛选与处理', '缺失数据替代', 'Penman-Monteith方法', '湿润系数计算']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_t0",
+    "source_preview": "[黑龙江 大豆 霜冻风险区划] | 土地类型 | 耕地 | 林地 | 草地 | 水域 | 城乡、工矿、居民用地 | 未利用土地 |\n|---|---|---|---|---|---|---|---|---|\n| 重分类值 | 3 | 2 | 2 | 1 | 1 | 1 |",
+    "source_len": 136,
+    "core_concept": [
+      "土地类型重分类",
+      "霜冻气候风险区划"
+    ],
+    "technical_terms": [
+      "土地类型",
+      "重分类值"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出黑龙江省大豆霜冻气候风险区划中6类土地类型的重分类赋值标准。",
+    "user_expressions_count": 5,
+    "metric_count": 6,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_t1",
+    "source_preview": "[黑龙江 大豆 霜冻风险区划] | FCV | 0-0.2 | 0.2-0.4 | 0.4-0.6 | 0.6-0.8 | 0.8-1 |\n|---|---|---|---|---|---|---|---|\n| 重分类值 | 5 | 4 | 3 | 2 | 1 |",
+    "source_len": 132,
+    "core_concept": [
+      "霜冻气候风险区划",
+      "风险等级划分"
+    ],
+    "technical_terms": [
+      "FCV",
+      "重分类值",
+      "霜冻气候风险指数"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出黑龙江大豆霜冻气候风险指数FCV的分级阈值，将0-1区间划分为5个等级并赋予1-5的重分类值。",
+    "user_expressions_count": 4,
+    "metric_count": 10,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_t2",
+    "source_preview": "[黑龙江 大豆 霜冻风险区划] | DEM | 0-500 | 500-1000 | 1000-2000 | 2000-4000 | >4000 |\n|---|---|---|---|---|---|---|---|\n| 重分类值 | 1 | 2 | 3 | 4 | 5 |",
+    "source_len": 137,
+    "core_concept": [
+      "大豆霜冻气候风险区划",
+      "DEM重分类"
+    ],
+    "technical_terms": [
+      "DEM",
+      "重分类值"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出大豆霜冻气候风险区划中DEM高程分级阈值与对应重分类值（1-5）。",
+    "user_expressions_count": 4,
+    "metric_count": 5,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_t3",
+    "source_preview": "[黑龙江 大豆 霜冻风险区划] 黑龙江大豆霜冻风险区划中，该表格为权重分配，列出权重等1个维度的权重系数。权重：地表覆盖度 0.5，DEM 0.5",
+    "source_len": 73,
+    "core_concept": [
+      "大豆霜冻风险区划",
+      "权重分配"
+    ],
+    "technical_terms": [
+      "权重系数",
+      "地表覆盖度",
+      "DEM"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出黑龙江大豆霜冻风险区划中地表覆盖度和DEM两项因子的权重分配，各为0.5。",
+    "user_expressions_count": 3,
+    "metric_count": 2,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "2025河南小麦品质_病害区划算法_s0",
+    "source_preview": "[河南 冬小麦 品质区划] 小麦品质区划步骤：\n\n筛选河南省4个品质指标的关键气象影响因子（表1）。\n\n表1 河南小麦品质的关键气象影响因子及权重赋值\n\n（“+”表示正相关，“-”表示负相关）\n\n将各站点各个气象区划因子进行归一化处理，即计算各气象因子隶属度，计算公式为：\n\n式中，U(X)为隶属度值，X为每个特征值，Xmin为1961-2023年最小特征数值，Xmax为最大特征值。",
+    "source_len": 192,
+    "core_concept": [
+      "小麦品质区划",
+      "气象影响因子筛选",
+      "隶属度归一化"
+    ],
+    "technical_terms": [
+      "品质指标",
+      "气象影响因子",
+      "权重赋值",
+      "归一化处理",
+      "隶属度",
+      "特征值"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述河南小麦品质区划方法，包括筛选4个品质指标的关键气象影响因子并进行隶属度归一化处理。",
+    "user_expressions_count": 5,
+    "metric_count": 1,
+    "region": {
+      "names": [
+        "河南"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "小麦"
+    ],
+    "evaluation_method": "['小麦品质区划', '气象影响因子筛选', '隶属度归一化']",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "黑龙江省大豆霜冻气候风险区划技术规范（初稿）_t4",
+    "source_preview": "[黑龙江 大豆 霜冻风险区划] 黑龙江大豆霜冻风险区划中，该表格为权重分配，列出致灾因子危险性、承灾体暴露度、孕灾环境脆弱性、防灾减灾能力等4个维度的权重系数。致灾因子危险性 0.53，承灾体暴露度 0.14，孕灾环境脆弱性 0.26，防灾减灾能力 0.07",
+    "source_len": 129,
+    "core_concept": [
+      "霜冻风险区划",
+      "风险评价权重"
+    ],
+    "technical_terms": [
+      "致灾因子危险性",
+      "承灾体暴露度",
+      "孕灾环境脆弱性",
+      "防灾减灾能力",
+      "权重系数"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出黑龙江大豆霜冻风险区划中4个评价维度（致灾因子危险性、承灾体暴露度、孕灾环境脆弱性、防灾减灾能力）的权重系数。",
+    "user_expressions_count": 5,
+    "metric_count": 4,
+    "region": {
+      "names": [
+        "黑龙江"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "大豆"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "2025河南小麦品质_病害区划算法_s1",
+    "source_preview": "[河南 冬小麦 品质区划] i=1,2,3，为区划因子，Y为区划综合指数，Pi为每个区划因子的权重系数（表1）。根据小麦品质指标区划综合指数分级标准，在GIS平台上，把小麦各个品质指标划分为特优、优、良和一般4个等级。\n\n表2 小麦品质区划综合指数\n\n小麦病害区划步骤：\n\n筛选河南省冬小麦赤霉病和条锈病的关键气象影响因子（表1和表2）。\n\n表1 河南小麦赤霉病的关键气象影响因子及权重赋值\n\n（“+”表示正相关，“-”表示负相关）\n\n表2 河南小麦条锈病的关键气象影响因子及权重赋值\n\n（“+”表示正相关，“-”表示负相关）\n\n将各站点各个气象区划因子进行归一化处理，即计算各气象因子隶属度，计算公式为：\n\n式中，U(X)为隶属度值，X为每个特征值，Xmin为1961-2023年最小特征数值，Xmax为最大特征值。",
+    "source_len": 359,
+    "core_concept": [
+      "小麦品质区划",
+      "小麦病害区划",
+      "区划综合指数"
+    ],
+    "technical_terms": [
+      "区划综合指数",
+      "权重系数",
+      "隶属度",
+      "归一化",
+      "赤霉病",
+      "条锈病",
+      "气象影响因子"
+    ],
+    "concept_evidence_count": 2,
+    "semantic_summary": "该chunk描述河南小麦品质和病害区划方法，通过区划综合指数、权重系数和隶属度归一化计算，划分品质等级并筛选赤霉病条锈病气象因子。",
+    "user_expressions_count": 7,
+    "metric_count": 2,
+    "region": {
+      "names": [
+        "河南"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "小麦",
+      "冬小麦",
+      "赤霉病",
+      "条锈病"
+    ],
+    "evaluation_method": "['区划综合指数法', '隶属度归一化', '权重赋值', '分级标准划分']",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "2025河南小麦品质_病害区划算法_s2",
+    "source_preview": "[河南 冬小麦 品质区划] i=1,2,3，为区划因子，Y为区划综合指数，Pi为每个区划因子的权重系数（表1和2）。根据小麦赤霉病和条锈病区划综合气候指数分级标准（表3），在GIS平台上，把小麦赤霉病和条锈病气候区划分为低风险、中风险、高风险、极高风险4个等级。\n\n表3 小麦赤霉病和条锈病气候区划综合指数",
+    "source_len": 153,
+    "core_concept": [
+      "小麦病害气候区划",
+      "区划综合指数"
+    ],
+    "technical_terms": [
+      "区划因子",
+      "权重系数",
+      "区划综合指数",
+      "分级标准",
+      "GIS平台",
+      "小麦赤霉病",
+      "小麦条锈病"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述小麦赤霉病和条锈病气候区划方法，通过区划因子加权计算综合指数，在GIS平台划分4个风险等级。",
+    "user_expressions_count": 5,
+    "metric_count": 2,
+    "region": {
+      "names": [
+        "河南"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "小麦",
+      "小麦赤霉病",
+      "小麦条锈病"
+    ],
+    "evaluation_method": "['加权综合指数法', '气候区划', '等级划分']",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "2025河南小麦品质_病害区划算法_t0",
+    "source_preview": "[河南 冬小麦 品质区划] 河南冬小麦品质区划中，该表格列出因子、蛋白质、湿面筋、容重等4项指标的具体数值。因子：温度 4月21日-5月31日最高气温，温度 4月21日-5月31日最低气温，温度 4月21日-5月31日平均气温，温度 4月21日-5月31日最高气温≥32℃天数，温度 4月21日-5月31日日平均气温为20至22℃的日数，温度 4月21日-5月31日≥10℃活动积温，降水 4月21日-5月31日降水日数。蛋白质：温度 0.4 +，温度 0.4 -，降水 0.2 -。湿面筋：温度 0.5 +，温度 0.3 -，温度 0.1 -，降水 0.1 -。容重：温度 0.4 -，温度 0.2 +，降水 0.4 -。稳定时间：温度 1 +",
+    "source_len": 323,
+    "core_concept": [
+      "冬小麦品质区划",
+      "品质指标影响因子"
+    ],
+    "technical_terms": [
+      "蛋白质",
+      "湿面筋",
+      "容重",
+      "稳定时间",
+      "活动积温",
+      "影响因子"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出河南冬小麦品质区划中蛋白质、湿面筋、容重、稳定时间等品质指标的温度、降水影响因子及权重系数。",
+    "user_expressions_count": 6,
+    "metric_count": 5,
+    "region": {
+      "names": [
+        "河南"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "冬小麦",
+      "蛋白质",
+      "湿面筋",
+      "容重",
+      "稳定时间"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "2025河南小麦品质_病害区划算法_t1",
+    "source_preview": "[河南 冬小麦 品质区划] 河南冬小麦品质区划中，该表格列出蛋白质、湿面筋、容重、稳定时间等4项指标的具体数值。蛋白质：特优 ＞0.65，优 0.56，0.65，良 0.35，0.56，一般 ≤0.35。湿面筋：特优 ＞0.56，优 0.53，0.56，良 0.51，0.53，一般 ≤0.51。容重：特优 ＞0.50，优 0.30，0.50，良 0.20，0.30，一般 ≤0.20。稳定时间：特优 ＞0.92，优 0.88，0.92，良 0.42，0.88，一般 ≤0.42",
+    "source_len": 239,
+    "core_concept": [
+      "冬小麦品质区划",
+      "品质指标分级"
+    ],
+    "technical_terms": [
+      "蛋白质",
+      "湿面筋",
+      "容重",
+      "稳定时间",
+      "品质区划指标",
+      "分级阈值"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出河南冬小麦品质区划的4指标4等级指标体系及分级阈值，包括蛋白质、湿面筋、容重和稳定时间。",
+    "user_expressions_count": 7,
+    "metric_count": 4,
+    "region": {
+      "names": [
+        "河南"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "冬小麦"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "2025河南小麦品质_病害区划算法_t2",
+    "source_preview": "[河南 冬小麦 品质区划] 河南冬小麦品质区划中，该表格为权重分配，列出因子、权重因子等2个维度的权重系数。4月1日-4月5日降水量：权重因子 0.20 +。4月16日-4月20日日照时数：权重因子 0.32 -。5月11日-5月15日的日照时数：权重因子 0.43 -。5月11日-5月15日降水量：权重因子 0.05 -",
+    "source_len": 162,
+    "core_concept": [
+      "冬小麦品质区划",
+      "区划权重分配"
+    ],
+    "technical_terms": [
+      "权重因子",
+      "降水量",
+      "日照时数",
+      "品质区划",
+      "权重系数"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出河南冬小麦品质区划中4个气象因子的权重分配，包括降水量和日照时数在不同时期的权重系数。",
+    "user_expressions_count": 7,
+    "metric_count": 4,
+    "region": {
+      "names": [
+        "河南"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "冬小麦"
+    ],
+    "evaluation_method": "['权重分配', '品质区划']",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "2025河南小麦品质_病害区划算法_t3",
+    "source_preview": "[河南 冬小麦 品质区划] 河南冬小麦品质区划中，该表格为权重分配，列出因子、北方条锈病除南阳、驻马店和信阳三市外、南方条锈病南阳、驻马店和信阳三市等3个维度的权重系数。3月下旬平均温度：北方条锈病除南阳、驻马店和信阳三市外 0.30+，因子 11月中旬降水量，南方条锈病南阳、驻马店和信阳三市 0.16-。4月上旬降水量：北方条锈病除南阳、驻马店和信阳三市外 0.11+，因子 12月中旬日照时数，南方条锈病南阳、驻马店和信阳三市 0.25-。4月下旬最低温度：北方条锈病除南阳、驻马店和信阳三市外 0.59-，因子 1月上旬平均温度，南方条锈病南阳、驻马店和信阳三市 0.59+",
+    "source_len": 291,
+    "core_concept": [
+      "小麦条锈病区划权重",
+      "病害区划因子权重分配"
+    ],
+    "technical_terms": [
+      "权重系数",
+      "北方条锈病区",
+      "南方条锈病区",
+      "3月下旬平均温度",
+      "4月上旬降水量",
+      "4月下旬最低温度",
+      "11月中旬降水量",
+      "12月中旬日照时数",
+      "1月上旬平均温度"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出河南冬小麦条锈病区划中北方和南方条锈病区各气候因子的权重系数及正负方向。",
+    "user_expressions_count": 5,
+    "metric_count": 6,
+    "region": {
+      "names": [
+        "河南",
+        "南阳",
+        "驻马店",
+        "信阳"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "冬小麦",
+      "条锈病"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "2025河南小麦品质_病害区划算法_t4",
+    "source_preview": "[河南 冬小麦 品质区划] 河南冬小麦品质区划中，该表格列出赤霉病、条锈病等2项指标的具体数值。赤霉病：低风险 ≤0.5，中风险 0.5，0.65，高风险 0.65，0.8，极高风险 ＞0.8。条锈病：低风险 ≤0.44，中风险 0.44，0.49，高风险 0.49，0.56，极高风险 ＞0.56",
+    "source_len": 149,
+    "core_concept": [
+      "冬小麦病害风险区划",
+      "赤霉病风险等级",
+      "条锈病风险等级"
+    ],
+    "technical_terms": [
+      "赤霉病",
+      "条锈病",
+      "低风险",
+      "中风险",
+      "高风险",
+      "极高风险"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk给出河南冬小麦赤霉病和条锈病2项病害指标的低、中、高、极高4级风险阈值。",
+    "user_expressions_count": 7,
+    "metric_count": 2,
+    "region": {
+      "names": [
+        "河南"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "冬小麦",
+      "赤霉病",
+      "条锈病"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 2
+  },
+  {
+    "chunk_id": "D_P_R_410000_001-农业气候区划报告-河南省_s0",
+    "source_preview": "[河南 气候区划] 温度、降水、光照、风等气象条件对农业生产活动都有很大的影响。农业气\n\n象灾害的种类较多，概括起来大致有四大类，其一，由温度异常引起的有热害、\n\n冻害、霜冻、冷害等；其二，有水分异常引起的有干旱、洪涝渍害、雪灾和雹灾；\n\n其三由风引起的大风倒伏等；其四由气象因子综合作用引起的有干热风、连阴雨\n\n等。从灾害发生的机制看，有些属于累积型，如干旱、涝渍害等；有些是突发型，\n\n如大风、冰雹等。有些灾害造成的影响是显性的，在灾害发生后通过外部形态特\n\n征就可直观判断，如洪涝、大风、冰雹等。有些是隐性的，例如霜冻、热害等，\n\n出现受害症状的时间滞后，需要一定时间才能观察到。虽然我省农业气象灾害种\n\n类繁多，但是从其对农业、农村经济的影响程度看，影响冬小麦的主要有干旱、",
+    "source_len": 341,
+    "core_concept": [
+      "农业气象灾害分类",
+      "冬小麦气象灾害"
+    ],
+    "technical_terms": [
+      "农业气象灾害",
+      "热害",
+      "冻害",
+      "霜冻",
+      "冷害",
+      "干热风",
+      "连阴雨",
+      "累积型灾害"
+    ],
+    "concept_evidence_count": 2,
+    "semantic_summary": "该chunk介绍农业气象灾害的四大分类及累积型、突发型、显性、隐性特征，并指出影响河南冬小麦的主要灾害为干旱。",
+    "user_expressions_count": 9,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "河南"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "冬小麦"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 1
+  },
+  {
+    "chunk_id": "D_P_R_410000_001-农业气候区划报告-河南省_s1",
+    "source_preview": "[河南 气候区划] 冬小麦干旱属于农业干旱的范畴，是气象干旱传递到农业干旱的一个具体表\n\n现，发生干旱时，小麦根系从土壤中吸收到的水分难以补偿蒸腾消耗，导致植株\n\n体内水分收支平衡失调，植株正常生长发育受到影响，主要包括生理机制受损、\n\n光合物质积累减少、根系生长受抑制、抗逆性降低以及籽粒灌浆不足等，表现在\n\n植株群体稀疏、植株矮小、分蘖较少、叶片发黄、孕穗抽穗提前、灌浆期缩短等，\n\n影响小麦正常结实，并最终导致减产和品质降低。按冬小麦生育期的季节，各个\n\n时期都可能发生干旱，严重的季节性干旱主要有春旱、夏伏旱和秋旱。\n\n春季正值小麦返青-起身-拔节阶段，这时一般全省性降水偏少，空气干燥，\n\n加上气温回升迅速，风多发，蒸发作用加强，土壤失墒快，易于发生春旱，尤其\n\n是黄河以北地区，土壤砂质，储水能力差，因此春旱频繁、程度最重。初夏正值\n\n小麦灌浆成熟之际，气温高降水少，即使在正常年份，初夏的降水也难以满足作\n\n物水分需求，往往造成小麦减产。盛夏时期和秋季河南省降水偏少时，造成麦播",
+    "source_len": 446,
+    "core_concept": [
+      "冬小麦干旱",
+      "农业干旱",
+      "季节性干旱"
+    ],
+    "technical_terms": [
+      "农业干旱",
+      "气象干旱",
+      "水分收支平衡",
+      "蒸腾消耗",
+      "灌浆期",
+      "季节性干旱"
+    ],
+    "concept_evidence_count": 2,
+    "semantic_summary": "该chunk解释冬小麦干旱的成因机制与表现，说明干旱导致水分失衡、生理受损和减产，并划分春旱、夏伏旱、秋旱等季节性干旱类型。",
+    "user_expressions_count": 9,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "河南",
+        "黄河以北"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "冬小麦",
+      "返青期",
+      "起身期",
+      "拔节期",
+      "灌浆期"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "D_P_R_410000_001-农业气候区划报告-河南省_s2",
+    "source_preview": "[河南 气候区划] 河南省冬小麦干旱空间分布总体表现为东北重，西南低。其中河南中部、东\n\n3\n\n部平原地带，全年降水量偏少，冬小麦易受中至重度干旱；西部浅山丘陵盆地与\n\n豫南地区旱情相对较轻，伏牛山南麓与信阳地区则很少出现冬小麦干旱。",
+    "source_len": 117,
+    "core_concept": [
+      "冬小麦干旱空间分布",
+      "干旱危险性评价"
+    ],
+    "technical_terms": [
+      "干旱空间分布",
+      "中至重度干旱",
+      "降水量偏少",
+      "旱情"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述河南冬小麦干旱空间分布，东北重西南轻，中部东部易受中至重度干旱，西部和豫南较轻。",
+    "user_expressions_count": 9,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "河南",
+        "豫南",
+        "伏牛山南麓",
+        "信阳"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "冬小麦"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "D_P_R_410000_001-农业气候区划报告-河南省_s3",
+    "source_preview": "[河南 气候区划] 河南轻干热风年均发生日数呈“北部、中部和东部多，西部、南部少”的分\n\n布态势。轻干热风高发区域主要分布在豫北安阳、鹤壁、焦作、济源、濮阳及豫\n\n中许昌、漯河、驻马店和豫东的商丘、周口的部分地区。轻干热风弱发区主要分\n\n布在豫西三门峡、洛阳及豫南的南阳和信阳的部分地区。重干热风发生日数空间\n\n分布于轻干热风具有一定的区域相似性，高发区主要分布在安阳、鹤壁、浚县、\n\n原阳、孟津、温县、修武、宜阳、许昌等地，三门峡、洛阳、南阳、信阳等地为\n\n重干热风的低发区域。综合来看，驻马店、商丘、鹤壁、许昌、开封、安阳等地\n\n为干热风高风险区域，西部济源、三门峡、平顶山、焦作、信阳等地为干热风低",
+    "source_len": 302,
+    "core_concept": [
+      "干热风空间分布",
+      "干热风风险区划"
+    ],
+    "technical_terms": [
+      "轻干热风",
+      "重干热风",
+      "年均发生日数",
+      "高发区域",
+      "弱发区",
+      "低发区域",
+      "高风险区域"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk描述河南轻干热风和重干热风的空间分布态势，明确高发区、弱发区和低发区的具体市县。",
+    "user_expressions_count": 7,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "河南",
+        "豫北",
+        "豫中",
+        "豫东",
+        "豫西",
+        "豫南"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 3
+  },
+  {
+    "chunk_id": "D_P_R_410000_001-农业气候区划报告-河南省_s4",
+    "source_preview": "[河南 气候区划] 小麦成熟收获期间出现的大范围连阴雨或暴雨天气，会导致成熟的小麦籽粒\n\n发芽、霉变。持续性的连阴雨天气或暴雨天气，不仅会导致麦田积水、小麦倒伏、\n\n发霉、籽粒萌动和穗发芽，也会影响大田中小麦的收获，导致产量损失和品质下\n\n降。例如，2023 年5 月下旬期到6 月上旬河南麦收期出现了大范围、连续性的\n\n降水天气过程，降水过程和小麦成熟、收获期高度重合，降水导致多地麦田积水，\n\n小麦连片倒伏、发霉，部分地区出现籽粒萌动和穗发芽现象，此次“烂场雨”天\n\n气严重影响了小麦收获，导致小麦丰产不丰收。因此麦收期连阴雨天气是影响麦",
+    "source_len": 271,
+    "core_concept": [
+      "麦收期连阴雨灾害",
+      "小麦穗发芽",
+      "小麦收获期气象灾害"
+    ],
+    "technical_terms": [
+      "连阴雨",
+      "暴雨",
+      "麦田积水",
+      "倒伏",
+      "籽粒萌动",
+      "穗发芽",
+      "烂场雨"
+    ],
+    "concept_evidence_count": 2,
+    "semantic_summary": "该chunk解释麦收期连阴雨和暴雨导致小麦倒伏、发霉、穗发芽的机制，并以2023年河南烂场雨为例说明其危害。",
+    "user_expressions_count": 8,
+    "metric_count": 0,
+    "region": {
+      "names": [
+        "河南"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [
+      "小麦",
+      "成熟期",
+      "收获期"
+    ],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "D_P_R_410000_001-农业气候区划报告-河南省_s6",
+    "source_preview": "[河南 气候区划] 日照百分率是实际日照时间与可能日照时间（全天无云时应有的日照时数）\n\n之比。它表明了气候条件（主要是云、雨、雾、尘、沙等）减少的日照比例（%）。",
+    "source_len": 82,
+    "core_concept": [
+      "日照百分率"
+    ],
+    "technical_terms": [
+      "日照百分率",
+      "实际日照时间",
+      "可能日照时间",
+      "日照比例"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk定义日照百分率概念，即实际日照时间与可能日照时间之比，用于表示云雨雾尘沙等气候条件减少的日照比例。",
+    "user_expressions_count": 3,
+    "metric_count": 0,
+    "region": null,
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 0
+  },
+  {
+    "chunk_id": "D_P_R_410000_001-农业气候区划报告-河南省_s5",
+    "source_preview": "[河南 气候区划] 本报告分析使用的数据包括1961-2023 年河南省122 个气象站逐日气象数据、\n\n主要包括日平均气温（℃）、日最低气温（℃）、日最高气温（℃）、降水量（mm）、\n\n平均相对湿度（%）、平均风速（m/s）、最大风速（m/s），日照时数（h）等。",
+    "source_len": 133,
+    "core_concept": [
+      "农业气候区划数据基础",
+      "气象数据来源"
+    ],
+    "technical_terms": [
+      "气象站",
+      "逐日气象数据",
+      "日平均气温",
+      "日最低气温",
+      "日最高气温",
+      "降水量",
+      "平均相对湿度",
+      "平均风速",
+      "最大风速",
+      "日照时数"
+    ],
+    "concept_evidence_count": 1,
+    "semantic_summary": "该chunk说明河南省农业气候区划分析所用的数据来源，包括1961-2023年122个气象站的逐日气象数据及具体气象要素。",
+    "user_expressions_count": 3,
+    "metric_count": 2,
+    "region": {
+      "names": [
+        "河南"
+      ],
+      "level": "province"
+    },
+    "affected_objects": [],
+    "evaluation_method": "[]",
+    "field_value_pairs_count": 1
+  }
+]
