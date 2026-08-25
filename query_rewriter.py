@@ -13,7 +13,6 @@ import json
 import os
 from collections import OrderedDict
 from pathlib import Path
-from typing import Optional
 from langchain_core.prompts import ChatPromptTemplate
 from llm_client import call_llm
 
@@ -183,14 +182,6 @@ REWRITE_PROMPT = ChatPromptTemplate.from_messages([
 
 {term_map_snippet}
 
-### Knowledge Context（知识库概念桥接，若下方为空则忽略本节）
-以下是从知识库中检索到的与用户问题最相关的概念片段（Chunk Knowledge）。
-改写时**优先使用**其中出现的概念与术语来生成 keywords 和 rewrite_queries。
-**不得凭空创造**与 Context 无关的专业概念；原始 Query 中的实体、时间、数值、地域等关键信息**必须保留**。
-Context 没有覆盖的部分，允许用映射表或保守推断补充。
-
-{knowledge_context}
-
 如果问题中出现了上表**没有**的口语/模糊表达，参考上表的风格自行映射为知识库术语。
 不确定时保持原表达，不要臆造术语。
 
@@ -304,12 +295,11 @@ def _needs_rewrite(query: str, top1_sim: float = 0.0, top2_sim: float = 0.0) -> 
     return False
 
 
-def _llm_rewrite(query: str, knowledge_context: str = "") -> dict:
-    """一次 LLM 调用完成改写。knowledge_context 为 CK Matcher 输出的概念桥接片段。"""
+def _llm_rewrite(query: str) -> dict:
+    """一次 LLM 调用完成改写。"""
     prompt = REWRITE_PROMPT.format(
         query=query,
         term_map_snippet=_build_term_map_prompt_snippet(),
-        knowledge_context=knowledge_context,
     )
     prompt_str = prompt.to_string() if hasattr(prompt, 'to_string') else str(prompt)
     try:
@@ -400,21 +390,25 @@ def precompute_rewrites(queries: list[str], mode: str = "all"):
     print(f"[rewriter] 已缓存 {len(_cache)} 条改写结果 → {CACHE_FILE}")
 
 
-def expand_query(query: str, mode: str = "all", top1_sim: float = 0.0, top2_sim: float = 0.0,
-                 use_ck: bool = True, knowledge_context: Optional[str] = None) -> list[str]:
+def expand_query(query: str, mode: str = "all", top1_sim: float = 0.0, top2_sim: float = 0.0) -> list[str]:
     """
     扩展查询，返回扩展后的查询列表供多路检索使用。
     mode: "keywords" | "multi_view" | "all"
     top1_sim: 原始 query 检索 top-1 相似度
     top2_sim: 原始 query 检索 top-2 相似度（用于 margin 门控）
-    use_ck: 是否注入 CK Matcher 的 Knowledge Context 指导改写（False 跑 A/B baseline）
-    knowledge_context: 显式传入 Knowledge Context（并行评测时主线程预计算，避免多线程调用 embedding 模型）
     """
     q = query.strip()
-    cache_key = q + ("|ck" if use_ck else "|base")
+    cache_key = q
     if cache_key in _cache:
         _cache.move_to_end(cache_key)
         entry = _cache[cache_key]
+    elif q + "|base" in _cache:
+        # BASE 口径旧缓存（CK 于 2026-08-25 从改写层移除），复用避免重跑 LLM
+        entry = _cache[q + "|base"]
+        _cache[cache_key] = entry
+        _cache.move_to_end(cache_key)
+        if _AUTO_SAVE:
+            _save_cache()
     elif not _needs_rewrite(q, top1_sim, top2_sim):
         # gate 不触发 LLM 改写时，确定性术语映射仍可能有产出
         mapped = _apply_terminology_map(q)
@@ -424,10 +418,7 @@ def expand_query(query: str, mode: str = "all", top1_sim: float = 0.0, top2_sim:
         if _AUTO_SAVE:
             _save_cache()
     else:
-        if use_ck and knowledge_context is None:
-            from ck_matcher import build_knowledge_context
-            knowledge_context = build_knowledge_context(q)
-        entry = _llm_rewrite(q, knowledge_context=knowledge_context or "")
+        entry = _llm_rewrite(q)
         _cache[cache_key] = entry
         _cache.move_to_end(cache_key)
         if _AUTO_SAVE:

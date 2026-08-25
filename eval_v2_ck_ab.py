@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """CK-guided Query Understanding A/B 评测
 
+【历史归档 · 2026-08-25】CK 已从改写层（query_rewriter.expand_query）移除，
+use_ck/knowledge_context 参数不再存在，本脚本无法运行。仅保留作为 A/B 实验
+记录（见 eval_v2_results.md 第 21 节）。CK 数据（chunk_knowledge.json、ck_matcher.py
+等）未删除，如需复现实验请回退本次提交。
+
 BASE (use_ck=False) vs CK (use_ck=True)，同一检索管线（+Rewrite + Reranker）。
 
 指标链:

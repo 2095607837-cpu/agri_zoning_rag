@@ -1,11 +1,12 @@
 # V2 Golden Set 全配置检索评测报告
 
-生成时间：2026-07-06 | 最后更新：2026-08-24 | 评测集：`golden_set_v2.json` | 199 题（in-domain 179 + OOD 20）
+生成时间：2026-07-06 | 最后更新：2026-08-25 | 评测集：`golden_set_v2.json` | 199 题（in-domain 179 + OOD 20）
 
 ## 变更日志
 
 | 日期 | 变更 |
 |------|------|
+| 2026-08-25 | **CK 应用层移除**（query_rewriter.py）：删除 REWRITE_PROMPT 的 Knowledge Context 段、expand_query 的 use_ck/knowledge_context 参数与 ck_matcher 调用，改写缓存键统一为纯 query（旧 `\|base` 缓存自动复用，200 条改写零重跑）。此前生产 use_ck 默认 True 实际在注入 CK；移除后改写/检索/召回统一为 BASE 口径（与 2026-08-13 A/B 结论一致：CK 无正向收益）。CK 数据与 ck_matcher.py 保留；eval_v2_ck_ab.py 归档。详见"二十一、CK A/B 评测"末尾口径说明 | 
 | 2026-08-24 | **RRF 权重分层扫描**（eval_rrf_weight_scan.py → data/rrf_weight_scan_report.json）：生产候选池（dense_k=30, bm25_k=20）解析式重算 0.1~0.95 权重网格。全局曲面为平台（0.4~0.8 只差 1.1pp），0.7/0.3 仍在最优区；唯一强敏感类型 query_rewrite（w_dense=0.1 时 +3 题）；按类完美权重 in-sample 上界仅 +5 题（+2.8pp）。判定：不调动态权重，优先修 single-channel boost 归一化机制。详见"二十四、RRF 权重分层扫描（2026-08-24）" |
 | 2026-08-24 | **RRF 损失诊断 P0**（eval_rrf_loss.py → data/rrf_loss_report.json）：复用 Oracle Rank 逐题列补 bm25_top30，180 题原始 query。A类（Dense top10 命中但 RRF top10 丢）6 题、B类（Dense top30 命中但 RRF top10 丢）18 题、C类（Dense top30 未命中）14 题。RRF 损失 24 题 > Dense 无法解决 14 题——检索层内 RRF 是第一瓶颈。详见"二十三、RRF 损失诊断 P0（2026-08-24）" |
 | 2026-08-24 | **Oracle Rank 可分性实验**（eval_oracle_rank.py → data/eval_oracle_rank_results.json）：180 原始 query × 791 chunk（生产索引）全量余弦诊断。median oracle rank=2.0（92.2% ≤30），仅 1 题 >100（Q_D29=106），>300 为 0。still-fail 24 题中 15 题表示空间可分但端到端失败（RRF 稀释+top-10 截断）。改写救回 5 题（Q_SR03 39→4）。结论：不训 Adapter，瓶颈在管线。详见"二十二、Oracle Rank 可分性实验（2026-08-24）" |
@@ -1461,6 +1462,7 @@ BASE R@10=0 的 24 题全部仍失败（CK 另新增 2 题）：
 - ck_gold_top1_rate 仅 46.7%：过半题的 CK Top-1 不是 gold chunk，Knowledge Context 的引导方向本身有偏差；cosine 平均 0.7629 说明改写与 gold 相关度处于中等水平，未能突破口语↔技术语言的语义鸿沟（如 Q_SR03「低温累积效应」 vs chunk「5-9月月平均温度之和的距平」）
 - 决定：CK 机制保留 use_ck 开关（默认开、A/B 可关），不作为当前主攻方向；失败题根因仍集中在 embedding 语义鸿沟与长尾定义类文本召回
   > ⚠ 2026-08-24 Oracle Rank 实验（第二十二节）修订了本条判断：语义鸿沟是窄尾（1 题 >100），端到端失败大头在管线（RRF 稀释+截断），详见 22.6
+  > ⚠ 2026-08-25 口径说明：CK 已从改写层（query_rewriter.py）移除——REWRITE_PROMPT 的 Knowledge Context 段、expand_query 的 use_ck/knowledge_context 参数、ck_matcher 调用全部删除，改写缓存键统一为纯 query（旧 `|base` 缓存自动复用）。此后所有改写/检索/召回路径均为 BASE 口径。CK 数据（chunk_knowledge.json、data/ck_matcher/、ck_matcher.py 等）保留未删，本评测脚本 eval_v2_ck_ab.py 归档为历史记录
 
 ---
 

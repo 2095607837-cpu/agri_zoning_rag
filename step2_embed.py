@@ -153,7 +153,7 @@ def split_documents(docs: list[Document]) -> list[Document]:
             sub_docs = _split_by_h3(d)
             if len(sub_docs) > 1:
                 h3_split_count += len(sub_docs) - 1
-                # TODO: 过滤 H3 切分产生的空 body chunk（暂时关闭，待 CK 重建同步）
+                # TODO: 过滤 H3 切分产生的空 body chunk（暂时关闭；CK 已于 2026-08-25 从改写层移除，恢复过滤不再受 chunk_id 映射约束）
                 # compact = _compact_header(d.metadata)
                 # before = len(sub_docs)
                 # sub_docs = [sd for sd in sub_docs
