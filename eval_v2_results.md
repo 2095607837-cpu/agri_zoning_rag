@@ -6,6 +6,7 @@
 
 | 日期 | 变更 |
 |------|------|
+| 2026-08-25 | **Phase 3 池大小扫描**（eval_pool_size_scan.py → data/pool_size_scan_report.json）：hybrid_search 拆分 _collect_candidates/_coverage_reserve_and_rerank，新增 max_pool 参数（默认 50）。采集一次+CE 打分一次，解析式重放 50/60/80：MRR 0.5517/0.5537/0.5549、R@10 87.2/86.7/87.8%、R@10=0 23/24/22；仅 18/180 题 top10 变化，净 +1 题（救 Q_S07/Q_L02、搅黄 Q_L09），非单调，判定维持 50。本次 50 亦为 CK 移除后新基线。详见"二十五、Phase 3 池大小扫描（2026-08-25）" |
 | 2026-08-25 | **CK 应用层移除**（query_rewriter.py）：删除 REWRITE_PROMPT 的 Knowledge Context 段、expand_query 的 use_ck/knowledge_context 参数与 ck_matcher 调用，改写缓存键统一为纯 query（旧 `\|base` 缓存自动复用，200 条改写零重跑）。此前生产 use_ck 默认 True 实际在注入 CK；移除后改写/检索/召回统一为 BASE 口径（与 2026-08-13 A/B 结论一致：CK 无正向收益）。CK 数据与 ck_matcher.py 保留；eval_v2_ck_ab.py 归档。详见"二十一、CK A/B 评测"末尾口径说明 | 
 | 2026-08-24 | **RRF 权重分层扫描**（eval_rrf_weight_scan.py → data/rrf_weight_scan_report.json）：生产候选池（dense_k=30, bm25_k=20）解析式重算 0.1~0.95 权重网格。全局曲面为平台（0.4~0.8 只差 1.1pp），0.7/0.3 仍在最优区；唯一强敏感类型 query_rewrite（w_dense=0.1 时 +3 题）；按类完美权重 in-sample 上界仅 +5 题（+2.8pp）。判定：不调动态权重，优先修 single-channel boost 归一化机制。详见"二十四、RRF 权重分层扫描（2026-08-24）" |
 | 2026-08-24 | **RRF 损失诊断 P0**（eval_rrf_loss.py → data/rrf_loss_report.json）：复用 Oracle Rank 逐题列补 bm25_top30，180 题原始 query。A类（Dense top10 命中但 RRF top10 丢）6 题、B类（Dense top30 命中但 RRF top10 丢）18 题、C类（Dense top30 未命中）14 题。RRF 损失 24 题 > Dense 无法解决 14 题——检索层内 RRF 是第一瓶颈。详见"二十三、RRF 损失诊断 P0（2026-08-24）" |
@@ -1688,3 +1689,48 @@ BASE R@10=0 的 24 题全部仍失败（CK 另新增 2 题）：
 4. **生产管线 RRF 后还有 CE 精排**（alpha=0.2），会进一步抹平融合权重差异——本扫描为 pre-CE 口径，端到端权重敏感性只会更低
 5. 由此**修订 23.5-2**：全局提高 Dense 权重无净收益，B 类正解是 23.5-3 的 single-channel boost 归一化机制修复（静态、全局、无过拟合风险）
 6. 若将来仍要做 query 级自适应：起点是廉价运行时特征（BM25 top 分强度、query 长度）的两档切换 + 留出集验证，不是 7 类分类器
+
+---
+
+## 二十五、Phase 3 池大小扫描（2026-08-25）
+
+> 脚本 `eval_pool_size_scan.py` → `data/pool_size_scan_report.json`（5453s，180 in-domain 题）
+>
+> 背景：search_multi_query Phase 3 的 Global Fill 目标（MAX_POOL=50）从未被实验验证。本次将 hybrid_search.py 拆为 `_collect_candidates`（Phase 1+2）/ `_coverage_reserve_and_rerank`（Phase 3+4），新增 `max_pool` 参数（默认 50，生产行为零变化）。
+>
+> 方法：候选采集一次 + CE 打分一次（max_pool=80 并集池；50/60 的池是 80 池的前缀，CE 逐对打分与池组成无关），解析式重放 50/60/80 的 Phase 3 配额与 CE min-max 归一化。10 题子集与真实 `search_multi_query(max_pool∈{50,60,80})` 逐题 top-10 比对完全一致。
+>
+> 口径：+Rewrite+Reranker，top_k=10，改写全缓存命中（无 LLM 调用）。本次 MP=50 亦为 CK 移除后（2026-08-25）的首个新基线。
+
+### 25.1 汇总（n=180）
+
+| 池大小 | MRR | R@5 | R@10 | Top1 | R@10=0 | 候选>池的题数 |
+|-------:|----:|----:|----:|----:|-------:|--------------:|
+| 50 | 0.5517 | 73.9% | 87.2% | 40.6% | 23 | 92 |
+| 60 | 0.5537 | 73.9% | 86.7% | 41.1% | 24 | 44 |
+| 80 | 0.5549 | 73.9% | 87.8% | 41.1% | 22 | 11 |
+
+新基线对比：MP=50 的 MRR 0.5517 / R@10 87.2% / R@10=0 23，优于 08-13 CK A/B 的 BASE（0.5490 / 86.7% / 24，当时生产仍注入 CK）——与"CK 无正向收益"结论一致。
+
+### 25.2 逐题变化
+
+- top10 实际变化：50→60 共 15 题、60→80 共 7 题、50→80 合计仅 **18/180 题**受影响
+- 命中翻转 50→80：救回 Q_S07（cross_section）、Q_L02（query_rewrite）；搅黄 Q_L09（query_rewrite）——净 +1 题
+- 50→60：0 救回、1 搅黄（Q_L09）；**60 是三个池大小中最差**（R@10 86.7%、R@10=0 24）
+
+### 25.3 机制分析
+
+| 题 | 现象 | 机制 |
+|---|---|---|
+| Q_S07 / Q_L02 | 50/60 不命中，80 命中（gold 排第 9） | gold 不在 quota 保留集（保留集平均仅 30.5/50，SQ 配额常填不满），靠 Global Fill 进入池并被 CE 排进 top-10 |
+| Q_L09 | 50 命中（gold 第 10），60/80 不命中 | 池扩大后新增 fill 候选改变 CE min-max 归一化分布，0.8×CE 主导下 gold 被挤出 top-10 |
+
+> 池大小与 CE 归一化耦合：新增候选不只会"补进好货"，也会稀释已有候选的相对 CE_norm——与二十三节 RRF 损失的稀释机制同源。收益集中在尾部（候选>80 的仅 11 题），且非单调（60 差于 50）。
+
+### 25.4 判定：维持 max_pool=50
+
+1. 50→80 的净收益 +1 题（MRR +0.0032、R@10=0 23→22），18/180 题受影响——样本内噪声级
+2. 非单调性（60 差于 50）说明中等扩池只有稀释损失，收益仅在 >80 的 11 题尾部
+3. 成本：池 80 vs 50 使 CE 交叉编码对 +60%，生产延迟增加
+4. `max_pool` 参数保留（默认 50 不变）；若后续发现跨 section 长难 query 的池截断损失，再针对 n_candidates>80 的尾部单独评估
+5. 本次扫描的中间召回结果（每题三池 top-10、池组成 quota/fill 数、gold 命中）全量落盘 `data/pool_size_scan_report.json`——弥补 07-29 实验未存中间结果的教训

@@ -422,6 +422,7 @@ class HybridSearcher:
         alpha: float = 0.2, lambda_length: float = 0.1,
         orig_dense_k: int = 30, orig_bm25_k: int = 20,
         subq_dense_k: int = 20, subq_bm25_k: int = 10,
+        max_pool: int = 50,
     ):
         """Union + RRF + Evidence Voting → CE Rerank 架构。
 
@@ -430,14 +431,38 @@ class HybridSearcher:
         ③ SubQuery: 每个 Dense20 + BM2510 → dict自然去重
         → Global Merge(chunk_id去重, 无截断)
         → Retrieval Prior(0.7×RRF_norm + 0.3×Evidence_norm) 排序
-        → Dynamic Coverage: Orig=20(50×40%), Rewrite=10(50×20%), SubQ均分20(50×40%)
-        → Global Fill 补齐50 → CE Rerank → Top K
+        → Dynamic Coverage: Orig=20, Rewrite=10, SubQ均分20
+        → Global Fill 补齐 max_pool（默认 50）→ CE Rerank → Top K
 
         Keywords 作为独立 BM25 通道检索（术语精确召回），不与 Original 拼合。
 
         Returns:
             (judge_results, merged): judge_results 为原始查询独立 CE 结果（供 OOD Judge），
             merged 为合并结果（供生成/评估）。
+        """
+        judge_results, cand_list, rw_list, sq_list = self._collect_candidates(
+            query, top_k, expand_context, rewrite_queries, sub_queries,
+            keyword_queries, extra_queries, lambda_length,
+            orig_dense_k, orig_bm25_k, subq_dense_k, subq_bm25_k)
+        if cand_list is None:
+            return judge_results, judge_results
+        results = self._coverage_reserve_and_rerank(
+            query, cand_list, rw_list, sq_list, top_k, expand_context,
+            alpha, lambda_length, max_pool)
+        return judge_results, results
+
+    def _collect_candidates(
+        self, query: str, top_k: int, expand_context: bool,
+        rewrite_queries, sub_queries, keyword_queries, extra_queries,
+        lambda_length: float,
+        orig_dense_k: int, orig_bm25_k: int,
+        subq_dense_k: int, subq_bm25_k: int,
+    ):
+        """Phase 1+2：多路召回 + Evidence + Retrieval Prior 排序。
+
+        Returns: (judge_results, cand_list, rw_list, sq_list)。
+        cand_list 已按 retrieval_prior 降序排序（Phase 3 输入）；
+        无任何改写输入时返回 (judge_results, None, None, None)。
         """
         # 原始查询独立 CE 结果（供 OOD Judge 判定检索质量）
         judge_results = self.search(query, top_k=top_k, expand_context=expand_context,
@@ -451,7 +476,7 @@ class HybridSearcher:
             sq_list = list(extra_queries)
         kw_query = " ".join(kw_list) if kw_list else ""
         if not rw_list and not sq_list and not kw_list:
-            return judge_results, judge_results
+            return judge_results, None, None, None
 
         # ── Phase 1: 每路 Dense+BM25→RRF → dict-based dedup ──
         RRF_K = 60
@@ -618,9 +643,17 @@ class HybridSearcher:
 
         cand_list.sort(key=lambda c: -c["retrieval_prior"])
 
-        # ── Phase 3: Dynamic Coverage Reservation (≤50) ──
-        MAX_POOL = 50
-        if len(cand_list) > MAX_POOL:
+        return judge_results, cand_list, rw_list, sq_list
+
+    def _coverage_reserve_and_rerank(
+        self, query: str, cand_list: list, rw_list: list, sq_list: list,
+        top_k: int, expand_context: bool, alpha: float, lambda_length: float,
+        max_pool: int = 50,
+    ):
+        """Phase 3+4：动态配额 + Global Fill 补齐 max_pool + CE 精排融合。"""
+
+        # ── Phase 3: Dynamic Coverage Reservation ──
+        if len(cand_list) > max_pool:
             n_rw = len(rw_list)
             n_sq = len(sq_list)
             rw_qids = set(range(1, 1 + n_rw))
@@ -668,9 +701,9 @@ class HybridSearcher:
                 if not placed:
                     rest.append(c)
 
-            # Global Fill: 补齐到 MAX_POOL
+            # Global Fill: 补齐到 max_pool
             cand_list = reserved + rest
-            cand_list = cand_list[:MAX_POOL]
+            cand_list = cand_list[:max_pool]
 
         # ── Phase 4: CE Rerank + Retrieval Prior 融合 ──
         # Final = 0.8×CE_norm + 0.2×retrieval_prior_norm
@@ -699,7 +732,7 @@ class HybridSearcher:
         if expand_context:
             results = self._expand_results(results)
 
-        return judge_results, results
+        return results
 
     def search(self, query: str, top_k: int = 5, expand_context: bool = False,
                skip_reranker: bool = False, w_dense: float = 0.7, w_bm25: float = 0.3,
