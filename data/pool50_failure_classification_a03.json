@@ -1,0 +1,1112 @@
+{
+  "generated": "2026-08-26 21:37:44",
+  "config": {
+    "max_pool": 50,
+    "top_k": 10,
+    "alpha": 0.3,
+    "lambda_length": 0.1,
+    "rank_convention": "1-indexed"
+  },
+  "summary": {
+    "n": 18,
+    "by_class": {
+      "A": {
+        "count": 4,
+        "qids": [
+          "Q_D29",
+          "Q_S03",
+          "Q_S14",
+          "Q_SR06"
+        ]
+      },
+      "B2": {
+        "count": 1,
+        "qids": [
+          "Q_L02"
+        ]
+      },
+      "C": {
+        "count": 13,
+        "qids": [
+          "Q_C25",
+          "Q_D04",
+          "Q_D10",
+          "Q_D20",
+          "Q_L07",
+          "Q_L11",
+          "Q_N11",
+          "Q_S05",
+          "Q_S07",
+          "Q_S23",
+          "Q_SR03",
+          "Q_SR08",
+          "Q_SR11"
+        ]
+      }
+    },
+    "A_oracle_split": {
+      "oracle_le30": {
+        "count": 1,
+        "qids": [
+          "Q_SR06"
+        ]
+      },
+      "oracle_gt30": {
+        "count": 3,
+        "qids": [
+          "Q_D29",
+          "Q_S03",
+          "Q_S14"
+        ]
+      },
+      "oracle_na": {
+        "count": 0,
+        "qids": []
+      }
+    },
+    "soft_protection_rescue": {
+      "dense10": {
+        "count": 0,
+        "pairs": []
+      },
+      "dense30": {
+        "count": 0,
+        "pairs": []
+      },
+      "chan10": {
+        "count": 0,
+        "pairs": []
+      },
+      "verified": {
+        "count": 0,
+        "pairs": []
+      }
+    },
+    "C_near_miss_margin_lt_002": {
+      "count": 1,
+      "pairs": [
+        [
+          "Q_L07",
+          0.0013
+        ]
+      ]
+    },
+    "capability_by_class": {
+      "context_expansion": {
+        "C": [
+          "Q_C25"
+        ]
+      },
+      "cross_document": {
+        "C": [
+          "Q_D04",
+          "Q_D10",
+          "Q_D20"
+        ],
+        "A": [
+          "Q_D29"
+        ]
+      },
+      "query_rewrite": {
+        "B2": [
+          "Q_L02"
+        ],
+        "C": [
+          "Q_L07",
+          "Q_L11",
+          "Q_SR03",
+          "Q_SR08",
+          "Q_SR11"
+        ],
+        "A": [
+          "Q_SR06"
+        ]
+      },
+      "numeric_retrieval": {
+        "C": [
+          "Q_N11"
+        ]
+      },
+      "cross_section": {
+        "A": [
+          "Q_S03",
+          "Q_S14"
+        ],
+        "C": [
+          "Q_S05",
+          "Q_S07",
+          "Q_S23"
+        ]
+      }
+    }
+  },
+  "per_question": [
+    {
+      "qid": "Q_C25",
+      "capability": "context_expansion",
+      "query": "陕西省苹果品质气候区划采用什么方法进行综合评价？",
+      "n_union": 43,
+      "gold_chunks": [
+        {
+          "chunk_id": "D_P_R_610000_001-陕西苹果气候区划报告_s22",
+          "global_union": {
+            "in_union": true,
+            "query_hits": [
+              0
+            ],
+            "channels": [
+              "Original-Dense"
+            ],
+            "best_channel": "Dense",
+            "best_rank": 20,
+            "prior_rank": 34
+          },
+          "pool50": {
+            "in_pool": true,
+            "exclusion_reason": null,
+            "pool_pos": 34
+          },
+          "ce": {
+            "in_ce": true,
+            "final_rank": 27,
+            "ce_rank": 8,
+            "retrieval_prior_rank": 34,
+            "top10_margin": 0.0653
+          },
+          "oracle": null
+        },
+        {
+          "chunk_id": "D_P_R_610000_001-陕西苹果气候区划报告_s15",
+          "global_union": {
+            "in_union": true,
+            "query_hits": [
+              0
+            ],
+            "channels": [
+              "Original-Dense"
+            ],
+            "best_channel": "Dense",
+            "best_rank": 13,
+            "prior_rank": 20
+          },
+          "pool50": {
+            "in_pool": true,
+            "exclusion_reason": null,
+            "pool_pos": 20
+          },
+          "ce": {
+            "in_ce": true,
+            "final_rank": 19,
+            "ce_rank": 19,
+            "retrieval_prior_rank": 20,
+            "top10_margin": 0.0352
+          },
+          "oracle": null
+        }
+      ],
+      "cls": "C"
+    },
+    {
+      "qid": "Q_D04",
+      "capability": "cross_document",
+      "query": "内蒙古大豆区划和陕西苹果区划在指标体系构建和空间分析方法上有什么共性和差异？",
+      "n_union": 71,
+      "gold_chunks": [
+        {
+          "chunk_id": "D_P_R_150000_001-内蒙古区划报告_s11",
+          "global_union": {
+            "in_union": true,
+            "query_hits": [
+              0,
+              2
+            ],
+            "channels": [
+              "Original-BM25kw",
+              "SubQ-Dense",
+              "SubQ-BM25o"
+            ],
+            "best_channel": "BM25",
+            "best_rank": 5,
+            "prior_rank": 35
+          },
+          "pool50": {
+            "in_pool": true,
+            "exclusion_reason": null,
+            "pool_pos": 34
+          },
+          "ce": {
+            "in_ce": true,
+            "final_rank": 37,
+            "ce_rank": 35,
+            "retrieval_prior_rank": 34,
+            "top10_margin": 0.3757
+          },
+          "oracle": null
+        },
+        {
+          "chunk_id": "D_P_R_610000_001-陕西苹果气候区划报告_s10",
+          "global_union": {
+            "in_union": false
+          },
+          "pool50": {
+            "in_pool": false,
+            "exclusion_reason": null
+          },
+          "ce": {
+            "in_ce": false,
+            "final_rank": null,
+            "ce_rank": null,
+            "retrieval_prior_rank": null,
+            "top10_margin": null
+          },
+          "oracle": null
+        }
+      ],
+      "cls": "C"
+    },
+    {
+      "qid": "Q_D10",
+      "capability": "cross_document",
+      "query": "河南省冬小麦品质区划中筋和弱筋适宜区的划分标准与气科院的全国大豆品质区划在方法论上有什么共通之处？",
+      "n_union": 79,
+      "gold_chunks": [
+        {
+          "chunk_id": "D_P_R_410000_001-农业气候区划报告-河南省_s23",
+          "global_union": {
+            "in_union": false
+          },
+          "pool50": {
+            "in_pool": false,
+            "exclusion_reason": null
+          },
+          "ce": {
+            "in_ce": false,
+            "final_rank": null,
+            "ce_rank": null,
+            "retrieval_prior_rank": null,
+            "top10_margin": null
+          },
+          "oracle": null
+        },
+        {
+          "chunk_id": "气科院-农业气候区划指标算法说明文档-王旗_s3",
+          "global_union": {
+            "in_union": true,
+            "query_hits": [
+              3
+            ],
+            "channels": [
+              "SubQ-Dense",
+              "SubQ-BM25o"
+            ],
+            "best_channel": "BM25",
+            "best_rank": 4,
+            "prior_rank": 32
+          },
+          "pool50": {
+            "in_pool": true,
+            "exclusion_reason": null,
+            "pool_pos": 31
+          },
+          "ce": {
+            "in_ce": true,
+            "final_rank": 23,
+            "ce_rank": 21,
+            "retrieval_prior_rank": 31,
+            "top10_margin": 0.4351
+          },
+          "oracle": null
+        }
+      ],
+      "cls": "C"
+    },
+    {
+      "qid": "Q_D20",
+      "capability": "cross_document",
+      "query": "新疆农业气象台的算法说明文档和陕西省的算法说明文档在本地化策略上有何不同？",
+      "n_union": 55,
+      "gold_chunks": [
+        {
+          "chunk_id": "农业气候区划指标算法说明文档（新疆农业气象台-算法说明文档-郑新倩）_s1_p0",
+          "global_union": {
+            "in_union": false
+          },
+          "pool50": {
+            "in_pool": false,
+            "exclusion_reason": null
+          },
+          "ce": {
+            "in_ce": false,
+            "final_rank": null,
+            "ce_rank": null,
+            "retrieval_prior_rank": null,
+            "top10_margin": null
+          },
+          "oracle": null
+        },
+        {
+          "chunk_id": "农业气候区划指标算法说明文档（新疆农业气象台-算法说明文档-郑新倩）_s1_p1",
+          "global_union": {
+            "in_union": false
+          },
+          "pool50": {
+            "in_pool": false,
+            "exclusion_reason": null
+          },
+          "ce": {
+            "in_ce": false,
+            "final_rank": null,
+            "ce_rank": null,
+            "retrieval_prior_rank": null,
+            "top10_margin": null
+          },
+          "oracle": null
+        },
+        {
+          "chunk_id": "农业气候区划指标算法说明文档（陕西-算法说明文档-梁轶）20250926_s0",
+          "global_union": {
+            "in_union": true,
+            "query_hits": [
+              0
+            ],
+            "channels": [
+              "Original-Dense",
+              "Original-BM25o",
+              "Original-BM25kw"
+            ],
+            "best_channel": "BM25",
+            "best_rank": 2,
+            "prior_rank": 38
+          },
+          "pool50": {
+            "in_pool": true,
+            "exclusion_reason": null,
+            "pool_pos": 38
+          },
+          "ce": {
+            "in_ce": true,
+            "final_rank": 17,
+            "ce_rank": 11,
+            "retrieval_prior_rank": 38,
+            "top10_margin": 0.0818
+          },
+          "oracle": null
+        }
+      ],
+      "cls": "C"
+    },
+    {
+      "qid": "Q_D29",
+      "capability": "cross_document",
+      "query": "陕西苹果品质区划和新疆冬小麦品质区划在气候因子选择和评价方法上有什么异同？",
+      "n_union": 93,
+      "gold_chunks": [
+        {
+          "chunk_id": "D_P_R_610000_001-陕西苹果气候区划报告_s17",
+          "global_union": {
+            "in_union": false
+          },
+          "pool50": {
+            "in_pool": false,
+            "exclusion_reason": null
+          },
+          "ce": {
+            "in_ce": false,
+            "final_rank": null,
+            "ce_rank": null,
+            "retrieval_prior_rank": null,
+            "top10_margin": null
+          },
+          "oracle": {
+            "oracle_rank": 106,
+            "dense_rank": null,
+            "bm25_rank": null,
+            "rrf_rank": null,
+            "rw_oracle_rank": 35
+          }
+        },
+        {
+          "chunk_id": "新疆冬小麦气候区划报告_t11",
+          "global_union": {
+            "in_union": false
+          },
+          "pool50": {
+            "in_pool": false,
+            "exclusion_reason": null
+          },
+          "ce": {
+            "in_ce": false,
+            "final_rank": null,
+            "ce_rank": null,
+            "retrieval_prior_rank": null,
+            "top10_margin": null
+          },
+          "oracle": null
+        }
+      ],
+      "cls": "A"
+    },
+    {
+      "qid": "Q_L02",
+      "capability": "query_rewrite",
+      "query": "农业上说的光照好不好用什么指标衡量？",
+      "n_union": 71,
+      "gold_chunks": [
+        {
+          "chunk_id": "黑龙江农业气候资源普查技术规范2025_s5",
+          "global_union": {
+            "in_union": true,
+            "query_hits": [
+              0
+            ],
+            "channels": [
+              "Original-BM25kw"
+            ],
+            "best_channel": "BM25-KW",
+            "best_rank": 20,
+            "prior_rank": 61
+          },
+          "pool50": {
+            "in_pool": false,
+            "exclusion_reason": "global_fill",
+            "res_rest_rank": 62
+          },
+          "ce": {
+            "in_ce": false,
+            "final_rank": null,
+            "ce_rank": null,
+            "retrieval_prior_rank": null,
+            "top10_margin": null
+          },
+          "oracle": null
+        }
+      ],
+      "cls": "B2"
+    },
+    {
+      "qid": "Q_L07",
+      "capability": "query_rewrite",
+      "query": "为什么有的地方适合种苹果有的地方不行？",
+      "n_union": 65,
+      "gold_chunks": [
+        {
+          "chunk_id": "D_P_R_610000_001-陕西苹果气候区划报告_s10",
+          "global_union": {
+            "in_union": true,
+            "query_hits": [
+              0,
+              1
+            ],
+            "channels": [
+              "Original-Dense",
+              "Original-BM25kw",
+              "Rewrite-Dense"
+            ],
+            "best_channel": "Dense",
+            "best_rank": 1,
+            "prior_rank": 1
+          },
+          "pool50": {
+            "in_pool": true,
+            "exclusion_reason": null,
+            "pool_pos": 1
+          },
+          "ce": {
+            "in_ce": true,
+            "final_rank": 11,
+            "ce_rank": 24,
+            "retrieval_prior_rank": 1,
+            "top10_margin": 0.0013
+          },
+          "oracle": null
+        }
+      ],
+      "cls": "C"
+    },
+    {
+      "qid": "Q_L11",
+      "capability": "query_rewrite",
+      "query": "种大豆选什么地方最好？",
+      "n_union": 61,
+      "gold_chunks": [
+        {
+          "chunk_id": "D_P_R_150000_001-内蒙古区划报告_s11",
+          "global_union": {
+            "in_union": true,
+            "query_hits": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "channels": [
+              "Original-Dense",
+              "Rewrite-Dense",
+              "SubQ-Dense"
+            ],
+            "best_channel": "Dense",
+            "best_rank": 13,
+            "prior_rank": 24
+          },
+          "pool50": {
+            "in_pool": true,
+            "exclusion_reason": null,
+            "pool_pos": 22
+          },
+          "ce": {
+            "in_ce": true,
+            "final_rank": 24,
+            "ce_rank": 26,
+            "retrieval_prior_rank": 22,
+            "top10_margin": 0.1852
+          },
+          "oracle": null
+        }
+      ],
+      "cls": "C"
+    },
+    {
+      "qid": "Q_N11",
+      "capability": "numeric_retrieval",
+      "query": "陕西苹果适宜区年降水量最适范围？",
+      "n_union": 51,
+      "gold_chunks": [
+        {
+          "chunk_id": "D_P_R_610000_001-陕西苹果气候区划报告_s11",
+          "global_union": {
+            "in_union": true,
+            "query_hits": [
+              0
+            ],
+            "channels": [
+              "Original-Dense"
+            ],
+            "best_channel": "Dense",
+            "best_rank": 15,
+            "prior_rank": 26
+          },
+          "pool50": {
+            "in_pool": true,
+            "exclusion_reason": null,
+            "pool_pos": 26
+          },
+          "ce": {
+            "in_ce": true,
+            "final_rank": 29,
+            "ce_rank": 32,
+            "retrieval_prior_rank": 26,
+            "top10_margin": 0.1704
+          },
+          "oracle": null
+        }
+      ],
+      "cls": "C"
+    },
+    {
+      "qid": "Q_S03",
+      "capability": "cross_section",
+      "query": "黑龙江省农业气候资源普查技术规范中涵盖了哪些气候要素的计算方法？每种方法的核心思路是什么？",
+      "n_union": 40,
+      "gold_chunks": [
+        {
+          "chunk_id": "黑龙江农业气候资源普查技术规范2025_s7",
+          "global_union": {
+            "in_union": false
+          },
+          "pool50": {
+            "in_pool": false,
+            "exclusion_reason": null
+          },
+          "ce": {
+            "in_ce": false,
+            "final_rank": null,
+            "ce_rank": null,
+            "retrieval_prior_rank": null,
+            "top10_margin": null
+          },
+          "oracle": {
+            "oracle_rank": 98,
+            "dense_rank": null,
+            "bm25_rank": null,
+            "rrf_rank": null,
+            "rw_oracle_rank": null
+          }
+        },
+        {
+          "chunk_id": "黑龙江农业气候资源普查技术规范2025_s12_p0",
+          "global_union": {
+            "in_union": false
+          },
+          "pool50": {
+            "in_pool": false,
+            "exclusion_reason": null
+          },
+          "ce": {
+            "in_ce": false,
+            "final_rank": null,
+            "ce_rank": null,
+            "retrieval_prior_rank": null,
+            "top10_margin": null
+          },
+          "oracle": null
+        },
+        {
+          "chunk_id": "黑龙江农业气候资源普查技术规范2025_s12_p1",
+          "global_union": {
+            "in_union": false
+          },
+          "pool50": {
+            "in_pool": false,
+            "exclusion_reason": null
+          },
+          "ce": {
+            "in_ce": false,
+            "final_rank": null,
+            "ce_rank": null,
+            "retrieval_prior_rank": null,
+            "top10_margin": null
+          },
+          "oracle": null
+        }
+      ],
+      "cls": "A"
+    },
+    {
+      "qid": "Q_S05",
+      "capability": "cross_section",
+      "query": "新疆冬小麦气候区划从哪几个维度进行？产量提升建议与区划结果有什么关联？",
+      "n_union": 95,
+      "gold_chunks": [
+        {
+          "chunk_id": "新疆冬小麦气候区划报告_s7_p1",
+          "global_union": {
+            "in_union": true,
+            "query_hits": [
+              0,
+              3
+            ],
+            "channels": [
+              "Original-BM25o",
+              "SubQ-BM25o"
+            ],
+            "best_channel": "BM25",
+            "best_rank": 4,
+            "prior_rank": 20
+          },
+          "pool50": {
+            "in_pool": true,
+            "exclusion_reason": null,
+            "pool_pos": 20
+          },
+          "ce": {
+            "in_ce": true,
+            "final_rank": 32,
+            "ce_rank": 30,
+            "retrieval_prior_rank": 20,
+            "top10_margin": 0.1684
+          },
+          "oracle": null
+        },
+        {
+          "chunk_id": "新疆冬小麦气候区划报告_s9",
+          "global_union": {
+            "in_union": false
+          },
+          "pool50": {
+            "in_pool": false,
+            "exclusion_reason": null
+          },
+          "ce": {
+            "in_ce": false,
+            "final_rank": null,
+            "ce_rank": null,
+            "retrieval_prior_rank": null,
+            "top10_margin": null
+          },
+          "oracle": null
+        }
+      ],
+      "cls": "C"
+    },
+    {
+      "qid": "Q_S07",
+      "capability": "cross_section",
+      "query": "内蒙古大豆多种灾害（干旱、霜冻、食心虫）风险区划在指标体系和方法上有什么共性和差异？",
+      "n_union": 99,
+      "gold_chunks": [
+        {
+          "chunk_id": "D_P_R_150000_001-内蒙古区划报告_s21",
+          "global_union": {
+            "in_union": true,
+            "query_hits": [
+              0
+            ],
+            "channels": [
+              "Original-Dense"
+            ],
+            "best_channel": "Dense",
+            "best_rank": 17,
+            "prior_rank": 86
+          },
+          "pool50": {
+            "in_pool": false,
+            "exclusion_reason": "global_fill",
+            "res_rest_rank": 86
+          },
+          "ce": {
+            "in_ce": false,
+            "final_rank": null,
+            "ce_rank": null,
+            "retrieval_prior_rank": null,
+            "top10_margin": null
+          },
+          "oracle": null
+        },
+        {
+          "chunk_id": "D_P_R_150000_001-内蒙古区划报告_s30",
+          "global_union": {
+            "in_union": true,
+            "query_hits": [
+              0
+            ],
+            "channels": [
+              "Original-Dense",
+              "Original-BM25o"
+            ],
+            "best_channel": "BM25",
+            "best_rank": 15,
+            "prior_rank": 80
+          },
+          "pool50": {
+            "in_pool": false,
+            "exclusion_reason": "global_fill",
+            "res_rest_rank": 80
+          },
+          "ce": {
+            "in_ce": false,
+            "final_rank": null,
+            "ce_rank": null,
+            "retrieval_prior_rank": null,
+            "top10_margin": null
+          },
+          "oracle": null
+        },
+        {
+          "chunk_id": "D_P_R_150000_001-内蒙古区划报告_s45",
+          "global_union": {
+            "in_union": true,
+            "query_hits": [
+              0,
+              4
+            ],
+            "channels": [
+              "Original-BM25o",
+              "SubQ-Dense"
+            ],
+            "best_channel": "Dense",
+            "best_rank": 9,
+            "prior_rank": 40
+          },
+          "pool50": {
+            "in_pool": true,
+            "exclusion_reason": null,
+            "pool_pos": 36
+          },
+          "ce": {
+            "in_ce": true,
+            "final_rank": 17,
+            "ce_rank": 14,
+            "retrieval_prior_rank": 36,
+            "top10_margin": 0.1051
+          },
+          "oracle": null
+        }
+      ],
+      "cls": "C"
+    },
+    {
+      "qid": "Q_S14",
+      "capability": "cross_section",
+      "query": "河南省冬小麦区划中各气象要素（积温、降水、日照、蒸散）年代际变化的总体规律是什么？",
+      "n_union": 58,
+      "gold_chunks": [
+        {
+          "chunk_id": "D_P_R_410000_001-农业气候区划报告-河南省_s14",
+          "global_union": {
+            "in_union": false
+          },
+          "pool50": {
+            "in_pool": false,
+            "exclusion_reason": null
+          },
+          "ce": {
+            "in_ce": false,
+            "final_rank": null,
+            "ce_rank": null,
+            "retrieval_prior_rank": null,
+            "top10_margin": null
+          },
+          "oracle": null
+        },
+        {
+          "chunk_id": "D_P_R_410000_001-农业气候区划报告-河南省_s18",
+          "global_union": {
+            "in_union": false
+          },
+          "pool50": {
+            "in_pool": false,
+            "exclusion_reason": null
+          },
+          "ce": {
+            "in_ce": false,
+            "final_rank": null,
+            "ce_rank": null,
+            "retrieval_prior_rank": null,
+            "top10_margin": null
+          },
+          "oracle": {
+            "oracle_rank": 43,
+            "dense_rank": null,
+            "bm25_rank": null,
+            "rrf_rank": null,
+            "rw_oracle_rank": null
+          }
+        }
+      ],
+      "cls": "A"
+    },
+    {
+      "qid": "Q_S23",
+      "capability": "cross_section",
+      "query": "河南省冬小麦不同生育阶段（播种至越冬前、越冬期、返青至成熟）各阶段的气候条件要求和主要农业气象灾害分别是什么？",
+      "n_union": 53,
+      "gold_chunks": [
+        {
+          "chunk_id": "D_P_R_410000_001-农业气候区划报告-河南省_s4",
+          "global_union": {
+            "in_union": true,
+            "query_hits": [
+              0
+            ],
+            "channels": [
+              "Original-Dense"
+            ],
+            "best_channel": "Dense",
+            "best_rank": 29,
+            "prior_rank": 53
+          },
+          "pool50": {
+            "in_pool": false,
+            "exclusion_reason": "global_fill",
+            "res_rest_rank": 53
+          },
+          "ce": {
+            "in_ce": false,
+            "final_rank": null,
+            "ce_rank": null,
+            "retrieval_prior_rank": null,
+            "top10_margin": null
+          },
+          "oracle": null
+        },
+        {
+          "chunk_id": "D_P_R_410000_001-农业气候区划报告-河南省_s5",
+          "global_union": {
+            "in_union": false
+          },
+          "pool50": {
+            "in_pool": false,
+            "exclusion_reason": null
+          },
+          "ce": {
+            "in_ce": false,
+            "final_rank": null,
+            "ce_rank": null,
+            "retrieval_prior_rank": null,
+            "top10_margin": null
+          },
+          "oracle": null
+        },
+        {
+          "chunk_id": "D_P_R_410000_001-农业气候区划报告-河南省_s37",
+          "global_union": {
+            "in_union": true,
+            "query_hits": [
+              0
+            ],
+            "channels": [
+              "Original-Dense"
+            ],
+            "best_channel": "Dense",
+            "best_rank": 17,
+            "prior_rank": 37
+          },
+          "pool50": {
+            "in_pool": true,
+            "exclusion_reason": null,
+            "pool_pos": 37
+          },
+          "ce": {
+            "in_ce": true,
+            "final_rank": 13,
+            "ce_rank": 5,
+            "retrieval_prior_rank": 37,
+            "top10_margin": 0.0368
+          },
+          "oracle": null
+        }
+      ],
+      "cls": "C"
+    },
+    {
+      "qid": "Q_SR03",
+      "capability": "query_rewrite",
+      "query": "低温累积效应如何影响大豆产量？",
+      "n_union": 66,
+      "gold_chunks": [
+        {
+          "chunk_id": "黑龙江省大豆冷害气候风险区划技术规范（初稿）_s3",
+          "global_union": {
+            "in_union": true,
+            "query_hits": [
+              0,
+              1
+            ],
+            "channels": [
+              "Original-BM25kw",
+              "Rewrite-Dense",
+              "Rewrite-BM25o"
+            ],
+            "best_channel": "Dense",
+            "best_rank": 4,
+            "prior_rank": 10
+          },
+          "pool50": {
+            "in_pool": true,
+            "exclusion_reason": null,
+            "pool_pos": 10
+          },
+          "ce": {
+            "in_ce": true,
+            "final_rank": 13,
+            "ce_rank": 29,
+            "retrieval_prior_rank": 10,
+            "top10_margin": 0.0617
+          },
+          "oracle": null
+        }
+      ],
+      "cls": "C"
+    },
+    {
+      "qid": "Q_SR06",
+      "capability": "query_rewrite",
+      "query": "气候生产潜力考虑了哪些因素？和光温生产潜力、光合生产潜力的层次关系是什么？",
+      "n_union": 0,
+      "gold_chunks": [
+        {
+          "chunk_id": "D_P_R_410000_001-农业气候区划报告-河南省_s29",
+          "global_union": {
+            "in_union": false
+          },
+          "pool50": {
+            "in_pool": false,
+            "exclusion_reason": null
+          },
+          "ce": {
+            "in_ce": false,
+            "final_rank": null,
+            "ce_rank": null,
+            "retrieval_prior_rank": null,
+            "top10_margin": null
+          },
+          "oracle": {
+            "oracle_rank": 10,
+            "dense_rank": 10,
+            "bm25_rank": 19,
+            "rrf_rank": 13,
+            "rw_oracle_rank": null
+          }
+        }
+      ],
+      "cls": "A",
+      "note": "无改写输入，生产直接返回原始 search Top10"
+    },
+    {
+      "qid": "Q_SR08",
+      "capability": "query_rewrite",
+      "query": "干旱致灾因子危险性和孕灾环境敏感性有什么区别？",
+      "n_union": 41,
+      "gold_chunks": [
+        {
+          "chunk_id": "黑龙江省大豆干旱气候风险区划技术规范（初稿）_s2_p0",
+          "global_union": {
+            "in_union": true,
+            "query_hits": [
+              0
+            ],
+            "channels": [
+              "Original-Dense",
+              "Original-BM25o",
+              "Original-BM25kw"
+            ],
+            "best_channel": "BM25-KW",
+            "best_rank": 5,
+            "prior_rank": 29
+          },
+          "pool50": {
+            "in_pool": true,
+            "exclusion_reason": null,
+            "pool_pos": 29
+          },
+          "ce": {
+            "in_ce": true,
+            "final_rank": 22,
+            "ce_rank": 20,
+            "retrieval_prior_rank": 29,
+            "top10_margin": 0.2145
+          },
+          "oracle": null
+        }
+      ],
+      "cls": "C"
+    },
+    {
+      "qid": "Q_SR11",
+      "capability": "query_rewrite",
+      "query": "新疆种冬小麦，最后能收多少主要看哪几个气候条件？这几个条件是怎么一起影响产量的？",
+      "n_union": 60,
+      "gold_chunks": [
+        {
+          "chunk_id": "新疆冬小麦气候区划报告_s5_p0",
+          "global_union": {
+            "in_union": true,
+            "query_hits": [
+              0
+            ],
+            "channels": [
+              "Original-BM25kw"
+            ],
+            "best_channel": "BM25-KW",
+            "best_rank": 14,
+            "prior_rank": 45
+          },
+          "pool50": {
+            "in_pool": true,
+            "exclusion_reason": null,
+            "pool_pos": 47
+          },
+          "ce": {
+            "in_ce": true,
+            "final_rank": 40,
+            "ce_rank": 37,
+            "retrieval_prior_rank": 47,
+            "top10_margin": 0.2206
+          },
+          "oracle": null
+        }
+      ],
+      "cls": "C"
+    }
+  ]
+}

@@ -6,6 +6,7 @@
 
 | 日期 | 变更 |
 |------|------|
+| 2026-08-26 | **α=0.3 新基线零召回分层与定位**（eval_pool50_failure_classify.py α=0.3 版 → data/pool50_failure_classification_a03.json）：真实零召回 18 题（解析重放的 19 题剔除 Q_N20——该题 α=0.3 生产 search 路径实测已命中 Top10）。分层 A=4 / B1=0 / B2=1 / C=13：**Soft Protection 收益空间仍为 0/18**（无题被配额误杀）；A 类仅 Q_SR06 管线可修（rewrite gate 误跳过 + plain search RRF 稀释：oracle=10、dense=10、rrf=13、α=0.3 实测 final=12），Q_S03/Q_S14/Q_D29 为真语义鸿沟（oracle 43/98/106，Q_D29 改写后 rw_oracle=35）；B2 Q_L02 是 prior 融合稀释（BM25kw rank=20 → prior=61）；C 类 13 题中 near-miss 仅剩 Q_L07（final=11、margin=0.0013），CE-strong/prior-weak 2 题（Q_C25/Q_S23）、prior-strong/CE-hard 2 题（Q_SR03/Q_L07）、双平庸 9 题；**query_rewrite 能力 7/18 为最大单一问题源**。详见"二十八、α=0.3 新基线零召回分层与定位（2026-08-26）" |
 | 2026-08-26 | **CE 融合 α 扫描 + 归一化验证，生产 α 0.2→0.3**（eval_ce_norm_scan.py → data/ce_norm_scan_report.json + data/ce_norm_cache.json 原始分缓存）：两阶段顺序实验，180 题离线重放。实验 1（minmax 固定扫 α 0.0~0.7）：**α=0.3 唯一零搅黄正收益点**，R@10 87.2→89.4%、MRR 0.5517→0.5763、R@10=0 23→19，救回 Q_C08/Q_D26/Q_L08/Q_SR04（全部 C 类），α≥0.4 开始搅黄（Q_D19/Q_S26）、≥0.6 净收益转负；实验 2（α=0.3 固定扫 6 种归一化）：**minmax 仍全局最优**，rank 单独救回 Q_C25 但搅黄别题，softmax 三档均显著变差（搅黄 7~11 题）。判定：生产 alpha 默认改 0.3，归一化维持 minmax。详见"二十七、CE 融合 α 扫描与归一化验证（2026-08-26）" |
 | 2026-08-26 | **MP=50 零召回分层诊断**（eval_pool50_failure_classify.py → data/pool50_failure_classification.json）：23 个 R@10=0 按生产管线重放分层 A=5 / B1=0 / B2=1 / C=17。**Soft Protection theoretical rescue = 0/23**（B1 无题，quota 未挤掉任何 gold，软保护方向否决）；A 类 oracle 拆分：≤30 空间可分 2 题（Q_N20/Q_SR06 均无改写输入）、>30 真语义鸿沟 3 题；C 类为主瓶颈：near-miss 4 题（Q_C08/Q_SR04/Q_S23/Q_D26，margin<0.02）、prior 强但 CE 拉下 4 题（Q_L07/Q_L08 prior=1→final 13/14）、CE 归一化稀释（Q_C25 ce_rank=8→final=23）、CE 本身不认 5 题。下一步方向：α 权重扫描 + CE 归一化方式实验（解析式重放零成本）。详见"二十六、MP=50 零召回分层与机制可救上限（2026-08-26）" |
 | 2026-08-25 | **Phase 3 池大小扫描**（eval_pool_size_scan.py → data/pool_size_scan_report.json）：hybrid_search 拆分 _collect_candidates/_coverage_reserve_and_rerank，新增 max_pool 参数（默认 50）。采集一次+CE 打分一次，解析式重放 50/60/80：MRR 0.5517/0.5537/0.5549、R@10 87.2/86.7/87.8%、R@10=0 23/24/22；仅 18/180 题 top10 变化，净 +1 题（救 Q_S07/Q_L02、搅黄 Q_L09），非单调，判定维持 50。本次 50 亦为 CK 移除后新基线。详见"二十五、Phase 3 池大小扫描（2026-08-25）" |
@@ -1838,3 +1839,74 @@ final = α × prior + (1-α) × CE_norm，α = prior 权重：
 ### 27.4 新基线（α=0.3 + minmax + max_pool=50）
 
 MRR 0.5763 / R@5 78.9% / R@10 **89.4%** / Top1 42.8% / R@10=0 **19**（180 in-domain 题，解析重放，基线一致性 180/180 校验）。零召回从 23 降至 19，剩 19 题的构成（A=5、B2=1、C=13）与可救方向不变：C 类 CE-hard 5 题不可救，A 类 Q_N20/Q_SR06 可修管线。
+
+补充校正（2026-08-26）：Q_N20 在 α=0.3 生产 search 路径实测已命中 Top10（重放报告因缓存口径未计入），**真实零召回为 18 题**，分层与定位见"二十八"。
+
+---
+
+## 二十八、α=0.3 新基线零召回分层与定位（2026-08-26）
+
+### 28.1 口径
+
+α=0.3 生产基线（MP=50）真实零召回集合为 **18 题**：27.1 解析重放的 19 题剔除 Q_N20（plain search 路径题，α=0.3 下生产 search() 实测已命中 Top10）。分层脚本 `eval_pool50_failure_classify.py`（α=0.3 版）对这 18 题按生产管线重放分类，结果落盘 `data/pool50_failure_classification_a03.json`（历史 α=0.2 报告保留在 `data/pool50_failure_classification.json`）。
+
+### 28.2 分层总览
+
+| 类 | 数量 | 失败机制 | 题目 |
+|---|---|---:|---|
+| A | 4 | Gold ∉ Global Union（检索信号层） | Q_SR06, Q_S03, Q_S14, Q_D29 |
+| B1 | 0 | 被配额淘汰（Soft Protection 目标） | — |
+| B2 | 1 | prior 太低被 global fill 淘汰（排序层） | Q_L02 |
+| C | 13 | ∈ Pool50 但 CE 融合掉出 Top10（融合层） | 见 28.5 |
+
+### 28.3 A 类定位（检索信号层，4 题）
+
+| 题 | capability | oracle | dense | 定位 |
+|---|---|---:|---:|---|
+| Q_SR06 | query_rewrite | **10** | 10 | **管线可修**：rewrite gate 误跳过（0 改写却 confidence=1.0）→ plain search 路径，RRF 把 dense rank-10 稀释到 13；α=0.3 生产实测 final=12（差 Top10 门槛 0.07 分）。修 gate 或 search 融合权重即可救回 |
+| Q_S03 | cross_section | 98 | — | 真语义鸿沟：口语问法 vs 定义类文本 embedding 无法关联；gate confidence=0.92 却错误跳过改写 |
+| Q_S14 | cross_section | 43 | — | 边界语义鸿沟：oracle 43 超出 dense top-30 截断，改写生成不出 |
+| Q_D29 | cross_document | 106 | — | 语义鸿沟最深：oracle 106（几乎全索引）；rw_oracle=35 说明改写方向对但幅度不够，BM25 完全 miss |
+
+oracle ≤30 判空间可分——4 题中仅 Q_SR06 管线可修，其余 3 题需 embedding 模型升级或农业同义词典扩展改写。
+
+### 28.4 B2 定位（排序层，1 题）
+
+Q_L02（query_rewrite）：gold 在 union 内（Original-BM25kw 通道 rank=20），但 retrieval_prior 融合后跌至 61 > 50 → 被 global fill 淘汰。检索信号本身够，是 prior 融合公式（0.7×rrf_norm + 0.3×ev_norm）把它稀释了。
+
+### 28.5 C 类定位（融合层，13 题）
+
+| 子类 | 题目 | CE 重放细节 |
+|---|---|---|
+| Near-miss（margin<0.02） | Q_L07 | prior=**1**, ce=24, final=11, margin=**0.0013**——离翻正只差千分之一 |
+| CE-strong / prior-weak | Q_C25 | s22: ce=**8** vs prior=34 → final=27 |
+| | Q_S23 | s37: ce=**5** vs prior=37 → final=13, margin=0.0368 |
+| Prior-strong / CE-hard | Q_SR03 | prior=**10** vs ce=29 → final=13, margin=0.0617 |
+| 双平庸（无绝对优势信号） | Q_D04, Q_D10, Q_D20, Q_L11, Q_N11, Q_S05, Q_S07, Q_SR08, Q_SR11 | prior 20~45、CE 11~37（Q_D20 ce=11 / Q_S07 ce=14 略好但 prior 40 拖死），final 17~40 |
+
+对比 α=0.2 分层（26 节）：near-miss 4 题中 Q_C08/Q_D26/Q_SR04 已被 α=0.3 救回，仅剩 Q_L07；prior-strong 的 Q_L08（prior=1）亦被救回；CE-hard 5 题全部保留（Q_D04/Q_N11/Q_S05/Q_SR03/Q_SR11，调 α 无效）。
+
+### 28.6 capability × class
+
+| capability | A | B1 | B2 | C | 小计 |
+|---|---|---:|---:|---:|---:|
+| query_rewrite | 1（Q_SR06） | 0 | 1（Q_L02） | 5 | **7** |
+| cross_section | 2（Q_S03/Q_S14） | 0 | 0 | 3 | 5 |
+| cross_document | 1（Q_D29） | 0 | 0 | 3 | 4 |
+| context_expansion | 0 | 0 | 0 | 1（Q_C25） | 1 |
+| numeric_retrieval | 0 | 0 | 0 | 1（Q_N11） | 1 |
+
+### 28.7 结论与可救方向
+
+1. **Soft Protection 仍然无收益空间**：B1=0，没有题被配额误杀，与 α=0.2 时结论一致（0/23 → 0/18）。
+2. **管线可修 1 题（Q_SR06）**：修复 rewrite gate 置信度标定（confidence=1.0 却零改写产出）+ plain search 路径 RRF 稀释，即可 -1 零召回。
+3. **A 类其余 3 题为 embedding 语义鸿沟**（oracle 43/98/106）：融合层修不动，方向是 embedding 模型升级或农业同义词典扩展改写。
+4. **C 类 13 题中 5 题有明确偏向**：CE-strong 2 题（Q_C25/Q_S23）调 α 回 0.2 可救但全局净亏（27.1 已证 α=0.3 最优）；CE-hard 2 题（Q_SR03/Q_L07 的 CE 侧）是 CE 排序模型本身不认这类题；near-miss 1 题（Q_L07）任何轻微扰动都可能翻正。
+5. **query_rewrite 能力是最大单一问题源（7/18）**：gate 误跳过（Q_SR06）+ 改写质量不足（Q_SR03/Q_SR08 等）三重叠加，优先投入方向。
+
+### 28.8 代码与数据
+
+| 文件 | 说明 |
+|------|------|
+| `eval_pool50_failure_classify.py` | 零召回集合来源改为 α=0.3 推导口径（α=0.2 基线零召回 − a0.3 救回 4 题 + 新增失败 0，剔除 Q_N20），输出独立文件保留历史报告 |
+| `data/pool50_failure_classification_a03.json` | α=0.3 分层报告（18 题逐题 trace + 汇总） |

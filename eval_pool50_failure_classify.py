@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""MP=50 下 23 个 R@10=0 的失败分层与机制可救上限。
+"""MP=50 下 α=0.3 新基线的 R@10=0（18 题）失败分层与机制可救上限。
 
 分类（question 级，any-gold 规则）：
   A: 所有 gold ∉ Global Union → 检索信号不足（Dense/BM25/Rewrite/SubQuery）
@@ -13,10 +13,12 @@
 （Dense top-10 / top-30 / 任一原始通道 top-10）的题数，并对满足条件的题做
 force-include CE 重放验证（pool+gold 后 gold 是否进 top-10）。
 
-复用 data/pool_size_scan_report.json 的 zero_qids；重跑生产候选收集（_collect_candidates），
+零召回集合 = data/ce_norm_scan_report.json 的 α=0.2 基线零召回 − exp1 a0.3 救回 4 题
++ a0.3 新增失败（0 题），再剔除 Q_N20（α=0.3 生产 search 路径实测已救回）；
+重跑生产候选收集（_collect_candidates，α=0.3 口径），
 按生产 Phase 3 (max_pool=50) 语义重放。rank 口径统一 1-indexed。
 
-输出 data/pool50_failure_classification.json。
+输出 data/pool50_failure_classification_a03.json（历史 α=0.2 报告保留不变）。
 
 用法: python3 eval_pool50_failure_classify.py
 """
@@ -27,7 +29,7 @@ from collections import defaultdict
 from pathlib import Path
 
 BASE = Path(__file__).resolve().parent
-OUT = BASE / "data" / "pool50_failure_classification.json"
+OUT = BASE / "data" / "pool50_failure_classification_a03.json"
 TOP_K = 10
 ALPHA = 0.3  # 2026-08-26 起生产默认（原 0.2）
 LAMBDA_LENGTH = 0.1
@@ -111,14 +113,21 @@ CE_SER = None  # 模块级 searcher 引用（main 中注入）
 def main():
     global CE_SER
     t0 = time.time()
-    scan = json.load(open(BASE / "data" / "pool_size_scan_report.json", encoding="utf-8"))
-    zero_qids = scan["summary"]["50"]["zero_qids"]
+    # α=0.3 新基线零召回集合：α=0.2 基线零召回 − a0.3 救回 + a0.3 新增失败，再剔除 Q_N20
+    # （Q_N20 为 plain search 路径，α=0.3 生产实测已命中；重放报告因缓存口径未计入）
+    scan = json.load(open(BASE / "data" / "ce_norm_scan_report.json", encoding="utf-8"))
+    a03 = scan["exp1_alpha_scan"]["a0.3"]
+    # α=0.3 零召回 = α=0.2 基线零召回 − a0.3 救回 + a0.3 新增失败（0）
+    zero_qids = sorted(((set(scan["baseline_metrics"]["zero_qids"])
+                         - set(a03["rescued_qids"])) | set(a03["new_fail_qids"]))
+                       - {"Q_N20"})
+    rescued_outside_replay = ["Q_N20"]
     gs = {q["id"]: q for q in json.load(open(BASE / "data" / "golden_set_v2.json", encoding="utf-8"))}
     oracle_rows = {x["qid"]: x for x in json.load(
         open(BASE / "data" / "eval_oracle_rank_results.json", encoding="utf-8"))["per_question"]}
     print(f"[cls] {len(zero_qids)} 个零召回题", flush=True)
 
-    # ── 改写映射（仅 23 题，缓存命中）──
+    # ── 改写映射（仅零召回题，缓存命中）──
     from query_rewriter import expand_query, get_keywords, get_rewrite_queries, get_sub_queries
     from hybrid_search import HybridSearcher
     _searcher = HybridSearcher(enable_reranker=False)
@@ -340,7 +349,7 @@ def main():
 
     # ── 打印 ──
     print("\n" + "=" * 80)
-    print("  MP=50 零召回分层（23 题）—— 机制可救上限诊断")
+    print("  MP=50 零召回分层（α=0.3，18 题）—— 机制可救上限诊断")
     print("=" * 80)
     labels = {"A": "Gold ∉ Union（检索信号）", "B1": "∉ Pool50 且被 quota 淘汰（配额）",
               "B2": "∉ Pool50 且 prior 太低（排序）", "C": "∈ Pool50 但 CE 掉出 Top10（CE/Prior）"}
