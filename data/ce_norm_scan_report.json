@@ -1,0 +1,878 @@
+{
+  "generated": "2026-08-26 21:00:53",
+  "config": {
+    "alphas": [
+      0.0,
+      0.1,
+      0.2,
+      0.3,
+      0.4,
+      0.5,
+      0.6,
+      0.7
+    ],
+    "norm_methods": [
+      "minmax",
+      "rank",
+      "zsigmoid",
+      "softmax0.05",
+      "softmax0.1",
+      "softmax0.2"
+    ],
+    "max_pool": 50,
+    "top_k": 10,
+    "lambda_length": 0.1,
+    "baseline": "minmax@a0.2",
+    "alpha_best": 0.3,
+    "verify_ok": 180,
+    "verify_bad": [],
+    "C_class": [
+      "Q_C08",
+      "Q_C25",
+      "Q_D04",
+      "Q_D10",
+      "Q_D20",
+      "Q_D26",
+      "Q_L07",
+      "Q_L08",
+      "Q_L11",
+      "Q_N11",
+      "Q_S05",
+      "Q_S07",
+      "Q_S23",
+      "Q_SR03",
+      "Q_SR04",
+      "Q_SR08",
+      "Q_SR11"
+    ],
+    "near_miss": [
+      "Q_C08",
+      "Q_D26",
+      "Q_S23",
+      "Q_SR04"
+    ],
+    "prior_strong": [
+      "Q_D26",
+      "Q_L07",
+      "Q_L08",
+      "Q_SR04"
+    ],
+    "ce_hard": [
+      "Q_D04",
+      "Q_N11",
+      "Q_S05",
+      "Q_SR03",
+      "Q_SR11"
+    ]
+  },
+  "baseline_metrics": {
+    "mrr": 0.5517217813051147,
+    "r5": 0.7388888888888889,
+    "r10": 0.8722222222222222,
+    "top1": 0.40555555555555556,
+    "zero": 23,
+    "zero_qids": [
+      "Q_C08",
+      "Q_C25",
+      "Q_S03",
+      "Q_S05",
+      "Q_S07",
+      "Q_S14",
+      "Q_S23",
+      "Q_D04",
+      "Q_D10",
+      "Q_D20",
+      "Q_D26",
+      "Q_D29",
+      "Q_N11",
+      "Q_N20",
+      "Q_L02",
+      "Q_L07",
+      "Q_L08",
+      "Q_L11",
+      "Q_SR03",
+      "Q_SR04",
+      "Q_SR06",
+      "Q_SR08",
+      "Q_SR11"
+    ],
+    "hit_qids": [
+      "Q_C01",
+      "Q_C02",
+      "Q_C03",
+      "Q_C04",
+      "Q_C05",
+      "Q_C06",
+      "Q_C07",
+      "Q_C09",
+      "Q_C10",
+      "Q_C11",
+      "Q_C12",
+      "Q_C13",
+      "Q_C14",
+      "Q_C15",
+      "Q_C16",
+      "Q_C17",
+      "Q_C18",
+      "Q_C19",
+      "Q_C20",
+      "Q_C21",
+      "Q_C22",
+      "Q_C23",
+      "Q_C24",
+      "Q_C26",
+      "Q_D01",
+      "Q_D02",
+      "Q_D03",
+      "Q_D05",
+      "Q_D06",
+      "Q_D07",
+      "Q_D09",
+      "Q_D11",
+      "Q_D12",
+      "Q_D13",
+      "Q_D14",
+      "Q_D15",
+      "Q_D16",
+      "Q_D17",
+      "Q_D18",
+      "Q_D19",
+      "Q_D21",
+      "Q_D22",
+      "Q_D23",
+      "Q_D24",
+      "Q_D25",
+      "Q_D27",
+      "Q_D28",
+      "Q_D30",
+      "Q_D31",
+      "Q_E01",
+      "Q_E02",
+      "Q_E03",
+      "Q_E04",
+      "Q_E05",
+      "Q_E06",
+      "Q_E07",
+      "Q_E08",
+      "Q_E09",
+      "Q_E10",
+      "Q_E11",
+      "Q_E12",
+      "Q_E13",
+      "Q_E14",
+      "Q_E15",
+      "Q_E16",
+      "Q_E17",
+      "Q_E18",
+      "Q_E19",
+      "Q_E20",
+      "Q_E21",
+      "Q_E22",
+      "Q_E23",
+      "Q_E24",
+      "Q_E25",
+      "Q_E26",
+      "Q_E27",
+      "Q_E28",
+      "Q_E29",
+      "Q_E30",
+      "Q_E31",
+      "Q_E32",
+      "Q_E33",
+      "Q_E34",
+      "Q_E35",
+      "Q_L01",
+      "Q_L03",
+      "Q_L04",
+      "Q_L06",
+      "Q_L09",
+      "Q_L10",
+      "Q_L12",
+      "Q_N01",
+      "Q_N02",
+      "Q_N03",
+      "Q_N04",
+      "Q_N05",
+      "Q_N06",
+      "Q_N07",
+      "Q_N08",
+      "Q_N09",
+      "Q_N10",
+      "Q_N12",
+      "Q_N13",
+      "Q_N14",
+      "Q_N15",
+      "Q_N16",
+      "Q_N17",
+      "Q_N18",
+      "Q_N19",
+      "Q_S01",
+      "Q_S02",
+      "Q_S04",
+      "Q_S06",
+      "Q_S08",
+      "Q_S09",
+      "Q_S10",
+      "Q_S11",
+      "Q_S13",
+      "Q_S15",
+      "Q_S16",
+      "Q_S17",
+      "Q_S18",
+      "Q_S19",
+      "Q_S20",
+      "Q_S21",
+      "Q_S22",
+      "Q_S24",
+      "Q_S25",
+      "Q_S26",
+      "Q_SR01",
+      "Q_SR02",
+      "Q_SR05",
+      "Q_SR07",
+      "Q_SR09",
+      "Q_SR10",
+      "Q_SR12",
+      "Q_SR13",
+      "Q_T03",
+      "Q_T04",
+      "Q_T08",
+      "Q_T09",
+      "Q_T11",
+      "Q_T12",
+      "Q_T16",
+      "Q_T20",
+      "Q_T21",
+      "Q_T22",
+      "Q_T23",
+      "Q_T24",
+      "Q_T25",
+      "Q_T26",
+      "Q_T27",
+      "Q_T28",
+      "Q_T29",
+      "Q_T30",
+      "Q_T31",
+      "Q_T32"
+    ]
+  },
+  "exp1_alpha_scan": {
+    "a0.0": {
+      "mrr": 0.5103130511463844,
+      "r5": 0.7055555555555556,
+      "r10": 0.8388888888888889,
+      "top1": 0.37777777777777777,
+      "zero": 29,
+      "rescued_from_zero": 2,
+      "rescued_qids": [
+        "Q_C25",
+        "Q_S23"
+      ],
+      "rescued_C": 2,
+      "rescued_C_qids": [
+        "Q_C25",
+        "Q_S23"
+      ],
+      "rescued_near_miss": [
+        "Q_S23"
+      ],
+      "rescued_prior_strong": [],
+      "rescued_ce_hard": [],
+      "new_fail": 8,
+      "new_fail_qids": [
+        "Q_C21",
+        "Q_C24",
+        "Q_L09",
+        "Q_S15",
+        "Q_S19",
+        "Q_T04",
+        "Q_T16",
+        "Q_T26"
+      ],
+      "net": -6
+    },
+    "a0.1": {
+      "mrr": 0.5387610229276897,
+      "r5": 0.7055555555555556,
+      "r10": 0.8555555555555555,
+      "top1": 0.4,
+      "zero": 26,
+      "rescued_from_zero": 1,
+      "rescued_qids": [
+        "Q_S23"
+      ],
+      "rescued_C": 1,
+      "rescued_C_qids": [
+        "Q_S23"
+      ],
+      "rescued_near_miss": [
+        "Q_S23"
+      ],
+      "rescued_prior_strong": [],
+      "rescued_ce_hard": [],
+      "new_fail": 4,
+      "new_fail_qids": [
+        "Q_C21",
+        "Q_C24",
+        "Q_S15",
+        "Q_T16"
+      ],
+      "net": -3
+    },
+    "a0.2": {
+      "mrr": 0.5517217813051147,
+      "r5": 0.7388888888888889,
+      "r10": 0.8722222222222222,
+      "top1": 0.40555555555555556,
+      "zero": 23,
+      "rescued_from_zero": 0,
+      "rescued_qids": [],
+      "rescued_C": 0,
+      "rescued_C_qids": [],
+      "rescued_near_miss": [],
+      "rescued_prior_strong": [],
+      "rescued_ce_hard": [],
+      "new_fail": 0,
+      "new_fail_qids": [],
+      "net": 0
+    },
+    "a0.3": {
+      "mrr": 0.5763315696649032,
+      "r5": 0.7888888888888889,
+      "r10": 0.8944444444444445,
+      "top1": 0.42777777777777776,
+      "zero": 19,
+      "rescued_from_zero": 4,
+      "rescued_qids": [
+        "Q_C08",
+        "Q_D26",
+        "Q_L08",
+        "Q_SR04"
+      ],
+      "rescued_C": 4,
+      "rescued_C_qids": [
+        "Q_C08",
+        "Q_D26",
+        "Q_L08",
+        "Q_SR04"
+      ],
+      "rescued_near_miss": [
+        "Q_C08",
+        "Q_D26",
+        "Q_SR04"
+      ],
+      "rescued_prior_strong": [
+        "Q_D26",
+        "Q_L08",
+        "Q_SR04"
+      ],
+      "rescued_ce_hard": [],
+      "new_fail": 0,
+      "new_fail_qids": [],
+      "net": 4
+    },
+    "a0.4": {
+      "mrr": 0.5919444444444445,
+      "r5": 0.7944444444444444,
+      "r10": 0.8888888888888888,
+      "top1": 0.4388888888888889,
+      "zero": 20,
+      "rescued_from_zero": 5,
+      "rescued_qids": [
+        "Q_C08",
+        "Q_D26",
+        "Q_L07",
+        "Q_L08",
+        "Q_SR04"
+      ],
+      "rescued_C": 5,
+      "rescued_C_qids": [
+        "Q_C08",
+        "Q_D26",
+        "Q_L07",
+        "Q_L08",
+        "Q_SR04"
+      ],
+      "rescued_near_miss": [
+        "Q_C08",
+        "Q_D26",
+        "Q_SR04"
+      ],
+      "rescued_prior_strong": [
+        "Q_D26",
+        "Q_L07",
+        "Q_L08",
+        "Q_SR04"
+      ],
+      "rescued_ce_hard": [],
+      "new_fail": 2,
+      "new_fail_qids": [
+        "Q_D19",
+        "Q_S26"
+      ],
+      "net": 3
+    },
+    "a0.5": {
+      "mrr": 0.6093077601410936,
+      "r5": 0.8111111111111111,
+      "r10": 0.8888888888888888,
+      "top1": 0.4722222222222222,
+      "zero": 20,
+      "rescued_from_zero": 5,
+      "rescued_qids": [
+        "Q_C08",
+        "Q_D26",
+        "Q_L07",
+        "Q_L08",
+        "Q_SR04"
+      ],
+      "rescued_C": 5,
+      "rescued_C_qids": [
+        "Q_C08",
+        "Q_D26",
+        "Q_L07",
+        "Q_L08",
+        "Q_SR04"
+      ],
+      "rescued_near_miss": [
+        "Q_C08",
+        "Q_D26",
+        "Q_SR04"
+      ],
+      "rescued_prior_strong": [
+        "Q_D26",
+        "Q_L07",
+        "Q_L08",
+        "Q_SR04"
+      ],
+      "rescued_ce_hard": [],
+      "new_fail": 2,
+      "new_fail_qids": [
+        "Q_D19",
+        "Q_S26"
+      ],
+      "net": 3
+    },
+    "a0.6": {
+      "mrr": 0.6033024691358028,
+      "r5": 0.8111111111111111,
+      "r10": 0.8777777777777778,
+      "top1": 0.46111111111111114,
+      "zero": 22,
+      "rescued_from_zero": 5,
+      "rescued_qids": [
+        "Q_C08",
+        "Q_D26",
+        "Q_L07",
+        "Q_L08",
+        "Q_SR04"
+      ],
+      "rescued_C": 5,
+      "rescued_C_qids": [
+        "Q_C08",
+        "Q_D26",
+        "Q_L07",
+        "Q_L08",
+        "Q_SR04"
+      ],
+      "rescued_near_miss": [
+        "Q_C08",
+        "Q_D26",
+        "Q_SR04"
+      ],
+      "rescued_prior_strong": [
+        "Q_D26",
+        "Q_L07",
+        "Q_L08",
+        "Q_SR04"
+      ],
+      "rescued_ce_hard": [],
+      "new_fail": 4,
+      "new_fail_qids": [
+        "Q_D12",
+        "Q_D19",
+        "Q_S26",
+        "Q_SR02"
+      ],
+      "net": 1
+    },
+    "a0.7": {
+      "mrr": 0.6004365079365079,
+      "r5": 0.8055555555555556,
+      "r10": 0.8666666666666667,
+      "top1": 0.46111111111111114,
+      "zero": 24,
+      "rescued_from_zero": 6,
+      "rescued_qids": [
+        "Q_C08",
+        "Q_D26",
+        "Q_L07",
+        "Q_L08",
+        "Q_SR03",
+        "Q_SR04"
+      ],
+      "rescued_C": 6,
+      "rescued_C_qids": [
+        "Q_C08",
+        "Q_D26",
+        "Q_L07",
+        "Q_L08",
+        "Q_SR03",
+        "Q_SR04"
+      ],
+      "rescued_near_miss": [
+        "Q_C08",
+        "Q_D26",
+        "Q_SR04"
+      ],
+      "rescued_prior_strong": [
+        "Q_D26",
+        "Q_L07",
+        "Q_L08",
+        "Q_SR04"
+      ],
+      "rescued_ce_hard": [
+        "Q_SR03"
+      ],
+      "new_fail": 7,
+      "new_fail_qids": [
+        "Q_D12",
+        "Q_D16",
+        "Q_D19",
+        "Q_S26",
+        "Q_SR01",
+        "Q_SR02",
+        "Q_T29"
+      ],
+      "net": -1
+    }
+  },
+  "exp2_norm_scan": {
+    "minmax": {
+      "mrr": 0.5763315696649032,
+      "r5": 0.7888888888888889,
+      "r10": 0.8944444444444445,
+      "top1": 0.42777777777777776,
+      "zero": 19,
+      "rescued_from_zero": 4,
+      "rescued_qids": [
+        "Q_C08",
+        "Q_D26",
+        "Q_L08",
+        "Q_SR04"
+      ],
+      "rescued_C": 4,
+      "rescued_C_qids": [
+        "Q_C08",
+        "Q_D26",
+        "Q_L08",
+        "Q_SR04"
+      ],
+      "rescued_near_miss": [
+        "Q_C08",
+        "Q_D26",
+        "Q_SR04"
+      ],
+      "rescued_prior_strong": [
+        "Q_D26",
+        "Q_L08",
+        "Q_SR04"
+      ],
+      "rescued_ce_hard": [],
+      "new_fail": 0,
+      "new_fail_qids": [],
+      "net": 4,
+      "gain_vs_minmax_at_alpha_best": {
+        "rescued": [],
+        "new_fail": []
+      }
+    },
+    "rank": {
+      "mrr": 0.5760427689594357,
+      "r5": 0.7555555555555555,
+      "r10": 0.8888888888888888,
+      "top1": 0.4388888888888889,
+      "zero": 20,
+      "rescued_from_zero": 4,
+      "rescued_qids": [
+        "Q_C25",
+        "Q_L08",
+        "Q_S23",
+        "Q_SR04"
+      ],
+      "rescued_C": 4,
+      "rescued_C_qids": [
+        "Q_C25",
+        "Q_L08",
+        "Q_S23",
+        "Q_SR04"
+      ],
+      "rescued_near_miss": [
+        "Q_S23",
+        "Q_SR04"
+      ],
+      "rescued_prior_strong": [
+        "Q_L08",
+        "Q_SR04"
+      ],
+      "rescued_ce_hard": [],
+      "new_fail": 1,
+      "new_fail_qids": [
+        "Q_S15"
+      ],
+      "net": 3,
+      "gain_vs_minmax_at_alpha_best": {
+        "rescued": [
+          "Q_C25",
+          "Q_S23"
+        ],
+        "new_fail": [
+          "Q_C08",
+          "Q_D26",
+          "Q_S15"
+        ]
+      }
+    },
+    "zsigmoid": {
+      "mrr": 0.594572310405644,
+      "r5": 0.7944444444444444,
+      "r10": 0.8833333333333333,
+      "top1": 0.45,
+      "zero": 21,
+      "rescued_from_zero": 4,
+      "rescued_qids": [
+        "Q_C08",
+        "Q_D26",
+        "Q_L08",
+        "Q_SR04"
+      ],
+      "rescued_C": 4,
+      "rescued_C_qids": [
+        "Q_C08",
+        "Q_D26",
+        "Q_L08",
+        "Q_SR04"
+      ],
+      "rescued_near_miss": [
+        "Q_C08",
+        "Q_D26",
+        "Q_SR04"
+      ],
+      "rescued_prior_strong": [
+        "Q_D26",
+        "Q_L08",
+        "Q_SR04"
+      ],
+      "rescued_ce_hard": [],
+      "new_fail": 2,
+      "new_fail_qids": [
+        "Q_D19",
+        "Q_S26"
+      ],
+      "net": 2,
+      "gain_vs_minmax_at_alpha_best": {
+        "rescued": [],
+        "new_fail": [
+          "Q_D19",
+          "Q_S26"
+        ]
+      }
+    },
+    "softmax0.05": {
+      "mrr": 0.557612433862434,
+      "r5": 0.7611111111111111,
+      "r10": 0.8555555555555555,
+      "top1": 0.40555555555555556,
+      "zero": 26,
+      "rescued_from_zero": 4,
+      "rescued_qids": [
+        "Q_D26",
+        "Q_L07",
+        "Q_L08",
+        "Q_SR04"
+      ],
+      "rescued_C": 4,
+      "rescued_C_qids": [
+        "Q_D26",
+        "Q_L07",
+        "Q_L08",
+        "Q_SR04"
+      ],
+      "rescued_near_miss": [
+        "Q_D26",
+        "Q_SR04"
+      ],
+      "rescued_prior_strong": [
+        "Q_D26",
+        "Q_L07",
+        "Q_L08",
+        "Q_SR04"
+      ],
+      "rescued_ce_hard": [],
+      "new_fail": 7,
+      "new_fail_qids": [
+        "Q_D09",
+        "Q_D12",
+        "Q_D16",
+        "Q_S26",
+        "Q_SR02",
+        "Q_T09",
+        "Q_T16"
+      ],
+      "net": -3,
+      "gain_vs_minmax_at_alpha_best": {
+        "rescued": [
+          "Q_L07"
+        ],
+        "new_fail": [
+          "Q_C08",
+          "Q_D09",
+          "Q_D12",
+          "Q_D16",
+          "Q_S26",
+          "Q_SR02",
+          "Q_T09",
+          "Q_T16"
+        ]
+      }
+    },
+    "softmax0.1": {
+      "mrr": 0.577958553791887,
+      "r5": 0.7833333333333333,
+      "r10": 0.8555555555555555,
+      "top1": 0.42777777777777776,
+      "zero": 26,
+      "rescued_from_zero": 5,
+      "rescued_qids": [
+        "Q_D26",
+        "Q_L07",
+        "Q_L08",
+        "Q_SR03",
+        "Q_SR04"
+      ],
+      "rescued_C": 5,
+      "rescued_C_qids": [
+        "Q_D26",
+        "Q_L07",
+        "Q_L08",
+        "Q_SR03",
+        "Q_SR04"
+      ],
+      "rescued_near_miss": [
+        "Q_D26",
+        "Q_SR04"
+      ],
+      "rescued_prior_strong": [
+        "Q_D26",
+        "Q_L07",
+        "Q_L08",
+        "Q_SR04"
+      ],
+      "rescued_ce_hard": [
+        "Q_SR03"
+      ],
+      "new_fail": 8,
+      "new_fail_qids": [
+        "Q_D09",
+        "Q_D12",
+        "Q_D16",
+        "Q_D19",
+        "Q_S26",
+        "Q_SR02",
+        "Q_T09",
+        "Q_T16"
+      ],
+      "net": -3,
+      "gain_vs_minmax_at_alpha_best": {
+        "rescued": [
+          "Q_L07",
+          "Q_SR03"
+        ],
+        "new_fail": [
+          "Q_C08",
+          "Q_D09",
+          "Q_D12",
+          "Q_D16",
+          "Q_D19",
+          "Q_S26",
+          "Q_SR02",
+          "Q_T09",
+          "Q_T16"
+        ]
+      }
+    },
+    "softmax0.2": {
+      "mrr": 0.5972420634920635,
+      "r5": 0.7833333333333333,
+      "r10": 0.8444444444444444,
+      "top1": 0.45555555555555555,
+      "zero": 28,
+      "rescued_from_zero": 6,
+      "rescued_qids": [
+        "Q_C08",
+        "Q_D26",
+        "Q_L07",
+        "Q_L08",
+        "Q_SR03",
+        "Q_SR04"
+      ],
+      "rescued_C": 6,
+      "rescued_C_qids": [
+        "Q_C08",
+        "Q_D26",
+        "Q_L07",
+        "Q_L08",
+        "Q_SR03",
+        "Q_SR04"
+      ],
+      "rescued_near_miss": [
+        "Q_C08",
+        "Q_D26",
+        "Q_SR04"
+      ],
+      "rescued_prior_strong": [
+        "Q_D26",
+        "Q_L07",
+        "Q_L08",
+        "Q_SR04"
+      ],
+      "rescued_ce_hard": [
+        "Q_SR03"
+      ],
+      "new_fail": 11,
+      "new_fail_qids": [
+        "Q_D05",
+        "Q_D12",
+        "Q_D16",
+        "Q_D19",
+        "Q_L10",
+        "Q_S26",
+        "Q_SR01",
+        "Q_SR02",
+        "Q_T09",
+        "Q_T24",
+        "Q_T29"
+      ],
+      "net": -5,
+      "gain_vs_minmax_at_alpha_best": {
+        "rescued": [
+          "Q_L07",
+          "Q_SR03"
+        ],
+        "new_fail": [
+          "Q_D05",
+          "Q_D12",
+          "Q_D16",
+          "Q_D19",
+          "Q_L10",
+          "Q_S26",
+          "Q_SR01",
+          "Q_SR02",
+          "Q_T09",
+          "Q_T24",
+          "Q_T29"
+        ]
+      }
+    }
+  }
+}

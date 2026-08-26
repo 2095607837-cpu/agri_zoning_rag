@@ -5,7 +5,7 @@
 候选收集 = 生产 _collect_candidates（Phase 1+2，含 Evidence + Retrieval Prior）；
 每 query 按 max_pool=80 的 Phase 3 配额逻辑得到并集池（50/60 的池是它的前缀，
 CE 逐对打分与池组成无关），CE 只打一次分；随后解析式重放 50/60/80 的
-CE min-max 归一化 + final=0.2×prior+0.8×ce_norm 融合，评估最终 top-10。
+CE min-max 归一化 + final=α×prior+(1-α)×ce_norm 融合（α=生产默认，现为 0.3），评估最终 top-10。
 
 中间召回结果全量落盘（data/pool_size_scan_report.json）：
   - 每题的池组成（quota 保留数 / global fill 数 / 全量候选数）
@@ -24,7 +24,7 @@ BASE = Path(__file__).resolve().parent
 OUT = BASE / "data" / "pool_size_scan_report.json"
 
 POOL_SIZES = [50, 60, 80]
-ALPHA = 0.2
+ALPHA = 0.3  # 2026-08-26 起生产默认（原 0.2）
 LAMBDA_LENGTH = 0.1
 TOP_K = 10
 

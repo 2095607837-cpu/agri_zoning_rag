@@ -29,7 +29,7 @@ from pathlib import Path
 BASE = Path(__file__).resolve().parent
 OUT = BASE / "data" / "pool50_failure_classification.json"
 TOP_K = 10
-ALPHA = 0.2
+ALPHA = 0.3  # 2026-08-26 起生产默认（原 0.2）
 LAMBDA_LENGTH = 0.1
 MAX_POOL = 50
 
@@ -90,7 +90,7 @@ def phase3_trace(cand_list, rw_list, sq_list, max_pool, gold_c=None):
 
 
 def ce_fuse_replay(query, pool, top_k=TOP_K):
-    """对池做 CE 打分 + 0.2×prior+0.8×ce_norm 融合，返回 [(final, idx)] 降序。"""
+    """对池做 CE 打分 + α×prior+(1-α)×ce_norm 融合，返回 [(final, idx)] 降序。"""
     pairs = [(query, c["text"][:500]) for c in pool]
     with CE_SER._reranker._infer_lock:
         raw = [float(x) for x in CE_SER._reranker._model.predict(

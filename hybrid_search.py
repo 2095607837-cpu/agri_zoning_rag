@@ -419,7 +419,7 @@ class HybridSearcher:
         self, query: str, top_k: int = 5, expand_context: bool = True,
         rewrite_queries=None, sub_queries=None, keyword_queries=None,
         extra_queries=None,
-        alpha: float = 0.2, lambda_length: float = 0.1,
+        alpha: float = 0.3, lambda_length: float = 0.1,
         orig_dense_k: int = 30, orig_bm25_k: int = 20,
         subq_dense_k: int = 20, subq_bm25_k: int = 10,
         max_pool: int = 50,
@@ -706,7 +706,7 @@ class HybridSearcher:
             cand_list = cand_list[:max_pool]
 
         # ── Phase 4: CE Rerank + Retrieval Prior 融合 ──
-        # Final = 0.8×CE_norm + 0.2×retrieval_prior_norm
+        # Final = 0.7×CE_norm + 0.3×retrieval_prior_norm
         candidate_keys = [c["chunk_id"] for c in cand_list]
         doc_store = {c["chunk_id"]: (c["text"], c["metadata"], c["cosine_sim"])
                      for c in cand_list}
@@ -720,7 +720,7 @@ class HybridSearcher:
             results = []
             scored = []
             for c in cand_list:
-                s = 0.8 * c["cosine_sim"] + 0.2 * c["retrieval_prior"]
+                s = 0.7 * c["cosine_sim"] + 0.3 * c["retrieval_prior"]
                 scored.append((s, c["text"], c["metadata"], c["cosine_sim"]))
             scored.sort(key=lambda x: -x[0])
             for s, text, meta, sim in scored[:top_k]:
@@ -736,7 +736,7 @@ class HybridSearcher:
 
     def search(self, query: str, top_k: int = 5, expand_context: bool = False,
                skip_reranker: bool = False, w_dense: float = 0.7, w_bm25: float = 0.3,
-               alpha: float = 0.2, lambda_length: float = 0.1,
+               alpha: float = 0.3, lambda_length: float = 0.1,
                ce_protect_keys: Optional[list[str]] = None) -> list[dict]:
         """单 query 混合检索（RRF 融合 + CE 精排 + 可选上下文扩展）。"""
         pool_size = max(top_k * 4, 20)
