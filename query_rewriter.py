@@ -415,9 +415,12 @@ def expand_query(query: str, mode: str = "all", top1_sim: float = 0.0, top2_sim:
         if _AUTO_SAVE:
             _save_cache()
     elif not _needs_rewrite(q, top1_sim, top2_sim):
-        # gate 不触发 LLM 改写时，确定性术语映射仍可能有产出
+        # gate 不触发 LLM 改写时，确定性术语映射仍可能有产出。
+        # gate_skipped=True 标记 LLM 未调用（旧缓存条目以 confidence=1.0 表示，
+        # 与 LLM 自评置信语义混用曾误导诊断——见 eval_v2_results.md 二十八 28.9）
         mapped = _apply_terminology_map(q)
-        entry = {"rewrite_type": "none", "keywords": mapped, "rewrite_queries": [], "sub_queries": [], "confidence": 1.0}
+        entry = {"rewrite_type": "none", "keywords": mapped,
+                 "rewrite_queries": [], "sub_queries": [], "gate_skipped": True}
         _cache[cache_key] = entry
         _cache.move_to_end(cache_key)
         if _AUTO_SAVE:
