@@ -79,10 +79,14 @@ def _load_term_map():
             continue
         cat_entries = []
         for spoken, standard in mappings.items():
-            # 跳过单字（确定性匹配用不上，prompt 中也误导）和自身映射（无增益）
-            if len(spoken) <= 1 or spoken == standard:
+            # 跳过单字（确定性匹配用不上，prompt 中也误导）
+            if len(spoken) <= 1:
                 continue
             _term_map[spoken] = standard
+            # 自身映射（如"光合生产潜力"→"光合生产潜力"）不进 prompt 分类表：
+            # 无口语→规范示范价值，但保留在扁平表中用于信号 1 门控与 BM25 关键词
+            if spoken == standard:
+                continue
             cat_entries.append({"spoken": spoken, "standard": standard})
         if cat_entries:
             _term_categories.append({"category": cat_name, "entries": cat_entries})
@@ -148,6 +152,7 @@ REWRITE_PROMPT = ChatPromptTemplate.from_messages([
 - **none**: 问题已是标准术语+完整检索语句，直接检索。sub_queries 留空，keywords 仅抽取核心实体。适用：普通事实查询、定义查询、单实体查询、已有标准术语的"方法/评价"类查询。
 - **normalize**: 问题需要术语标准化（口语→术语、简称→全称、同义词→标准名），但问题结构不变。标准化包括：①口语→术语（"光照好不好"→日照百分率/日照时数）②简称→全称（"积温"→≥10℃活动积温）③模糊→精确（"冷害"→低温冷害/冷害风险指数）④灾害否定→安全保障（"冻不坏"="不发生冻害"→安全越冬，不是越冬冻害；"不旱"="不发生干旱"→水分保障，不是干旱）⑤抽象科学概念→领域术语（"低温累积效应"即"低温冷害对产量的累积影响"→低温冷害/冷害风险指数）⑥抽象流程词→具体方法词（"工作流程"→技术流程/技术路线）⑦**口语适宜性查询→分层术语链**（如"种X选什么地方最好"=极简口语，keywords和sub_queries需覆盖不同抽象层级：动作层"X种植"→框架层"适宜性区划/气候区划"→结果层"种植适宜区/适宜种植区"，每层1-2个词，确保不同层级的chunk都能命中）。**必须将口语/同义词/抽象概念映射为知识库中的精确术语**。
 - **expand**: 仅当一个问题天然需要多个独立检索才能完整回答时使用。必须满足：①同时询问多个不同对象 ②明确包含多个比较维度 ③答案分散在不同 section。普通事实查询、定义查询、单实体查询禁止 expand。
+- **定义/层次类专业术语查询例外**: query 含"光合生产潜力/光温生产潜力/气候生产潜力"且询问其定义、考虑因素或层次关系时，禁止判 none，必须判 normalize 并为每个涉及的术语生成定义类 sub_queries（如"光合生产潜力的定义是什么？""光温生产潜力的定义是什么？"），定义文本与层次论述通常分属不同 chunk，必须拆开检索。
 
 ## Step 2: 执行改写
 

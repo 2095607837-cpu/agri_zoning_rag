@@ -6,6 +6,7 @@
 
 | 日期 | 变更 |
 |------|------|
+| 2026-08-26 | **Q_SR06 救回尝试：生产潜力类术语强制改写**（query_rewriter.py + data/terminology_mapping.json）：术语词典新增"生产潜力_层次"类（光合/光温/气候生产潜力全称 + 缩写），加载器放开 identity 条目跳过（identity 进扁平表做信号 1 门控与 BM25 关键词，不进 prompt 分类表）；REWRITE_PROMPT 新增定义/层次类术语查询例外（禁止 none，必须 normalize + 定义类 sub_queries）。效果：Q_SR06 由 A 类（gate 误跳过 → 无改写 → gold ∉ union）转为改写触发、gold 进池 prior rank 8（定义子查询 dense rank 2/3），但 CE 排 13 → α=0.3 融合 final 12，**转为 C 类 CE-hard near-miss，Top10 外 2 名，未完全救回**（与 Q_SR03/Q_L07 同族，27.1 已证调 α 无效）；含术语/identity 词的 Q_C12/Q_S17/Q_D24/Q_T31/Q_E24 回归检查全部保持命中。另发现生产接线缺口：rag_pipeline 不传 keyword_queries（kw BM25 通道仅评测脚本启用，生产≠评测口径，既存问题）。详见"二十八"28.9 |
 | 2026-08-26 | **α=0.3 新基线零召回分层与定位**（eval_pool50_failure_classify.py α=0.3 版 → data/pool50_failure_classification_a03.json）：真实零召回 18 题（解析重放的 19 题剔除 Q_N20——该题 α=0.3 生产 search 路径实测已命中 Top10）。分层 A=4 / B1=0 / B2=1 / C=13：**Soft Protection 收益空间仍为 0/18**（无题被配额误杀）；A 类仅 Q_SR06 管线可修（rewrite gate 误跳过 + plain search RRF 稀释：oracle=10、dense=10、rrf=13、α=0.3 实测 final=12），Q_S03/Q_S14/Q_D29 为真语义鸿沟（oracle 43/98/106，Q_D29 改写后 rw_oracle=35）；B2 Q_L02 是 prior 融合稀释（BM25kw rank=20 → prior=61）；C 类 13 题中 near-miss 仅剩 Q_L07（final=11、margin=0.0013），CE-strong/prior-weak 2 题（Q_C25/Q_S23）、prior-strong/CE-hard 2 题（Q_SR03/Q_L07）、双平庸 9 题；**query_rewrite 能力 7/18 为最大单一问题源**。详见"二十八、α=0.3 新基线零召回分层与定位（2026-08-26）" |
 | 2026-08-26 | **CE 融合 α 扫描 + 归一化验证，生产 α 0.2→0.3**（eval_ce_norm_scan.py → data/ce_norm_scan_report.json + data/ce_norm_cache.json 原始分缓存）：两阶段顺序实验，180 题离线重放。实验 1（minmax 固定扫 α 0.0~0.7）：**α=0.3 唯一零搅黄正收益点**，R@10 87.2→89.4%、MRR 0.5517→0.5763、R@10=0 23→19，救回 Q_C08/Q_D26/Q_L08/Q_SR04（全部 C 类），α≥0.4 开始搅黄（Q_D19/Q_S26）、≥0.6 净收益转负；实验 2（α=0.3 固定扫 6 种归一化）：**minmax 仍全局最优**，rank 单独救回 Q_C25 但搅黄别题，softmax 三档均显著变差（搅黄 7~11 题）。判定：生产 alpha 默认改 0.3，归一化维持 minmax。详见"二十七、CE 融合 α 扫描与归一化验证（2026-08-26）" |
 | 2026-08-26 | **MP=50 零召回分层诊断**（eval_pool50_failure_classify.py → data/pool50_failure_classification.json）：23 个 R@10=0 按生产管线重放分层 A=5 / B1=0 / B2=1 / C=17。**Soft Protection theoretical rescue = 0/23**（B1 无题，quota 未挤掉任何 gold，软保护方向否决）；A 类 oracle 拆分：≤30 空间可分 2 题（Q_N20/Q_SR06 均无改写输入）、>30 真语义鸿沟 3 题；C 类为主瓶颈：near-miss 4 题（Q_C08/Q_SR04/Q_S23/Q_D26，margin<0.02）、prior 强但 CE 拉下 4 题（Q_L07/Q_L08 prior=1→final 13/14）、CE 归一化稀释（Q_C25 ce_rank=8→final=23）、CE 本身不认 5 题。下一步方向：α 权重扫描 + CE 归一化方式实验（解析式重放零成本）。详见"二十六、MP=50 零召回分层与机制可救上限（2026-08-26）" |
@@ -1910,3 +1911,30 @@ Q_L02（query_rewrite）：gold 在 union 内（Original-BM25kw 通道 rank=20�
 |------|------|
 | `eval_pool50_failure_classify.py` | 零召回集合来源改为 α=0.3 推导口径（α=0.2 基线零召回 − a0.3 救回 4 题 + 新增失败 0，剔除 Q_N20），输出独立文件保留历史报告 |
 | `data/pool50_failure_classification_a03.json` | α=0.3 分层报告（18 题逐题 trace + 汇总） |
+
+### 28.9 Q_SR06 救回尝试：生产潜力类术语强制改写（2026-08-26）
+
+针对 28.3 定位的"唯一管线可修题 Q_SR06"，实施术语词典 + 改写规则两级修复：
+
+**修复内容：**
+
+| 层 | 修改 |
+|---|---|
+| 术语词典 | `data/terminology_mapping.json` 新增"生产潜力_层次"类：光合潜力/光温潜力/气候潜力 → 全称（缩写规范），及光合生产潜力/光温生产潜力/气候生产潜力三个 identity 条目 |
+| 加载器 | `query_rewriter.py` `_load_term_map` 放开 identity 跳过：identity 条目进扁平表（信号 1 门控 + BM25 关键词），不进 prompt 分类表（无口语→规范示范价值） |
+| Prompt | REWRITE_PROMPT 新增规则：含"光合/光温/气候生产潜力"且询问定义、考虑因素或层次关系 → 禁止 none，必须 normalize 并为每个术语生成定义类 sub_queries（定义文本与层次论述分属不同 chunk） |
+
+**机制验证（Q_SR06，α=0.3 重放）：**
+
+| 环节 | 修复前 | 修复后 |
+|---|---|---|
+| 改写 gate | 跳过（硬编码 confidence=1.0，LLM 未调用） | 信号 1 触发（术语命中），LLM 产出 2 改写 + 3 定义子查询 |
+| gold 位置 | ∉ union（A 类，oracle=10、dense=10） | ∈ pool，**prior rank 8**（子查询"光合生产潜力的定义是什么？"dense rank 3） |
+| CE 排序 | — | **ce_rank 13**（CE 不认定义类 gold，与 C 类 CE-hard 同族） |
+| 融合 final（α=0.3） | 12（plain search 路径） | **12**（0.3×prior+0.7×ce，Top10 外 2 名） |
+
+**结论：Q_SR06 从 A 类（检索信号层）转化为 C 类 CE-hard near-miss（融合层），未完全救回。** 术语强制改写把 gold 的 prior 推到 rank 8，但 bge-reranker-v2-m3 对定义类 gold 排序差（ce_rank 13），0.7 的 CE 权重把最终排名压回 12；27.1 已证 CE-hard 题调 α 无效，救回需 CE 层手段（模型/输入构造）。
+
+**回归检查：** 含新术语或 identity 词的 Q_C12/Q_S17/Q_D24/Q_T31/Q_E24 全部保持命中（缓存条目不受 prompt 变更影响；kw 池新增 identity 术语后命中 rank 1~2）。
+
+**附带发现（既存问题）：** `rag_pipeline.py` 调用 `search_multi_query` 时未传 `keyword_queries`——术语关键词 BM25 通道仅评测脚本启用，生产链路未接线（生产≠评测口径）。本次修复不依赖该通道（子查询走 extra_queries），但值得后续对齐。
