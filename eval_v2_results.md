@@ -6,6 +6,7 @@
 
 | 日期 | 变更 |
 |------|------|
+| 2026-08-26 | **MP=50 零召回分层诊断**（eval_pool50_failure_classify.py → data/pool50_failure_classification.json）：23 个 R@10=0 按生产管线重放分层 A=5 / B1=0 / B2=1 / C=17。**Soft Protection theoretical rescue = 0/23**（B1 无题，quota 未挤掉任何 gold，软保护方向否决）；A 类 oracle 拆分：≤30 空间可分 2 题（Q_N20/Q_SR06 均无改写输入）、>30 真语义鸿沟 3 题；C 类为主瓶颈：near-miss 4 题（Q_C08/Q_SR04/Q_S23/Q_D26，margin<0.02）、prior 强但 CE 拉下 4 题（Q_L07/Q_L08 prior=1→final 13/14）、CE 归一化稀释（Q_C25 ce_rank=8→final=23）、CE 本身不认 5 题。下一步方向：α 权重扫描 + CE 归一化方式实验（解析式重放零成本）。详见"二十六、MP=50 零召回分层与机制可救上限（2026-08-26）" |
 | 2026-08-25 | **Phase 3 池大小扫描**（eval_pool_size_scan.py → data/pool_size_scan_report.json）：hybrid_search 拆分 _collect_candidates/_coverage_reserve_and_rerank，新增 max_pool 参数（默认 50）。采集一次+CE 打分一次，解析式重放 50/60/80：MRR 0.5517/0.5537/0.5549、R@10 87.2/86.7/87.8%、R@10=0 23/24/22；仅 18/180 题 top10 变化，净 +1 题（救 Q_S07/Q_L02、搅黄 Q_L09），非单调，判定维持 50。本次 50 亦为 CK 移除后新基线。详见"二十五、Phase 3 池大小扫描（2026-08-25）" |
 | 2026-08-25 | **CK 应用层移除**（query_rewriter.py）：删除 REWRITE_PROMPT 的 Knowledge Context 段、expand_query 的 use_ck/knowledge_context 参数与 ck_matcher 调用，改写缓存键统一为纯 query（旧 `\|base` 缓存自动复用，200 条改写零重跑）。此前生产 use_ck 默认 True 实际在注入 CK；移除后改写/检索/召回统一为 BASE 口径（与 2026-08-13 A/B 结论一致：CK 无正向收益）。CK 数据与 ck_matcher.py 保留；eval_v2_ck_ab.py 归档。详见"二十一、CK A/B 评测"末尾口径说明 | 
 | 2026-08-24 | **RRF 权重分层扫描**（eval_rrf_weight_scan.py → data/rrf_weight_scan_report.json）：生产候选池（dense_k=30, bm25_k=20）解析式重算 0.1~0.95 权重网格。全局曲面为平台（0.4~0.8 只差 1.1pp），0.7/0.3 仍在最优区；唯一强敏感类型 query_rewrite（w_dense=0.1 时 +3 题）；按类完美权重 in-sample 上界仅 +5 题（+2.8pp）。判定：不调动态权重，优先修 single-channel boost 归一化机制。详见"二十四、RRF 权重分层扫描（2026-08-24）" |
@@ -1734,3 +1735,46 @@ BASE R@10=0 的 24 题全部仍失败（CK 另新增 2 题）：
 3. 成本：池 80 vs 50 使 CE 交叉编码对 +60%，生产延迟增加
 4. `max_pool` 参数保留（默认 50 不变）；若后续发现跨 section 长难 query 的池截断损失，再针对 n_candidates>80 的尾部单独评估
 5. 本次扫描的中间召回结果（每题三池 top-10、池组成 quota/fill 数、gold 命中）全量落盘 `data/pool_size_scan_report.json`——弥补 07-29 实验未存中间结果的教训
+
+## 二十六、MP=50 零召回分层与机制可救上限（2026-08-26）
+
+**目的**：不是修代码，而是先测量每个候选机制的理论可救上限，再决定下一步投入方向。对 25.1 的 23 个 R@10=0 逐题重放生产管线（_collect_candidates + Phase 3 配额 + CE 重排），把每题分到 A/B1/B2/C 四类，并记录每个 gold chunk 的 global_union / pool50（含 exclusion_reason）/ ce（final_rank、ce_rank、retrieval_prior_rank、top10_margin）三层轨迹。
+
+### 26.1 分层结果（question 级，any-gold）
+
+| 类别 | 数量 | 题 | 真正问题 | 下一步 |
+|---|---|---|---|---|
+| A：Gold ∉ Union | 5 | Q_S03, Q_S14, Q_D29, Q_N20, Q_SR06 | 检索信号不足 | Dense / BM25 / Rewrite / SubQuery |
+| B1：∈ Union 且 prior≤50，但被 quota 挤出 50 池 | **0** | — | 配额机制问题 | **Soft Protection** |
+| B2：∈ Union 但 prior>50 | 1 | Q_L02（prior_rank=61） | 检索排序问题 | Retrieval Prior / Fusion |
+| C：∈ Pool50 但 CE 后 Top10 外 | **17** | Q_C08, Q_C25, Q_S05, Q_S07, Q_S23, Q_D04, Q_D10, Q_D20, Q_D26, Q_N11, Q_L07, Q_L08, Q_L11, Q_SR03, Q_SR04, Q_SR08, Q_SR11 | CE / Prior 问题 | CE + Retrieval Prior |
+
+### 26.2 关键结论 ①：Soft Protection theoretical rescue = 0/23，方向否决
+
+B1=0——50 池配额机制从未挤掉任何 gold（保留集平均仅 ~30.5/50，配额本身填不满，被淘汰的候选都落在 Global Fill 区）。对 B1 的三档保护条件（原始 query Dense top-10 / top-30 / 任一原始通道 top-10）逐一统计均为 0 题，force-include CE 验证可救 0 题。**即使实现软保护，理论上限也为 0 题，不投入。**
+
+### 26.3 关键结论 ②：A 类 oracle 拆分（空间可分 vs 语义鸿沟）
+
+| oracle_rank | 数量 | 题 | 判定 |
+|---|---|---|---|
+| ≤30 | 2 | Q_N20（oracle=10）, Q_SR06（oracle=10） | 表示空间可分，是**管线问题**；两题均为无改写输入题（rewrite 缓存无键，生产直接走原始 search），可修 Dense top-K / 改写触发 |
+| >30 | 3 | Q_S03（98）, Q_S14（43）, Q_D29（106） | 真表示/语义鸿沟，检索调参难以解决 |
+
+### 26.4 关键结论 ③：C 类为主瓶颈（17/23），且内部有救
+
+20 个进池 gold 的 CE 重放（final = 0.2×prior + 0.8×ce_norm）：
+
+| 子类 | 题（gold） | 数据 |
+|---|---|---|
+| near-miss（margin<0.02） | Q_C08（final=11, 0.0015）、Q_SR04（11, 0.0011）、Q_S23（12, 0.0058）、Q_D26（13, 0.0138） | 离 Top10 只差一线，微调 α 或 CE 归一化即可能救回 |
+| prior 强但 CE 拉下 | Q_L07（prior=1→final=14）、Q_L08（prior=1→final=13）、Q_SR04（prior=2→final=11）、Q_D26 s12（prior=5→final=13） | α=0.2 的 prior 权重打不过 CE，提高 α 可能救回 |
+| CE 强但归一化稀释 | Q_C25 s22（ce_rank=8→final=23）、Q_D20 s0（ce_rank=11→final=15） | min-max 归一化在 CE 分数集中时压缩优势，换归一化方式（如 z-score/排名归一化）可能救回 |
+| CE 本身不认（ce_rank>25） | Q_S05（30）、Q_D04（35）、Q_N11（32）、Q_SR11（37）、Q_SR03（29） | CE 语义鸿沟，难救 |
+
+### 26.5 下一步投入方向（按可救上限排序）
+
+1. **C 类 CE/Prior 融合实验**（理论可救上限 ≈ 8 题：4 near-miss + 4 prior-strong）：α 权重扫描 + CE 归一化方式对比，解析式重放即可（复用本节已存的池与 CE 分数，零 LLM 成本）
+2. **A 类管线修复**（上限 2 题）：Q_N20/Q_SR06 的改写输入缺失——排查 rewrite 缓存为何无键（无 LLM 改写触发条件过严？），或提高原始 Dense top-K
+3. 不做：Soft Protection（上限 0）；B2 单题 Q_L02 不单独投入，随 RRF/排序优化一并观察
+
+> 全程无 LLM 调用（改写缓存命中）；每 gold 三层轨迹全量落盘 `data/pool50_failure_classification.json`。
