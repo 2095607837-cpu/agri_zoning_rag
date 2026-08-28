@@ -2,7 +2,7 @@
 
 > 完整记录从原始文档到检索结果的全链路 chunk 处理逻辑
 >
-> **最后更新**: 2026-08-28 (v2.8：G1 结构 Gate 上线——生产与评测默认 gate_mode="struct" + struct_force=True)
+> **最后更新**: 2026-08-28 (v2.8.1：kw-only 路径修复——kw 不再触发 multi-query，Q_N20 副作用消除)
 
 ---
 
@@ -10,7 +10,8 @@
 
 | 日期 | 版本 | 变更 |
 |------|------|------|
-| 2026-08-28 | v2.8 | **G1 结构 Gate 上线为生产默认**：query_rewriter.py 各入口（expand_query / get_keywords / get_rewrite_queries / get_sub_queries / get_gate_info / _needs_rewrite）默认参数改为 gate_mode="struct" + struct_force=True——生产（rag_pipeline.py）与全部评测脚本（不显式传 gate_mode）统一走 G1 口径；数值 Gate 保留为 gate_mode="base" 历史基线（eval_gate_ab.py 三臂对照显式传参不受影响）。上线理由：数值阈值（margin 0.03 / top1 0.72）随问题分布漂移、一刀切；结构规则（结构词/术语/长度）数据集无关、泛化性更好。已知副作用（A/B 全 CE 发现的 Q_N20 路径切换 / Q_S15 过度拆分 / Q_D05 强制改写扰动，净持平）保留，随 L2 融合层修复一并处理 |
+| 2026-08-28 | v2.8.1 | **kw-only 路径修复（方案①）**：hybrid_search.py 路径判定从"rw/sq/kw 全空才走 plain"改为"只看 rw/sq"——kw-only（LLM 判 none 但产出 keywords，或 gate 跳过带术语映射）不再触发 multi-query 机制（RRF 权重组合 0.7/0.15/0.3 与 prior 融合全链路），改走 plain 路径并把 kw 拼入 Original BM25 query 增强召回（_rrf_retrieve/search 新增 keywords 参数；Dense 与 CE 仍只用原 query）。修复 G1 副作用之一：Q_N20（简单事实题被 LLM 产出 kw 切进 multi-query 丢 CE rank 9）。回归（eval_kw_path_fix.py → data/kw_path_fix_report.json，G1 臂 58 道 kw-only 题，修复前值取自 gate_ab_ce_report.json）：MRR 0.7124→0.7205、R@10 94.83%→96.55%，救回 Q_N20（rr=0.111）0 丢失、7 升（Q_E33/Q_C18 0.5→1.0 等）5 降（Q_N01/Q_N02 1.0→0.5 等名次小滑，无失分） |
+| 2026-08-28 | v2.8 | **G1 结构 Gate 上线为生产默认**：query_rewriter.py 各入口（expand_query / get_keywords / get_rewrite_queries / get_sub_queries / get_gate_info / _needs_rewrite）默认参数改为 gate_mode="struct" + struct_force=True——生产（rag_pipeline.py）与全部评测脚本（不显式传 gate_mode）统一走 G1 口径；数值 Gate 保留为 gate_mode="base" 历史基线（eval_gate_ab.py 三臂对照显式传参不受影响）。上线理由：数值阈值（margin 0.03 / top1 0.72）随问题分布漂移、一刀切；结构规则（结构词/术语/长度）数据集无关、泛化性更好。已知副作用（A/B 全 CE 发现的 Q_N20 路径切换 / Q_S15 过度拆分 / Q_D05 强制改写扰动，净持平）保留，随 L2 融合层修复一并处理（Q_N20 于 v2.8.1 修复） |
 | 2026-08-28 | v2.7 | **Gate 结构改写 A/B 三臂实验（生产口径不变）**：query_rewriter.py 新增 `gate_mode` 参数——`base`（现行数值 Gate，默认）/ `struct`（结构 Gate：结构词命中→强制改写，术语→改写，≤6字无术语→跳过，其他→LLM 自判，不使用 top1/top2 数值信号），`struct_force` 对结构命中题注入"禁止 none + 必须拆子查询"强制指令（G1 臂）；缓存键隔离 BASE 裸键 / `query\|g1` / `query\|g2`（G2 复用 BASE 的 LLM 条目省调用），三池注册表与 gate 诊断接口（get_gate_info）按臂隔离。三臂 A/B（eval_gate_ab.py）：快速版 G1 救回 3 题（Q_N20/Q_S03/Q_S14）0 丢失、19 题 rank 改善，G2≈BASE（结构 gate 本身无收益，强制 prompt 是救回主力）；全 CE 决胜 MRR 0.5769→0.5786、R@5 78.9%→76.7%、R@10 90.0%→89.4%，救 2（Q_D20/Q_L07）丢 3（Q_D05/Q_N20/Q_S15）净持平；Q_S03/Q_S14 CE 后两臂均未进 Top10（改写层救不回 CE-hard 题）。**判定不上线，生产保持 BASE 数值 Gate**。详见 eval_v2_results.md 二十九节 |
 | 2026-08-26 | v2.6 | **CE 融合 α 0.2→0.3 + 术语强制改写 + gate_skipped 缓存标记**：① 生产默认 alpha 0.2→0.3（minmax 归一化不变；依据 eval_v2_results.md 二十七 α 扫描：α=0.3 唯一零搅黄正收益点，R@10 87.2%→89.4%）；② terminology_mapping.json 新增"生产潜力_层次"类（光合/光温/气候生产潜力全称+缩写），`_load_term_map` 放开 identity 跳过——identity 进扁平表 `_term_map` 做改写 gate 信号 1 门控与 BM25 关键词，不进 prompt 分类表 `_term_categories`；REWRITE_PROMPT 新增定义/层次类术语查询例外（禁止 none，必须 normalize + 为每个涉及术语生成定义类 sub_queries）；③ gate 跳过 LLM 时的缓存条目由硬编码 `confidence: 1.0` 改为 `gate_skipped: true`，与 LLM 自评置信（0.0~1.0）语义分离（rewrite_cache.json 为 gitignore 本地文件，旧条目需迁移） |
 | 2026-08-25 | v2.5 | **CK 应用层移除 + Phase 3 拆分 max_pool 参数化**：① 移除 query_rewriter.py 中 REWRITE_PROMPT 的 Knowledge Context 段、expand_query 的 use_ck/knowledge_context 参数与 ck_matcher 调用，改写缓存键统一为纯 query——改写/检索/召回统一为 BASE 口径（2026-08-13 CK A/B 结论：CK 无正向收益）；ck_matcher.py 与 CK 数据保留，本文档 CK 章节保留作历史记录；② hybrid_search.py 拆分 `_collect_candidates`（Phase 1+2：Union 采集 + Evidence + Retrieval Prior）/ `_coverage_reserve_and_rerank`（Phase 3+4：动态配额 + Global Fill + CE 融合），新增 max_pool 参数（默认 50），支持一次采集解析式重放不同池大小 |
@@ -148,7 +149,7 @@ data/chunks_split.json  (787 条, avg 374 字)  +  vectordb/  (787 vectors)
 ║    ├── [改写] expand_query → 三池产出                                    ║
 ║    │   ┌─ Keyword 池 (词/短语, ≤6, hard 6) ────────────────────┐         ║
 ║    │   │ 术语映射 + 同义词扩展 + LLM keywords                   │        ║
-║    │   │ → 拼入 Original BM25 query 增强关键词召回              │        ║
+║    │   │ → kw-only 拼入 BM25；有 rw/sq → 独立 BM25 通道(W=0.3) │         ║
 ║    │   └────────────────────────────────────────────────────────┘        ║
 ║    │   ┌─ Rewrite Query 池 (完整句子, ≤2, hard 2) ─────────────┐         ║
 ║    │   │ LLM rewrite_queries（不同表达重述同一问题）            │        ║
@@ -1053,7 +1054,8 @@ query → search(top_k=2) → top1_sim, top2_sim
 │ 来源: 术语映射 + 同义词扩展 + LLM keywords                     │
 │ 形式: 词/短语                                                │
 │ 限制: ≤6 (hard 6)                                           │
-│ 检索: 不独立检索，拼入 Original 的 BM25 query 文本            │
+│ 检索: kw-only（无 rw/sq）→ plain 路径，拼入 BM25 query       │
+│       （v2.8.1）；rw/sq 存在 → 独立 BM25 通道 W=0.3           │
 └──────────────────────────────────────────────────────────────┘
 
 ┌─ Rewrite Query 池 ──────────────────────────────────────────┐

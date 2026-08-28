@@ -361,8 +361,12 @@ class HybridSearcher:
     def _rrf_retrieve(
         self, query: str, dense_k: int, bm25_k: int,
         w_dense: float = 0.7, w_bm25: float = 0.3,
+        keywords: Optional[list[str]] = None,
     ) -> tuple[dict, dict, list]:
         """单查询 Dense+BM25→RRF 融合（不含 CE）。
+
+        keywords: kw-only 场景的关键词，拼入 BM25 query 增强术语召回
+        （Dense 与 CE 仍只用原 query）。
 
         Returns:
             (rrf_scores, doc_store, chroma_raw)
@@ -377,7 +381,10 @@ class HybridSearcher:
         bm25_keys: set[str] = set()
 
         chroma_raw = self._vectorstore.similarity_search_with_score(query, k=dense_k)
-        bm25_docs = self._bm25_retriever.invoke(query)[:bm25_k]
+        bm25_query = query
+        if keywords:
+            bm25_query = query + " " + " ".join(kw for kw in keywords if kw)
+        bm25_docs = self._bm25_retriever.invoke(bm25_query)[:bm25_k]
 
         for rank, (doc, l2_dist) in enumerate(chroma_raw):
             key = self._chunk_key(doc)
@@ -434,7 +441,9 @@ class HybridSearcher:
         → Dynamic Coverage: Orig=20, Rewrite=10, SubQ均分20
         → Global Fill 补齐 max_pool（默认 50）→ CE Rerank → Top K
 
-        Keywords 作为独立 BM25 通道检索（术语精确召回），不与 Original 拼合。
+        Keywords：rw/sq 存在时作为独立 BM25 通道检索（术语精确召回）；
+        kw-only（无 rw/sq）走 plain 路径，kw 拼入 Original BM25 query 增强召回，
+        不触发 multi-query 机制（路径切换会改变 RRF 权重组合，搅黄简单事实题）。
 
         Returns:
             (judge_results, merged): judge_results 为原始查询独立 CE 结果（供 OOD Judge），
@@ -445,7 +454,12 @@ class HybridSearcher:
             keyword_queries, extra_queries, lambda_length,
             orig_dense_k, orig_bm25_k, subq_dense_k, subq_bm25_k)
         if cand_list is None:
-            return judge_results, judge_results
+            merged = judge_results
+            if keyword_queries:
+                merged = self.search(query, top_k=top_k, expand_context=expand_context,
+                                     alpha=alpha, lambda_length=lambda_length,
+                                     keywords=list(keyword_queries))
+            return judge_results, merged
         results = self._coverage_reserve_and_rerank(
             query, cand_list, rw_list, sq_list, top_k, expand_context,
             alpha, lambda_length, max_pool)
@@ -475,7 +489,9 @@ class HybridSearcher:
         if not rw_list and not sq_list and extra_queries:
             sq_list = list(extra_queries)
         kw_query = " ".join(kw_list) if kw_list else ""
-        if not rw_list and not sq_list and not kw_list:
+        if not rw_list and not sq_list:
+            # kw-only（无 rw/sq）不触发 multi-query 机制——kw 只做 BM25 增强，
+            # 由 search_multi_query 走 plain 路径拼入 BM25（见 search(keywords=...)）
             return judge_results, None, None, None
 
         # ── Phase 1: 每路 Dense+BM25→RRF → dict-based dedup ──
@@ -737,12 +753,16 @@ class HybridSearcher:
     def search(self, query: str, top_k: int = 5, expand_context: bool = False,
                skip_reranker: bool = False, w_dense: float = 0.7, w_bm25: float = 0.3,
                alpha: float = 0.3, lambda_length: float = 0.1,
-               ce_protect_keys: Optional[list[str]] = None) -> list[dict]:
-        """单 query 混合检索（RRF 融合 + CE 精排 + 可选上下文扩展）。"""
+               ce_protect_keys: Optional[list[str]] = None,
+               keywords: Optional[list[str]] = None) -> list[dict]:
+        """单 query 混合检索（RRF 融合 + CE 精排 + 可选上下文扩展）。
+
+        keywords: kw-only 场景的关键词，拼入 BM25 query 增强术语召回。
+        """
         pool_size = max(top_k * 4, 20)
 
         rrf_scores, doc_store, chroma_raw = self._rrf_retrieve(
-            query, dense_k=pool_size, bm25_k=pool_size)
+            query, dense_k=pool_size, bm25_k=pool_size, keywords=keywords)
 
         # CE 候选池：RRF top-30 ∪ Dense top-5（去重）
         rrf_top30 = sorted(rrf_scores, key=lambda k: -rrf_scores[k])[:30]
