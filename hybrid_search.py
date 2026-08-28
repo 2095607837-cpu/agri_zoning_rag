@@ -438,8 +438,10 @@ class HybridSearcher:
         ③ SubQuery: 每个 Dense20 + BM2510 → dict自然去重
         → Global Merge(chunk_id去重, 无截断)
         → Retrieval Prior(0.7×RRF_norm + 0.3×Evidence_norm) 排序
-        → Dynamic Coverage: Orig=20, Rewrite=10, SubQ均分20
-        → Global Fill 补齐 max_pool（默认 50）→ CE Rerank → Top K
+        → Dynamic Coverage(方案C): Orig=20, Rewrite=10, SubQ预算30
+          （每 SubQ 至少 5, 剩余按 retrieval_prior 全局分配）
+        → Global Fill 补齐池上限（多 SubQuery 60, 其余 50）
+        → CE Rerank（query 用 rw[0], 无 rw 用原 query）→ Top K
 
         Keywords：rw/sq 存在时作为独立 BM25 通道检索（术语精确召回）；
         kw-only（无 rw/sq）走 plain 路径，kw 拼入 Original BM25 query 增强召回，
@@ -460,8 +462,11 @@ class HybridSearcher:
                                      alpha=alpha, lambda_length=lambda_length,
                                      keywords=list(keyword_queries))
             return judge_results, merged
+        # CE 精排 query 用 rw[0]（标准化改写句，压制碎片 chunk 虚高分，v2.9）；
+        # 无 rw 时用原 query
+        ce_query = rw_list[0] if rw_list else query
         results = self._coverage_reserve_and_rerank(
-            query, cand_list, rw_list, sq_list, top_k, expand_context,
+            ce_query, cand_list, rw_list, sq_list, top_k, expand_context,
             alpha, lambda_length, max_pool)
         return judge_results, results
 
@@ -666,27 +671,30 @@ class HybridSearcher:
         top_k: int, expand_context: bool, alpha: float, lambda_length: float,
         max_pool: int = 50,
     ):
-        """Phase 3+4：动态配额 + Global Fill 补齐 max_pool + CE 精排融合。"""
+        """Phase 3+4：动态配额（方案C）+ Global Fill 补齐池上限 + CE 精排融合。
 
-        # ── Phase 3: Dynamic Coverage Reservation ──
-        if len(cand_list) > max_pool:
+        query 为 CE 精排所用 query（生产传 rw[0]，无 rw 时传原 query，见 search_multi_query）。
+        """
+
+        # ── Phase 3: Dynamic Coverage Reservation (方案C: 动态预算 + 最低保护) ──
+        # 多个 SubQuery(≥2) 池上限扩到 60, 其余保持 max_pool(50)
+        cap = max_pool + 10 if len(sq_list) >= 2 else max_pool
+        if len(cand_list) > cap:
             n_rw = len(rw_list)
             n_sq = len(sq_list)
             rw_qids = set(range(1, 1 + n_rw))
             sq_start = 1 + n_rw     # first SubQ qid
 
-            # 动态配额: Original=20(40%), Rewrite=10(20%), SubQ合计=20(40%)
             quota_orig = 20
             quota_rw = 10 if n_rw > 0 else 0
-            sub_budget = 20 if n_sq > 0 else 0
+            sub_budget = 30 if n_sq >= 2 else (20 if n_sq == 1 else 0)
 
-            # SubQ 均分
+            # 每 SubQ 最低保护 5（多 SubQuery 时 SubQ 总预算 30）
             sq_quotas: dict[int, int] = {}
             if n_sq > 0:
-                base = sub_budget // n_sq
-                remainder = sub_budget % n_sq
+                min_q = min(5, sub_budget)
                 for i in range(n_sq):
-                    sq_quotas[sq_start + i] = base + (1 if i < remainder else 0)
+                    sq_quotas[sq_start + i] = min_q
 
             reserved: list[dict] = []
             rest: list[dict] = []
@@ -700,7 +708,7 @@ class HybridSearcher:
                     reserved.append(c)
                     taken[0] = taken.get(0, 0) + 1
                     placed = True
-                # 2) 各 SubQ 按均分配额
+                # 2) 各 SubQ 最低保护
                 elif not placed:
                     for sq_qid, sq_quota in sq_quotas.items():
                         if sq_qid in c["query_hits"] and taken.get(sq_qid, 0) < sq_quota:
@@ -717,9 +725,22 @@ class HybridSearcher:
                 if not placed:
                     rest.append(c)
 
-            # Global Fill: 补齐到 max_pool
+            # SubQ 剩余额度按 retrieval_prior 全局分配（含未填满的最低保护）
+            if n_sq > 0:
+                sq_need = sub_budget - sum(taken.get(q, 0) for q in sq_quotas)
+                if sq_need > 0:
+                    new_rest = []
+                    for c in rest:
+                        if sq_need > 0 and any(q in c["query_hits"] for q in sq_quotas):
+                            reserved.append(c)
+                            sq_need -= 1
+                        else:
+                            new_rest.append(c)
+                    rest = new_rest
+
+            # Global Fill: 补齐到 cap
             cand_list = reserved + rest
-            cand_list = cand_list[:max_pool]
+            cand_list = cand_list[:cap]
 
         # ── Phase 4: CE Rerank + Retrieval Prior 融合 ──
         # Final = 0.7×CE_norm + 0.3×retrieval_prior_norm

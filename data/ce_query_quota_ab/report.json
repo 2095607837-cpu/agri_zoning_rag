@@ -1,0 +1,8431 @@
+{
+  "generated": "2026-08-28 18:28:25",
+  "config": {
+    "alpha": 0.3,
+    "lambda_length": 0.1,
+    "top_k": 10,
+    "variants": [
+      [
+        "even",
+        "orig"
+      ],
+      [
+        "even",
+        "rw"
+      ],
+      [
+        "planC",
+        "orig"
+      ],
+      [
+        "planC",
+        "rw"
+      ]
+    ],
+    "planC": "每SubQ至少5 + 剩余按retrieval_prior全局分配, SubQ预算30; n_sq>=2 池上限60, 其余50",
+    "n": 180
+  },
+  "aggregates": {
+    "even|orig": {
+      "n": 180,
+      "mrr": 0.5776,
+      "recall_5": 0.7556,
+      "recall_10": 0.8944,
+      "hit_count": 249,
+      "sec_mrr": 0.5925,
+      "sec_recall_10": 0.9056
+    },
+    "even|rw": {
+      "n": 180,
+      "mrr": 0.5926,
+      "recall_5": 0.7667,
+      "recall_10": 0.9056,
+      "hit_count": 240,
+      "sec_mrr": 0.6072,
+      "sec_recall_10": 0.9111
+    },
+    "planC|orig": {
+      "n": 180,
+      "mrr": 0.578,
+      "recall_5": 0.7556,
+      "recall_10": 0.8944,
+      "hit_count": 249,
+      "sec_mrr": 0.593,
+      "sec_recall_10": 0.9056
+    },
+    "planC|rw": {
+      "n": 180,
+      "mrr": 0.5932,
+      "recall_5": 0.7722,
+      "recall_10": 0.9056,
+      "hit_count": 241,
+      "sec_mrr": 0.6078,
+      "sec_recall_10": 0.9111
+    }
+  },
+  "panels": {
+    "rw_panel_n": 120,
+    "quota_panel_n": 76,
+    "ce_query": {
+      "even": {
+        "rescued": [
+          {
+            "id": "Q_S07",
+            "rw_rr": 0.1
+          },
+          {
+            "id": "Q_S15",
+            "rw_rr": 0.5
+          },
+          {
+            "id": "Q_S23",
+            "rw_rr": 0.1
+          },
+          {
+            "id": "Q_SR03",
+            "rw_rr": 0.3333
+          },
+          {
+            "id": "Q_SR06",
+            "rw_rr": 0.125
+          }
+        ],
+        "lost": [
+          {
+            "id": "Q_S13",
+            "orig_rr": 0.2
+          },
+          {
+            "id": "Q_D09",
+            "orig_rr": 0.1667
+          },
+          {
+            "id": "Q_D12",
+            "orig_rr": 0.1
+          }
+        ],
+        "improved": [
+          {
+            "id": "Q_E16",
+            "orig_rr": 0.3333,
+            "rw_rr": 0.5
+          },
+          {
+            "id": "Q_E34",
+            "orig_rr": 0.5,
+            "rw_rr": 1.0
+          },
+          {
+            "id": "Q_C15",
+            "orig_rr": 0.3333,
+            "rw_rr": 1.0
+          },
+          {
+            "id": "Q_S04",
+            "orig_rr": 0.25,
+            "rw_rr": 0.5
+          },
+          {
+            "id": "Q_D11",
+            "orig_rr": 0.2,
+            "rw_rr": 0.5
+          },
+          {
+            "id": "Q_D16",
+            "orig_rr": 0.2,
+            "rw_rr": 0.25
+          },
+          {
+            "id": "Q_D18",
+            "orig_rr": 0.2,
+            "rw_rr": 1.0
+          },
+          {
+            "id": "Q_D26",
+            "orig_rr": 0.1111,
+            "rw_rr": 0.125
+          },
+          {
+            "id": "Q_D28",
+            "orig_rr": 0.2,
+            "rw_rr": 0.25
+          },
+          {
+            "id": "Q_L01",
+            "orig_rr": 0.1429,
+            "rw_rr": 1.0
+          },
+          {
+            "id": "Q_L03",
+            "orig_rr": 0.2,
+            "rw_rr": 1.0
+          },
+          {
+            "id": "Q_L04",
+            "orig_rr": 0.2,
+            "rw_rr": 0.3333
+          },
+          {
+            "id": "Q_L07",
+            "orig_rr": 0.125,
+            "rw_rr": 1.0
+          },
+          {
+            "id": "Q_L08",
+            "orig_rr": 0.1111,
+            "rw_rr": 1.0
+          },
+          {
+            "id": "Q_L09",
+            "orig_rr": 0.1429,
+            "rw_rr": 0.5
+          },
+          {
+            "id": "Q_SR01",
+            "orig_rr": 0.5,
+            "rw_rr": 1.0
+          },
+          {
+            "id": "Q_SR05",
+            "orig_rr": 0.2,
+            "rw_rr": 0.3333
+          },
+          {
+            "id": "Q_T27",
+            "orig_rr": 0.3333,
+            "rw_rr": 0.5
+          },
+          {
+            "id": "Q_T28",
+            "orig_rr": 0.1429,
+            "rw_rr": 0.1667
+          },
+          {
+            "id": "Q_S26",
+            "orig_rr": 0.1429,
+            "rw_rr": 0.25
+          }
+        ],
+        "worsened": [
+          {
+            "id": "Q_E03",
+            "orig_rr": 1.0,
+            "rw_rr": 0.5
+          },
+          {
+            "id": "Q_E07",
+            "orig_rr": 0.5,
+            "rw_rr": 0.3333
+          },
+          {
+            "id": "Q_C23",
+            "orig_rr": 0.25,
+            "rw_rr": 0.2
+          },
+          {
+            "id": "Q_C24",
+            "orig_rr": 0.1429,
+            "rw_rr": 0.125
+          },
+          {
+            "id": "Q_S19",
+            "orig_rr": 0.125,
+            "rw_rr": 0.1
+          },
+          {
+            "id": "Q_S20",
+            "orig_rr": 1.0,
+            "rw_rr": 0.25
+          },
+          {
+            "id": "Q_S21",
+            "orig_rr": 0.3333,
+            "rw_rr": 0.2
+          },
+          {
+            "id": "Q_S24",
+            "orig_rr": 1.0,
+            "rw_rr": 0.3333
+          },
+          {
+            "id": "Q_D02",
+            "orig_rr": 0.5,
+            "rw_rr": 0.25
+          },
+          {
+            "id": "Q_D07",
+            "orig_rr": 0.5,
+            "rw_rr": 0.2
+          },
+          {
+            "id": "Q_D13",
+            "orig_rr": 0.25,
+            "rw_rr": 0.1429
+          },
+          {
+            "id": "Q_D14",
+            "orig_rr": 0.5,
+            "rw_rr": 0.25
+          },
+          {
+            "id": "Q_D19",
+            "orig_rr": 1.0,
+            "rw_rr": 0.3333
+          },
+          {
+            "id": "Q_D20",
+            "orig_rr": 0.25,
+            "rw_rr": 0.1667
+          },
+          {
+            "id": "Q_D23",
+            "orig_rr": 0.2,
+            "rw_rr": 0.125
+          },
+          {
+            "id": "Q_D24",
+            "orig_rr": 0.5,
+            "rw_rr": 0.2
+          },
+          {
+            "id": "Q_D25",
+            "orig_rr": 0.3333,
+            "rw_rr": 0.2
+          },
+          {
+            "id": "Q_L12",
+            "orig_rr": 1.0,
+            "rw_rr": 0.5
+          },
+          {
+            "id": "Q_T21",
+            "orig_rr": 1.0,
+            "rw_rr": 0.5
+          },
+          {
+            "id": "Q_C26",
+            "orig_rr": 0.25,
+            "rw_rr": 0.1111
+          }
+        ]
+      },
+      "planC": {
+        "rescued": [
+          {
+            "id": "Q_S07",
+            "rw_rr": 0.1
+          },
+          {
+            "id": "Q_S15",
+            "rw_rr": 0.5
+          },
+          {
+            "id": "Q_S23",
+            "rw_rr": 0.1
+          },
+          {
+            "id": "Q_SR03",
+            "rw_rr": 0.3333
+          },
+          {
+            "id": "Q_SR06",
+            "rw_rr": 0.125
+          }
+        ],
+        "lost": [
+          {
+            "id": "Q_S13",
+            "orig_rr": 0.2
+          },
+          {
+            "id": "Q_D09",
+            "orig_rr": 0.1667
+          },
+          {
+            "id": "Q_D12",
+            "orig_rr": 0.1
+          }
+        ],
+        "improved": [
+          {
+            "id": "Q_E16",
+            "orig_rr": 0.3333,
+            "rw_rr": 0.5
+          },
+          {
+            "id": "Q_E34",
+            "orig_rr": 0.5,
+            "rw_rr": 1.0
+          },
+          {
+            "id": "Q_C15",
+            "orig_rr": 0.3333,
+            "rw_rr": 1.0
+          },
+          {
+            "id": "Q_S04",
+            "orig_rr": 0.25,
+            "rw_rr": 0.5
+          },
+          {
+            "id": "Q_D11",
+            "orig_rr": 0.2,
+            "rw_rr": 0.5
+          },
+          {
+            "id": "Q_D16",
+            "orig_rr": 0.2,
+            "rw_rr": 0.25
+          },
+          {
+            "id": "Q_D18",
+            "orig_rr": 0.2,
+            "rw_rr": 1.0
+          },
+          {
+            "id": "Q_D26",
+            "orig_rr": 0.1111,
+            "rw_rr": 0.125
+          },
+          {
+            "id": "Q_D28",
+            "orig_rr": 0.2,
+            "rw_rr": 0.25
+          },
+          {
+            "id": "Q_L01",
+            "orig_rr": 0.1429,
+            "rw_rr": 1.0
+          },
+          {
+            "id": "Q_L03",
+            "orig_rr": 0.2,
+            "rw_rr": 1.0
+          },
+          {
+            "id": "Q_L04",
+            "orig_rr": 0.2,
+            "rw_rr": 0.3333
+          },
+          {
+            "id": "Q_L07",
+            "orig_rr": 0.125,
+            "rw_rr": 1.0
+          },
+          {
+            "id": "Q_L08",
+            "orig_rr": 0.1111,
+            "rw_rr": 1.0
+          },
+          {
+            "id": "Q_L09",
+            "orig_rr": 0.1429,
+            "rw_rr": 0.5
+          },
+          {
+            "id": "Q_SR01",
+            "orig_rr": 0.5,
+            "rw_rr": 1.0
+          },
+          {
+            "id": "Q_SR05",
+            "orig_rr": 0.2,
+            "rw_rr": 0.3333
+          },
+          {
+            "id": "Q_T27",
+            "orig_rr": 0.3333,
+            "rw_rr": 0.5
+          },
+          {
+            "id": "Q_T28",
+            "orig_rr": 0.1429,
+            "rw_rr": 0.1667
+          },
+          {
+            "id": "Q_S26",
+            "orig_rr": 0.1429,
+            "rw_rr": 0.25
+          }
+        ],
+        "worsened": [
+          {
+            "id": "Q_E03",
+            "orig_rr": 1.0,
+            "rw_rr": 0.5
+          },
+          {
+            "id": "Q_E07",
+            "orig_rr": 0.5,
+            "rw_rr": 0.3333
+          },
+          {
+            "id": "Q_C23",
+            "orig_rr": 0.25,
+            "rw_rr": 0.2
+          },
+          {
+            "id": "Q_C24",
+            "orig_rr": 0.1429,
+            "rw_rr": 0.125
+          },
+          {
+            "id": "Q_S19",
+            "orig_rr": 0.125,
+            "rw_rr": 0.1
+          },
+          {
+            "id": "Q_S20",
+            "orig_rr": 1.0,
+            "rw_rr": 0.25
+          },
+          {
+            "id": "Q_S21",
+            "orig_rr": 0.3333,
+            "rw_rr": 0.2
+          },
+          {
+            "id": "Q_S24",
+            "orig_rr": 1.0,
+            "rw_rr": 0.3333
+          },
+          {
+            "id": "Q_D02",
+            "orig_rr": 0.5,
+            "rw_rr": 0.25
+          },
+          {
+            "id": "Q_D07",
+            "orig_rr": 0.5,
+            "rw_rr": 0.2
+          },
+          {
+            "id": "Q_D13",
+            "orig_rr": 0.3333,
+            "rw_rr": 0.25
+          },
+          {
+            "id": "Q_D14",
+            "orig_rr": 0.5,
+            "rw_rr": 0.25
+          },
+          {
+            "id": "Q_D19",
+            "orig_rr": 1.0,
+            "rw_rr": 0.3333
+          },
+          {
+            "id": "Q_D20",
+            "orig_rr": 0.25,
+            "rw_rr": 0.1667
+          },
+          {
+            "id": "Q_D23",
+            "orig_rr": 0.2,
+            "rw_rr": 0.125
+          },
+          {
+            "id": "Q_D24",
+            "orig_rr": 0.5,
+            "rw_rr": 0.2
+          },
+          {
+            "id": "Q_D25",
+            "orig_rr": 0.3333,
+            "rw_rr": 0.2
+          },
+          {
+            "id": "Q_L12",
+            "orig_rr": 1.0,
+            "rw_rr": 0.5
+          },
+          {
+            "id": "Q_T21",
+            "orig_rr": 1.0,
+            "rw_rr": 0.5
+          },
+          {
+            "id": "Q_C26",
+            "orig_rr": 0.25,
+            "rw_rr": 0.1111
+          }
+        ]
+      },
+      "agg": {
+        "even_orig": {
+          "n": 120,
+          "mrr": 0.507,
+          "recall_5": 0.7167,
+          "recall_10": 0.8667,
+          "hit_count": 173,
+          "sec_mrr": 0.5222,
+          "sec_recall_10": 0.8833
+        },
+        "even_rw": {
+          "n": 120,
+          "mrr": 0.5296,
+          "recall_5": 0.7333,
+          "recall_10": 0.8833,
+          "hit_count": 164,
+          "sec_mrr": 0.5442,
+          "sec_recall_10": 0.8917
+        },
+        "planC_orig": {
+          "n": 120,
+          "mrr": 0.5077,
+          "recall_5": 0.7167,
+          "recall_10": 0.8667,
+          "hit_count": 173,
+          "sec_mrr": 0.5229,
+          "sec_recall_10": 0.8833
+        },
+        "planC_rw": {
+          "n": 120,
+          "mrr": 0.5305,
+          "recall_5": 0.7417,
+          "recall_10": 0.8833,
+          "hit_count": 165,
+          "sec_mrr": 0.5451,
+          "sec_recall_10": 0.8917
+        }
+      }
+    },
+    "quota": {
+      "orig": {
+        "rescued": [],
+        "lost": [],
+        "improved": [
+          {
+            "id": "Q_D13",
+            "even_rr": 0.25,
+            "planC_rr": 0.3333
+          }
+        ],
+        "worsened": []
+      },
+      "rw": {
+        "rescued": [],
+        "lost": [],
+        "improved": [
+          {
+            "id": "Q_D13",
+            "even_rr": 0.1429,
+            "planC_rr": 0.25
+          }
+        ],
+        "worsened": []
+      },
+      "agg": {
+        "even_orig": {
+          "n": 76,
+          "mrr": 0.4995,
+          "recall_5": 0.7105,
+          "recall_10": 0.8421,
+          "hit_count": 117,
+          "sec_mrr": 0.5155,
+          "sec_recall_10": 0.8684
+        },
+        "planC_orig": {
+          "n": 76,
+          "mrr": 0.5006,
+          "recall_5": 0.7105,
+          "recall_10": 0.8421,
+          "hit_count": 117,
+          "sec_mrr": 0.5166,
+          "sec_recall_10": 0.8684
+        },
+        "even_rw": {
+          "n": 76,
+          "mrr": 0.4782,
+          "recall_5": 0.6711,
+          "recall_10": 0.8553,
+          "hit_count": 107,
+          "sec_mrr": 0.4946,
+          "sec_recall_10": 0.8684
+        },
+        "planC_rw": {
+          "n": 76,
+          "mrr": 0.4796,
+          "recall_5": 0.6842,
+          "recall_10": 0.8553,
+          "hit_count": 108,
+          "sec_mrr": 0.496,
+          "sec_recall_10": 0.8684
+        }
+      }
+    }
+  },
+  "answerability": {
+    "even|orig": {
+      "n": 180,
+      "full": 138,
+      "partial": 34,
+      "pct_full": 0.7667,
+      "pct_answerable": 0.9556
+    },
+    "even|rw": {
+      "n": 180,
+      "full": 144,
+      "partial": 27,
+      "pct_full": 0.8,
+      "pct_answerable": 0.95
+    },
+    "planC|orig": {
+      "n": 180,
+      "full": 138,
+      "partial": 33,
+      "pct_full": 0.7667,
+      "pct_answerable": 0.95
+    },
+    "planC|rw": {
+      "n": 180,
+      "full": 144,
+      "partial": 27,
+      "pct_full": 0.8,
+      "pct_answerable": 0.95
+    }
+  },
+  "per_question": {
+    "Q_E01": {
+      "qid": "Q_E01",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 46
+    },
+    "Q_E02": {
+      "qid": "Q_E02",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 43
+    },
+    "Q_E03": {
+      "qid": "Q_E03",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 56
+    },
+    "Q_E04": {
+      "qid": "Q_E04",
+      "even|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_E05": {
+      "qid": "Q_E05",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 66
+    },
+    "Q_E06": {
+      "qid": "Q_E06",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 61
+    },
+    "Q_E07": {
+      "qid": "Q_E07",
+      "even|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 42
+    },
+    "Q_E08": {
+      "qid": "Q_E08",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_E09": {
+      "qid": "Q_E09",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 43
+    },
+    "Q_E10": {
+      "qid": "Q_E10",
+      "even|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_E11": {
+      "qid": "Q_E11",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 45
+    },
+    "Q_E12": {
+      "qid": "Q_E12",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_E13": {
+      "qid": "Q_E13",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 38
+    },
+    "Q_E14": {
+      "qid": "Q_E14",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 0,
+      "plain": false,
+      "pool": 41
+    },
+    "Q_E15": {
+      "qid": "Q_E15",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 0,
+      "plain": false,
+      "pool": 53
+    },
+    "Q_E16": {
+      "qid": "Q_E16",
+      "even|orig": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 61
+    },
+    "Q_E17": {
+      "qid": "Q_E17",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_E18": {
+      "qid": "Q_E18",
+      "even|orig": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 53
+    },
+    "Q_E19": {
+      "qid": "Q_E19",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_E20": {
+      "qid": "Q_E20",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 54
+    },
+    "Q_E21": {
+      "qid": "Q_E21",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_E22": {
+      "qid": "Q_E22",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_E23": {
+      "qid": "Q_E23",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 8,
+        "gold_count": 11,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 7,
+        "gold_count": 11,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 8,
+        "gold_count": 11,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 7,
+        "gold_count": 11,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 72
+    },
+    "Q_E24": {
+      "qid": "Q_E24",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 66
+    },
+    "Q_E25": {
+      "qid": "Q_E25",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_E26": {
+      "qid": "Q_E26",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 36
+    },
+    "Q_E27": {
+      "qid": "Q_E27",
+      "even|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_E28": {
+      "qid": "Q_E28",
+      "even|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 69
+    },
+    "Q_E29": {
+      "qid": "Q_E29",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_E30": {
+      "qid": "Q_E30",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 7,
+        "gold_count": 7,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 7,
+        "gold_count": 7,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 7,
+        "gold_count": 7,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 7,
+        "gold_count": 7,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_E31": {
+      "qid": "Q_E31",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_E32": {
+      "qid": "Q_E32",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_E33": {
+      "qid": "Q_E33",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_E34": {
+      "qid": "Q_E34",
+      "even|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 0,
+      "plain": false,
+      "pool": 50
+    },
+    "Q_E35": {
+      "qid": "Q_E35",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_C01": {
+      "qid": "Q_C01",
+      "even|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 56
+    },
+    "Q_C02": {
+      "qid": "Q_C02",
+      "even|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 68
+    },
+    "Q_C03": {
+      "qid": "Q_C03",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 60
+    },
+    "Q_C04": {
+      "qid": "Q_C04",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 85
+    },
+    "Q_C05": {
+      "qid": "Q_C05",
+      "even|orig": {
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 50
+    },
+    "Q_C06": {
+      "qid": "Q_C06",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 60
+    },
+    "Q_C07": {
+      "qid": "Q_C07",
+      "even|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 52
+    },
+    "Q_C08": {
+      "qid": "Q_C08",
+      "even|orig": {
+        "rr": 0.1111111111111111,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.1111111111111111,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.1111111111111111,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.1111111111111111,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.1111111111111111,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.1111111111111111,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.1111111111111111,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.1111111111111111,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 59
+    },
+    "Q_C09": {
+      "qid": "Q_C09",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_C10": {
+      "qid": "Q_C10",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_C11": {
+      "qid": "Q_C11",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 53
+    },
+    "Q_C12": {
+      "qid": "Q_C12",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 49
+    },
+    "Q_C13": {
+      "qid": "Q_C13",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_C14": {
+      "qid": "Q_C14",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_C15": {
+      "qid": "Q_C15",
+      "even|orig": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 52
+    },
+    "Q_C16": {
+      "qid": "Q_C16",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_C17": {
+      "qid": "Q_C17",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_C18": {
+      "qid": "Q_C18",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_C19": {
+      "qid": "Q_C19",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_C20": {
+      "qid": "Q_C20",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 4,
+        "gold_count": 8,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 4,
+        "gold_count": 8,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 4,
+        "gold_count": 8,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 4,
+        "gold_count": 8,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 45
+    },
+    "Q_C21": {
+      "qid": "Q_C21",
+      "even|orig": {
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 56
+    },
+    "Q_C22": {
+      "qid": "Q_C22",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 52
+    },
+    "Q_C23": {
+      "qid": "Q_C23",
+      "even|orig": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 54
+    },
+    "Q_C24": {
+      "qid": "Q_C24",
+      "even|orig": {
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 89
+    },
+    "Q_C25": {
+      "qid": "Q_C25",
+      "even|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "even|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_S01": {
+      "qid": "Q_S01",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 58
+    },
+    "Q_S02": {
+      "qid": "Q_S02",
+      "even|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 0,
+      "plain": false,
+      "pool": 47
+    },
+    "Q_S03": {
+      "qid": "Q_S03",
+      "even|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 3,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "even|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 3,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 3,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 3,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 54
+    },
+    "Q_S04": {
+      "qid": "Q_S04",
+      "even|orig": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 57
+    },
+    "Q_S05": {
+      "qid": "Q_S05",
+      "even|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "even|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 72
+    },
+    "Q_S06": {
+      "qid": "Q_S06",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 65
+    },
+    "Q_S07": {
+      "qid": "Q_S07",
+      "even|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 3,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "even|rw": {
+        "rr": 0.1,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.1,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 3,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|rw": {
+        "rr": 0.1,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.1,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 98
+    },
+    "Q_S08": {
+      "qid": "Q_S08",
+      "even|orig": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 0,
+      "plain": false,
+      "pool": 57
+    },
+    "Q_S09": {
+      "qid": "Q_S09",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 54
+    },
+    "Q_S10": {
+      "qid": "Q_S10",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 4,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 4,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 4,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 4,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 55
+    },
+    "Q_S11": {
+      "qid": "Q_S11",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_S13": {
+      "qid": "Q_S13",
+      "even|orig": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|orig": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 37
+    },
+    "Q_S14": {
+      "qid": "Q_S14",
+      "even|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "even|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 70
+    },
+    "Q_S15": {
+      "qid": "Q_S15",
+      "even|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 67
+    },
+    "Q_S16": {
+      "qid": "Q_S16",
+      "even|orig": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 4,
+      "plain": false,
+      "pool": 60
+    },
+    "Q_S17": {
+      "qid": "Q_S17",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 58
+    },
+    "Q_S18": {
+      "qid": "Q_S18",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 4,
+      "plain": false,
+      "pool": 61
+    },
+    "Q_S19": {
+      "qid": "Q_S19",
+      "even|orig": {
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.1,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.1,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.1,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.1,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 0,
+      "plain": false,
+      "pool": 59
+    },
+    "Q_S20": {
+      "qid": "Q_S20",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 49
+    },
+    "Q_S21": {
+      "qid": "Q_S21",
+      "even|orig": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 4,
+        "gold_count": 5,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 5,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 4,
+        "gold_count": 5,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 5,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 0,
+      "plain": false,
+      "pool": 58
+    },
+    "Q_S22": {
+      "qid": "Q_S22",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 46
+    },
+    "Q_S23": {
+      "qid": "Q_S23",
+      "even|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 3,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "even|rw": {
+        "rr": 0.1,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.1,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 3,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|rw": {
+        "rr": 0.1,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.1,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 65
+    },
+    "Q_S24": {
+      "qid": "Q_S24",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 75
+    },
+    "Q_S25": {
+      "qid": "Q_S25",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 54
+    },
+    "Q_D01": {
+      "qid": "Q_D01",
+      "even|orig": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 42
+    },
+    "Q_D02": {
+      "qid": "Q_D02",
+      "even|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 75
+    },
+    "Q_D03": {
+      "qid": "Q_D03",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 86
+    },
+    "Q_D04": {
+      "qid": "Q_D04",
+      "even|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "even|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 70
+    },
+    "Q_D05": {
+      "qid": "Q_D05",
+      "even|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "even|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 61
+    },
+    "Q_D06": {
+      "qid": "Q_D06",
+      "even|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 88
+    },
+    "Q_D07": {
+      "qid": "Q_D07",
+      "even|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 64
+    },
+    "Q_D09": {
+      "qid": "Q_D09",
+      "even|orig": {
+        "rr": 0.16666666666666666,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 4,
+        "sec_rr": 0.16666666666666666,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 4,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|orig": {
+        "rr": 0.16666666666666666,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 4,
+        "sec_rr": 0.16666666666666666,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 4,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 73
+    },
+    "Q_D10": {
+      "qid": "Q_D10",
+      "even|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "even|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 76
+    },
+    "Q_D11": {
+      "qid": "Q_D11",
+      "even|orig": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 67
+    },
+    "Q_D12": {
+      "qid": "Q_D12",
+      "even|orig": {
+        "rr": 0.1,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 4,
+        "sec_rr": 0.1,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 4,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|orig": {
+        "rr": 0.1,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 4,
+        "sec_rr": 0.1,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 4,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 69
+    },
+    "Q_D13": {
+      "qid": "Q_D13",
+      "even|orig": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 5,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 5,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 5,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 5,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 64
+    },
+    "Q_D14": {
+      "qid": "Q_D14",
+      "even|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 7,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 7,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 7,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 7,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 63
+    },
+    "Q_D15": {
+      "qid": "Q_D15",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 73
+    },
+    "Q_D16": {
+      "qid": "Q_D16",
+      "even|orig": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 66
+    },
+    "Q_D17": {
+      "qid": "Q_D17",
+      "even|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 48
+    },
+    "Q_D18": {
+      "qid": "Q_D18",
+      "even|orig": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 50
+    },
+    "Q_D19": {
+      "qid": "Q_D19",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 68
+    },
+    "Q_D20": {
+      "qid": "Q_D20",
+      "even|orig": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.16666666666666666,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.16666666666666666,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.16666666666666666,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.16666666666666666,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 60
+    },
+    "Q_D21": {
+      "qid": "Q_D21",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 4,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 4,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 4,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 4,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 91
+    },
+    "Q_D22": {
+      "qid": "Q_D22",
+      "even|orig": {
+        "rr": 0.16666666666666666,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.16666666666666666,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.16666666666666666,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.16666666666666666,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.16666666666666666,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.16666666666666666,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.16666666666666666,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.16666666666666666,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 61
+    },
+    "Q_D23": {
+      "qid": "Q_D23",
+      "even|orig": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 5,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 5,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 5,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 5,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 79
+    },
+    "Q_D24": {
+      "qid": "Q_D24",
+      "even|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 77
+    },
+    "Q_D25": {
+      "qid": "Q_D25",
+      "even|orig": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 79
+    },
+    "Q_D26": {
+      "qid": "Q_D26",
+      "even|orig": {
+        "rr": 0.1111111111111111,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.1111111111111111,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.1111111111111111,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.1111111111111111,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 69
+    },
+    "Q_D27": {
+      "qid": "Q_D27",
+      "even|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 59
+    },
+    "Q_D28": {
+      "qid": "Q_D28",
+      "even|orig": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 107
+    },
+    "Q_D29": {
+      "qid": "Q_D29",
+      "even|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "even|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 82
+    },
+    "Q_D30": {
+      "qid": "Q_D30",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 7,
+        "gold_count": 10,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 7,
+        "gold_count": 10,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 7,
+        "gold_count": 10,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 7,
+        "gold_count": 10,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 58
+    },
+    "Q_T03": {
+      "qid": "Q_T03",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_T04": {
+      "qid": "Q_T04",
+      "even|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_T08": {
+      "qid": "Q_T08",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_T09": {
+      "qid": "Q_T09",
+      "even|orig": {
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_T11": {
+      "qid": "Q_T11",
+      "even|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_T12": {
+      "qid": "Q_T12",
+      "even|orig": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_T16": {
+      "qid": "Q_T16",
+      "even|orig": {
+        "rr": 0.16666666666666666,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.16666666666666666,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.16666666666666666,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.16666666666666666,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.16666666666666666,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.16666666666666666,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.16666666666666666,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.16666666666666666,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_T20": {
+      "qid": "Q_T20",
+      "even|orig": {
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_N01": {
+      "qid": "Q_N01",
+      "even|orig": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_N02": {
+      "qid": "Q_N02",
+      "even|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_N03": {
+      "qid": "Q_N03",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_N04": {
+      "qid": "Q_N04",
+      "even|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_N05": {
+      "qid": "Q_N05",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_N06": {
+      "qid": "Q_N06",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_N07": {
+      "qid": "Q_N07",
+      "even|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 48
+    },
+    "Q_N08": {
+      "qid": "Q_N08",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_N09": {
+      "qid": "Q_N09",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_N10": {
+      "qid": "Q_N10",
+      "even|orig": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_N11": {
+      "qid": "Q_N11",
+      "even|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "even|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_N12": {
+      "qid": "Q_N12",
+      "even|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_N13": {
+      "qid": "Q_N13",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 0,
+      "plain": false,
+      "pool": 59
+    },
+    "Q_N14": {
+      "qid": "Q_N14",
+      "even|orig": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_N15": {
+      "qid": "Q_N15",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_N16": {
+      "qid": "Q_N16",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_N17": {
+      "qid": "Q_N17",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_N18": {
+      "qid": "Q_N18",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 0,
+      "plain": false,
+      "pool": 45
+    },
+    "Q_N19": {
+      "qid": "Q_N19",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 0,
+      "plain": false,
+      "pool": 45
+    },
+    "Q_N20": {
+      "qid": "Q_N20",
+      "even|orig": {
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_L01": {
+      "qid": "Q_L01",
+      "even|orig": {
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 0,
+      "plain": false,
+      "pool": 52
+    },
+    "Q_L02": {
+      "qid": "Q_L02",
+      "even|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "even|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "n_rw": 1,
+      "n_sq": 0,
+      "plain": false,
+      "pool": 71
+    },
+    "Q_L03": {
+      "qid": "Q_L03",
+      "even|orig": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 71
+    },
+    "Q_L04": {
+      "qid": "Q_L04",
+      "even|orig": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 0,
+      "plain": false,
+      "pool": 59
+    },
+    "Q_L06": {
+      "qid": "Q_L06",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 0,
+      "plain": false,
+      "pool": 62
+    },
+    "Q_L07": {
+      "qid": "Q_L07",
+      "even|orig": {
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 0,
+      "plain": false,
+      "pool": 64
+    },
+    "Q_L08": {
+      "qid": "Q_L08",
+      "even|orig": {
+        "rr": 0.1111111111111111,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.1111111111111111,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.1111111111111111,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.1111111111111111,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 0,
+      "plain": false,
+      "pool": 65
+    },
+    "Q_L09": {
+      "qid": "Q_L09",
+      "even|orig": {
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 0,
+      "plain": false,
+      "pool": 65
+    },
+    "Q_L10": {
+      "qid": "Q_L10",
+      "even|orig": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 0,
+      "plain": false,
+      "pool": 62
+    },
+    "Q_L11": {
+      "qid": "Q_L11",
+      "even|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "even|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 61
+    },
+    "Q_L12": {
+      "qid": "Q_L12",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 71
+    },
+    "Q_SR01": {
+      "qid": "Q_SR01",
+      "even|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 0,
+      "plain": false,
+      "pool": 72
+    },
+    "Q_SR02": {
+      "qid": "Q_SR02",
+      "even|orig": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 0,
+      "plain": false,
+      "pool": 59
+    },
+    "Q_SR03": {
+      "qid": "Q_SR03",
+      "even|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "even|rw": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|rw": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 0,
+      "plain": false,
+      "pool": 66
+    },
+    "Q_SR04": {
+      "qid": "Q_SR04",
+      "even|orig": {
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_SR05": {
+      "qid": "Q_SR05",
+      "even|orig": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 50
+    },
+    "Q_SR06": {
+      "qid": "Q_SR06",
+      "even|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "even|rw": {
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|rw": {
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 43
+    },
+    "Q_SR07": {
+      "qid": "Q_SR07",
+      "even|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "even|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_SR08": {
+      "qid": "Q_SR08",
+      "even|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "even|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "planC|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 49
+    },
+    "Q_SR09": {
+      "qid": "Q_SR09",
+      "even|orig": {
+        "rr": 0.1111111111111111,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.1111111111111111,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.1111111111111111,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.1111111111111111,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.1111111111111111,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.1111111111111111,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.1111111111111111,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.1111111111111111,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 50
+    },
+    "Q_SR10": {
+      "qid": "Q_SR10",
+      "even|orig": {
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_SR11": {
+      "qid": "Q_SR11",
+      "even|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.16666666666666666,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.16666666666666666,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 72
+    },
+    "Q_SR12": {
+      "qid": "Q_SR12",
+      "even|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_SR13": {
+      "qid": "Q_SR13",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 70
+    },
+    "Q_T21": {
+      "qid": "Q_T21",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 55
+    },
+    "Q_T22": {
+      "qid": "Q_T22",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 44
+    },
+    "Q_T23": {
+      "qid": "Q_T23",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 50
+    },
+    "Q_T24": {
+      "qid": "Q_T24",
+      "even|orig": {
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 52
+    },
+    "Q_T25": {
+      "qid": "Q_T25",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_T26": {
+      "qid": "Q_T26",
+      "even|orig": {
+        "rr": 0.16666666666666666,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.16666666666666666,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.16666666666666666,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.16666666666666666,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.16666666666666666,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.16666666666666666,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.16666666666666666,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.16666666666666666,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 54
+    },
+    "Q_T27": {
+      "qid": "Q_T27",
+      "even|orig": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 64
+    },
+    "Q_T28": {
+      "qid": "Q_T28",
+      "even|orig": {
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.16666666666666666,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.16666666666666666,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.16666666666666666,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.16666666666666666,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 73
+    },
+    "Q_T29": {
+      "qid": "Q_T29",
+      "even|orig": {
+        "rr": 0.1111111111111111,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.1111111111111111,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.1111111111111111,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.1111111111111111,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.1111111111111111,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.1111111111111111,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.1111111111111111,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.1111111111111111,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_T30": {
+      "qid": "Q_T30",
+      "even|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 2,
+      "plain": false,
+      "pool": 44
+    },
+    "Q_T31": {
+      "qid": "Q_T31",
+      "even|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_T32": {
+      "qid": "Q_T32",
+      "even|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "n_rw": 0,
+      "n_sq": 0,
+      "plain": true,
+      "pool": null
+    },
+    "Q_S26": {
+      "qid": "Q_S26",
+      "even|orig": {
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 39
+    },
+    "Q_D31": {
+      "qid": "Q_D31",
+      "even|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 67
+    },
+    "Q_C26": {
+      "qid": "Q_C26",
+      "even|orig": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 4,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "even|rw": {
+        "rr": 0.1111111111111111,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 4,
+        "sec_rr": 0.1111111111111111,
+        "sec_recall_10": true
+      },
+      "planC|orig": {
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 4,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "planC|rw": {
+        "rr": 0.1111111111111111,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 4,
+        "sec_rr": 0.1111111111111111,
+        "sec_recall_10": true
+      },
+      "n_rw": 1,
+      "n_sq": 3,
+      "plain": false,
+      "pool": 111
+    }
+  },
+  "smoke": null
+}

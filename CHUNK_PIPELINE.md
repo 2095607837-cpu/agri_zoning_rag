@@ -2,7 +2,7 @@
 
 > 完整记录从原始文档到检索结果的全链路 chunk 处理逻辑
 >
-> **最后更新**: 2026-08-28 (v2.8.1：kw-only 路径修复——kw 不再触发 multi-query，Q_N20 副作用消除)
+> **最后更新**: 2026-08-28 (v2.9：CE 精排改用 rw[0] + 配额方案C——全面板 MRR 0.5776→0.5932)
 
 ---
 
@@ -10,6 +10,7 @@
 
 | 日期 | 版本 | 变更 |
 |------|------|------|
+| 2026-08-28 | v2.9 | **CE 精排 query 改用 rw[0] + 配额方案C 上线**：① CE 精排 query 从原 query 改为 rw[0]（有 rw 时；无 rw 用原 query，kw-only plain 路径不受影响）——标准化改写句压制表格碎片 chunk 的 CE 虚高分（Q_S15 gold prior=1.0 但 CE 长度惩罚下 rank 14，碎片 len≈14 CE 0.731 虚高；改用 rw[0] 后 rank 2）；② 配额从均分改为方案C：每 SubQ 最低保护 5（多 SubQ 时 SubQ 总预算 30）+ 剩余额度按 retrieval_prior 全局分配 + SubQuery≥2 池上限 50→60。2×2 因子 A/B（eval_ce_query_quota_ab.py，离线重放 180 题全 CE，候选采集一次、四臂纯重放）：rw-CE 全面板 MRR 0.5776→0.5932、rw 面板 0.5070→0.5296（救 5 丢 3，Q_S15/Q_SR08 等历史难题救回）；方案C 净持平（MRR +0.0004，0 救 0 丢 1 升，但 SubQ 配额语义有意义）；两改动叠加零召回 19→17、可回答率 95.56%→95.00%（全量 144/80.0%、部分 27/15.0%）。详见 eval_v2_results.md 三十节 |
 | 2026-08-28 | v2.8.1 | **kw-only 路径修复（方案①）**：hybrid_search.py 路径判定从"rw/sq/kw 全空才走 plain"改为"只看 rw/sq"——kw-only（LLM 判 none 但产出 keywords，或 gate 跳过带术语映射）不再触发 multi-query 机制（RRF 权重组合 0.7/0.15/0.3 与 prior 融合全链路），改走 plain 路径并把 kw 拼入 Original BM25 query 增强召回（_rrf_retrieve/search 新增 keywords 参数；Dense 与 CE 仍只用原 query）。修复 G1 副作用之一：Q_N20（简单事实题被 LLM 产出 kw 切进 multi-query 丢 CE rank 9）。回归（eval_kw_path_fix.py → data/kw_path_fix_report.json，G1 臂 58 道 kw-only 题，修复前值取自 gate_ab_ce_report.json）：MRR 0.7124→0.7205、R@10 94.83%→96.55%，救回 Q_N20（rr=0.111）0 丢失、7 升（Q_E33/Q_C18 0.5→1.0 等）5 降（Q_N01/Q_N02 1.0→0.5 等名次小滑，无失分） |
 | 2026-08-28 | v2.8 | **G1 结构 Gate 上线为生产默认**：query_rewriter.py 各入口（expand_query / get_keywords / get_rewrite_queries / get_sub_queries / get_gate_info / _needs_rewrite）默认参数改为 gate_mode="struct" + struct_force=True——生产（rag_pipeline.py）与全部评测脚本（不显式传 gate_mode）统一走 G1 口径；数值 Gate 保留为 gate_mode="base" 历史基线（eval_gate_ab.py 三臂对照显式传参不受影响）。上线理由：数值阈值（margin 0.03 / top1 0.72）随问题分布漂移、一刀切；结构规则（结构词/术语/长度）数据集无关、泛化性更好。已知副作用（A/B 全 CE 发现的 Q_N20 路径切换 / Q_S15 过度拆分 / Q_D05 强制改写扰动，净持平）保留，随 L2 融合层修复一并处理（Q_N20 于 v2.8.1 修复） |
 | 2026-08-28 | v2.7 | **Gate 结构改写 A/B 三臂实验（生产口径不变）**：query_rewriter.py 新增 `gate_mode` 参数——`base`（现行数值 Gate，默认）/ `struct`（结构 Gate：结构词命中→强制改写，术语→改写，≤6字无术语→跳过，其他→LLM 自判，不使用 top1/top2 数值信号），`struct_force` 对结构命中题注入"禁止 none + 必须拆子查询"强制指令（G1 臂）；缓存键隔离 BASE 裸键 / `query\|g1` / `query\|g2`（G2 复用 BASE 的 LLM 条目省调用），三池注册表与 gate 诊断接口（get_gate_info）按臂隔离。三臂 A/B（eval_gate_ab.py）：快速版 G1 救回 3 题（Q_N20/Q_S03/Q_S14）0 丢失、19 题 rank 改善，G2≈BASE（结构 gate 本身无收益，强制 prompt 是救回主力）；全 CE 决胜 MRR 0.5769→0.5786、R@5 78.9%→76.7%、R@10 90.0%→89.4%，救 2（Q_D20/Q_L07）丢 3（Q_D05/Q_N20/Q_S15）净持平；Q_S03/Q_S14 CE 后两臂均未进 Top10（改写层救不回 CE-hard 题）。**判定不上线，生产保持 BASE 数值 Gate**。详见 eval_v2_results.md 二十九节 |
@@ -170,13 +171,14 @@ data/chunks_split.json  (787 条, avg 374 字)  +  vectordb/  (787 vectors)
 ║    │   Evidence: 1路→0, 2路→δ(0.002), ≥3路→2δ(0.004)                     ║
 ║    │   Retrieval Prior = 0.7×RRF_norm + 0.3×Evidence_norm                ║
 ║    │                                                                     ║
-║    ├── Phase 3: Dynamic Coverage Reservation (≤50)                       ║
-║    │   Original=20(40%) | Rewrite=10(20%) | SubQ均分20(40%)              ║
-║    │   Global Fill 补齐到 50                                             ║
+║    ├── Phase 3: Dynamic Coverage Reservation (方案C)                     ║
+║    │   Original=20 | Rewrite=10 | SubQ: ≥2个→30 (每路最低5)              ║
+║    │   SubQ 剩余按 Prior 分配 → Global Fill 补齐 (池≤50/60)              ║
 ║    │                                                                     ║
 ║    ├── Phase 4: CE Rerank — bge-reranker-v2-m3                           ║
+║    │   Query = rw[0] (无 rw 用原 query)                                  ║
 ║    │   Final = 0.7×CE_norm + 0.3×Retrieval_Prior, λ=0.1                  ║
-║    │   50 → Top K (默认 10)                                              ║
+║    │   50/60 → Top K (默认 10)                                           ║
 ║    │                                                                     ║
 ║    ▼                                                                     ║
 ║  最终 10 条 → ±1 chunk 上下文扩展                                        ║
@@ -856,25 +858,28 @@ Query: "新疆冬小麦和河南冬小麦品种有什么不同？"
   │   Retrieval Prior = 0.7 × RRF_norm + 0.3 × Evidence_norm
   │   → 按 Retrieval Prior 降序排列
   │
-  ├── Phase 3: Dynamic Coverage Reservation (≤50) ───────────
+  ├── Phase 3: Dynamic Coverage Reservation (方案C) ─────────
   │
-  │   ┌──────────┬────────┬──────────────────────────┐
-  │   │ 来源      │  占比   │ 配额                     │
-  │   ├──────────┼────────┼──────────────────────────┤
-  │   │ Original  │  40%   │ 20 = 50×40%             │
-  │   │ Rewrite   │  20%   │ 10 (N个共享)             │
-  │   │ SubQuery  │  40%   │ 20 (M个均分)             │
-  │   │ 候补      │   —    │ Global Fill 补齐到 50    │
-  │   └──────────┴────────┴──────────────────────────┘
+  │   ┌──────────┬────────┬───────────────────────────────┐
+  │   │ 来源      │  占比   │ 配额                          │
+  │   ├──────────┼────────┼───────────────────────────────┤
+  │   │ Original  │  40%   │ 20 (≤50×40%)                 │
+  │   │ Rewrite   │  20%   │ 10 (N个共享)                  │
+  │   │ SubQuery  │  40%   │ ≥2个→30 (每路最低5), 1个→20    │
+  │   │ 候补      │   —    │ Global Fill 补齐到 50/60      │
+  │   └──────────┴────────┴───────────────────────────────┘
   │
-  │   SubQ 均分: 2个→[10,10]  3个→[7,7,6]  4个→[5,5,5,5]
+  │   方案C 配额: Original 固定 20, Rewrite 固定 10
+  │   SubQ: ≥2个→总预算 30 (每路最低 5), 1个→20, 0个→0
+  │   SubQ 最低保护 5 逐路填入 → 剩余额度按 Retrieval Prior 全局分配
   │   优先级: Original → SubQ₁ → SubQ₂ → ... → Rewrite → 候补
-  │   候补: 未入配额的候选按 Retrieval Prior 竞争剩余名额
+  │   候补: 未入配额的候选按 Retrieval Prior 竞争剩余名额 (补齐到 50/60)
+  │   池上限: SubQuery ≥2 个 → 60, 其余 → 50
   │
   ├── Phase 4: CE Rerank + Prior 融合 ──────────────────────
   │
-  │   候选池 ≤50 → CrossEncoder (bge-reranker-v2-m3)
-  │   Query = Original Query (仅用原始查询文本)
+  │   候选池 ≤50/60 → CrossEncoder (bge-reranker-v2-m3)
+  │   Query = rw[0] (标准化改写句; 无 rw 时用原 query)
   │   CE 长度归一化: raw - 0.1×log(len(content))
   │
   │   Final = 0.7 × CE_norm + 0.3 × Retrieval_Prior
@@ -902,11 +907,11 @@ Query: "新疆冬小麦和河南冬小麦品种有什么不同？"
   │
   ├── Phase 2: Evidence Voting + Retrieval Prior 排序
   │
-  ├── Phase 3: Dynamic Coverage → 50
-  │     Original=20, Rewrite=10, SubQ: 2个→[10,10]
-  │     候补补齐剩余 → 50
+  ├── Phase 3: Dynamic Coverage (方案C) → 50/60
+  │     Original=20, Rewrite=10, SubQ: ≥2个→30 (每路最低5)
+  │     SubQ 剩余按 Prior 全局分配 + 候补补齐剩余 → 50/60
   │
-  ├── Phase 4: CE Rerank: 50 → Top 10
+  ├── Phase 4: CE Rerank (query=rw[0]): 50/60 → Top 10
   │
   ▼
 最终 10 条
@@ -921,7 +926,7 @@ Query: "新疆冬小麦和河南冬小麦品种有什么不同？"
 | SubQ Dense | **20** | ≤4 路 |
 | SubQ BM25 | **10** | ≤4 路 |
 | Global Merge | **自然去重** | 无截断, 无人工上限 |
-| CE 候选池 | **≤50** | Dynamic Coverage + Global Fill |
+| CE 候选池 | **≤50/60** | 方案C: SubQuery≥2 → 60, 其余 50 |
 | CE 输出 | **10** | top_k |
 | 最终返回 | **10** | ±1 chunk 上下文扩展 |
 
@@ -941,8 +946,9 @@ v1.19 Evidence Merge:
 v2.0 Union + Dynamic Coverage (当前):
   各路 Dense+BM25→RRF → Union 自然去重 (无截断)
     → Retrieval Prior (70%RRF + 30%Evidence) 排序
-    → Dynamic Coverage: Original 40% + Rewrite 20% + SubQ 40%
-    → Global Fill 补齐 50 → CE Rerank → Top 10
+    → Dynamic Coverage (方案C): Orig=20, RW=10, SubQ≥2→30(每路保5)
+    → SubQ 剩余按 Prior 分配 → Global Fill 补齐 50/60
+    → CE Rerank (query=rw[0]) → Top 10
   Keywords 不再独立检索, 拼入 Original BM25 增强
 ```
 
@@ -958,11 +964,11 @@ v2.0 Union + Dynamic Coverage (当前):
 | w_dense / w_bm25 | **0.7 / 0.3** | RRF 通道权重 |
 | Evidence δ | **0.002** | 2路=δ, ≥3路=2δ |
 | Retrieval Prior | **0.7×RRF + 0.3×Ev** | Phase 2 融合 |
-| CE 候选池 (MAX_POOL) | **50** | Dynamic Coverage 截断 |
-| Coverage 配比 | **40%/20%/40%** | Orig=20, RW=10, SubQ均分20 |
+| CE 候选池 (MAX_POOL) | **50/60** | SubQuery≥2 → 60, 其余 50 |
+| Coverage 配额 (方案C) | **20/10/30** | Orig=20, RW=10, SubQ≥2→30(每路保5) |
 | alpha (CE fusion) | **0.3** | 30% Prior + 70% CE（2026-08-26 起，原 0.2）|
 | lambda_length | **0.1** | CE 长度归一化 |
-| CE Query | **Original Query** | 最终要回答的是原始问题 |
+| CE Query | **rw[0]** | 标准化改写句, 无 rw 用原 query (2026-08-28 起) |
 
 ### CK Matcher — Knowledge-guided Query Understanding（v2.4 新增，v2.5 移除）
 

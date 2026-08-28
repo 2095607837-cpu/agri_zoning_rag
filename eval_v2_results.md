@@ -6,6 +6,7 @@
 
 | 日期 | 变更 |
 |------|------|
+| 2026-08-28 | **CE 精排 query 改用 rw[0] + 配额方案C 上线**（eval_ce_query_quota_ab.py → data/ce_query_quota_ab/；代码改动见 CHUNK_PIPELINE.md 变更日志 v2.9）：2×2 因子设计 {CE query: orig/rw} × {配额: 均分/方案C}，G1 口径 180 题离线重放（候选采集一次 + CE 原始分缓存 12810 对，四臂纯重放零 LLM；冒烟 3/3、生产 8/8 逐位一致，与 v2.8 全 CE 报告交叉验证 122/122）。rw-CE 全面板 MRR 0.5776→0.5926（+0.0150）、R@10 89.4%→90.6%、rw 面板 +0.0226，救 5（Q_S07/Q_S15/Q_S23/Q_SR03/Q_SR06 均历史难题）丢 3（Q_S13/Q_D09/Q_D12）、20 升 20 降；机制：rw 标准化句压制 len≈14 表格碎片 CE 虚高（Q_S15 gold CE_raw=0.999 但 len=756 长度惩罚 → rank 14，改 rw[0] 后 rank 2），丢题为 rw 收窄主题的反向副作用。方案C 净持平（MRR +0.0004，0 救 0 丢 1 升 Q_D13）但"每 SubQ 最低 5 + 剩余按 prior 分配 + SubQ≥2 池上限 60"语义优于均分，照常上线。叠加后（新生产）MRR 0.5932、R@10 90.56%、零召回 19→17；可回答率 95.56%→95.00%（full 138→144、partial 34→27，no 9 题以跨省对比单边召回为主）。详见"三十" |
 | 2026-08-28 | **kw-only 路径修复（方案①）**（eval_kw_path_fix.py → data/kw_path_fix_report.json；代码改动见 CHUNK_PIPELINE.md 变更日志 v2.8.1）：hybrid_search.py 路径判定从"rw/sq/kw 全空才走 plain"改为"只看 rw/sq"——kw-only（LLM 判 none 但产出 keywords，或 gate 跳过带术语映射）不再触发 multi-query 机制（RRF 权重组合与 prior 融合全链路），改走 plain 路径并把 kw 拼入 Original BM25 query（Dense 与 CE 仍只用原 query）。修复二十九节 G1 副作用之一：Q_N20（简单事实题被 LLM 产出 kw 切进 multi-query，丢 CE rank 9）。G1 臂 58 道 kw-only 题回归（修复前值取自 gate_ab_ce_report.json）：MRR 0.7124→0.7205（+0.0081）、R@10 94.83%→96.55%（+1.7pp），救回 Q_N20（rr=0.111）0 丢失、7 升（Q_E33/Q_C18 0.5→1.0、Q_T04/Q_N04 0.25→0.5 等）5 降（Q_N01/Q_N02 1.0→0.5、Q_T20/Q_SR07/Q_T29 名次小滑，均未失分） |
 | 2026-08-28 | **G1 上线为生产默认**（代码改动见 CHUNK_PIPELINE.md 变更日志 v2.8）：query_rewriter.py 默认参数改 gate_mode="struct" + struct_force=True，生产（rag_pipeline.py）与全部评测脚本统一走 G1 口径；数值 Gate 保留为 gate_mode="base" 历史基线。上线理由：结构规则（结构词/术语/长度）数据集无关、泛化性优于数值阈值（margin 0.03/top1 0.72 随问题分布漂移）。三臂 A/B 全 CE 已知副作用保留（Q_N20 路径切换 / Q_S15 过度拆分 / Q_D05 强制改写扰动，净持平：MRR +0.0017、R@5 -2.2pp），随 L2 融合层修复一并处理。详见"二十九" |
 | 2026-08-28 | **Gate 结构改写 A/B 三臂实验**（eval_gate_ab.py → data/gate_ab_report.json + data/gate_ab_ce_report.json；代码改动见 CHUNK_PIPELINE.md 变更日志 v2.7）：BASE（数值 Gate 0.72/0.03）/ G1（结构 Gate + 强制改写 prompt）/ G2（结构 Gate + 原 prompt）三臂，缓存键 query\|base/g1/g2 隔离。快速版（无 CE，union∪回退口径）：BASE 176 可检索（97.8%）→ G1 179（99.4%，救回 Q_N20/Q_S03/Q_S14、0 丢失、19 题 rank 改善）、G2 177（仅救回 Q_N20）——结构 gate 本身无收益，强制 prompt 是救回主力（expand 34→72、有 sq 36→101）。全 CE 决胜（BASE vs G1，α=0.3）：MRR 0.5769→0.5786（+0.0017）、R@5 78.9%→76.7%（-2.2pp）、R@10 90.0%→89.4%（-0.6pp）、hit 249→249、sec_MRR 0.5959→0.5999，救回 2（Q_D20 rr=0.25、Q_L07 rr=0.125——near-miss margin 0.0013 被翻正）丢失 3（Q_D05/Q_N20/Q_S15）；Q_S03/Q_S14 两臂最终 rr=0——改写层把 gold 送进 union（prior 43/32）但 CE-hard 题融合层救不回（与 28.9 Q_SR06 同族）。**判定：G1 不上线，生产保持 BASE 数值 Gate；改写层收益到顶，后续方向 L2 融合层 14 题子分层**。详见"二十九" |
@@ -2013,3 +2014,84 @@ Q_L02（query_rewrite）：gold 在 union 内（Original-BM25kw 通道 rank=20�
 | `data/gate_ab_report.json` | 快速版报告（门控统计 + union 口径 + 逐题差异） |
 | `data/gate_ab_ce_report.json` | 全 CE 报告（MRR/R@K + 逐题差异） |
 | `rewrite_cache.json` | 新增 `query\|g1` / `query\|g2` 条目（若调整强制指令内容需先清除 g1 键） |
+
+---
+
+## 三十、CE 精排 query 改用 rw[0] + 配额方案C 2×2 实验（2026-08-28）
+
+### 30.1 背景与设计
+
+二十九节结论：改写层收益到顶（Q_S03/Q_S14 强制改写后 gold 进 union，但 CE 融合层救不回），修复重点转向 L2 融合层。同时 Q_S15 机制观察（gold CE_raw=0.999、len=756，被长度惩罚 + len≈14 表格碎片 chunk 的虚高 CE 0.731 挤到 rank 14）提示：CE 精排 query 用口语化原问时，碎片 chunk 与问句的字面重叠会产生虚高分。
+
+本实验 2×2 因子设计（eval_ce_query_quota_ab.py），候选采集一次 + CE 原始分缓存一次，四臂纯离线重放（融合公式逐位复刻）：
+
+| 因子 | 臂 A（旧生产） | 臂 B（新） |
+|---|---|---|
+| CE query | orig（原 query） | rw（rw[0]；无 rw 用原 query） |
+| Phase 3 配额 | even（Orig=20 / RW=10 / SubQ 均分 20，池上限 50） | planC（方案C：每 SubQ 最低 5 + SubQ 总预算 30（≥2 个）或 20（1 个）+ 剩余按 retrieval_prior 全局分配 + SubQ≥2 池上限 60） |
+
+方法保证：G1 口径 180 题（122 multi-query + 58 kw-only plain），Phase 0 改写池预热 0 次 LLM（rewrite_cache 全命中）；冒烟 3/3、生产代码 8/8 逐位一致；与 v2.8 gate_ab_ce_report.json 交叉验证 122/122 multi-query 题完全一致（15 道 kw-only 差异全部归因 v2.8.1 路径修复）。
+
+### 30.2 四臂结果（180 题全量）
+
+| 臂 | MRR | R@5 | R@10 | hit | sec_MRR | sec_R@10 |
+|---|---:|---:|---:|---:|---:|---:|
+| even + orig（旧生产） | 0.5776 | 75.6% | 89.4% | 249 | 0.5925 | 90.6% |
+| even + rw | 0.5926 | 76.7% | 90.6% | 240 | 0.6072 | 91.1% |
+| planC + orig | 0.5780 | 75.6% | 89.4% | 249 | 0.5930 | 90.6% |
+| **planC + rw（新生产）** | **0.5932** | **77.2%** | **90.6%** | 241 | 0.6078 | 91.1% |
+
+- rw 面板（120 道有 rw 的题）：even+orig 0.5070 → even+rw 0.5296（+0.0226）→ planC+rw 0.5305
+- 配额面板（76 道 n_sq>0 且候选数>池上限、配额真实激活的题）：planC vs even +0.0011（orig 臂）/ +0.0014（rw 臂）
+
+### 30.3 rw-CE 效应（救 5 丢 3、20 升 20 降）
+
+**救回 5**（全部为历史反复出现的 hard case）：Q_S15（rr 0→0.5，见 30.6 可回答性同步 no→full）、Q_SR03（0→0.3333）、Q_S07（0→0.1）、Q_S23（0→0.1）、Q_SR06（0→0.125）
+**丢失 3**：Q_S13（0.2→0）、Q_D09（0.1667→0）、Q_D12（0.1→0）
+**改善 20 / 变差 20**（even 臂口径）：改善代表 Q_L07 0.125→1.0、Q_L08 0.1111→1.0、Q_L01 0.1429→1.0；变差代表 Q_S20 1.0→0.25、Q_S24 1.0→0.3333、Q_D19 1.0→0.3333
+
+机制（Q_S15 解剖）：gold chunk prior=1.0、CE_raw=0.999、len=756 → CE 长度归一化后仅 0.663；len≈14 的表格碎片 chunk 在"原 query"下 CE 0.731（字面重叠虚高）→ gold 被挤到 rank 14。改用 rw[0]（标准化改写句、术语归一）后碎片 CE 被压制、gold rank 2。丢失 3 题机制相反：rw 把 CE 关注面收窄到 rw 主题，同主题 chunk 集体抬高，minmax 竞争中 gold 被挤出 Top10。
+
+### 30.4 方案C 配额效应
+
+0 救 0 丢、1 升（Q_D13：even 0.25→planC 0.3333，orig 臂；rw 臂 0.1429→0.25）、0 降，全面板 MRR +0.0004。效果甚微的原因：配额仅在候选数>池上限时激活，gold 极少恰好落在溢出区。但"每 SubQ 最低保护 5 + 剩余按 prior 全局分配"在子查询质量参差时不会把名额浪费在弱子查询上，语义优于一刀切均分；且 SubQ≥2 池上限 60 给多子查询题更大 CE 竞争空间。判定：照常上线。
+
+### 30.5 零召回变化（19 → 17）
+
+新生产（planC+rw）仍零召回 17 题：
+
+Q_C25、Q_D04、Q_D05、Q_D09、Q_D10、Q_D12、Q_D29、Q_L02、Q_L11、Q_N11、Q_S03、Q_S05、Q_S13、Q_S14、Q_SR07、Q_SR08、Q_SR11
+
+- 救回 5：Q_S07 / Q_S15 / Q_S23 / Q_SR03 / Q_SR06；新增 3：Q_S13 / Q_D09 / Q_D12（即 30.3 丢失 3 题）
+- 与 29.5 L2 子分层对照：near-miss Q_L07 救回；prior-strong/CE-hard 3 题（Q_SR03/Q_SR06/Q_L07）**全部救回**；CE-strong/prior-weak 2 题中 Q_S23 救回、Q_C25 仍在；双平庸 9 题中 Q_S07 本次救回、Q_D20 已于 G1 救回，余 7 题（Q_D04/Q_D10/Q_L11/Q_N11/Q_S05/Q_SR08/Q_SR11）仍在。剩余 17 题中 L2 子分层题占 8（Q_C25 + 7 双平庸），另有 9 题不在 L2 名单（Q_D05 G1 已知副作用、Q_S03/Q_S14/Q_D29 真语义鸿沟、Q_L02 prior 稀释、Q_SR07、及本次 rw 新丢 Q_S13/Q_D09/Q_D12）——L2 修复方向不变
+
+### 30.6 可回答性评测（LLM 三级判定）
+
+方法：以 golden answer 为锚，LLM（temperature=0, json_mode）判定召回 top10 能否回答原问题——full（完整回答）/ partial（部分回答）/ no（不能回答）；按 (题, top10 签名) 缓存去重，共判定 304 个 distinct top10。
+
+| 臂 | full | partial | 可回答率 (full+partial) |
+|---|---:|---:|---:|
+| even+orig（旧生产） | 138 (76.7%) | 34 (18.9%) | 172 (95.6%) |
+| **planC+rw（新生产）** | **144 (80.0%)** | **27 (15.0%)** | **171 (95.0%)** |
+
+- 逐题变化：7 题 partial→full（Q_D06/Q_D19/Q_D27/Q_L03/Q_L04/Q_SR03/Q_SR13）+ Q_S15 no→full（零召回救回且可完整回答）；2 题 full→partial（Q_D30/Q_S18）、2 题 partial→no（Q_D03/Q_D28）
+- **不可回答 9 题**：Q_C15（只说用 AHP 未给判断矩阵/一致性检验步骤）、Q_D03（未提气科院全国算法与陕西本地化算法的关系）、Q_D09/Q_D10/Q_D28（全国算法或跨省对比缺一边）、Q_N14（缺 <140℃·d 区域信息）、Q_N20（缺 2022 年产量具体数值）、Q_S05（仅重复查询词无实质内容）、Q_SR11（仅标题无内容）
+- **部分回答 27 题**，主因三类：① 跨文档对比只召回单边（Q_D04/Q_D07/Q_D11/Q_D12/Q_D14/Q_D15/Q_D16/Q_D17/Q_D18/Q_D20/Q_D21/Q_D22/Q_D23/Q_D24/Q_D25/Q_D29/Q_D30——17/27 为主因）；② 缺关键阈值/流程细节（Q_C26 缺产量区划逐步订正法、Q_L11 缺 ≥2800℃·d 阈值、Q_S02 缺完整五步流程、Q_S03 缺大部分要素计算法、Q_S14 缺日照趋势、Q_S18 缺产量区划指标、Q_S22 缺隶属度函数构建、Q_T03 缺"较高"等级）；③ 检索内容与问法错位（Q_S23 灾害信息 vs 生育阶段条件、Q_D26 缺霜冻核心指标）
+
+### 30.7 结论与上线决定
+
+1. **CE query 改 rw[0] 上线**：全面板 MRR +0.015（叠加方案C 后 0.5776→0.5932）、rw 面板 +0.0226；救回的 5 题全部是历史反复出现的 hard case（Q_S15 自二十七节起多次 rank 14 症结，Q_SR03/Q_SR06 即 29.5 L2 子分层 prior-strong/CE-hard 类）；代价 3 题丢失属"rw 收窄主题"副作用，可接受。
+2. **方案C 上线**：效果甚微（+0.0004）但语义优于均分，且 SubQ≥2 池上限 60 无副作用。
+3. **可回答性口径**：95.0% 的召回内容可回答（80.0% 完整 + 15.0% 部分）；不可回答 9 题 + 部分回答 27 题的主体是"跨省对比单边召回"，与 L2 融合层 14 题子分层（CE-strong/prior-weak、双平庸）高度重合——L2 修复方向不变。
+4. 生产改动：hybrid_search.py search_multi_query（ce_query=rw[0]）+ _coverage_reserve_and_rerank（方案C 配额）；kw-only plain 路径不受影响。
+
+### 30.8 代码与数据
+
+| 文件 | 说明 |
+|------|------|
+| `eval_ce_query_quota_ab.py` | 2×2 实验脚本（phase0 G1 池预热 0 LLM / phase1 候选采集 / phase2 CE 原始分缓存 / phase3 四臂离线重放 / phase4 指标 / phase5 可回答性判定；`--limit/--smoke/--answerability/--workers`） |
+| `hybrid_search.py` | 生产改动：CE query=rw[0] + 方案C 配额（8/8 逐位校验） |
+| `data/ce_query_quota_ab/report.json` | 四臂指标 + 逐题差异 + 可回答性统计 |
+| `data/ce_query_quota_ab/ce_scores.json` | CE 原始分缓存（12810 对，key=(query_text, chunk_id)） |
+| `data/ce_query_quota_ab/judge_cache.json` | 可回答性判定缓存（310 条目 / 304 distinct top10） |
+| `data/ce_query_quota_ab/candidates/`、`top10/` | 逐题候选与四臂 top10 |
