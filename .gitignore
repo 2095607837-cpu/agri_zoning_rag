@@ -9,3 +9,4 @@ diagnose_*.json
 data/rewrite_cache.json
 *.bak-*
 data/*backup*
+data/*.log
