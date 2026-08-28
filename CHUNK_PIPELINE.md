@@ -161,7 +161,7 @@ data/chunks_split.json  (787 条, avg 374 字)  +  vectordb/  (787 vectors)
 ║    │   └────────────────────────────────────────────────────────┘        ║
 ║    │                                                                     ║
 ║    ├── Phase 1: Union 并路采集 + Dict 去重                               ║
-║    │   Original: Dense30 + BM25(keyword增强)20 → 自然去重                ║
+║    │   Original: Dense30 + BM25(原句)20 + BM25(kw)20 → 自然去重          ║
 ║    │   Rewrite:  每路 Dense20+BM2510 → 自然去重                          ║
 ║    │   SubQuery: 每路 Dense20+BM2510 → 自然去重                          ║
 ║    │   Global Merge — chunk_id 去重, 无截断                              ║
