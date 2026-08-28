@@ -22,7 +22,7 @@ from langgraph.graph import StateGraph, END
 from hybrid_search import HybridSearcher
 from judge import judge
 from generator import generate, generate_rejection
-from query_rewriter import expand_query
+from query_rewriter import expand_query, get_keywords, get_rewrite_queries, get_sub_queries
 
 
 # ── State 定义 ───────────────────────────────────────
@@ -96,13 +96,17 @@ class RAGPipeline:
 
         if self.enable_rewrite:
             search_queries = expand_query(query, "all", top1_sim=top1_sim, top2_sim=top2_sim)
-            extra_queries = [sq for sq in search_queries if sq != query]
+            rw_queries = get_rewrite_queries(query)
+            sq_queries = get_sub_queries(query)
+            keywords = get_keywords(query)
         else:
             search_queries = [query]
-            extra_queries = None
+            rw_queries, sq_queries, keywords = [], [], []
 
         judge_results, merged = self._searcher.search_multi_query(
-            query, top_k=self.top_k, expand_context=True, extra_queries=extra_queries,
+            query, top_k=self.top_k, expand_context=True,
+            rewrite_queries=rw_queries, sub_queries=sq_queries,
+            keyword_queries=keywords,
         )
         return {
             "search_queries": search_queries,
