@@ -267,20 +267,43 @@ Q: 新疆冬小麦越冬期长度？
 ])
 
 
-def _needs_rewrite(query: str, top1_sim: float = 0.0, top2_sim: float = 0.0) -> bool:
-    """多信号门控：判断是否需要 LLM 改写。
+# ── 结构 Gate（G1/G2 A/B 臂）──────────────────────
+# 结构词表：多对象/枚举/对比/规律类。排除"比较"——程度副词（比较高/比较适合）会大面积误伤。
+_STRUCT_FORCE_WORDS = ("哪些", "各种", "各", "分别", "每种", "异同", "对比",
+                       "总体规律", "规律", "区别", "差异")
 
-    信号优先级（任一命中 → 触发改写）：
-      1. 已知口语词命中 → 直接触发（确定性最强）
-      2. 检索器不确定（top1-top2 margin < 0.03）→ 触发
-      3. top1 自身很低（< 0.72）→ 触发
 
-    同时满足以下所有条件才跳过 LLM：
-      - query > 12 字
-      - 口语词未命中
-      - margin ≥ 0.03（检索器确定）
-      - top1_sim ≥ 0.72（检索质量够好）
+def _has_complex_structure(query: str) -> bool:
+    """结构判定：命中结构词，或含 ≥2 个问号（多问题多条件）。"""
+    if any(w in query for w in _STRUCT_FORCE_WORDS):
+        return True
+    if query.count("？") + query.count("?") >= 2:
+        return True
+    return False
+
+
+def _needs_rewrite(query: str, top1_sim: float = 0.0, top2_sim: float = 0.0,
+                   gate_mode: str = "base") -> bool:
+    """改写门控。
+
+    gate_mode="base":   数值 Gate（现行生产）——口语词 / 检索不确定性信号。
+    gate_mode="struct": 结构 Gate（G1/G2 A/B 臂）——规则优先级：结构 → 术语 → 长度 → 默认触发，
+                        不使用 top1/top2 数值信号。
     """
+    if gate_mode == "struct":
+        # 1. 复杂结构 → 强制改写
+        if _has_complex_structure(query):
+            return True
+        # 2. 已知口语词 → 改写（术语映射检查优先于长度）
+        if _apply_terminology_map(query):
+            return True
+        # 3. ≤6 字且无术语映射 → 跳过
+        if len(query) <= 6:
+            return False
+        # 4. 其他 → LLM 自判
+        return True
+
+    # base: 现行数值 Gate
     if len(query) <= 6:
         return False
 
@@ -300,13 +323,31 @@ def _needs_rewrite(query: str, top1_sim: float = 0.0, top2_sim: float = 0.0) -> 
     return False
 
 
-def _llm_rewrite(query: str) -> dict:
-    """一次 LLM 调用完成改写。"""
+_STRUCT_FORCE_INSTRUCTION = """## 强制改写指令（本问题命中结构规则，最高优先级，覆盖 Step 1 的 none 判定）
+
+本问题为多对象/枚举/对比/规律类复杂结构问题，完整答案分散在多个 chunk 中：
+- **禁止输出 rewrite_type=none**
+- **必须产出 sub_queries**（≥2 条），每条独立可检索，覆盖问题的每个对象/条件/维度
+- 多对象对比/异同类 → rewrite_type=expand；单对象枚举/规律类 → rewrite_type=normalize（sub_queries 仍必须拆分）
+- 拆分时保留地区、作物、限定条件（数值/时间/等级），禁止丢失信息、禁止扩大范围
+
+"""
+
+
+def _llm_rewrite(query: str, struct_force: bool = False) -> dict:
+    """一次 LLM 调用完成改写。struct_force=True 时注入强制改写指令（G1 臂）。"""
     prompt = REWRITE_PROMPT.format(
         query=query,
         term_map_snippet=_build_term_map_prompt_snippet(),
     )
     prompt_str = prompt.to_string() if hasattr(prompt, 'to_string') else str(prompt)
+    if struct_force:
+        marker = "用户问题："
+        idx = prompt_str.rfind(marker)
+        if idx >= 0:
+            prompt_str = prompt_str[:idx] + _STRUCT_FORCE_INSTRUCTION + prompt_str[idx:]
+        else:
+            prompt_str = prompt_str + _STRUCT_FORCE_INSTRUCTION
     try:
         resp = call_llm(
             [{"role": "user", "content": prompt_str}],
@@ -395,26 +436,57 @@ def precompute_rewrites(queries: list[str], mode: str = "all"):
     print(f"[rewriter] 已缓存 {len(_cache)} 条改写结果 → {CACHE_FILE}")
 
 
-def expand_query(query: str, mode: str = "all", top1_sim: float = 0.0, top2_sim: float = 0.0) -> list[str]:
+def _cache_key(query: str, gate_mode: str, struct_force: bool) -> str:
+    """缓存键隔离：BASE 复用裸键（= 现行缓存），G1/G2 各自独立。"""
+    if gate_mode == "base":
+        return query
+    return f"{query}|g1" if struct_force else f"{query}|g2"
+
+
+def _is_llm_entry(entry) -> bool:
+    """条目是否为 LLM 产物（而非 gate 跳过）。gate 跳过条目带 gate_skipped=True；
+    旧格式跳过条目以 confidence=1.0 且无 flag 表示。"""
+    if not entry:
+        return False
+    if entry.get("gate_skipped"):
+        return False
+    if "gate_skipped" not in entry and entry.get("confidence") == 1.0:
+        return False
+    return True
+
+
+def expand_query(query: str, mode: str = "all", top1_sim: float = 0.0, top2_sim: float = 0.0,
+                 gate_mode: str = "base", struct_force: bool = False) -> list[str]:
     """
     扩展查询，返回扩展后的查询列表供多路检索使用。
     mode: "keywords" | "multi_view" | "all"
     top1_sim: 原始 query 检索 top-1 相似度
-    top2_sim: 原始 query 检索 top-2 相似度（用于 margin 门控）
+    top2_sim: 原始 query 检索 top-2 相似度（base 数值 Gate 的 margin 信号）
+    gate_mode: "base"（现行数值 Gate，默认）| "struct"（结构 Gate，G1/G2 A/B 臂）
+    struct_force: struct 模式下对结构命中题注入强制改写指令（G1 臂）
     """
     q = query.strip()
-    cache_key = q
+    cache_key = _cache_key(q, gate_mode, struct_force)
+    struct_hit = _has_complex_structure(q) if gate_mode == "struct" else False
+    called_llm = False
+    reused_base = False
     if cache_key in _cache:
         _cache.move_to_end(cache_key)
         entry = _cache[cache_key]
-    elif q + "|base" in _cache:
+    elif gate_mode == "struct" and not struct_force and _is_llm_entry(_cache.get(q)):
+        # G2 臂复用 BASE 臂 LLM 结果：同 prompt 同 query，仅 gate 触发判定不同。
+        # BASE 已调 LLM ⟹ query > 6 字 ⟹ struct 必触发，复用安全。
+        entry = _cache[q]
+        _cache.move_to_end(q)
+        reused_base = True
+    elif gate_mode == "base" and q + "|base" in _cache:
         # BASE 口径旧缓存（CK 于 2026-08-25 从改写层移除），复用避免重跑 LLM
         entry = _cache[q + "|base"]
         _cache[cache_key] = entry
         _cache.move_to_end(cache_key)
         if _AUTO_SAVE:
             _save_cache()
-    elif not _needs_rewrite(q, top1_sim, top2_sim):
+    elif not _needs_rewrite(q, top1_sim, top2_sim, gate_mode=gate_mode):
         # gate 不触发 LLM 改写时，确定性术语映射仍可能有产出。
         # gate_skipped=True 标记 LLM 未调用（旧缓存条目以 confidence=1.0 表示，
         # 与 LLM 自评置信语义混用曾误导诊断——见 eval_v2_results.md 二十八 28.9）
@@ -426,13 +498,24 @@ def expand_query(query: str, mode: str = "all", top1_sim: float = 0.0, top2_sim:
         if _AUTO_SAVE:
             _save_cache()
     else:
-        entry = _llm_rewrite(q)
+        called_llm = True
+        entry = _llm_rewrite(q, struct_force=struct_force and struct_hit)
         _cache[cache_key] = entry
         _cache.move_to_end(cache_key)
         if _AUTO_SAVE:
             _save_cache()
         while len(_cache) > CACHE_MAX:
             _cache.popitem(last=False)
+
+    _gate_info_registry[cache_key] = {
+        "gate_mode": gate_mode,
+        "struct_force": struct_force,
+        "struct_hit": struct_hit,
+        "called_llm": called_llm,
+        "reused_base": reused_base,
+        "llm_entry": _is_llm_entry(entry),
+        "rewrite_type": entry.get("rewrite_type"),
+    }
 
     queries = [query]
 
@@ -477,10 +560,10 @@ def expand_query(query: str, mode: str = "all", top1_sim: float = 0.0, top2_sim:
     MAX_SUBQUERY = 4      # hard limit
     sq_pool = sq_pool[:MAX_SUBQUERY]
 
-    # ── 注册各类型查询供 eval 分路传递 ──
-    _kw_registry[q] = list(kw_pool)
-    _rw_registry[q] = list(rw_pool)
-    _sq_registry[q] = list(sq_pool)
+    # ── 注册各类型查询供 eval 分路传递（按臂隔离，避免三臂并行互相覆盖）──
+    _kw_registry[cache_key] = list(kw_pool)
+    _rw_registry[cache_key] = list(rw_pool)
+    _sq_registry[cache_key] = list(sq_pool)
 
     # ── 合并输出：Rewrite Query → SubQuery（Keyword 不在此处，走 BM25-only）──
     extra = list(rw_pool)
@@ -497,21 +580,27 @@ def expand_query(query: str, mode: str = "all", top1_sim: float = 0.0, top2_sim:
 _kw_registry: dict[str, list[str]] = {}
 _rw_registry: dict[str, list[str]] = {}
 _sq_registry: dict[str, list[str]] = {}
+_gate_info_registry: dict[str, dict] = {}
 
 
-def get_keywords(query: str) -> list[str]:
-    """返回最近一次 expand_query 为该 query 提取的关键词列表。"""
-    return _kw_registry.get(query.strip(), [])
+def get_keywords(query: str, gate_mode: str = "base", struct_force: bool = False) -> list[str]:
+    """返回最近一次 expand_query 为该 query（按臂）提取的关键词列表。"""
+    return _kw_registry.get(_cache_key(query.strip(), gate_mode, struct_force), [])
 
 
-def get_rewrite_queries(query: str) -> list[str]:
-    """返回最近一次 expand_query 为该 query 生成的 rewrite queries（完整句子改写）。"""
-    return _rw_registry.get(query.strip(), [])
+def get_rewrite_queries(query: str, gate_mode: str = "base", struct_force: bool = False) -> list[str]:
+    """返回最近一次 expand_query 为该 query（按臂）生成的 rewrite queries（完整句子改写）。"""
+    return _rw_registry.get(_cache_key(query.strip(), gate_mode, struct_force), [])
 
 
-def get_sub_queries(query: str) -> list[str]:
-    """返回最近一次 expand_query 为该 query 生成的 sub queries（子问题拆分）。"""
-    return _sq_registry.get(query.strip(), [])
+def get_sub_queries(query: str, gate_mode: str = "base", struct_force: bool = False) -> list[str]:
+    """返回最近一次 expand_query 为该 query（按臂）生成的 sub queries（子问题拆分）。"""
+    return _sq_registry.get(_cache_key(query.strip(), gate_mode, struct_force), [])
+
+
+def get_gate_info(query: str, gate_mode: str = "base", struct_force: bool = False) -> dict:
+    """返回最近一次 expand_query 为该 query（按臂）记录的 gate 诊断信息。"""
+    return _gate_info_registry.get(_cache_key(query.strip(), gate_mode, struct_force), {})
 
 
 # 模块加载时恢复磁盘缓存（与文档承诺一致：评测问题集改写结果下次直接加载）

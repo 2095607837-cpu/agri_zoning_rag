@@ -2,7 +2,7 @@
 
 > 完整记录从原始文档到检索结果的全链路 chunk 处理逻辑
 >
-> **最后更新**: 2026-08-26 (v2.6：CE α=0.3 + 术语强制改写 + gate_skipped 缓存标记)
+> **最后更新**: 2026-08-28 (v2.7：Gate 结构改写 A/B 三臂实验——结构 Gate + 强制改写 prompt 离线评估，**生产口径不变**)
 
 ---
 
@@ -10,6 +10,7 @@
 
 | 日期 | 版本 | 变更 |
 |------|------|------|
+| 2026-08-28 | v2.7 | **Gate 结构改写 A/B 三臂实验（生产口径不变）**：query_rewriter.py 新增 `gate_mode` 参数——`base`（现行数值 Gate，默认）/ `struct`（结构 Gate：结构词命中→强制改写，术语→改写，≤6字无术语→跳过，其他→LLM 自判，不使用 top1/top2 数值信号），`struct_force` 对结构命中题注入"禁止 none + 必须拆子查询"强制指令（G1 臂）；缓存键隔离 BASE 裸键 / `query\|g1` / `query\|g2`（G2 复用 BASE 的 LLM 条目省调用），三池注册表与 gate 诊断接口（get_gate_info）按臂隔离。三臂 A/B（eval_gate_ab.py）：快速版 G1 救回 3 题（Q_N20/Q_S03/Q_S14）0 丢失、19 题 rank 改善，G2≈BASE（结构 gate 本身无收益，强制 prompt 是救回主力）；全 CE 决胜 MRR 0.5769→0.5786、R@5 78.9%→76.7%、R@10 90.0%→89.4%，救 2（Q_D20/Q_L07）丢 3（Q_D05/Q_N20/Q_S15）净持平；Q_S03/Q_S14 CE 后两臂均未进 Top10（改写层救不回 CE-hard 题）。**判定不上线，生产保持 BASE 数值 Gate**。详见 eval_v2_results.md 二十九节 |
 | 2026-08-26 | v2.6 | **CE 融合 α 0.2→0.3 + 术语强制改写 + gate_skipped 缓存标记**：① 生产默认 alpha 0.2→0.3（minmax 归一化不变；依据 eval_v2_results.md 二十七 α 扫描：α=0.3 唯一零搅黄正收益点，R@10 87.2%→89.4%）；② terminology_mapping.json 新增"生产潜力_层次"类（光合/光温/气候生产潜力全称+缩写），`_load_term_map` 放开 identity 跳过——identity 进扁平表 `_term_map` 做改写 gate 信号 1 门控与 BM25 关键词，不进 prompt 分类表 `_term_categories`；REWRITE_PROMPT 新增定义/层次类术语查询例外（禁止 none，必须 normalize + 为每个涉及术语生成定义类 sub_queries）；③ gate 跳过 LLM 时的缓存条目由硬编码 `confidence: 1.0` 改为 `gate_skipped: true`，与 LLM 自评置信（0.0~1.0）语义分离（rewrite_cache.json 为 gitignore 本地文件，旧条目需迁移） |
 | 2026-08-25 | v2.5 | **CK 应用层移除 + Phase 3 拆分 max_pool 参数化**：① 移除 query_rewriter.py 中 REWRITE_PROMPT 的 Knowledge Context 段、expand_query 的 use_ck/knowledge_context 参数与 ck_matcher 调用，改写缓存键统一为纯 query——改写/检索/召回统一为 BASE 口径（2026-08-13 CK A/B 结论：CK 无正向收益）；ck_matcher.py 与 CK 数据保留，本文档 CK 章节保留作历史记录；② hybrid_search.py 拆分 `_collect_candidates`（Phase 1+2：Union 采集 + Evidence + Retrieval Prior）/ `_coverage_reserve_and_rerank`（Phase 3+4：动态配额 + Global Fill + CE 融合），新增 max_pool 参数（默认 50），支持一次采集解析式重放不同池大小 |
 | 2026-08-13 | v2.4 | **CK-guided Query Understanding**：新增 ck_matcher.py，CK 只服务 Query→Rewrite 环节（不参与检索）。Dense 检索 CK 匹配文本（user_expressions + core_concept + semantic_summary），Top-3 精炼为 Knowledge Context（概念/术语/方法/摘要，~150-300 token）注入 Rewrite Prompt，指导 keywords/rewrite_queries 生成。检索管线（Dense/BM25/RRF/CE）零改动。expand_query 新增 use_ck 开关（默认开，A/B 可关）。757/791 CK 参与匹配（34 条匹配文本为空跳过） |
@@ -134,12 +135,14 @@ data/chunks_split.json  (787 条, avg 374 字)  +  vectordb/  (787 vectors)
 ║                                                                         ║
 ║  Query: "新疆冬小麦和河南冬小麦品种有什么不同？"                         ║
 ║    │                                                                     ║
-║    ├── [改写 gate] _needs_rewrite 三信号门控（v2.6）             ║
+║    ├── [改写 gate] _needs_rewrite 数值门控（v2.6）             ║
 ║    │   ① 术语映射命中 → 强制改写（确定性最强）                   ║
 ║    │   ② margin < 0.03（检索器不确定）→ 触发                     ║
 ║    │   ③ top1_sim < 0.72（检索质量不足）→ 触发                   ║
 ║    │   query ≤ 6 字直接跳过；gate 跳过仍产出术语映射 keywords    ║
 ║    │   （缓存条目标记 gate_skipped，与 LLM 置信语义分离）        ║
+║    │   v2.7: 可选 gate_mode="struct" 结构 Gate（A/B 实验，产    ║
+║    │   结构词→强制 / 术语→改写 / ≤6字→跳过 / 其他→LLM 自判）            ║
 ║    │                                                                     ║
 ║    ├── [改写] expand_query → 三池产出                                    ║
 ║    │   ┌─ Keyword 池 (词/短语, ≤6, hard 6) ───────────────────┐          ║
@@ -1014,18 +1017,30 @@ Hybrid Retrieval（Dense/BM25/RRF/CE 完全不变）
 
 CK 版 keywords 精确命中 gold chunk 的概念（变化趋势 + 线性拟合倾向率），BASE 版只有泛化词。术语映射表已覆盖的场景（如"积温"）两版一致——CK 弥补的是映射表盲区。
 
-### 改写触发逻辑（v2.6 更新）
+### 改写触发逻辑（v2.7 更新）
 
 ```
 query → search(top_k=2) → top1_sim, top2_sim
-  → expand_query(mode="all", top1_sim, top2_sim)
-    → gate (_needs_rewrite 三信号门控，任一命中触发 LLM 改写):
+  → expand_query(mode="all", top1_sim, top2_sim, gate_mode="base")
+    → gate (_needs_rewrite 数值门控，任一命中触发 LLM 改写):
         信号1: 术语映射命中 → 强制改写（确定性最强，含 identity 定义类术语）
         信号2: margin < 0.03（检索器不确定）
         信号3: top1_sim < 0.72（检索质量不足）
       query ≤ 6 字 → 直接跳过 LLM
     → gate 跳过 → 确定性术语映射仍产出 keywords，缓存条目 gate_skipped: true
     → gate 触发 → LLM 改写（三池产出，缓存含 confidence 0.0~1.0）
+
+  v2.7 可选 gate_mode="struct"（结构 Gate，A/B 实验臂，生产默认 base 不变）:
+    规则优先级: ① 结构词命中（哪些/各种/各/分别/每种/异同/对比/总体规律/规律/区别/差异，
+               排除"比较"；或 ≥2 个问号）→ 强制改写
+               ② 术语映射命中 → 改写（先于长度判断）
+               ③ ≤6 字且无术语 → 跳过
+               ④ 其他 → LLM 自判
+    不使用 top1/top2 数值信号。
+    struct_force=True（G1 臂）对结构命中题在 prompt 注入强制指令：
+    禁止 none + 必须产 sub_queries ≥2（多对象对比→expand；单对象枚举→normalize+拆分）。
+    缓存键: base→裸键；struct→ query|g1（force）/ query|g2（G2 复用 BASE 的 LLM 条目）。
+    2026-08-28 A/B 结论: 不上线（详见 eval_v2_results.md 二十九节）。
 ```
 
 ### expand_query 三池输出

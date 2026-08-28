@@ -1,0 +1,4420 @@
+{
+  "generated": "2026-08-28 00:48:23",
+  "mode": "ce",
+  "arms": [
+    "BASE",
+    "G1"
+  ],
+  "gate_stats": {
+    "BASE": {
+      "n": 180,
+      "struct_hit": 0,
+      "llm_product": 159,
+      "fresh_llm_calls": 0,
+      "reused_base": 0,
+      "gate_skipped": 21,
+      "rewrite_type": {
+        "none": 118,
+        "normalize": 28,
+        "expand": 34
+      },
+      "n_rw": 61,
+      "n_sq": 36,
+      "n_kw": 159,
+      "rw_total": 62,
+      "sq_total": 99,
+      "kw_total": 883
+    },
+    "G1": {
+      "n": 180,
+      "struct_hit": 97,
+      "llm_product": 180,
+      "fresh_llm_calls": 0,
+      "reused_base": 0,
+      "gate_skipped": 0,
+      "rewrite_type": {
+        "normalize": 50,
+        "none": 58,
+        "expand": 72
+      },
+      "n_rw": 120,
+      "n_sq": 101,
+      "n_kw": 180,
+      "rw_total": 120,
+      "sq_total": 251,
+      "kw_total": 985
+    }
+  },
+  "summary": {
+    "BASE": {
+      "n": 180,
+      "mrr": 0.5769,
+      "recall_5": 0.7888888888888889,
+      "recall_10": 0.9,
+      "hit_count": 249,
+      "sec_mrr": 0.5959,
+      "sec_recall_10": 0.9055555555555556
+    },
+    "G1": {
+      "n": 180,
+      "mrr": 0.5786,
+      "recall_5": 0.7666666666666667,
+      "recall_10": 0.8944444444444445,
+      "hit_count": 249,
+      "sec_mrr": 0.5999,
+      "sec_recall_10": 0.9111111111111111
+    }
+  },
+  "diffs": {
+    "BASE_vs_G1": {
+      "rescued": [
+        {
+          "id": "Q_D20",
+          "G1_rr": 0.25,
+          "G1_hit": 1
+        },
+        {
+          "id": "Q_L07",
+          "G1_rr": 0.125,
+          "G1_hit": 1
+        }
+      ],
+      "lost": [
+        {
+          "id": "Q_D05",
+          "BASE_rr": 0.125
+        },
+        {
+          "id": "Q_N20",
+          "BASE_rr": 0.1111
+        },
+        {
+          "id": "Q_S15",
+          "BASE_rr": 0.3333
+        }
+      ]
+    }
+  },
+  "per_question": {
+    "Q_C01": {
+      "BASE": {
+        "id": "Q_C01",
+        "arm": "BASE",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_C01",
+        "arm": "G1",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      }
+    },
+    "Q_C02": {
+      "BASE": {
+        "id": "Q_C02",
+        "arm": "BASE",
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_C02",
+        "arm": "G1",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      }
+    },
+    "Q_C03": {
+      "BASE": {
+        "id": "Q_C03",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_C03",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_C04": {
+      "BASE": {
+        "id": "Q_C04",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_C04",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_C05": {
+      "BASE": {
+        "id": "Q_C05",
+        "arm": "BASE",
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_C05",
+        "arm": "G1",
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      }
+    },
+    "Q_C06": {
+      "BASE": {
+        "id": "Q_C06",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_C06",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_C07": {
+      "BASE": {
+        "id": "Q_C07",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_C07",
+        "arm": "G1",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      }
+    },
+    "Q_C08": {
+      "BASE": {
+        "id": "Q_C08",
+        "arm": "BASE",
+        "rr": 0.1,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.1,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_C08",
+        "arm": "G1",
+        "rr": 0.1111111111111111,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.1111111111111111,
+        "sec_recall_10": true
+      }
+    },
+    "Q_C09": {
+      "BASE": {
+        "id": "Q_C09",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_C09",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_C10": {
+      "BASE": {
+        "id": "Q_C10",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_C10",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_C11": {
+      "BASE": {
+        "id": "Q_C11",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_C11",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_C12": {
+      "BASE": {
+        "id": "Q_C12",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_C12",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_C13": {
+      "BASE": {
+        "id": "Q_C13",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_C13",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_C14": {
+      "BASE": {
+        "id": "Q_C14",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_C14",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_C15": {
+      "BASE": {
+        "id": "Q_C15",
+        "arm": "BASE",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_C15",
+        "arm": "G1",
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      }
+    },
+    "Q_C16": {
+      "BASE": {
+        "id": "Q_C16",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_C16",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_C17": {
+      "BASE": {
+        "id": "Q_C17",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_C17",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_C18": {
+      "BASE": {
+        "id": "Q_C18",
+        "arm": "BASE",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_C18",
+        "arm": "G1",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_C19": {
+      "BASE": {
+        "id": "Q_C19",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_C19",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_C20": {
+      "BASE": {
+        "id": "Q_C20",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 5,
+        "gold_count": 8,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_C20",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 4,
+        "gold_count": 8,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_C21": {
+      "BASE": {
+        "id": "Q_C21",
+        "arm": "BASE",
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_C21",
+        "arm": "G1",
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      }
+    },
+    "Q_C22": {
+      "BASE": {
+        "id": "Q_C22",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_C22",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_C23": {
+      "BASE": {
+        "id": "Q_C23",
+        "arm": "BASE",
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_C23",
+        "arm": "G1",
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      }
+    },
+    "Q_C24": {
+      "BASE": {
+        "id": "Q_C24",
+        "arm": "BASE",
+        "rr": 0.1,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.1,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_C24",
+        "arm": "G1",
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      }
+    },
+    "Q_C25": {
+      "BASE": {
+        "id": "Q_C25",
+        "arm": "BASE",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "G1": {
+        "id": "Q_C25",
+        "arm": "G1",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      }
+    },
+    "Q_C26": {
+      "BASE": {
+        "id": "Q_C26",
+        "arm": "BASE",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 4,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_C26",
+        "arm": "G1",
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 4,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      }
+    },
+    "Q_D01": {
+      "BASE": {
+        "id": "Q_D01",
+        "arm": "BASE",
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_D01",
+        "arm": "G1",
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      }
+    },
+    "Q_D02": {
+      "BASE": {
+        "id": "Q_D02",
+        "arm": "BASE",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_D02",
+        "arm": "G1",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      }
+    },
+    "Q_D03": {
+      "BASE": {
+        "id": "Q_D03",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_D03",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_D04": {
+      "BASE": {
+        "id": "Q_D04",
+        "arm": "BASE",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "G1": {
+        "id": "Q_D04",
+        "arm": "G1",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      }
+    },
+    "Q_D05": {
+      "BASE": {
+        "id": "Q_D05",
+        "arm": "BASE",
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_D05",
+        "arm": "G1",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      }
+    },
+    "Q_D06": {
+      "G1": {
+        "id": "Q_D06",
+        "arm": "G1",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "BASE": {
+        "id": "Q_D06",
+        "arm": "BASE",
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      }
+    },
+    "Q_D07": {
+      "BASE": {
+        "id": "Q_D07",
+        "arm": "BASE",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_D07",
+        "arm": "G1",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      }
+    },
+    "Q_D09": {
+      "BASE": {
+        "id": "Q_D09",
+        "arm": "BASE",
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 4,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_D09",
+        "arm": "G1",
+        "rr": 0.16666666666666666,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 4,
+        "sec_rr": 0.16666666666666666,
+        "sec_recall_10": true
+      }
+    },
+    "Q_D10": {
+      "BASE": {
+        "id": "Q_D10",
+        "arm": "BASE",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "G1": {
+        "id": "Q_D10",
+        "arm": "G1",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      }
+    },
+    "Q_D11": {
+      "G1": {
+        "id": "Q_D11",
+        "arm": "G1",
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "BASE": {
+        "id": "Q_D11",
+        "arm": "BASE",
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      }
+    },
+    "Q_D12": {
+      "BASE": {
+        "id": "Q_D12",
+        "arm": "BASE",
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 4,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_D12",
+        "arm": "G1",
+        "rr": 0.1,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 4,
+        "sec_rr": 0.1,
+        "sec_recall_10": true
+      }
+    },
+    "Q_D13": {
+      "BASE": {
+        "id": "Q_D13",
+        "arm": "BASE",
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 5,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_D13",
+        "arm": "G1",
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 5,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      }
+    },
+    "Q_D14": {
+      "BASE": {
+        "id": "Q_D14",
+        "arm": "BASE",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 7,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_D14",
+        "arm": "G1",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 7,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      }
+    },
+    "Q_D15": {
+      "BASE": {
+        "id": "Q_D15",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_D15",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_D16": {
+      "BASE": {
+        "id": "Q_D16",
+        "arm": "BASE",
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_D16",
+        "arm": "G1",
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_D17": {
+      "BASE": {
+        "id": "Q_D17",
+        "arm": "BASE",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_D17",
+        "arm": "G1",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      }
+    },
+    "Q_D18": {
+      "BASE": {
+        "id": "Q_D18",
+        "arm": "BASE",
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_D18",
+        "arm": "G1",
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      }
+    },
+    "Q_D19": {
+      "BASE": {
+        "id": "Q_D19",
+        "arm": "BASE",
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_D19",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_D20": {
+      "G1": {
+        "id": "Q_D20",
+        "arm": "G1",
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "BASE": {
+        "id": "Q_D20",
+        "arm": "BASE",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 3,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      }
+    },
+    "Q_D21": {
+      "BASE": {
+        "id": "Q_D21",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 4,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_D21",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 4,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_D22": {
+      "BASE": {
+        "id": "Q_D22",
+        "arm": "BASE",
+        "rr": 0.16666666666666666,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.16666666666666666,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_D22",
+        "arm": "G1",
+        "rr": 0.16666666666666666,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.16666666666666666,
+        "sec_recall_10": true
+      }
+    },
+    "Q_D23": {
+      "BASE": {
+        "id": "Q_D23",
+        "arm": "BASE",
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 5,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_D23",
+        "arm": "G1",
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 5,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      }
+    },
+    "Q_D24": {
+      "G1": {
+        "id": "Q_D24",
+        "arm": "G1",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "BASE": {
+        "id": "Q_D24",
+        "arm": "BASE",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      }
+    },
+    "Q_D25": {
+      "BASE": {
+        "id": "Q_D25",
+        "arm": "BASE",
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_D25",
+        "arm": "G1",
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      }
+    },
+    "Q_D26": {
+      "BASE": {
+        "id": "Q_D26",
+        "arm": "BASE",
+        "rr": 0.1,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.1,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_D26",
+        "arm": "G1",
+        "rr": 0.1111111111111111,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.1111111111111111,
+        "sec_recall_10": true
+      }
+    },
+    "Q_D27": {
+      "BASE": {
+        "id": "Q_D27",
+        "arm": "BASE",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_D27",
+        "arm": "G1",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      }
+    },
+    "Q_D28": {
+      "BASE": {
+        "id": "Q_D28",
+        "arm": "BASE",
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_D28",
+        "arm": "G1",
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      }
+    },
+    "Q_D29": {
+      "G1": {
+        "id": "Q_D29",
+        "arm": "G1",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "BASE": {
+        "id": "Q_D29",
+        "arm": "BASE",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      }
+    },
+    "Q_D30": {
+      "BASE": {
+        "id": "Q_D30",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 7,
+        "gold_count": 10,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_D30",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 7,
+        "gold_count": 10,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_D31": {
+      "BASE": {
+        "id": "Q_D31",
+        "arm": "BASE",
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_D31",
+        "arm": "G1",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E01": {
+      "BASE": {
+        "id": "Q_E01",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E01",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E02": {
+      "BASE": {
+        "id": "Q_E02",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E02",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E03": {
+      "BASE": {
+        "id": "Q_E03",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E03",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E04": {
+      "BASE": {
+        "id": "Q_E04",
+        "arm": "BASE",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E04",
+        "arm": "G1",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E05": {
+      "BASE": {
+        "id": "Q_E05",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E05",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E06": {
+      "BASE": {
+        "id": "Q_E06",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E06",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E07": {
+      "BASE": {
+        "id": "Q_E07",
+        "arm": "BASE",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E07",
+        "arm": "G1",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E08": {
+      "BASE": {
+        "id": "Q_E08",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E08",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E09": {
+      "BASE": {
+        "id": "Q_E09",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E09",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E10": {
+      "BASE": {
+        "id": "Q_E10",
+        "arm": "BASE",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E10",
+        "arm": "G1",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E11": {
+      "BASE": {
+        "id": "Q_E11",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E11",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E12": {
+      "BASE": {
+        "id": "Q_E12",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E12",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E13": {
+      "BASE": {
+        "id": "Q_E13",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E13",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E14": {
+      "BASE": {
+        "id": "Q_E14",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E14",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E15": {
+      "BASE": {
+        "id": "Q_E15",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E15",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E16": {
+      "BASE": {
+        "id": "Q_E16",
+        "arm": "BASE",
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E16",
+        "arm": "G1",
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E17": {
+      "BASE": {
+        "id": "Q_E17",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E17",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E18": {
+      "BASE": {
+        "id": "Q_E18",
+        "arm": "BASE",
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E18",
+        "arm": "G1",
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E19": {
+      "BASE": {
+        "id": "Q_E19",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E19",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E20": {
+      "BASE": {
+        "id": "Q_E20",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E20",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E21": {
+      "BASE": {
+        "id": "Q_E21",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E21",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E22": {
+      "BASE": {
+        "id": "Q_E22",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E22",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E23": {
+      "BASE": {
+        "id": "Q_E23",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 7,
+        "gold_count": 11,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E23",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 8,
+        "gold_count": 11,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E24": {
+      "BASE": {
+        "id": "Q_E24",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E24",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E25": {
+      "BASE": {
+        "id": "Q_E25",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E25",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E26": {
+      "BASE": {
+        "id": "Q_E26",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E26",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E27": {
+      "BASE": {
+        "id": "Q_E27",
+        "arm": "BASE",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E27",
+        "arm": "G1",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E28": {
+      "BASE": {
+        "id": "Q_E28",
+        "arm": "BASE",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E28",
+        "arm": "G1",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E29": {
+      "BASE": {
+        "id": "Q_E29",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E29",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E30": {
+      "BASE": {
+        "id": "Q_E30",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 7,
+        "gold_count": 7,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E30",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 7,
+        "gold_count": 7,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E31": {
+      "BASE": {
+        "id": "Q_E31",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E31",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E32": {
+      "BASE": {
+        "id": "Q_E32",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E32",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E33": {
+      "BASE": {
+        "id": "Q_E33",
+        "arm": "BASE",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E33",
+        "arm": "G1",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E34": {
+      "BASE": {
+        "id": "Q_E34",
+        "arm": "BASE",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E34",
+        "arm": "G1",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      }
+    },
+    "Q_E35": {
+      "BASE": {
+        "id": "Q_E35",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_E35",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_L01": {
+      "BASE": {
+        "id": "Q_L01",
+        "arm": "BASE",
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_L01",
+        "arm": "G1",
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      }
+    },
+    "Q_L02": {
+      "BASE": {
+        "id": "Q_L02",
+        "arm": "BASE",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "G1": {
+        "id": "Q_L02",
+        "arm": "G1",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      }
+    },
+    "Q_L03": {
+      "BASE": {
+        "id": "Q_L03",
+        "arm": "BASE",
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_L03",
+        "arm": "G1",
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      }
+    },
+    "Q_L04": {
+      "BASE": {
+        "id": "Q_L04",
+        "arm": "BASE",
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_L04",
+        "arm": "G1",
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      }
+    },
+    "Q_L06": {
+      "BASE": {
+        "id": "Q_L06",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_L06",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_L07": {
+      "BASE": {
+        "id": "Q_L07",
+        "arm": "BASE",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "G1": {
+        "id": "Q_L07",
+        "arm": "G1",
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      }
+    },
+    "Q_L08": {
+      "BASE": {
+        "id": "Q_L08",
+        "arm": "BASE",
+        "rr": 0.1,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.1,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_L08",
+        "arm": "G1",
+        "rr": 0.1111111111111111,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.1111111111111111,
+        "sec_recall_10": true
+      }
+    },
+    "Q_L09": {
+      "BASE": {
+        "id": "Q_L09",
+        "arm": "BASE",
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_L09",
+        "arm": "G1",
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      }
+    },
+    "Q_L10": {
+      "BASE": {
+        "id": "Q_L10",
+        "arm": "BASE",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_L10",
+        "arm": "G1",
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      }
+    },
+    "Q_L11": {
+      "BASE": {
+        "id": "Q_L11",
+        "arm": "BASE",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "G1": {
+        "id": "Q_L11",
+        "arm": "G1",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      }
+    },
+    "Q_L12": {
+      "BASE": {
+        "id": "Q_L12",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_L12",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_N01": {
+      "BASE": {
+        "id": "Q_N01",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_N01",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_N02": {
+      "BASE": {
+        "id": "Q_N02",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_N02",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_N03": {
+      "BASE": {
+        "id": "Q_N03",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_N03",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_N04": {
+      "BASE": {
+        "id": "Q_N04",
+        "arm": "BASE",
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_N04",
+        "arm": "G1",
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      }
+    },
+    "Q_N05": {
+      "BASE": {
+        "id": "Q_N05",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_N05",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_N06": {
+      "BASE": {
+        "id": "Q_N06",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_N06",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_N07": {
+      "BASE": {
+        "id": "Q_N07",
+        "arm": "BASE",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_N07",
+        "arm": "G1",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_N08": {
+      "BASE": {
+        "id": "Q_N08",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_N08",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_N09": {
+      "BASE": {
+        "id": "Q_N09",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_N09",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_N10": {
+      "BASE": {
+        "id": "Q_N10",
+        "arm": "BASE",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_N10",
+        "arm": "G1",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      }
+    },
+    "Q_N11": {
+      "BASE": {
+        "id": "Q_N11",
+        "arm": "BASE",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "G1": {
+        "id": "Q_N11",
+        "arm": "G1",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      }
+    },
+    "Q_N12": {
+      "BASE": {
+        "id": "Q_N12",
+        "arm": "BASE",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_N12",
+        "arm": "G1",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      }
+    },
+    "Q_N13": {
+      "BASE": {
+        "id": "Q_N13",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_N13",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_N14": {
+      "BASE": {
+        "id": "Q_N14",
+        "arm": "BASE",
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_N14",
+        "arm": "G1",
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      }
+    },
+    "Q_N15": {
+      "BASE": {
+        "id": "Q_N15",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_N15",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_N16": {
+      "BASE": {
+        "id": "Q_N16",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_N16",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_N17": {
+      "BASE": {
+        "id": "Q_N17",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_N17",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_N18": {
+      "BASE": {
+        "id": "Q_N18",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_N18",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_N19": {
+      "BASE": {
+        "id": "Q_N19",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_N19",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_N20": {
+      "BASE": {
+        "id": "Q_N20",
+        "arm": "BASE",
+        "rr": 0.1111111111111111,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_N20",
+        "arm": "G1",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_S01": {
+      "BASE": {
+        "id": "Q_S01",
+        "arm": "BASE",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_S01",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_S02": {
+      "BASE": {
+        "id": "Q_S02",
+        "arm": "BASE",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_S02",
+        "arm": "G1",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      }
+    },
+    "Q_S03": {
+      "BASE": {
+        "id": "Q_S03",
+        "arm": "BASE",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 3,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "G1": {
+        "id": "Q_S03",
+        "arm": "G1",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 3,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      }
+    },
+    "Q_S04": {
+      "BASE": {
+        "id": "Q_S04",
+        "arm": "BASE",
+        "rr": 0.16666666666666666,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.16666666666666666,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_S04",
+        "arm": "G1",
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      }
+    },
+    "Q_S05": {
+      "G1": {
+        "id": "Q_S05",
+        "arm": "G1",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "BASE": {
+        "id": "Q_S05",
+        "arm": "BASE",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      }
+    },
+    "Q_S06": {
+      "BASE": {
+        "id": "Q_S06",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_S06",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_S07": {
+      "BASE": {
+        "id": "Q_S07",
+        "arm": "BASE",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 3,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "G1": {
+        "id": "Q_S07",
+        "arm": "G1",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 3,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      }
+    },
+    "Q_S08": {
+      "BASE": {
+        "id": "Q_S08",
+        "arm": "BASE",
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_S08",
+        "arm": "G1",
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 3,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      }
+    },
+    "Q_S09": {
+      "BASE": {
+        "id": "Q_S09",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_S09",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_S10": {
+      "BASE": {
+        "id": "Q_S10",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 4,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_S10",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 4,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_S11": {
+      "BASE": {
+        "id": "Q_S11",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_S11",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_S13": {
+      "BASE": {
+        "id": "Q_S13",
+        "arm": "BASE",
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_S13",
+        "arm": "G1",
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      }
+    },
+    "Q_S14": {
+      "BASE": {
+        "id": "Q_S14",
+        "arm": "BASE",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "G1": {
+        "id": "Q_S14",
+        "arm": "G1",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      }
+    },
+    "Q_S15": {
+      "BASE": {
+        "id": "Q_S15",
+        "arm": "BASE",
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_S15",
+        "arm": "G1",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 2,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      }
+    },
+    "Q_S16": {
+      "BASE": {
+        "id": "Q_S16",
+        "arm": "BASE",
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_S16",
+        "arm": "G1",
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      }
+    },
+    "Q_S17": {
+      "BASE": {
+        "id": "Q_S17",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_S17",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_S18": {
+      "BASE": {
+        "id": "Q_S18",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_S18",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_S19": {
+      "BASE": {
+        "id": "Q_S19",
+        "arm": "BASE",
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_S19",
+        "arm": "G1",
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      }
+    },
+    "Q_S20": {
+      "BASE": {
+        "id": "Q_S20",
+        "arm": "BASE",
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_S20",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_S21": {
+      "BASE": {
+        "id": "Q_S21",
+        "arm": "BASE",
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 4,
+        "gold_count": 5,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_S21",
+        "arm": "G1",
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 4,
+        "gold_count": 5,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      }
+    },
+    "Q_S22": {
+      "BASE": {
+        "id": "Q_S22",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_S22",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_S23": {
+      "BASE": {
+        "id": "Q_S23",
+        "arm": "BASE",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 3,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "G1": {
+        "id": "Q_S23",
+        "arm": "G1",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 3,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      }
+    },
+    "Q_S24": {
+      "BASE": {
+        "id": "Q_S24",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_S24",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 3,
+        "gold_count": 3,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_S25": {
+      "BASE": {
+        "id": "Q_S25",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_S25",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_S26": {
+      "BASE": {
+        "id": "Q_S26",
+        "arm": "BASE",
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_S26",
+        "arm": "G1",
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      }
+    },
+    "Q_SR01": {
+      "BASE": {
+        "id": "Q_SR01",
+        "arm": "BASE",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_SR01",
+        "arm": "G1",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      }
+    },
+    "Q_SR02": {
+      "G1": {
+        "id": "Q_SR02",
+        "arm": "G1",
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "BASE": {
+        "id": "Q_SR02",
+        "arm": "BASE",
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      }
+    },
+    "Q_SR03": {
+      "BASE": {
+        "id": "Q_SR03",
+        "arm": "BASE",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "G1": {
+        "id": "Q_SR03",
+        "arm": "G1",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      }
+    },
+    "Q_SR04": {
+      "BASE": {
+        "id": "Q_SR04",
+        "arm": "BASE",
+        "rr": 0.1111111111111111,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.1111111111111111,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_SR04",
+        "arm": "G1",
+        "rr": 0.1111111111111111,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.1111111111111111,
+        "sec_recall_10": true
+      }
+    },
+    "Q_SR05": {
+      "BASE": {
+        "id": "Q_SR05",
+        "arm": "BASE",
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_SR05",
+        "arm": "G1",
+        "rr": 0.2,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 2,
+        "gold_count": 2,
+        "sec_rr": 0.2,
+        "sec_recall_10": true
+      }
+    },
+    "Q_SR06": {
+      "G1": {
+        "id": "Q_SR06",
+        "arm": "G1",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "BASE": {
+        "id": "Q_SR06",
+        "arm": "BASE",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      }
+    },
+    "Q_SR07": {
+      "BASE": {
+        "id": "Q_SR07",
+        "arm": "BASE",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_SR07",
+        "arm": "G1",
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      }
+    },
+    "Q_SR08": {
+      "BASE": {
+        "id": "Q_SR08",
+        "arm": "BASE",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      },
+      "G1": {
+        "id": "Q_SR08",
+        "arm": "G1",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.0,
+        "sec_recall_10": false
+      }
+    },
+    "Q_SR09": {
+      "BASE": {
+        "id": "Q_SR09",
+        "arm": "BASE",
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_SR09",
+        "arm": "G1",
+        "rr": 0.1111111111111111,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 2,
+        "sec_rr": 0.1111111111111111,
+        "sec_recall_10": true
+      }
+    },
+    "Q_SR10": {
+      "BASE": {
+        "id": "Q_SR10",
+        "arm": "BASE",
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_SR10",
+        "arm": "G1",
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      }
+    },
+    "Q_SR11": {
+      "BASE": {
+        "id": "Q_SR11",
+        "arm": "BASE",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.16666666666666666,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_SR11",
+        "arm": "G1",
+        "rr": 0.0,
+        "recall_5": false,
+        "recall_10": false,
+        "hit_count": 0,
+        "gold_count": 1,
+        "sec_rr": 0.16666666666666666,
+        "sec_recall_10": true
+      }
+    },
+    "Q_SR12": {
+      "BASE": {
+        "id": "Q_SR12",
+        "arm": "BASE",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_SR12",
+        "arm": "G1",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      }
+    },
+    "Q_SR13": {
+      "BASE": {
+        "id": "Q_SR13",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_SR13",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_T03": {
+      "BASE": {
+        "id": "Q_T03",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_T03",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_T04": {
+      "BASE": {
+        "id": "Q_T04",
+        "arm": "BASE",
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_T04",
+        "arm": "G1",
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      }
+    },
+    "Q_T08": {
+      "BASE": {
+        "id": "Q_T08",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_T08",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_T09": {
+      "BASE": {
+        "id": "Q_T09",
+        "arm": "BASE",
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_T09",
+        "arm": "G1",
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      }
+    },
+    "Q_T11": {
+      "BASE": {
+        "id": "Q_T11",
+        "arm": "BASE",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_T11",
+        "arm": "G1",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      }
+    },
+    "Q_T12": {
+      "BASE": {
+        "id": "Q_T12",
+        "arm": "BASE",
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_T12",
+        "arm": "G1",
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      }
+    },
+    "Q_T16": {
+      "BASE": {
+        "id": "Q_T16",
+        "arm": "BASE",
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_T16",
+        "arm": "G1",
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      }
+    },
+    "Q_T20": {
+      "BASE": {
+        "id": "Q_T20",
+        "arm": "BASE",
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_T20",
+        "arm": "G1",
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      }
+    },
+    "Q_T21": {
+      "BASE": {
+        "id": "Q_T21",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_T21",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_T22": {
+      "BASE": {
+        "id": "Q_T22",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_T22",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_T23": {
+      "BASE": {
+        "id": "Q_T23",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_T23",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_T24": {
+      "BASE": {
+        "id": "Q_T24",
+        "arm": "BASE",
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_T24",
+        "arm": "G1",
+        "rr": 0.125,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.125,
+        "sec_recall_10": true
+      }
+    },
+    "Q_T25": {
+      "BASE": {
+        "id": "Q_T25",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_T25",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    },
+    "Q_T26": {
+      "BASE": {
+        "id": "Q_T26",
+        "arm": "BASE",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_T26",
+        "arm": "G1",
+        "rr": 0.16666666666666666,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.16666666666666666,
+        "sec_recall_10": true
+      }
+    },
+    "Q_T27": {
+      "BASE": {
+        "id": "Q_T27",
+        "arm": "BASE",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_T27",
+        "arm": "G1",
+        "rr": 0.3333333333333333,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.3333333333333333,
+        "sec_recall_10": true
+      }
+    },
+    "Q_T28": {
+      "BASE": {
+        "id": "Q_T28",
+        "arm": "BASE",
+        "rr": 0.25,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.25,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_T28",
+        "arm": "G1",
+        "rr": 0.14285714285714285,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.14285714285714285,
+        "sec_recall_10": true
+      }
+    },
+    "Q_T29": {
+      "BASE": {
+        "id": "Q_T29",
+        "arm": "BASE",
+        "rr": 0.16666666666666666,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.16666666666666666,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_T29",
+        "arm": "G1",
+        "rr": 0.16666666666666666,
+        "recall_5": false,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.16666666666666666,
+        "sec_recall_10": true
+      }
+    },
+    "Q_T30": {
+      "BASE": {
+        "id": "Q_T30",
+        "arm": "BASE",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_T30",
+        "arm": "G1",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      }
+    },
+    "Q_T31": {
+      "BASE": {
+        "id": "Q_T31",
+        "arm": "BASE",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_T31",
+        "arm": "G1",
+        "rr": 0.5,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 0.5,
+        "sec_recall_10": true
+      }
+    },
+    "Q_T32": {
+      "BASE": {
+        "id": "Q_T32",
+        "arm": "BASE",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      },
+      "G1": {
+        "id": "Q_T32",
+        "arm": "G1",
+        "rr": 1.0,
+        "recall_5": true,
+        "recall_10": true,
+        "hit_count": 1,
+        "gold_count": 1,
+        "sec_rr": 1.0,
+        "sec_recall_10": true
+      }
+    }
+  }
+}

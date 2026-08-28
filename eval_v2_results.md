@@ -1,11 +1,12 @@
 # V2 Golden Set 全配置检索评测报告
 
-生成时间：2026-07-06 | 最后更新：2026-08-26 | 评测集：`golden_set_v2.json` | 199 题（in-domain 179 + OOD 20）
+生成时间：2026-07-06 | 最后更新：2026-08-28 | 评测集：`golden_set_v2.json` | 199 题（in-domain 179 + OOD 20）
 
 ## 变更日志
 
 | 日期 | 变更 |
 |------|------|
+| 2026-08-28 | **Gate 结构改写 A/B 三臂实验**（eval_gate_ab.py → data/gate_ab_report.json + data/gate_ab_ce_report.json；代码改动见 CHUNK_PIPELINE.md 变更日志 v2.7）：BASE（数值 Gate 0.72/0.03）/ G1（结构 Gate + 强制改写 prompt）/ G2（结构 Gate + 原 prompt）三臂，缓存键 query\|base/g1/g2 隔离。快速版（无 CE，union∪回退口径）：BASE 176 可检索（97.8%）→ G1 179（99.4%，救回 Q_N20/Q_S03/Q_S14、0 丢失、19 题 rank 改善）、G2 177（仅救回 Q_N20）——结构 gate 本身无收益，强制 prompt 是救回主力（expand 34→72、有 sq 36→101）。全 CE 决胜（BASE vs G1，α=0.3）：MRR 0.5769→0.5786（+0.0017）、R@5 78.9%→76.7%（-2.2pp）、R@10 90.0%→89.4%（-0.6pp）、hit 249→249、sec_MRR 0.5959→0.5999，救回 2（Q_D20 rr=0.25、Q_L07 rr=0.125——near-miss margin 0.0013 被翻正）丢失 3（Q_D05/Q_N20/Q_S15）；Q_S03/Q_S14 两臂最终 rr=0——改写层把 gold 送进 union（prior 43/32）但 CE-hard 题融合层救不回（与 28.9 Q_SR06 同族）。**判定：G1 不上线，生产保持 BASE 数值 Gate；改写层收益到顶，后续方向 L2 融合层 14 题子分层**。详见"二十九" |
 | 2026-08-26 | **Q_SR06 救回尝试结果**（代码改动见 CHUNK_PIPELINE.md 变更日志 v2.6）：生产潜力类术语强制改写后，Q_SR06 由 A 类（gate 误跳过 → 无改写 → gold ∉ union）转为 C 类 CE-hard near-miss——gold 进池 prior rank 8（定义子查询 dense rank 2/3）、CE 排 13 → α=0.3 融合 final 12，**Top10 外 2 名，未完全救回**（与 Q_SR03/Q_L07 同族，27.1 已证调 α 无效）；含术语/identity 词的 Q_C12/Q_S17/Q_D24/Q_T31/Q_E24 回归检查全部保持命中。另发现生产接线缺口：rag_pipeline 不传 keyword_queries（kw BM25 通道仅评测脚本启用，生产≠评测口径，既存问题）。详见"二十八"28.9 |
 | 2026-08-26 | **α=0.3 新基线零召回分层与定位**（eval_pool50_failure_classify.py α=0.3 版 → data/pool50_failure_classification_a03.json）：真实零召回 18 题（解析重放的 19 题剔除 Q_N20——该题 α=0.3 生产 search 路径实测已命中 Top10）。分层 A=4 / B1=0 / B2=1 / C=13：**Soft Protection 收益空间仍为 0/18**（无题被配额误杀）；A 类仅 Q_SR06 管线可修（rewrite gate 误跳过 + plain search RRF 稀释：oracle=10、dense=10、rrf=13、α=0.3 实测 final=12），Q_S03/Q_S14/Q_D29 为真语义鸿沟（oracle 43/98/106，Q_D29 改写后 rw_oracle=35）；B2 Q_L02 是 prior 融合稀释（BM25kw rank=20 → prior=61）；C 类 13 题中 near-miss 仅剩 Q_L07（final=11、margin=0.0013），CE-strong/prior-weak 2 题（Q_C25/Q_S23）、prior-strong/CE-hard 2 题（Q_SR03/Q_L07）、双平庸 9 题；**query_rewrite 能力 7/18 为最大单一问题源**。详见"二十八、α=0.3 新基线零召回分层与定位（2026-08-26）" |
 | 2026-08-26 | **CE 融合 α 扫描 + 归一化验证，生产 α 0.2→0.3**（eval_ce_norm_scan.py → data/ce_norm_scan_report.json + data/ce_norm_cache.json 原始分缓存）：两阶段顺序实验，180 题离线重放。实验 1（minmax 固定扫 α 0.0~0.7）：**α=0.3 唯一零搅黄正收益点**，R@10 87.2→89.4%、MRR 0.5517→0.5763、R@10=0 23→19，救回 Q_C08/Q_D26/Q_L08/Q_SR04（全部 C 类），α≥0.4 开始搅黄（Q_D19/Q_S26）、≥0.6 净收益转负；实验 2（α=0.3 固定扫 6 种归一化）：**minmax 仍全局最优**，rank 单独救回 Q_C25 但搅黄别题，softmax 三档均显著变差（搅黄 7~11 题）。判定：生产 alpha 默认改 0.3，归一化维持 minmax。详见"二十七、CE 融合 α 扫描与归一化验证（2026-08-26）" |
@@ -1938,3 +1939,75 @@ Q_L02（query_rewrite）：gold 在 union 内（Original-BM25kw 通道 rank=20�
 **回归检查：** 含新术语或 identity 词的 Q_C12/Q_S17/Q_D24/Q_T31/Q_E24 全部保持命中（缓存条目不受 prompt 变更影响；kw 池新增 identity 术语后命中 rank 1~2）。
 
 **附带发现（既存问题）：** `rag_pipeline.py` 调用 `search_multi_query` 时未传 `keyword_queries`——术语关键词 BM25 通道仅评测脚本启用，生产链路未接线（生产≠评测口径）。本次修复不依赖该通道（子查询走 extra_queries），但值得后续对齐。
+
+---
+
+## 二十九、Gate 结构改写 A/B 三臂实验（2026-08-28）
+
+### 29.1 背景与设计
+
+28.3 定位 A 类 3 题（Q_S03/Q_S14/Q_D29）为 embedding 语义鸿沟，其中 Q_S03/Q_S14 改写层判 none（gate 跳过或 LLM 按 prompt 规则合规判 none）导致 gold ∉ union；28.7 结论 5 指出 query_rewrite 是最大单一问题源（7/18）。本实验回答：**把"数值 Gate"换成"结构 Gate"并强制拆分改写，能否救回 A 类题、是否搅黄已命中题**（预期救回 1~2、搅黄 0~1）。
+
+三臂设计（eval_gate_ab.py，缓存键隔离保证三臂独立）：
+
+| 臂 | Gate | Prompt | 缓存键 | LLM 成本 |
+|---|---|---|---|---|
+| BASE | 数值 Gate（≤6字/术语/0.72/0.03，现行生产） | 原 prompt | 裸键（复用现有条目） | 0 次 |
+| G2 | 结构 Gate：结构词命中→强制；术语→改写；≤6字无术语→跳过；其他→LLM 自判 | 原 prompt | `query\|g2`（复用 BASE 的 LLM 条目） | 21 次 |
+| G1 | 同上 | 结构命中题注入"禁止 none + 必须产 sub_queries≥2"强制指令 | `query\|g1`（全量重写） | 179 次 |
+
+结构词表：哪些/各种/各/分别/每种/异同/对比/总体规律/规律/区别/差异 + ≥2 个问号；排除"比较"（程度副词会大面积误伤）。对比语义：BASE vs G2 隔离 gate 变量；G1 vs G2 隔离 prompt 变量。
+
+### 29.2 门控触发统计（180 题）
+
+| 臂 | 结构命中 | LLM 产物 | 新调用 | gate 跳过 | none | normalize | expand | 有rw | 有sq |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| BASE | — | 159 | 0 | 21 | 118 | 28 | 34 | 61 | 36 |
+| G2 | 97 | 180 | 21 | 0 | 117 | 29 | 34 | 62 | 36 |
+| G1 | 97 | 180 | 179 | 0 | 58 | 50 | **72** | **120** | **101** |
+
+结构 Gate 把 21 个原 gate 跳过题全部送进 LLM（G2 新调用 21）；强制指令把 expand 34→72、有 sq 36→101——97 个结构命中题全部产出子查询（G2 同样 97 个结构命中但仅 36 题有 sq，其余被 LLM 自判 none，即强制指令正是针对这一合规性失效）。
+
+### 29.3 快速版（无 CE，Phase 1+2 候选采集；union ∪ plain 回退 = 管线可检索）
+
+| 臂 | union | 回退 | 可检索 | sec | median prior | rank>50 | kw命中 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| BASE | 156 | 20 | 176 (97.8%) | 177 | 2 | 1 | 10 |
+| G2 | 177 | 0 | 177 (98.3%) | 177 | 2 | 1 | 10 |
+| G1 | 179 | 0 | **179 (99.4%)** | 179 | 2 | 3 | 8 |
+
+- **BASE vs G1：救回 3、丢失 0、rank 改善≥3 共 19 题**。救回：Q_N20（Original-Dense rank 13，gate 由跳过改触发）、Q_S03（SubQ-Dense rank 43）、Q_S14（SubQ-Dense rank 32）。改善代表：Q_C07 7→1、Q_D03 10→1、Q_S04 7→1、Q_SR08 29→5。
+- **BASE vs G2：仅救回 Q_N20、0 改善**——结构 gate 本身无收益（159/180 复用 BASE 结果，21 个新调用只改变 1 题可检索性）。
+- **G1 vs G2：G1 多救回 Q_S03/Q_S14**（强制 prompt 净效应）；但 12 题 rank 变差（Q_D10 54 vs 32、Q_SR11 65 vs 45）——强制改写质量参差，rank>50 从 1 升至 3。
+
+### 29.4 全 CE 决胜（BASE vs G1，α=0.3，max_pool=50，耗时 ~92 分钟）
+
+| 臂 | MRR | R@5 | R@10 | hit | sec_MRR | sec_R@10 |
+|---|---:|---:|---:|---:|---:|---:|
+| BASE | 0.5769 | 78.9% | 90.0% | 249 | 0.5959 | 90.6% |
+| G1 | 0.5786 | 76.7% | 89.4% | 249 | 0.5999 | 91.1% |
+
+- **救回 2**：Q_D20（G1 rr=0.25）、Q_L07（G1 rr=0.125）——Q_L07 即 28.5 的 near-miss（final=11、margin=0.0013），G1 改写扰动将其翻正，与"任何轻微扰动都可能翻正"的判断一致。
+- **丢失 3**：Q_D05（BASE rr=0.125）、Q_N20（BASE rr=0.1111）、Q_S15（BASE rr=0.3333，搅黄最大）——强制改写改变候选构成，挤掉了 BASE 原能命中的题。
+- **Q_S03/Q_S14 两臂最终均 rr=0**：快速版 G1 把 gold 送进 union（prior 43/32），但 CE 融合后仍出 Top10——与 28.9 Q_SR06 同族（改写层修信号、CE-hard 题融合层救不回）。
+
+### 29.5 结论
+
+1. **结构 Gate 不上线**：全 CE 下 G1 相对 BASE 净持平（MRR +0.0017、R@5 -2.2pp、R@10 -0.6pp，救 2 丢 3），低于预期（救 1~2 搅黄 0~1）；且 G2 证明 gate 本身无收益——收益全来自强制 prompt，而强制 prompt 的收益被搅黄抵消。生产保持 BASE 数值 Gate；gate_mode 参数与结构 Gate 代码保留作评测隔离用。
+2. **改写层收益到顶**：L0 信号层题（Q_S03/Q_S14）改写后可进 union，但 CE 融合层最终不认——修复重点应转向 L2 融合层。
+3. **L2 融合层 14 题子分层**（后续修复方向）：
+   - near-miss（1）：Q_L07（margin=0.0013，已被 G1 翻正证明扰动敏感）
+   - CE-strong / prior-weak（2）：Q_C25、Q_S23（ce_rank 5~8 但 prior 34~37 拖死；Q_C25 另有 minmax outlier 压缩问题）
+   - prior-strong / CE-hard（3）：Q_SR03、Q_SR06、Q_L07（CE 模型不认定义类/概念解释类题，27.1 已证调 α 无效）
+   - 双平庸（9）：Q_D04、Q_D10、Q_D20、Q_L11、Q_N11、Q_S05、Q_S07、Q_SR08、Q_SR11（prior 20~45、CE 11~37 两边都不强）
+   - （Q_L07 同属 near-miss 与 CE-hard；子类 1/2 融合公式可救，子类 3/4 需 CE 模型级或通道级改动）
+
+### 29.6 代码与数据
+
+| 文件 | 说明 |
+|------|------|
+| `eval_gate_ab.py` | 三臂 A/B 脚本（`--full-ce` / `--arms` 参数化；Phase 0 三臂改写池并行预热 + 快速版/全 CE 两模式） |
+| `query_rewriter.py` | gate_mode / struct_force / 缓存键隔离 / 三池注册表按臂隔离 / get_gate_info 诊断接口（生产默认 gate_mode="base" 行为不变） |
+| `data/gate_ab_report.json` | 快速版报告（门控统计 + union 口径 + 逐题差异） |
+| `data/gate_ab_ce_report.json` | 全 CE 报告（MRR/R@K + 逐题差异） |
+| `rewrite_cache.json` | 新增 `query\|g1` / `query\|g2` 条目（若调整强制指令内容需先清除 g1 键） |
