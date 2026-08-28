@@ -73,7 +73,13 @@ def ce_norms(method, xs):
     raise ValueError(method)
 
 
-def top10_of(prior, norm, alpha):
+def top10_of(prior, norm, alpha, prior_norm=False):
+    """prior_norm=True: 融合前对 prior 做 min-max（search 路径口径，rrf 原始分）；
+    False: prior 已在 [0,1]（multi-query 路径的 retrieval_prior）。"""
+    if prior_norm:
+        lo, hi = min(prior), max(prior)
+        rng = hi - lo or 1e-8
+        prior = [(p - lo) / rng for p in prior]
     finals = [(alpha * p + (1 - alpha) * nn, i)
               for i, (p, nn) in enumerate(zip(prior, norm))]
     finals.sort(key=lambda x: -x[0])
@@ -135,9 +141,27 @@ def main():
                 query, TOP_K, False, rw_q, sq_q, kws, None, LAMBDA_LENGTH, 30, 20, 20, 10)
 
             if cand_list is None:
-                top_ids = [r.get("metadata", {}).get("chunk_id", "")
-                           for r in judge_results[:TOP_K]]
-                cache[qid] = {"fixed": True, "top10": top_ids}
+                # 生产走 plain search 路径：RRF top-30 ∪ Dense top-5 池 + CE，
+                # prior 为原始 rrf 分、融合内 min-max（search() 口径，可随 α 重放）
+                rrf_scores, doc_store, chroma_raw = searcher._rrf_retrieve(query, 40, 40)
+                rrf_top30 = sorted(rrf_scores, key=lambda k: -rrf_scores[k])[:30]
+                seen = set(rrf_top30)
+                dense_top5 = []
+                for doc, _ in chroma_raw[:5]:
+                    k = searcher._chunk_key(doc)
+                    if k not in seen and k not in dense_top5:
+                        dense_top5.append(k)
+                keys = rrf_top30 + dense_top5
+                pairs = [(query, doc_store[k][0][:500]) for k in keys]
+                with searcher._reranker._infer_lock:
+                    raw = [float(x) for x in searcher._reranker._model.predict(
+                        pairs, show_progress_bar=False)]
+                ce_adj = [r - LAMBDA_LENGTH * math.log(len(doc_store[k][0]))
+                          for k, r in zip(keys, raw)]
+                cache[qid] = {"path": "search", "fixed": False,
+                              "chunk_ids": keys,
+                              "priors": [rrf_scores[k] for k in keys],
+                              "ce_adj": ce_adj}
             else:
                 pool, _ = phase3_pool(cand_list, rw_list, sq_list, MAX_POOL)
                 pairs = [(query, c["text"][:500]) for c in pool]
@@ -163,7 +187,9 @@ def main():
         stored = scan["per_question"][i]["per_pool"]["50"]["top10"]
         c = cache[qid]
         replay = c["top10"] if c["fixed"] else \
-            [c["chunk_ids"][i] for i in top10_of(c["priors"], ce_norms("minmax", c["ce_adj"]), 0.2)]
+            [c["chunk_ids"][i] for i in top10_of(
+                c["priors"], ce_norms("minmax", c["ce_adj"]), 0.2,
+                prior_norm=(c.get("path") == "search"))]
         if replay == stored:
             verify_ok += 1
         else:
@@ -177,7 +203,9 @@ def main():
         for q in gs:
             c = cache[q["id"]]
             top = c["top10"] if c["fixed"] else \
-                [c["chunk_ids"][i] for i in top10_of(c["priors"], ce_norms(norm, c["ce_adj"]), alpha)]
+                [c["chunk_ids"][i] for i in top10_of(
+                    c["priors"], ce_norms(norm, c["ce_adj"]), alpha,
+                    prior_norm=(c.get("path") == "search"))]
             out.append({"qid": q["id"], "gold": list(q["gold_chunks"]), "top10": top})
         return out
 
