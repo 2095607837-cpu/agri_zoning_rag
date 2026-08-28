@@ -283,12 +283,12 @@ def _has_complex_structure(query: str) -> bool:
 
 
 def _needs_rewrite(query: str, top1_sim: float = 0.0, top2_sim: float = 0.0,
-                   gate_mode: str = "base") -> bool:
+                   gate_mode: str = "struct") -> bool:
     """改写门控。
 
-    gate_mode="base":   数值 Gate（现行生产）——口语词 / 检索不确定性信号。
-    gate_mode="struct": 结构 Gate（G1/G2 A/B 臂）——规则优先级：结构 → 术语 → 长度 → 默认触发，
-                        不使用 top1/top2 数值信号。
+    gate_mode="struct": 结构 Gate（G1，现行生产默认）——规则优先级：结构 → 术语 → 长度 → 默认触发，
+                        不使用 top1/top2 数值信号；泛化性优于数值阈值（阈值随问题分布漂移）。
+    gate_mode="base":   数值 Gate（历史基线）——口语词 / 检索不确定性信号。
     """
     if gate_mode == "struct":
         # 1. 复杂结构 → 强制改写
@@ -456,13 +456,13 @@ def _is_llm_entry(entry) -> bool:
 
 
 def expand_query(query: str, mode: str = "all", top1_sim: float = 0.0, top2_sim: float = 0.0,
-                 gate_mode: str = "base", struct_force: bool = False) -> list[str]:
+                 gate_mode: str = "struct", struct_force: bool = True) -> list[str]:
     """
     扩展查询，返回扩展后的查询列表供多路检索使用。
     mode: "keywords" | "multi_view" | "all"
     top1_sim: 原始 query 检索 top-1 相似度
     top2_sim: 原始 query 检索 top-2 相似度（base 数值 Gate 的 margin 信号）
-    gate_mode: "base"（现行数值 Gate，默认）| "struct"（结构 Gate，G1/G2 A/B 臂）
+    gate_mode: "struct"（结构 Gate + 强制改写，G1，生产默认）| "base"（历史数值 Gate）
     struct_force: struct 模式下对结构命中题注入强制改写指令（G1 臂）
     """
     q = query.strip()
@@ -583,22 +583,22 @@ _sq_registry: dict[str, list[str]] = {}
 _gate_info_registry: dict[str, dict] = {}
 
 
-def get_keywords(query: str, gate_mode: str = "base", struct_force: bool = False) -> list[str]:
+def get_keywords(query: str, gate_mode: str = "struct", struct_force: bool = True) -> list[str]:
     """返回最近一次 expand_query 为该 query（按臂）提取的关键词列表。"""
     return _kw_registry.get(_cache_key(query.strip(), gate_mode, struct_force), [])
 
 
-def get_rewrite_queries(query: str, gate_mode: str = "base", struct_force: bool = False) -> list[str]:
+def get_rewrite_queries(query: str, gate_mode: str = "struct", struct_force: bool = True) -> list[str]:
     """返回最近一次 expand_query 为该 query（按臂）生成的 rewrite queries（完整句子改写）。"""
     return _rw_registry.get(_cache_key(query.strip(), gate_mode, struct_force), [])
 
 
-def get_sub_queries(query: str, gate_mode: str = "base", struct_force: bool = False) -> list[str]:
+def get_sub_queries(query: str, gate_mode: str = "struct", struct_force: bool = True) -> list[str]:
     """返回最近一次 expand_query 为该 query（按臂）生成的 sub queries（子问题拆分）。"""
     return _sq_registry.get(_cache_key(query.strip(), gate_mode, struct_force), [])
 
 
-def get_gate_info(query: str, gate_mode: str = "base", struct_force: bool = False) -> dict:
+def get_gate_info(query: str, gate_mode: str = "struct", struct_force: bool = True) -> dict:
     """返回最近一次 expand_query 为该 query（按臂）记录的 gate 诊断信息。"""
     return _gate_info_registry.get(_cache_key(query.strip(), gate_mode, struct_force), {})
 
