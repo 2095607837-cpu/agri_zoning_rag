@@ -7,6 +7,12 @@ __pycache__/
 *.old-v3
 diagnose_*.json
 data/rewrite_cache.json
+data/repair_cache.json
+data/repair_stage*/collections*.json
+data/repair_stage*/top10/
+data/repair_stage1/a_fallback.json
+data/ce_query_quota_ab/candidates/
+data/ce_query_quota_ab/top10/
 *.bak-*
 data/*backup*
 data/*.log

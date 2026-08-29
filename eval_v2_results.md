@@ -6,6 +6,7 @@
 
 | 日期 | 变更 |
 |------|------|
+| 2026-08-29 | **修复 query 合体实验（Stage 1 召回端 + Stage 2 端到端，已否决）**（repair_query.py / eval_repair_stage1.py / eval_repair_stage2.py → data/repair_stage1/report.json + data/repair_stage2/report.json；hybrid_search.py 新增 orig_kw_k/force_multi 可选参数，默认行为不变，见 CHUNK_PIPELINE.md v2.9.1）：修复句=原问程序化术语替换（保护词典/前后缀吸收/相邻同值合并，67 题）+LLM 最小修复（9 题，硬约束+校验重试 1 次回退）。Stage 1 零 CE 召回端：rw 移除 −7 可检索（全 rw-only 题）、修复句净 +1（救 Q_L08/Q_SR02、丢 Q_N13）→ 合体取代召回不成立。Stage 2 端到端（统一 multi force_multi、通道 Dense50+BM25原句30+BM25kw20、配额修复句30、CE query=修复句；A 一致性自检 180/180）：MRR 0.5932→0.5716、R@10 90.6%→89.4%、零召回 17→19、可回答率 95.0% 持平（full 144→142）；救 6（三十节丢3 全救回 Q_S13/Q_D09/Q_D12 + 历史难题 Q_D05/Q_SR07/Q_L02）丢 8（救5 丢 3：Q_S07/Q_S15/Q_SR06）；归因：8 丢中 7 个 gold 在池内 CE 排不进（rw 标准化压制收益消失 + repair_changed 面板 −0.072），rw-only 面板 −0.09（rw 召回通道不可替代）；正面信号：repair_unchanged 面板 +0.008、kw-only 合并几乎持平（统一 multi 可行）。**下一步 M 臂=生产召回保留 rw 通道 + CE query 换修复句**。详见"三十一" |
 | 2026-08-28 | **CE 精排 query 改用 rw[0] + 配额方案C 上线**（eval_ce_query_quota_ab.py → data/ce_query_quota_ab/；代码改动见 CHUNK_PIPELINE.md 变更日志 v2.9）：2×2 因子设计 {CE query: orig/rw} × {配额: 均分/方案C}，G1 口径 180 题离线重放（候选采集一次 + CE 原始分缓存 12810 对，四臂纯重放零 LLM；冒烟 3/3、生产 8/8 逐位一致，与 v2.8 全 CE 报告交叉验证 122/122）。rw-CE 全面板 MRR 0.5776→0.5926（+0.0150）、R@10 89.4%→90.6%、rw 面板 +0.0226，救 5（Q_S07/Q_S15/Q_S23/Q_SR03/Q_SR06 均历史难题）丢 3（Q_S13/Q_D09/Q_D12）、20 升 20 降；机制：rw 标准化句压制 len≈14 表格碎片 CE 虚高（Q_S15 gold CE_raw=0.999 但 len=756 长度惩罚 → rank 14，改 rw[0] 后 rank 2），丢题为 rw 收窄主题的反向副作用。方案C 净持平（MRR +0.0004，0 救 0 丢 1 升 Q_D13）但"每 SubQ 最低 5 + 剩余按 prior 分配 + SubQ≥2 池上限 60"语义优于均分，照常上线。叠加后（新生产）MRR 0.5932、R@10 90.56%、零召回 19→17；可回答率 95.56%→95.00%（full 138→144、partial 34→27，no 9 题以跨省对比单边召回为主）。详见"三十" |
 | 2026-08-28 | **kw-only 路径修复（方案①）**（eval_kw_path_fix.py → data/kw_path_fix_report.json；代码改动见 CHUNK_PIPELINE.md 变更日志 v2.8.1）：hybrid_search.py 路径判定从"rw/sq/kw 全空才走 plain"改为"只看 rw/sq"——kw-only（LLM 判 none 但产出 keywords，或 gate 跳过带术语映射）不再触发 multi-query 机制（RRF 权重组合与 prior 融合全链路），改走 plain 路径并把 kw 拼入 Original BM25 query（Dense 与 CE 仍只用原 query）。修复二十九节 G1 副作用之一：Q_N20（简单事实题被 LLM 产出 kw 切进 multi-query，丢 CE rank 9）。G1 臂 58 道 kw-only 题回归（修复前值取自 gate_ab_ce_report.json）：MRR 0.7124→0.7205（+0.0081）、R@10 94.83%→96.55%（+1.7pp），救回 Q_N20（rr=0.111）0 丢失、7 升（Q_E33/Q_C18 0.5→1.0、Q_T04/Q_N04 0.25→0.5 等）5 降（Q_N01/Q_N02 1.0→0.5、Q_T20/Q_SR07/Q_T29 名次小滑，均未失分） |
 | 2026-08-28 | **G1 上线为生产默认**（代码改动见 CHUNK_PIPELINE.md 变更日志 v2.8）：query_rewriter.py 默认参数改 gate_mode="struct" + struct_force=True，生产（rag_pipeline.py）与全部评测脚本统一走 G1 口径；数值 Gate 保留为 gate_mode="base" 历史基线。上线理由：结构规则（结构词/术语/长度）数据集无关、泛化性优于数值阈值（margin 0.03/top1 0.72 随问题分布漂移）。三臂 A/B 全 CE 已知副作用保留（Q_N20 路径切换 / Q_S15 过度拆分 / Q_D05 强制改写扰动，净持平：MRR +0.0017、R@5 -2.2pp），随 L2 融合层修复一并处理。详见"二十九" |
@@ -2095,3 +2096,75 @@ Q_C25、Q_D04、Q_D05、Q_D09、Q_D10、Q_D12、Q_D29、Q_L02、Q_L11、Q_N11、
 | `data/ce_query_quota_ab/ce_scores.json` | CE 原始分缓存（12810 对，key=(query_text, chunk_id)） |
 | `data/ce_query_quota_ab/judge_cache.json` | 可回答性判定缓存（310 条目 / 304 distinct top10） |
 | `data/ce_query_quota_ab/candidates/`、`top10/` | 逐题候选与四臂 top10 |
+
+## 三十一、修复 query 合体实验（Stage 1 召回端 + Stage 2 端到端，2026-08-29）
+
+### 31.1 背景与设计
+
+三十节上线 rw-CE 后遗留两个已知代价：救5（rw 标准化压制表格碎片虚高）vs 丢3（rw 收窄主题副作用）。修复 query 实验假设：对原问做"最小修复"（口语词→规范术语程序化替换 + LLM 最小语法修复，不动语序/不合并分句/不删减），用修复句统一替代"原问 + rw"两个角色——召回端主 query 与 CE 精排 query，从而同时消除 rw 的收窄副作用与口语问法的碎片虚高。
+
+修复生成器（repair_query.py）：① 程序化术语替换（terminology_mapping.json 口语词→规范术语；保护词典 14 项防子串腐蚀/复合词冗余、最长口语词优先、非重叠匹配、相邻同值合并（打药+防虫→病虫害防治）、前后缀吸收（≥10℃积温+积温→≥10℃活动积温）、受灾/地方适合种排除）；② LLM 最小病句修复（temperature 0、7 条硬约束：禁重排/合并/删减/新增概念、数值符号保真、专名保真、术语不回退、问号数一致；违规重试 1 次回退程序化版）；③ 校验器（问号数/长度±50%/数字集合/符号集合/术语回退）。180 题：术语替换 67、LLM 修复 9、残留违规 1（Q_C23 按设计回退）。缓存 data/repair_cache.json（gitignore）。
+
+Stage 1（eval_repair_stage1.py，零 CE 召回端，retrievable = gold∈union ∪ gold∈plain-top10）：四臂 A（生产 orig+rw+sq+kw）/ B0（原问去 rw，对照）/ B（修复句去 rw）/ B'（B+SubQ 术语替换）。Stage 2（eval_repair_stage2.py，端到端全 CE）：合体 C 臂——180 题统一 multi 路径（force_multi，无 plain 例外）、主 query=修复句、rw 移除、sq/kw 生产原样、Original 通道 Dense50+BM25原句30+BM25kw20（hybrid_search.py 新增 orig_kw_k 参数拆分 kw topk）、方案C 配额修复句30+SubQ 预算30/20、池上限60/50、CE query=修复句；对比生产 A 臂（planC|rw 存量回放，MRR 0.5932）；A 一致性自检：新脚本按 quota_orig=20 重放 A 与存量 top10 逐位比对 180/180 零不一致。
+
+### 31.2 Stage 1 结果（零 CE 召回端）
+
+| 臂 | 可检索 | union | fallback | 中位 rank |
+|---|---:|---:|---:|---:|
+| A（生产） | 173/180 | 121 | 52 | 2 |
+| B0（原问去rw） | 166 | 100 | 66 | 2 |
+| B（修复句去rw） | 167 | 100 | 67 | 2 |
+| B'（+SubQ替换） | 167 | 100 | 67 | 2 |
+
+- rw 移除 −7（全为 rw-only 题：multi→plain 退化后 BM25-KW/rw-dense 通道消失）
+- 修复句 vs 原问净 +1（救 Q_L08 打药防虫→病虫害防治、Q_SR02 水分不足→水分亏缺指数；丢 Q_N13 越冬期长度→越冬期天数——映射表个例）
+- Q_D12 rank 22→11：rw 收窄副作用在召回端就存在
+- 结论：合体 query 完全取代 orig+rw 做召回不成立；修复句召回端中性偏正但无法替代 rw 通道
+
+### 31.3 Stage 2 结果（端到端全 CE）
+
+| 指标 | A 生产 | C 合体 |
+|---|---:|---:|
+| MRR | 0.5932 | 0.5716（−0.0216） |
+| R@5 / R@10 | 77.2% / 90.6% | 75.0% / 89.4% |
+| secMRR | 0.6078 | 0.5997 |
+| 零召回 | 17 | 19 |
+| 可回答率 | 95.0%（full 144/partial 27/no 9） | 95.0%（full 142/partial 29/no 9） |
+
+救 6 / 丢 8 / 升 30 / 降 35。**合体方案端到端不成立**。
+
+面板：
+- repair_changed（67 题，术语替换生效）：0.4785→0.4068（−0.072）——术语替换句在 CE 端有害（与 Stage 1 召回端中性偏正方向相反）
+- repair_unchanged（113 题，修复句==原问）：0.6613→0.6693（+0.008）——rw 移除+通道放大+统一 multi 在这些题不亏
+- rw-only（21 题）：0.6587→0.5672（−0.09）——rw 召回通道不可替代（Stage 1 结论端到端复现）
+- kw-only（58 题）：0.709→0.7033（−0.006）——统一 multi 没搅黄简单事实题（当初拆 plain 的担忧未兑现），且救回 Q_SR07
+- sq>0（101 题）：0.5131→0.4969
+
+### 31.4 救 6 丢 8 与 gold-in-pool 归因
+
+**救 6**：Q_S13（0→0.125）/Q_D09（0→0.25）/Q_D12（0→0.143）——三十节 rw-CE 丢 3 全部救回（修复句 CE 不收窄主题）；Q_D05（0→0.333）/Q_SR07（0→0.333）/Q_L02（0→0.143）——三个历史零召回难题。
+
+**丢 8**：Q_E24（1.0→0）、Q_L07（1.0→0）、Q_S07（0.1→0）、Q_S15（0.5→0）、Q_SR06（0.125→0）、Q_D26、Q_N20、Q_T28。其中救5 丢 3（Q_S07/Q_S15/Q_SR06）——rw 标准化压制碎片的能力修复句没有（Q_S15 复归碎片压制）；Q_S23 微升 0.1→0.125、Q_SR03 降档 0.333→0.143 保住。
+
+gold-in-pool 检查：8 丢中 7 个 gold 在池内（prior rank 5~59）但 CE 排不进 top10，仅 Q_T28 是池截断（prior 74）——**丢失主要是 CE 效应不是召回**；rw-CE 的收益（救5）与代价（丢3）都发生在 CE 端，修复句 CE 只拿到"不收窄"的一半，拿不到"标准化压制"的另一半。
+
+### 31.5 结论
+
+1. 合体方案否决：MRR −0.022、零召回 +2；可回答率持平 95.0%（full −2/partial +2）。
+2. rw 的 CE 价值被再次确认且不可被修复句替代：救5 的标准化压制与丢3 的收窄是同一机制的两面。
+3. 术语替换在召回端中性偏正（Stage 1）、在 CE 端有害（Stage 2 repair_changed −0.072）——两端效应方向相反。
+4. 正面信号：统一 multi 可行（kw-only 面板几乎持平、Q_SR07 救回）；repair_unchanged 面板微升。
+5. 下一步：M 臂——生产召回原样保留（含 rw 通道）+ CE query 换修复句，验证"rw 召回价值 + 修复句 CE 不收窄"组合。
+
+### 31.6 代码与数据
+
+| 文件 | 说明 |
+|------|------|
+| `repair_query.py` | 修复生成器（程序化替换 + LLM 最小修复 + 校验器，缓存 data/repair_cache.json） |
+| `eval_repair_stage1.py` | Stage 1 四臂召回端对比（A/B0/B/B'，复用 2×2 候选缓存） |
+| `eval_repair_stage2.py` | Stage 2 合体 C 臂端到端（force_multi 统一 multi + quota_orig 参数化 + A 一致性自检） |
+| `hybrid_search.py` | 新增 orig_kw_k/force_multi 可选参数（默认行为不变，见 CHUNK_PIPELINE.md v2.9.1） |
+| `data/repair_stage1/report.json` | Stage 1 四臂汇总 + 逐题差异 |
+| `data/repair_stage2/report.json` | Stage 2 A/C 指标 + 面板 + 可回答性统计 |
+| `data/repair_stage2/ce_scores.json` | 修复句 CE 原始分缓存（6704 新对 + 复用存量键，key=(修复句, chunk_id)） |
+| `data/repair_stage2/judge_cache.json` | 可回答性判定缓存（种子=2×2 存量 310 条 + 新判 177 条） |

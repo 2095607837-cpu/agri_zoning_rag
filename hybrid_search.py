@@ -476,8 +476,12 @@ class HybridSearcher:
         lambda_length: float,
         orig_dense_k: int, orig_bm25_k: int,
         subq_dense_k: int, subq_bm25_k: int,
+        orig_kw_k: int = None, force_multi: bool = False,
     ):
         """Phase 1+2：多路召回 + Evidence + Retrieval Prior 排序。
+
+        orig_kw_k: BM25-kw 通道 topk（默认=orig_bm25_k，实验用拆分）;
+        force_multi: rw/sq 全空也走 multi 路径（实验用，生产 False）。
 
         Returns: (judge_results, cand_list, rw_list, sq_list)。
         cand_list 已按 retrieval_prior 降序排序（Phase 3 输入）；
@@ -494,7 +498,7 @@ class HybridSearcher:
         if not rw_list and not sq_list and extra_queries:
             sq_list = list(extra_queries)
         kw_query = " ".join(kw_list) if kw_list else ""
-        if not rw_list and not sq_list:
+        if not force_multi and not rw_list and not sq_list:
             # kw-only（无 rw/sq）不触发 multi-query 机制——kw 只做 BM25 增强，
             # 由 search_multi_query 走 plain 路径拼入 BM25（见 search(keywords=...)）
             return judge_results, None, None, None
@@ -507,7 +511,7 @@ class HybridSearcher:
         candidates: dict[str, dict] = {}
 
         def _collect(q: str, dense_k: int, bm25_k: int, qid: int, qtype: str,
-                     bm25_keyword_q: str = ""):
+                     bm25_keyword_q: str = "", kw_k: int = None):
             """qtype: 'Original' | 'Rewrite' | 'SubQ'
             bm25_keyword_q: 仅 Original 使用，独立 BM25 通道做术语召回"""
             local_rrf: dict[str, float] = {}
@@ -565,7 +569,8 @@ class HybridSearcher:
 
             # BM25 Route 2: Keyword query — 术语精准召回，仅 Original 使用
             if bm25_keyword_q:
-                bm25_kw_docs = self._bm25_retriever.invoke(bm25_keyword_q)[:bm25_k]
+                bm25_kw_docs = self._bm25_retriever.invoke(bm25_keyword_q)[
+                    :(kw_k if kw_k is not None else bm25_k)]
                 for rank, doc in enumerate(bm25_kw_docs):
                     cid = self._chunk_key(doc)
                     bm25_kw_keys.add(cid)
@@ -603,7 +608,8 @@ class HybridSearcher:
 
         # 收集各路查询
         # ① Original: Dense30 + BM25(original)20 + BM25(keyword)20
-        _collect(query, orig_dense_k, orig_bm25_k, 0, "Original", bm25_keyword_q=kw_query)
+        _collect(query, orig_dense_k, orig_bm25_k, 0, "Original",
+                 bm25_keyword_q=kw_query, kw_k=orig_kw_k)
         qid = 1
         # ② Rewrite: Dense20 + BM2510 每个
         for rq in rw_list:
