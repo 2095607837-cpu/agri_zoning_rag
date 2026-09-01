@@ -200,7 +200,8 @@ def phase1(srch, qs, repairs, records):
     t0 = time.time()
     for i, q in enumerate(qs, 1):
         rec = records[q["id"]]
-        repair = repairs[q["question"]]["repair_query"]
+        rr = repairs[q["question"]]
+        repair = rr.get("repair_query") or rr.get("v2_query")
         collect_c(srch, q, repair, rec["sq"], rec["kw"], cache)
         coll = cache[q["id"]]
         pool = coll["cand"]
@@ -528,13 +529,25 @@ def main():
     ap.add_argument("--answerability", choices=["on", "off"], default="on",
                     help="answerability judge 开关（默认 on）")
     ap.add_argument("--workers", type=int, default=6, help="judge 并发数")
+    ap.add_argument("--cache", default=rp.CACHE_FILE, help="修复句缓存文件（v1/v2）")
+    ap.add_argument("--out-dir", default="data/repair_stage2", help="输出目录")
+    ap.add_argument("--label", default="", help="C 臂 query 标签（写入 report config）")
     args = ap.parse_args()
 
-    qs = ab.gs[:args.limit] if args.limit else ab.gs
-    print(f"[start] {len(qs)} 题 | answerability={args.answerability}",
-          flush=True)
+    global OUT_DIR, CAND_DIR, TOP10_DIR, CE_SCORES, JUDGE_CACHE, COLL_C, REPORT
+    OUT_DIR = args.out_dir
+    CAND_DIR = os.path.join(OUT_DIR, "candidates")
+    TOP10_DIR = os.path.join(OUT_DIR, "top10")
+    CE_SCORES = os.path.join(OUT_DIR, "ce_scores.json")
+    JUDGE_CACHE = os.path.join(OUT_DIR, "judge_cache.json")
+    COLL_C = os.path.join(OUT_DIR, "collections_c.json")
+    REPORT = os.path.join(OUT_DIR, "report.json")
 
-    repairs = json.load(open(rp.CACHE_FILE, encoding="utf-8"))
+    qs = ab.gs[:args.limit] if args.limit else ab.gs
+    print(f"[start] {len(qs)} 题 | answerability={args.answerability} "
+          f"| cache={args.cache} | out={OUT_DIR}", flush=True)
+
+    repairs = json.load(open(args.cache, encoding="utf-8"))
     for q in qs:
         if q["question"] not in repairs:
             sys.exit(f"缺修复记录: {q['id']}")
@@ -554,7 +567,7 @@ def main():
         "config": {
             "alpha": ALPHA, "lambda_length": LAMBDA_LEN, "top_k": TOPK,
             "c_arm": {
-                "query": "修复句(repair)", "rw": "移除", "sq/kw": "生产原样",
+                "query": args.label or "修复句(repair)", "rw": "移除", "sq/kw": "生产原样",
                 "force_multi": True,
                 "channels": {"dense_k": C_DENSE_K, "bm25_k": C_BM25_K,
                              "kw_k": C_KW_K,

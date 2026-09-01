@@ -8,6 +8,7 @@ __pycache__/
 diagnose_*.json
 data/rewrite_cache.json
 data/repair_cache.json
+data/repair_cache_v2.json
 data/repair_stage*/collections*.json
 data/repair_stage*/top10/
 data/repair_stage1/a_fallback.json
