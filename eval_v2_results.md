@@ -1,11 +1,12 @@
 # V2 Golden Set 全配置检索评测报告
 
-生成时间：2026-07-06 | 最后更新：2026-08-30 | 评测集：`golden_set_v2.json` | 199 题（in-domain 179 + OOD 20）
+生成时间：2026-07-06 | 最后更新：2026-09-01 | 评测集：`golden_set_v2.json` | 199 题（in-domain 179 + OOD 20）
 
 ## 变更日志
 
 | 日期 | 变更 |
 |------|------|
+| 2026-09-01 | **multi 路径 BM25 权重网格 + kw 消融实验**（eval_bm25_weight_grid.py → data/bm25_weight_grid/report.json；代码改动见 CHUNK_PIPELINE.md v2.9.2）：0.7/0.3 有 §9.4/§24 扫描支撑（plain 路径），multi 路径 0.15 于 6f0ee16 无实验引入——record_ch_ranks 采集 per-channel 原始 rank（122 multi 题，生产参数 30/20/20/10），解析式重放 {w_o∈0/0.05/0.15/0.3}×{w_kw∈0/0.3}（dense 固定 0.7），方案C配额 → CE 重放（复用 2×2 缓存，缺 570 对补算）。sanity：生产权重 prior 逐值 0 不一致、top10 逐位 0 不一致。结果：生产 0.15\|0.3 全网格最优（MRR 0.5932；0.05/0.3 各 0.5899、0 为 0.5575）——无实验的 0.15 验证通过维持不动；kw 消融 k0.3−k0 = **MRR +0.0420、零召回 20→17（−3）、救 Q_C08/Q_C26/Q_S19 0 丢**，w_o=0.05/0.3 档同量级（+0.0425/+0.0392）——kw 通道必留；增益机制在 CE 融合层 prior 抬升而非池准入（pool recall 0.9754 不变）；k=0 时 w_o 四档几乎无差（BM25o 价值依赖 kw 共存）。详见"三十三" |
 | 2026-08-30 | **v2 合体句（文档风格）+ M 臂隔离实验，修复 query 方向正式否决**（repair_query_v2.py / repair_v2_sample.py / eval_repair_m.py → data/repair_stage2_v2/report.json + data/repair_m/report.json；无生产代码改动）：v2 合体句=V2_PROMPT 文档风格改写（术语硬对齐 + 问句→标题风格重构 + 隐含要素显式增量，明确不要求紧凑度，9 条硬约束 + 校验重试 1 次回退 mapped；180 题改写 177/术语替换 67/重试 5/残留违规 1，缓存 data/repair_cache_v2.json）。Stage 2 v2 全量 C 臂（v2 主查询召回+CE，口径同 31 节）：MRR 0.5567（比 v1 0.5716 更差）、零召回 20，救 4 丢 7。M 臂（生产候选/配额完全不变，仅 CE query=v2；复用 v2 句 9672 对 CE 缓存 + 生产池差集补算 987 对）：MRR 0.5932→0.5586（−0.0346）、R@10 90.6%→90.0%、零召回 17→18，救 2（Q_D05/Q_D09）丢 3（Q_E24 1.0→0/Q_S15 0.5→0/Q_N20）升 19 降 35；三臂分解 A(0.5932)/M(0.5586)/C_v2(0.5567)：**CE 端损失 −0.0346 占总退化 95%，召回端主查询换 v2 仅约 −0.0019**（SubQ/kw 多通道承担召回，推翻 31 节"召回损失占大头"推测）；rw 收窄丢 3 仅救回 Q_D09、rw 压制救 5 丢回 Q_S15/Q_E24，L 类重伤（Q_L01 1.0→0.167/Q_L07 1.0→0.2/Q_L08 1.0→0.2=CE 长度惩罚反噬）。机制定论：召回端生产原样最优，CE 端 rw[0] 最优（v2 分差扁平化 + 标准化压制丢失 + 长度惩罚反噬），v2 方向正式否决，生产 v2.9 保持。另诊断 temperature=0 不稳定（DeepSeek 无 seed 参数，greedy 解码受批处理数值噪声影响 + 自由重写解空间大 + 重试协议放大；修法=协议锚定 mapped 最小编辑 + best-of-N 确定性择优 + 缓存锁定，评估后不改变 v2 结论，未实施）。详见"三十二" |
 | 2026-08-29 | **修复 query 合体实验（Stage 1 召回端 + Stage 2 端到端，已否决）**（repair_query.py / eval_repair_stage1.py / eval_repair_stage2.py → data/repair_stage1/report.json + data/repair_stage2/report.json；hybrid_search.py 新增 orig_kw_k/force_multi 可选参数，默认行为不变，见 CHUNK_PIPELINE.md v2.9.1）：修复句=原问程序化术语替换（保护词典/前后缀吸收/相邻同值合并，67 题）+LLM 最小修复（9 题，硬约束+校验重试 1 次回退）。Stage 1 零 CE 召回端：rw 移除 −7 可检索（全 rw-only 题）、修复句净 +1（救 Q_L08/Q_SR02、丢 Q_N13）→ 合体取代召回不成立。Stage 2 端到端（统一 multi force_multi、通道 Dense50+BM25原句30+BM25kw20、配额修复句30、CE query=修复句；A 一致性自检 180/180）：MRR 0.5932→0.5716、R@10 90.6%→89.4%、零召回 17→19、可回答率 95.0% 持平（full 144→142）；救 6（三十节丢3 全救回 Q_S13/Q_D09/Q_D12 + 历史难题 Q_D05/Q_SR07/Q_L02）丢 8（救5 丢 3：Q_S07/Q_S15/Q_SR06）；归因：8 丢中 7 个 gold 在池内 CE 排不进（rw 标准化压制收益消失 + repair_changed 面板 −0.072），rw-only 面板 −0.09（rw 召回通道不可替代）；正面信号：repair_unchanged 面板 +0.008、kw-only 合并几乎持平（统一 multi 可行）。**下一步 M 臂=生产召回保留 rw 通道 + CE query 换修复句**。详见"三十一" |
 | 2026-08-28 | **CE 精排 query 改用 rw[0] + 配额方案C 上线**（eval_ce_query_quota_ab.py → data/ce_query_quota_ab/；代码改动见 CHUNK_PIPELINE.md 变更日志 v2.9）：2×2 因子设计 {CE query: orig/rw} × {配额: 均分/方案C}，G1 口径 180 题离线重放（候选采集一次 + CE 原始分缓存 12810 对，四臂纯重放零 LLM；冒烟 3/3、生产 8/8 逐位一致，与 v2.8 全 CE 报告交叉验证 122/122）。rw-CE 全面板 MRR 0.5776→0.5926（+0.0150）、R@10 89.4%→90.6%、rw 面板 +0.0226，救 5（Q_S07/Q_S15/Q_S23/Q_SR03/Q_SR06 均历史难题）丢 3（Q_S13/Q_D09/Q_D12）、20 升 20 降；机制：rw 标准化句压制 len≈14 表格碎片 CE 虚高（Q_S15 gold CE_raw=0.999 但 len=756 长度惩罚 → rank 14，改 rw[0] 后 rank 2），丢题为 rw 收窄主题的反向副作用。方案C 净持平（MRR +0.0004，0 救 0 丢 1 升 Q_D13）但"每 SubQ 最低 5 + 剩余按 prior 分配 + SubQ≥2 池上限 60"语义优于均分，照常上线。叠加后（新生产）MRR 0.5932、R@10 90.56%、零召回 19→17；可回答率 95.56%→95.00%（full 138→144、partial 34→27，no 9 题以跨省对比单边召回为主）。详见"三十" |
@@ -2249,3 +2250,44 @@ V2_PROMPT（repair_v2_sample.py，全量生成与抽查共享）：9 条硬约�
 | `data/repair_stage2_v2/ce_scores.json` | v2 句 CE 原始分缓存（9672 对） |
 | `data/repair_m/report.json` | M 臂指标 + 逐题差异 + 零召回 |
 | `data/repair_m/ce_scores.json` | M 臂生产池差集补算 CE 原始分（987 对） |
+
+## 三十三、multi 路径 BM25 权重网格与 kw 消融（2026-09-01）
+
+### 33.1 背景与口径
+
+plain 路径 0.7/0.3 有两次扫描实验支撑（§9.4 2026-07-10 融合权重扫描、§24 2026-08-24 分层扫描）；multi 路径的 W_BM25_ORIG=0.15 于 6f0ee16（chunk versioning 提交，与权重调优无关）引入、W_BM25_KW=0.3 亦无实验——0.7/0.15/0.3 整组组合从未验证。本实验用 hybrid_search.py 新增 record_ch_ranks 参数（v2.9.2，默认关闭零行为变化）采集 122 道 multi 题 per-channel 原始 rank（生产参数 30/20/20/10），解析式重放 {W_BM25_ORIG ∈ 0/0.05/0.15/0.3} × {W_BM25_KW ∈ 0/0.3} 8 组配置（dense 固定 0.7，含 single-channel boost 归一化与 evidence/minmax 全链路复刻），方案C配额 → CE 重放（复用 2×2 CE 缓存，池差集补算 570 对）；plain 题 58 道不经过这些权重，各配置同值复用生产 top10。
+
+Sanity：生产权重 (0.15,0.3) 重放 rrf_prior/retrieval_prior 与存量逐值一致 0 题、top10 与生产 planC|rw 逐位一致 0 题——重放基建 = 生产管线。
+
+### 33.2 全量结果（180 题）
+
+| W_BM25_ORIG＼W_BM25_KW | k=0 | k=0.3 |
+|---|---|---|
+| w_o=0 | MRR 0.5529 / R@10 88.3% / zero 21 | MRR 0.5575 / R@10 88.9% / zero 20 |
+| w_o=0.05 | 0.5474 / 88.3% / 21 | 0.5899 / 90.6% / 17 |
+| **w_o=0.15（生产）** | 0.5512 / 88.9% / 20 | **0.5932 / 90.6% / 17** |
+| w_o=0.3 | 0.5507 / 88.9% / 20 | 0.5899 / 90.6% / 17 |
+
+multi 题 pool recall（gold 进池）：0.9754（119/122）各配置恒定，仅 w_o=0 时 kw 提升到 0.9836。
+
+### 33.3 kw 通道消融：增益是多大
+
+w_o=0.15 档 k0.3−k0：**MRR +0.0420**（0.5512→0.5932）、R@5 75.6%→77.2%、R@10 88.9%→90.6%、secMRR +0.0394、零召回 20→17（−3），救 3（Q_C08/Q_C26/Q_S19，rr 0.1~0.111）0 丢、36 升 9 降。w_o=0.05 档 +0.0425（零召回 −4）、w_o=0.3 档 +0.0392（−3）、w_o=0 档 +0.0046（−1，救 Q_L02/Q_SR09 丢 Q_S13）——**kw 通道增益 +0.039~0.043 MRR、零召回 −3~4，是生产不可或缺的通道**。
+
+机制：pool recall 不因 kw 改变（金标已在池内）——kw 增益不在池准入，而在 CE 融合层：gold 命中 kw 通道 → rrf_prior 抬升 → retrieval_prior 高 → final=0.3×prior+0.7×CE 的名次提升。这解释了 rw/kw 重叠度统计（kw 条目字面命中 rw 句 48.9%、BM25 top20 Jaccard 0.363）中 kw 的增量价值：不靠送新 chunk 进池，靠给已在池内的 gold 加权。
+
+### 33.4 0.15 网格验证
+
+- k=0.3 固定：0.15（0.5932）> 0.05（0.5899）= 0.3（0.5899）> 0（0.5575）。0.15 恰好最优；0.05/0.3 各差 −0.0033（0 救 0 丢，纯名次微调）；w_o=0 差 −0.0357（丢 Q_C08/Q_C26/Q_D28/Q_S19，救 Q_L02）。
+- k=0 时 w_o 四档几乎无差（0.5474~0.5529，w_o=0 反而最高 0.5529）——**BM25o 通道的价值完全依赖 kw 通道共存**：无 kw 时原句 BM25 是纯噪声注入（与 dense 争权无互补），有 kw 时提供互补字面证据（0.15 vs 0 = +0.0357）。
+- 结论：无实验的 0.15 验证通过——恰在生产最优区，维持 0.15 不动；kw 权重 0.3 与 0 对比证明必留。生产 0.7/0.15/0.3 组合维持不变。
+
+### 33.5 代码与数据
+
+| 文件 | 说明 |
+|------|------|
+| `eval_bm25_weight_grid.py` | 权重网格 + kw 消融回放脚本（phase1 采集 record_ch_ranks / phase23 CE 补齐+8 配置重放 / phase4 指标+sanity） |
+| `hybrid_search.py` | v2.9.2：`_collect_candidates` 新增 record_ch_ranks 可选参数（默认 False 零行为变化） |
+| `data/bm25_weight_grid/cands/` | 122 题 per-channel 原始 rank（权重无关，可复用于任意权重重放） |
+| `data/bm25_weight_grid/ce_scores.json` | 网格池差集补算 CE 原始分（570 对） |
+| `data/bm25_weight_grid/report.json` | 8 配置指标 + kw 消融 + 网格对比 + sanity |

@@ -477,11 +477,14 @@ class HybridSearcher:
         orig_dense_k: int, orig_bm25_k: int,
         subq_dense_k: int, subq_bm25_k: int,
         orig_kw_k: int = None, force_multi: bool = False,
+        record_ch_ranks: bool = False,
     ):
         """Phase 1+2：多路召回 + Evidence + Retrieval Prior 排序。
 
         orig_kw_k: BM25-kw 通道 topk（默认=orig_bm25_k，实验用拆分）;
-        force_multi: rw/sq 全空也走 multi 路径（实验用，生产 False）。
+        force_multi: rw/sq 全空也走 multi 路径（实验用，生产 False）;
+        record_ch_ranks: 每个候选记录各通道原始 rank（ch_ranks 字段，
+        权重无关，供离线权重重放实验；默认 False 零开销零行为变化）。
 
         Returns: (judge_results, cand_list, rw_list, sq_list)。
         cand_list 已按 retrieval_prior 降序排序（Phase 3 输入）；
@@ -536,6 +539,7 @@ class HybridSearcher:
                         "dense_rank": rank, "bm25_rank": 999, "bm25_kw_rank": 999,
                         "best_channel": "Dense", "best_rank": rank,
                         "rrf_prior": 0.0, "cosine_sim": sim,
+                        "ch_ranks": {},
                     }
                 else:
                     if rank < candidates[cid]["dense_rank"]:
@@ -543,6 +547,8 @@ class HybridSearcher:
                     candidates[cid]["cosine_sim"] = max(candidates[cid]["cosine_sim"], sim)
                 candidates[cid]["sources"].append(f"{qtype}-Dense")
                 candidates[cid]["query_hits"].add(qid)
+                if record_ch_ranks:
+                    candidates[cid]["ch_ranks"][f"{qtype}{qid}-Dense"] = rank
 
             # BM25 Route 1: Original query — 保留用户真实表达，弱辅助
             bm25_orig_docs = self._bm25_retriever.invoke(q)[:bm25_k]
@@ -560,12 +566,15 @@ class HybridSearcher:
                         "dense_rank": 999, "bm25_rank": rank, "bm25_kw_rank": 999,
                         "best_channel": "BM25", "best_rank": rank,
                         "rrf_prior": 0.0, "cosine_sim": 0.0,
+                        "ch_ranks": {},
                     }
                 else:
                     if rank < candidates[cid]["bm25_rank"]:
                         candidates[cid]["bm25_rank"] = rank
                 candidates[cid]["sources"].append(f"{qtype}-BM25o")
                 candidates[cid]["query_hits"].add(qid)
+                if record_ch_ranks:
+                    candidates[cid]["ch_ranks"][f"{qtype}{qid}-BM25o"] = rank
 
             # BM25 Route 2: Keyword query — 术语精准召回，仅 Original 使用
             if bm25_keyword_q:
@@ -585,12 +594,15 @@ class HybridSearcher:
                             "dense_rank": 999, "bm25_rank": 999, "bm25_kw_rank": rank,
                             "best_channel": "BM25-KW", "best_rank": rank,
                             "rrf_prior": 0.0, "cosine_sim": 0.0,
+                            "ch_ranks": {},
                         }
                     else:
                         if rank < candidates[cid].get("bm25_kw_rank", 999):
                             candidates[cid]["bm25_kw_rank"] = rank
                     candidates[cid]["sources"].append(f"{qtype}-BM25kw")
                     candidates[cid]["query_hits"].add(qid)
+                    if record_ch_ranks:
+                        candidates[cid]["ch_ranks"][f"{qtype}{qid}-BM25kw"] = rank
 
             # Single-channel boost: 多通道归一化，避免多通道命中天然占优
             for cid in local_rrf:

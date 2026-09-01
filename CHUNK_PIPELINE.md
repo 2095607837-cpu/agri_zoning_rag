@@ -2,7 +2,7 @@
 
 > 完整记录从原始文档到检索结果的全链路 chunk 处理逻辑
 >
-> **最后更新**: 2026-08-29 (v2.9.1：hybrid_search 实验参数——修复 query 合体实验，生产行为不变)
+> **最后更新**: 2026-09-01 (v2.9.2：hybrid_search 实验参数 record_ch_ranks——multi 路径 BM25 权重网格实验，生产行为不变)
 
 ---
 
@@ -10,6 +10,7 @@
 
 | 日期 | 版本 | 变更 |
 |------|------|------|
+| 2026-09-01 | v2.9.2 | **hybrid_search.py 实验参数（生产行为不变）**：`_collect_candidates` 新增 `record_ch_ranks` 可选参数——开启时每个候选记录 `ch_ranks` 字段（每通道原始 rank，如 `Original0-Dense`/`Rewrite1-BM25o`，权重无关），供离线权重重放实验（eval_bm25_weight_grid.py）；默认 False 零开销零行为变化。实验结论见 eval_v2_results.md 三十三节（multi 路径 0.15 验证为最优、kw 通道增益 MRR +0.042 必留） |
 | 2026-08-29 | v2.9.1 | **hybrid_search.py 实验参数（生产行为不变）**：`_collect_candidates` 新增 `orig_kw_k` / `force_multi` 可选参数——`orig_kw_k` 允许 Original 通道 BM25(原句) 与 BM25(kw) 的 topk 分别设定（默认 None 沿用同一 bm25_k），`force_multi=True` 强制走 multi-query 路径（无视 rw/sq 是否为空）。仅服务修复 query 合体实验（Stage 2 C 臂：召回端 rw 通道移除 + 修复句配额 30 + 统一 multi），实验结论见 eval_v2_results.md 三十一节（合体否决，MRR 0.5932→0.5716） |
 | 2026-08-28 | v2.9 | **CE 精排 query 改用 rw[0] + 配额方案C 上线**：① CE 精排 query 从原 query 改为 rw[0]（有 rw 时；无 rw 用原 query，kw-only plain 路径不受影响）——标准化改写句压制表格碎片 chunk 的 CE 虚高分（Q_S15 gold prior=1.0 但 CE 长度惩罚下 rank 14，碎片 len≈14 CE 0.731 虚高；改用 rw[0] 后 rank 2）；② 配额从均分改为方案C：每 SubQ 最低保护 5（多 SubQ 时 SubQ 总预算 30）+ 剩余额度按 retrieval_prior 全局分配 + SubQuery≥2 池上限 50→60。2×2 因子 A/B（eval_ce_query_quota_ab.py，离线重放 180 题全 CE，候选采集一次、四臂纯重放）：rw-CE 全面板 MRR 0.5776→0.5932、rw 面板 0.5070→0.5296（救 5 丢 3，Q_S15/Q_SR08 等历史难题救回）；方案C 净持平（MRR +0.0004，0 救 0 丢 1 升，但 SubQ 配额语义有意义）；两改动叠加零召回 19→17、可回答率 95.56%→95.00%（全量 144/80.0%、部分 27/15.0%）。详见 eval_v2_results.md 三十节 |
 | 2026-08-28 | v2.8.1 | **kw-only 路径修复（方案①）**：hybrid_search.py 路径判定从"rw/sq/kw 全空才走 plain"改为"只看 rw/sq"——kw-only（LLM 判 none 但产出 keywords，或 gate 跳过带术语映射）不再触发 multi-query 机制（RRF 权重组合 0.7/0.15/0.3 与 prior 融合全链路），改走 plain 路径并把 kw 拼入 Original BM25 query 增强召回（_rrf_retrieve/search 新增 keywords 参数；Dense 与 CE 仍只用原 query）。修复 G1 副作用之一：Q_N20（简单事实题被 LLM 产出 kw 切进 multi-query 丢 CE rank 9）。回归（eval_kw_path_fix.py → data/kw_path_fix_report.json，G1 臂 58 道 kw-only 题，修复前值取自 gate_ab_ce_report.json）：MRR 0.7124→0.7205、R@10 94.83%→96.55%，救回 Q_N20（rr=0.111）0 丢失、7 升（Q_E33/Q_C18 0.5→1.0 等）5 降（Q_N01/Q_N02 1.0→0.5 等名次小滑，无失分） |
